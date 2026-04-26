@@ -177,9 +177,9 @@
     <style><![CDATA[
       .t-display   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }
       .t-tag       { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: #A78BFA; }
-      .t-cat-cap   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.30em; text-transform: uppercase; }
-      .t-region    { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }
-      .t-skill     { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 18px; fill: #E5E7EB; }
+      .t-cat-cap   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.25em; text-transform: uppercase; }
+      .t-region    { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 22px; fill: #FFFFFF; }
+      .t-skill     { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 16px; fill: #E5E7EB; }
       .brain-pulse { animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
       @keyframes brainPulse {
         0%, 100% { filter: drop-shadow(0 0 16px rgba(236,72,153,0.45)); }
