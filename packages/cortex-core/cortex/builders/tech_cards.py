@@ -114,9 +114,9 @@ _SLOTS: list[dict] = [
     {"x": 30, "y": 30, "accent": "Red", "hex": "#F90001", "fade": "c1", "bar": "b1"},
     {"x": 450, "y": 30, "accent": "Orange", "hex": "#FF652F", "fade": "c2", "bar": "b2"},
     {"x": 870, "y": 30, "accent": "Green", "hex": "#34D399", "fade": "c3", "bar": "b3"},
-    {"x": 30, "y": 380, "accent": "Gold", "hex": "#FFD23F", "fade": "c4", "bar": "b4"},
-    {"x": 450, "y": 380, "accent": "Cyan", "hex": "#22D3EE", "fade": "c5", "bar": "b5"},
-    {"x": 870, "y": 380, "accent": "Purple", "hex": "#A78BFA", "fade": "c6", "bar": "b6"},
+    {"x": 30, "y": 440, "accent": "Gold", "hex": "#FFD23F", "fade": "c4", "bar": "b4"},
+    {"x": 450, "y": 440, "accent": "Cyan", "hex": "#22D3EE", "fade": "c5", "bar": "b5"},
+    {"x": 870, "y": 440, "accent": "Purple", "hex": "#A78BFA", "fade": "c6", "bar": "b6"},
 ]
 
 # Brain regions render in this order (matches the reference layout).
@@ -168,14 +168,14 @@ def _stats_for(region: BrainRegion, mastery: str) -> list[StatEntry]:
 
 # ── SVG composition ──────────────────────────────────────────────────────
 _HEAD = """<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="720" viewBox="0 0 1300 720" role="img" aria-label="__ARIA__">
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="850" viewBox="0 0 1300 850" role="img" aria-label="__ARIA__">
   <style>
-    .t-caption  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
-    .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.01em; fill: #FFFFFF; }
-    .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 13px; font-style: italic; fill: #9BA1A6; }
-    .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.01em; fill: #E8E8E8; }
-    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
-    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; fill: #6E7681; }
+    .t-caption  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.20em; text-transform: uppercase; }
+    .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
+    .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
+    .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
+    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
 
     .breathe-stripe { animation: stripeBreathe 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes stripeBreathe { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
@@ -218,7 +218,7 @@ _HEAD = """<?xml version="1.0" encoding="UTF-8"?>
       <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  <rect width="1300" height="720" fill="url(#dots)"/>
+  <rect width="1300" height="850" fill="url(#dots)"/>
 """
 
 _TAIL = "</svg>\n"
@@ -235,43 +235,43 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
     parts.append(f'  <g transform="translate({slot["x"]},{slot["y"]})">')
     parts.append(f'    <g class="card-fade {slot["fade"]}">')
     parts.append(
-        '      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>'
+        '      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>'
     )
     parts.append(
-        '      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>'
+        '      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>'
     )
     parts.append(
         f'      <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accent{slot["accent"]})" class="breathe-stripe"/>'
     )
     parts.append(
-        f'      <text x="32" y="48" class="t-caption" fill="{slot["hex"]}">{_x(visual["caption"])}</text>'
+        f'      <text x="32" y="52" class="t-caption" fill="{slot["hex"]}">{_x(visual["caption"])}</text>'
     )
-    parts.append(f'      <text x="32" y="86" class="t-title">{_x(title)}</text>')
-    parts.append(f'      <text x="32" y="114" class="t-tagline">{_x(visual["tagline"])}</text>')
+    parts.append(f'      <text x="32" y="96" class="t-title">{_x(title)}</text>')
+    parts.append(f'      <text x="32" y="130" class="t-tagline">{_x(visual["tagline"])}</text>')
     parts.append(
-        f'      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">{_x(primary)}</text>'
+        f'      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">{_x(primary)}</text>'
     )
     if secondary:
-        parts.append(f'      <text x="32" y="180" class="t-tool">{_x(secondary)}</text>')
+        parts.append(f'      <text x="32" y="208" class="t-tool">{_x(secondary)}</text>')
     if tertiary:
         parts.append(
-            f'      <text x="32" y="202" class="t-tool" fill="#9BA1A6">{_x(tertiary)}</text>'
+            f'      <text x="32" y="236" class="t-tool" fill="#9BA1A6">{_x(tertiary)}</text>'
         )
     parts.append(
-        '      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>'
+        '      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>'
     )
     if show_stats:
         for i, stat in enumerate(stats):
             sx = 32 + i * 120
             parts.append(
-                f'      <text x="{sx}"  y="260" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>'
+                f'      <text x="{sx}"  y="306" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>'
             )
             parts.append(
-                f'      <text x="{sx}"  y="276" class="t-stat-lbl">{_x(stat.label)}</text>'
+                f'      <text x="{sx}"  y="324" class="t-stat-lbl">{_x(stat.label)}</text>'
             )
-    parts.append('      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>')
+    parts.append('      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>')
     parts.append(
-        f'      <line x1="32" y1="299.5" x2="{bar_x_end}" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar {slot["bar"]}"/>'
+        f'      <line x1="32" y1="355.5" x2="{bar_x_end}" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar {slot["bar"]}"/>'
     )
     parts.append("    </g>")
     parts.append("  </g>")

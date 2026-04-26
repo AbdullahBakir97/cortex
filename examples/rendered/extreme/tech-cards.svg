@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="720" viewBox="0 0 1300 720" role="img" aria-label="Tech stack — Backend, Frontend, Architecture, Data Layer, DevOps, AI &amp; Data">
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="850" viewBox="0 0 1300 850" role="img" aria-label="Tech stack — Backend, Frontend, Architecture, Data Layer, DevOps, AI &amp; Data">
   <style>
-    .t-caption  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
-    .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.01em; fill: #FFFFFF; }
-    .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 13px; font-style: italic; fill: #9BA1A6; }
-    .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.01em; fill: #E8E8E8; }
-    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
-    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; fill: #6E7681; }
+    .t-caption  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.20em; text-transform: uppercase; }
+    .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
+    .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
+    .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
+    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
 
     .breathe-stripe { animation: stripeBreathe 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes stripeBreathe { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
@@ -49,132 +49,132 @@
       <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  <rect width="1300" height="720" fill="url(#dots)"/>
+  <rect width="1300" height="850" fill="url(#dots)"/>
   <g transform="translate(30,30)">
     <g class="card-fade c1">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentRed)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#F90001">SERVER · APIS · LOGIC</text>
-      <text x="32" y="86" class="t-title">⚙️ Backend</text>
-      <text x="32" y="114" class="t-tagline">Robust, well-tested server-side systems.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">Python · Django</text>
-      <text x="32" y="180" class="t-tool">DRF · FastAPI</text>
-      <text x="32" y="202" class="t-tool" fill="#9BA1A6">Flask</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#F90001">4+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#F90001">30+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#F90001">EXPERT</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="368" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b1"/>
+      <text x="32" y="52" class="t-caption" fill="#F90001">SERVER · APIS · LOGIC</text>
+      <text x="32" y="96" class="t-title">⚙️ Backend</text>
+      <text x="32" y="130" class="t-tagline">Robust, well-tested server-side systems.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Python · Django</text>
+      <text x="32" y="208" class="t-tool">DRF · FastAPI</text>
+      <text x="32" y="236" class="t-tool" fill="#9BA1A6">Flask</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#F90001">4+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#F90001">30+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#F90001">EXPERT</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b1"/>
     </g>
   </g>
   <g transform="translate(450,30)">
     <g class="card-fade c2">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentOrange)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#FF652F">CLIENT · UI · INTERACTION</text>
-      <text x="32" y="86" class="t-title">🎨 Frontend</text>
-      <text x="32" y="114" class="t-tagline">Interactive, accessible interfaces.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">Vue · Nuxt</text>
-      <text x="32" y="180" class="t-tool">TypeScript · Tailwind</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#FF652F">4+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#FF652F">20+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#FF652F">ADVANCED</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="337" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b2"/>
+      <text x="32" y="52" class="t-caption" fill="#FF652F">CLIENT · UI · INTERACTION</text>
+      <text x="32" y="96" class="t-title">🎨 Frontend</text>
+      <text x="32" y="130" class="t-tagline">Interactive, accessible interfaces.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Vue · Nuxt</text>
+      <text x="32" y="208" class="t-tool">TypeScript · Tailwind</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#FF652F">4+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#FF652F">20+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#FF652F">ADVANCED</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b2"/>
     </g>
   </g>
   <g transform="translate(870,30)">
     <g class="card-fade c3">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentGreen)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#34D399">SYSTEMS · DESIGN · SCALE</text>
-      <text x="32" y="86" class="t-title">🏗️ Architecture</text>
-      <text x="32" y="114" class="t-tagline">Distributed, event-driven systems.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">Microservices · RabbitMQ</text>
-      <text x="32" y="180" class="t-tool">Event-Driven</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#34D399">3+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#34D399">10+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#34D399">PROFICIENT</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="302" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b3"/>
+      <text x="32" y="52" class="t-caption" fill="#34D399">SYSTEMS · DESIGN · SCALE</text>
+      <text x="32" y="96" class="t-title">🏗️ Architecture</text>
+      <text x="32" y="130" class="t-tagline">Distributed, event-driven systems.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Microservices · RabbitMQ</text>
+      <text x="32" y="208" class="t-tool">Event-Driven</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#34D399">3+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#34D399">10+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#34D399">PROFICIENT</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="302" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b3"/>
     </g>
   </g>
-  <g transform="translate(30,380)">
+  <g transform="translate(30,440)">
     <g class="card-fade c4">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentGold)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#FFD23F">PERSISTENCE · STATE · CACHE</text>
-      <text x="32" y="86" class="t-title">💾 Data Layer</text>
-      <text x="32" y="114" class="t-tagline">Modeling, indexing, performance.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">PostgreSQL · Redis</text>
-      <text x="32" y="180" class="t-tool">MySQL · SQLite</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#FFD23F">4+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#FFD23F">30+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#FFD23F">EXPERT</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="368" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b4"/>
+      <text x="32" y="52" class="t-caption" fill="#FFD23F">PERSISTENCE · STATE · CACHE</text>
+      <text x="32" y="96" class="t-title">💾 Data Layer</text>
+      <text x="32" y="130" class="t-tagline">Modeling, indexing, performance.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">PostgreSQL · Redis</text>
+      <text x="32" y="208" class="t-tool">MySQL · SQLite</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#FFD23F">4+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#FFD23F">30+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#FFD23F">EXPERT</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b4"/>
     </g>
   </g>
-  <g transform="translate(450,380)">
+  <g transform="translate(450,440)">
     <g class="card-fade c5">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentCyan)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#22D3EE">PLATFORM · CI/CD · DEPLOY</text>
-      <text x="32" y="86" class="t-title">🛠️ DevOps</text>
-      <text x="32" y="114" class="t-tagline">Pipelines that don&apos;t break on Friday.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">Docker · Git</text>
-      <text x="32" y="180" class="t-tool">GitHub Actions · AWS</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#22D3EE">4+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#22D3EE">20+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#22D3EE">ADVANCED</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="337" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b5"/>
+      <text x="32" y="52" class="t-caption" fill="#22D3EE">PLATFORM · CI/CD · DEPLOY</text>
+      <text x="32" y="96" class="t-title">🛠️ DevOps</text>
+      <text x="32" y="130" class="t-tagline">Pipelines that don&apos;t break on Friday.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Docker · Git</text>
+      <text x="32" y="208" class="t-tool">GitHub Actions · AWS</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#22D3EE">4+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#22D3EE">20+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#22D3EE">ADVANCED</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b5"/>
     </g>
   </g>
-  <g transform="translate(870,380)">
+  <g transform="translate(870,440)">
     <g class="card-fade c6">
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
-      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
       <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accentPurple)" class="breathe-stripe"/>
-      <text x="32" y="48" class="t-caption" fill="#A78BFA">INTELLIGENCE · ANALYTICS</text>
-      <text x="32" y="86" class="t-title">🤖 AI &amp; Data</text>
-      <text x="32" y="114" class="t-tagline">LLMs, RAG, agents, notebooks.</text>
-      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">PyTorch · TensorFlow</text>
-      <text x="32" y="180" class="t-tool">LLMs · RAG</text>
-      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>
-      <text x="32"  y="260" class="t-stat-num" fill="#A78BFA">2+</text>
-      <text x="32"  y="276" class="t-stat-lbl">YEARS</text>
-      <text x="152"  y="260" class="t-stat-num" fill="#A78BFA">5+</text>
-      <text x="152"  y="276" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="260" class="t-stat-num" fill="#A78BFA">GROWING</text>
-      <text x="272"  y="276" class="t-stat-lbl">MASTERY</text>
-      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>
-      <line x1="32" y1="299.5" x2="257" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b6"/>
+      <text x="32" y="52" class="t-caption" fill="#A78BFA">INTELLIGENCE · ANALYTICS</text>
+      <text x="32" y="96" class="t-title">🤖 AI &amp; Data</text>
+      <text x="32" y="130" class="t-tagline">LLMs, RAG, agents, notebooks.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">PyTorch · TensorFlow</text>
+      <text x="32" y="208" class="t-tool">LLMs · RAG</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <text x="32"  y="306" class="t-stat-num" fill="#A78BFA">2+</text>
+      <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
+      <text x="152"  y="306" class="t-stat-num" fill="#A78BFA">5+</text>
+      <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
+      <text x="272"  y="306" class="t-stat-num" fill="#A78BFA">GROWING</text>
+      <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="257" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b6"/>
     </g>
   </g>
 </svg>

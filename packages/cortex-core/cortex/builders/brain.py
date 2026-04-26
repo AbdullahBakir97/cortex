@@ -85,12 +85,12 @@ def _recolor(content: str, palette_primary: str, palette_secondary: str) -> str:
 
 # ── Region label data (positions on the wrapper canvas) ──────────────────
 _REGION_POSITIONS = {
-    "frontal": {"label_xy": (1180, 150), "target_xy": (850, 310), "color": "primary"},
-    "parietal": {"label_xy": (600, 90), "target_xy": (700, 260), "color": "accent_d"},
-    "occipital": {"label_xy": (20, 150), "target_xy": (480, 300), "color": "secondary"},
-    "temporal": {"label_xy": (1180, 470), "target_xy": (830, 500), "color": "accent_c"},
-    "cerebellum": {"label_xy": (20, 690), "target_xy": (470, 600), "color": "accent_a"},
-    "brainstem": {"label_xy": (1180, 690), "target_xy": (760, 620), "color": "accent_b"},
+    "frontal": {"label_xy": (1060, 200), "target_xy": (850, 320), "color": "primary"},
+    "parietal": {"label_xy": (540, 130), "target_xy": (700, 280), "color": "accent_d"},
+    "occipital": {"label_xy": (20, 200), "target_xy": (490, 310), "color": "secondary"},
+    "temporal": {"label_xy": (1060, 480), "target_xy": (830, 510), "color": "accent_c"},
+    "cerebellum": {"label_xy": (20, 660), "target_xy": (480, 610), "color": "accent_a"},
+    "brainstem": {"label_xy": (1060, 660), "target_xy": (760, 630), "color": "accent_b"},
 }
 
 _REGION_CAPTIONS = {
@@ -146,27 +146,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         emoji = _emoji_for_region(key)
         cap = _REGION_CAPTIONS[key]
         domain = _x(region_obj.domain)
-        tools_preview = _x(" · ".join(region_obj.tools[:3])) if region_obj.tools else ""
+        tools_preview = _x(" · ".join(region_obj.tools[:4])) if region_obj.tools else ""
 
         region_blocks.append(
             f'<g transform="translate({lx},{ly})"><g class="label-fade lf{i + 1}">'
-            f'<rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" '
-            f'stroke="{color}" stroke-width="1.5" filter="url(#cardShadow)"/>'
-            f'<rect x="0" y="0" width="5" height="80" rx="2" fill="{color}"/>'
-            f'<text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
-            f'<text x="100" y="44" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
-            f'<text x="100" y="64" class="t-skill" text-anchor="middle">{tools_preview}</text>'
+            f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" '
+            f'stroke="{color}" stroke-width="1.8" filter="url(#cardShadow)"/>'
+            f'<rect x="0" y="0" width="7" height="140" rx="3" fill="{color}"/>'
+            f'<text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
+            f'<text x="160" y="78" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
+            f'<text x="160" y="114" class="t-skill" text-anchor="middle">{tools_preview}</text>'
             f"</g></g>"
         )
 
         # Leader line from label edge to brain target
         # Pick a midpoint between label and target for a soft curve
         mid_x = (lx + tx) // 2
-        mid_y = (ly + 80 + ty) // 2 if ly < 400 else (ly + ty) // 2
+        mid_y = (ly + 140 + ty) // 2 if ly < 400 else (ly + ty) // 2
         # Determine which side of label to anchor (right-side labels start at lx,
-        # left-side labels start at lx+200)
-        anchor_x = lx if lx > 600 else lx + 200
-        anchor_y = ly + 40
+        # left-side labels start at lx+320)
+        anchor_x = lx if lx > 600 else lx + 320
+        anchor_y = ly + 70
         region_lines.append(
             f'<path d="M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}" '
             f'stroke="{color}" stroke-width="1.2" fill="none" '
@@ -231,11 +231,11 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       </feMerge>
     </filter>
     <style><![CDATA[
-      .t-display   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 30px; fill: #FFFFFF; }}
-      .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: {p_accent_b}; }}
-      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }}
-      .t-region    {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; fill: #FFFFFF; }}
-      .t-skill     {{ font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10.5px; fill: #D1D5DB; }}
+      .t-display   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }}
+      .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: {p_accent_b}; }}
+      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.20em; text-transform: uppercase; }}
+      .t-region    {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }}
+      .t-skill     {{ font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 18px; fill: #E5E7EB; }}
       .brain-pulse {{ animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
       @keyframes brainPulse {{
         0%, 100% {{ filter: drop-shadow(0 0 16px rgba(236,72,153,0.45)); }}

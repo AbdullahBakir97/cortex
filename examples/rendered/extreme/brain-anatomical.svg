@@ -50,11 +50,11 @@
       </feMerge>
     </filter>
     <style><![CDATA[
-      .t-display   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 30px; fill: #FFFFFF; }
-      .t-tag       { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #A78BFA; }
-      .t-cat-cap   { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; }
-      .t-region    { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 14px; fill: #FFFFFF; }
-      .t-skill     { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 10.5px; fill: #D1D5DB; }
+      .t-display   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }
+      .t-tag       { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: #A78BFA; }
+      .t-cat-cap   { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.20em; text-transform: uppercase; }
+      .t-region    { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }
+      .t-skill     { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 18px; fill: #E5E7EB; }
       .brain-pulse { animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
       @keyframes brainPulse {
         0%, 100% { filter: drop-shadow(0 0 16px rgba(236,72,153,0.45)); }
@@ -86,22 +86,22 @@
 
   <!-- Leader lines (drawn behind brain) -->
   <g fill="none">
-        <path d="M 1180,190 Q 1015,270 850,310" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 800,130 Q 650,215 700,260" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 220,190 Q 250,265 480,300" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 1180,510 Q 1005,485 830,500" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 220,730 Q 245,645 470,600" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 1180,730 Q 970,655 760,620" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+        <path d="M 1060,270 Q 955,330 850,320" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+    <path d="M 860,200 Q 620,275 700,280" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+    <path d="M 340,270 Q 255,325 490,310" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+    <path d="M 1060,550 Q 945,495 830,510" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+    <path d="M 340,730 Q 250,635 480,610" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
+    <path d="M 1060,730 Q 910,645 760,630" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
   </g>
 
   <!-- Synaptic spark dots at leader endpoints -->
   <g>
-        <circle cx="850" cy="310" r="4" fill="#F90001" class="target-pulse" style="animation-delay:0.0s"/>
-    <circle cx="700" cy="260" r="4" fill="#34D399" class="target-pulse" style="animation-delay:0.3s"/>
-    <circle cx="480" cy="300" r="4" fill="#FF652F" class="target-pulse" style="animation-delay:0.6s"/>
-    <circle cx="830" cy="500" r="4" fill="#FFD23F" class="target-pulse" style="animation-delay:0.8999999999999999s"/>
-    <circle cx="470" cy="600" r="4" fill="#22D3EE" class="target-pulse" style="animation-delay:1.2s"/>
-    <circle cx="760" cy="620" r="4" fill="#A78BFA" class="target-pulse" style="animation-delay:1.5s"/>
+        <circle cx="850" cy="320" r="4" fill="#F90001" class="target-pulse" style="animation-delay:0.0s"/>
+    <circle cx="700" cy="280" r="4" fill="#34D399" class="target-pulse" style="animation-delay:0.3s"/>
+    <circle cx="490" cy="310" r="4" fill="#FF652F" class="target-pulse" style="animation-delay:0.6s"/>
+    <circle cx="830" cy="510" r="4" fill="#FFD23F" class="target-pulse" style="animation-delay:0.8999999999999999s"/>
+    <circle cx="480" cy="610" r="4" fill="#22D3EE" class="target-pulse" style="animation-delay:1.2s"/>
+    <circle cx="760" cy="630" r="4" fill="#A78BFA" class="target-pulse" style="animation-delay:1.5s"/>
   </g>
 
   <!-- The neon brain (Wikimedia anatomical, recolored, centered, 3D wobble) -->
@@ -927,10 +927,10 @@
   </g>
 
   <!-- Region labels -->
-    <g transform="translate(1180,150)"><g class="label-fade lf1"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#F90001" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#F90001"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#F90001">FRONTAL · LOBE</text><text x="100" y="44" class="t-region" text-anchor="middle">⚙️ Backend</text><text x="100" y="64" class="t-skill" text-anchor="middle">Python · Django · DRF</text></g></g>
-  <g transform="translate(600,90)"><g class="label-fade lf2"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#34D399" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#34D399"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#34D399">PARIETAL · LOBE</text><text x="100" y="44" class="t-region" text-anchor="middle">🏗️ Architecture</text><text x="100" y="64" class="t-skill" text-anchor="middle">Microservices · RabbitMQ · Event-Driven</text></g></g>
-  <g transform="translate(20,150)"><g class="label-fade lf3"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#FF652F" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#FF652F"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#FF652F">OCCIPITAL · LOBE</text><text x="100" y="44" class="t-region" text-anchor="middle">🎨 Frontend</text><text x="100" y="64" class="t-skill" text-anchor="middle">Vue · Nuxt · TypeScript</text></g></g>
-  <g transform="translate(1180,470)"><g class="label-fade lf4"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#FFD23F" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#FFD23F"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#FFD23F">TEMPORAL · LOBE</text><text x="100" y="44" class="t-region" text-anchor="middle">💾 Data Layer</text><text x="100" y="64" class="t-skill" text-anchor="middle">PostgreSQL · Redis · MySQL</text></g></g>
-  <g transform="translate(20,690)"><g class="label-fade lf5"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#22D3EE" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#22D3EE"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#22D3EE">CEREBELLUM</text><text x="100" y="44" class="t-region" text-anchor="middle">🛠️ DevOps</text><text x="100" y="64" class="t-skill" text-anchor="middle">Docker · Git · GitHub Actions</text></g></g>
-  <g transform="translate(1180,690)"><g class="label-fade lf6"><rect x="0" y="0" width="200" height="80" rx="10" fill="url(#cardBg)" stroke="#A78BFA" stroke-width="1.5" filter="url(#cardShadow)"/><rect x="0" y="0" width="5" height="80" rx="2" fill="#A78BFA"/><text x="100" y="20" class="t-cat-cap" text-anchor="middle" fill="#A78BFA">BRAINSTEM</text><text x="100" y="44" class="t-region" text-anchor="middle">🤖 AI &amp; Data</text><text x="100" y="64" class="t-skill" text-anchor="middle">PyTorch · TensorFlow · LLMs</text></g></g>
+    <g transform="translate(1060,200)"><g class="label-fade lf1"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#F90001" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#F90001"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#F90001">FRONTAL · LOBE</text><text x="160" y="78" class="t-region" text-anchor="middle">⚙️ Backend</text><text x="160" y="114" class="t-skill" text-anchor="middle">Python · Django · DRF · FastAPI</text></g></g>
+  <g transform="translate(540,130)"><g class="label-fade lf2"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#34D399" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#34D399"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#34D399">PARIETAL · LOBE</text><text x="160" y="78" class="t-region" text-anchor="middle">🏗️ Architecture</text><text x="160" y="114" class="t-skill" text-anchor="middle">Microservices · RabbitMQ · Event-Driven</text></g></g>
+  <g transform="translate(20,200)"><g class="label-fade lf3"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#FF652F" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#FF652F"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#FF652F">OCCIPITAL · LOBE</text><text x="160" y="78" class="t-region" text-anchor="middle">🎨 Frontend</text><text x="160" y="114" class="t-skill" text-anchor="middle">Vue · Nuxt · TypeScript · Tailwind</text></g></g>
+  <g transform="translate(1060,480)"><g class="label-fade lf4"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#FFD23F" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#FFD23F"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#FFD23F">TEMPORAL · LOBE</text><text x="160" y="78" class="t-region" text-anchor="middle">💾 Data Layer</text><text x="160" y="114" class="t-skill" text-anchor="middle">PostgreSQL · Redis · MySQL · SQLite</text></g></g>
+  <g transform="translate(20,660)"><g class="label-fade lf5"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#22D3EE" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#22D3EE"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#22D3EE">CEREBELLUM</text><text x="160" y="78" class="t-region" text-anchor="middle">🛠️ DevOps</text><text x="160" y="114" class="t-skill" text-anchor="middle">Docker · Git · GitHub Actions · AWS</text></g></g>
+  <g transform="translate(1060,660)"><g class="label-fade lf6"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" stroke="#A78BFA" stroke-width="1.8" filter="url(#cardShadow)"/><rect x="0" y="0" width="7" height="140" rx="3" fill="#A78BFA"/><text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="#A78BFA">BRAINSTEM</text><text x="160" y="78" class="t-region" text-anchor="middle">🤖 AI &amp; Data</text><text x="160" y="114" class="t-skill" text-anchor="middle">PyTorch · TensorFlow · LLMs · RAG</text></g></g>
 </svg>
