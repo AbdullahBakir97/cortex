@@ -235,7 +235,7 @@ class BannerConfig(_Strict):
     animation: Literal["drift", "pulse", "static"] = "drift"
 
 
-def _default_footer() -> "BannerConfig":
+def _default_footer() -> BannerConfig:
     return BannerConfig(height=160, title="", subtitle="")
 
 
