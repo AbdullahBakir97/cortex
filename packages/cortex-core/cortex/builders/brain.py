@@ -239,41 +239,73 @@ def _build_lobe_stroke_overlay(
 def _dna_helix_paths(
     cx: int, cy: int,
     width: int = 80, height: int = 170,
-    samples: int = 24,
+    samples: int = 12,
 ) -> tuple[str, str, list[tuple[tuple[int, int], tuple[int, int]]]]:
-    """Generate two intertwining sine paths + base-pair rung connectors for a DNA helix.
+    """Generate smooth cubic-Bezier helix strands + base-pair rung connectors.
 
     Returns (strand_a_path_d, strand_b_path_d, rungs).
-    Strand A: cosine wave (one phase). Strand B: -cosine (anti-phase, mirrored).
-    Rungs: horizontal connectors at every 6th sample point (excluding endpoints).
+    Strands are mathematically smooth: each segment between anchor points is a
+    cubic Bezier whose control points are derived from the tangent of the
+    cosine wave at each anchor — produces a true smooth curve, not a polygon
+    approximation.
+
+    Strand A: cosine wave. Strand B: -cosine (anti-phase, mirrored).
+    Rungs: horizontal connectors at every 3rd sample point (excluding endpoints).
     """
-    points_a: list[tuple[int, int]] = []
-    points_b: list[tuple[int, int]] = []
-    rungs: list[tuple[tuple[int, int], tuple[int, int]]] = []
+    cycles = 2.0  # 2 full helix turns over the height
+    omega = cycles * 2 * math.pi
+    seg = height / samples  # vertical distance per segment
+    cp_offset = seg / 3.0   # cubic-Bezier control points offset along tangent
+
+    # Anchors + tangents (dx/dy at that anchor) for each strand.
+    pts_a: list[tuple[float, float, float]] = []  # (x, y, dx_dy)
+    pts_b: list[tuple[float, float, float]] = []
+    rungs_anchors: list[tuple[tuple[int, int], tuple[int, int]]] = []
     for i in range(samples + 1):
         t = i / samples
-        y = round(cy + (t - 0.5) * height)
-        offset = round(math.cos(t * 2 * math.pi * 2) * (width / 2))
-        ax = cx + offset
-        bx = cx - offset
-        points_a.append((ax, y))
-        points_b.append((bx, y))
-        if i % 6 == 0 and i not in (0, samples):
-            rungs.append(((ax, y), (bx, y)))
+        y = cy + (t - 0.5) * height
+        # cosine wave in t-space
+        ax = cx + math.cos(omega * t) * (width / 2.0)
+        bx = cx - math.cos(omega * t) * (width / 2.0)
+        # dx/dy = derivative of cosine wave w.r.t. y. Since y = cy + (t-0.5)*height,
+        # dy/dt = height, so dt/dy = 1/height. d(cos(omega*t))/dt = -omega*sin(omega*t).
+        # dx/dy = -omega * sin(omega*t) * (width/2) / height.
+        dx_dy = -omega * math.sin(omega * t) * (width / 2.0) / height
+        pts_a.append((ax, y, dx_dy))
+        pts_b.append((bx, y, -dx_dy))
+        if i % 3 == 0 and i not in (0, samples):
+            rungs_anchors.append(((round(ax), round(y)), (round(bx), round(y))))
 
-    strand_a = "M" + " L".join(f"{x},{y}" for x, y in points_a)
-    strand_b = "M" + " L".join(f"{x},{y}" for x, y in points_b)
-    return strand_a, strand_b, rungs
+    def _to_bezier_path(pts: list[tuple[float, float, float]]) -> str:
+        x0, y0, _ = pts[0]
+        d_parts = [f"M{x0:.1f},{y0:.1f}"]
+        for i in range(1, len(pts)):
+            xa, ya, ta = pts[i - 1]
+            xb, yb, tb = pts[i]
+            cp1x = xa + ta * cp_offset
+            cp1y = ya + cp_offset
+            cp2x = xb - tb * cp_offset
+            cp2y = yb - cp_offset
+            d_parts.append(
+                f" C{cp1x:.1f},{cp1y:.1f} {cp2x:.1f},{cp2y:.1f} {xb:.1f},{yb:.1f}"
+            )
+        return "".join(d_parts)
+
+    strand_a = _to_bezier_path(pts_a)
+    strand_b = _to_bezier_path(pts_b)
+    return strand_a, strand_b, rungs_anchors
 
 
-def _dna_specs_random(rng: random.Random, count: int = 8) -> list[dict]:
+def _dna_specs_random(rng: random.Random, count: int = 5) -> list[dict]:
     """Generate `count` deterministic-random DNA helix specs scattered around
-    canvas edge zones (avoiding brain + cards). Each spec has unique position,
-    size, tilt, color, and timings — no two helixes ever sync up visually.
+    canvas edge zones. Restrained design: vertical orientation (no tilt),
+    monochromatic jewel-tone palette (3 colors only — same family as aurora),
+    fewer helixes (5 default vs. 8) for visual restraint, larger sizes for
+    legibility. Each spec has unique cycle/delay so no synchronization tells.
     """
-    palette = ["#22D3EE", "#EC4899", "#7C3AED", "#34D399", "#A78BFA", "#FFD23F"]
-    # 4 corner zones — keep helixes away from brain (canvas 262-892, 260-720)
-    # and away from card areas. Each zone is (xmin, xmax, ymin, ymax).
+    # Same jewel-tone palette as aurora — 3 cool tones for visual unity
+    palette = ["#4F8CC4", "#7B5EAA", "#C95E8A"]
+    # 4 corner zones — keep helixes outside brain + card area
     zones = [
         (60, 280, 60, 220),       # top-left
         (1120, 1340, 60, 220),    # top-right
@@ -283,19 +315,16 @@ def _dna_specs_random(rng: random.Random, count: int = 8) -> list[dict]:
     specs: list[dict] = []
     for _ in range(count):
         xmin, xmax, ymin, ymax = rng.choice(zones)
+        size = rng.randint(140, 260)
         specs.append({
             "cx": rng.randint(xmin, xmax),
             "cy": rng.randint(ymin, ymax),
-            "size": rng.randint(80, 220),
-            "width": 0,  # filled below as size * 0.4
-            "tilt": rng.randint(-30, 30),
+            "size": size,
+            "width": round(size * 0.35),  # narrower helix for elegance
             "color": rng.choice(palette),
-            "cycle": round(rng.uniform(18, 28), 1),
-            "delay": round(rng.uniform(0, 12), 1),
-            "packet_dur": round(rng.uniform(6, 11), 1),
-            "pulse_dur": round(rng.uniform(3, 5), 1),
+            "cycle": round(rng.uniform(24, 32), 1),
+            "delay": round(rng.uniform(0, 16), 1),
         })
-        specs[-1]["width"] = round(specs[-1]["size"] * 0.4)
     return specs
 
 
@@ -780,42 +809,37 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # timers. Reads as a scientific/biological motif tying the brain theme
     # to the organic atmosphere (no longer competing with the digital grid,
     # which was removed in R4-2).
-    # 8 deterministically-random DNA helixes scattered around canvas edges,
-    # each with unique size, tilt, color, and timing. Pseudo-3D rotation via
-    # stroke-width/opacity pulse 180° out of phase between strands. Data
-    # packets travel along strand-a via animateMotion. Soft Gaussian blur for
-    # cinematic edge softening.
+    # 5 deterministic-random DNA helixes scattered around canvas edges.
+    # Vertical orientation (no tilt) for scientific feel. Monochromatic
+    # jewel-tone palette (cyan/violet/dusty-rose — same as aurora). Cubic
+    # Bezier strands for smooth curves. Simple opacity fade + draw animation
+    # — restraint reads as professional. Strong Gaussian blur (stdDev=2) for
+    # soft luminous look.
     dna_rng = random.Random(_seed_from_name(config.identity.name) ^ 0xCAFEBABE)
-    dna_specs_list = _dna_specs_random(dna_rng, count=8)
+    dna_specs_list = _dna_specs_random(dna_rng, count=5)
     dna_blocks: list[str] = []
-    for idx, spec in enumerate(dna_specs_list):
+    for spec in dna_specs_list:
         strand_a, strand_b, rungs = _dna_helix_paths(
-            cx=0, cy=0, width=spec["width"], height=spec["size"], samples=20,
+            cx=0, cy=0, width=spec["width"], height=spec["size"], samples=12,
         )
-        strand_a_id = f"dnaStrand_{idx}_a"
         rung_lines = "\n".join(
             f'    <line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
-            f'stroke="{spec["color"]}" stroke-width="0.7" stroke-opacity="0.5"/>'
+            f'stroke="{spec["color"]}" stroke-width="0.9" stroke-opacity="0.6"/>'
             for a, b in rungs
         )
         dna_blocks.append(
             f'<g class="dna" filter="url(#dnaBlur)" '
             f'style="animation-delay:{spec["delay"]}s;animation-duration:{spec["cycle"]}s" '
-            f'transform="translate({spec["cx"]},{spec["cy"]}) rotate({spec["tilt"]})">\n'
-            f'  <path id="{strand_a_id}" d="{strand_a}" stroke="{spec["color"]}" '
-            f'fill="none" class="dna-strand-a" '
-            f'style="animation-duration:{spec["pulse_dur"]}s"/>\n'
-            f'  <path d="{strand_b}" stroke="{spec["color"]}" '
-            f'fill="none" class="dna-strand-b" '
-            f'style="animation-duration:{spec["pulse_dur"]}s"/>\n'
+            f'transform="translate({spec["cx"]},{spec["cy"]})">\n'
+            f'  <path d="{strand_a}" stroke="{spec["color"]}" stroke-width="1.4" '
+            f'fill="none" pathLength="100" stroke-dasharray="100 100" '
+            f'class="dna-strand" '
+            f'style="animation-duration:{spec["cycle"]}s;animation-delay:{spec["delay"]}s"/>\n'
+            f'  <path d="{strand_b}" stroke="{spec["color"]}" stroke-width="1.4" '
+            f'fill="none" pathLength="100" stroke-dasharray="100 100" '
+            f'class="dna-strand" '
+            f'style="animation-duration:{spec["cycle"]}s;animation-delay:{spec["delay"]}s"/>\n'
             f'{rung_lines}\n'
-            f'  <circle r="2.5" fill="{spec["color"]}" class="dna-packet" opacity="0">\n'
-            f'    <animateMotion dur="{spec["packet_dur"]}s" repeatCount="indefinite">\n'
-            f'      <mpath href="#{strand_a_id}"/>\n'
-            f'    </animateMotion>\n'
-            f'    <animate attributeName="opacity" values="0;0.9;0.9;0" '
-            f'keyTimes="0;0.2;0.8;1" dur="{spec["packet_dur"]}s" repeatCount="indefinite"/>\n'
-            f'  </circle>\n'
             f'  </g>'
         )
 
@@ -894,30 +918,30 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
          hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
          vocabulary, not "rainbow tech demo". -->
     <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#C95E8A" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_b" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#4F8CC4" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_c" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_d" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#6FB28E" stop-opacity="0"/>
     </radialGradient>
     <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="25"/>
     </filter>
-    <filter id="dnaBlur" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur stdDeviation="0.5"/>
+    <filter id="dnaBlur" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2"/>
     </filter>
     <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
     {chr(10).join("      " + p for p in brain_clip_paths)}
@@ -1090,8 +1114,11 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         0%, 100% {{ opacity: 0.20; }}
         50%      {{ opacity: 0.85; }}
       }}
-      /* DNA helixes — duration set inline per element so each helix has a
-         unique timing (no shared period multiples = no synchronization tells). */
+      /* DNA helixes — restraint reads as professional. Each helix has its
+         own animation duration (set inline) so no two ever sync up. The
+         visible phase (40-60% of cycle) is when both the group fade-in AND
+         the strand draw-in are at peak — the strand visibly "draws itself"
+         as the group fades up, then "draws away" as it fades out. */
       .dna {{
         opacity: 0;
         animation-name: dnaFade;
@@ -1101,28 +1128,21 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       @keyframes dnaFade {{
         0%, 100% {{ opacity: 0; }}
         12%      {{ opacity: 0; }}
-        28%      {{ opacity: 0.85; }}
-        58%      {{ opacity: 0.85; }}
+        28%      {{ opacity: 0.95; }}
+        58%      {{ opacity: 0.95; }}
         72%      {{ opacity: 0; }}
       }}
-      /* Pseudo-3D rotation: strands pulse stroke-width + opacity 180° out
-         of phase. The brain reads the alternating thickness as a 3D barrel
-         rotating around its long axis. Same trick used by Pixar for
-         line-weight 3D illusion. */
-      .dna-strand-a, .dna-strand-b {{
-        stroke-width: 1.2;
+      .dna-strand {{
+        animation-name: dnaDraw;
         animation-timing-function: ease-in-out;
         animation-iteration-count: infinite;
       }}
-      .dna-strand-a {{ animation-name: dnaStrandFront; }}
-      .dna-strand-b {{ animation-name: dnaStrandBack; }}
-      @keyframes dnaStrandFront {{
-        0%, 100% {{ stroke-width: 1.7; opacity: 1.0; }}
-        50%      {{ stroke-width: 0.6; opacity: 0.45; }}
-      }}
-      @keyframes dnaStrandBack {{
-        0%, 100% {{ stroke-width: 0.6; opacity: 0.45; }}
-        50%      {{ stroke-width: 1.7; opacity: 1.0; }}
+      @keyframes dnaDraw {{
+        0%   {{ stroke-dashoffset: 100; }}
+        28%  {{ stroke-dashoffset: 0; }}
+        58%  {{ stroke-dashoffset: 0; }}
+        72%  {{ stroke-dashoffset: -100; }}
+        100% {{ stroke-dashoffset: -100; }}
       }}
     ]]></style>
   </defs>

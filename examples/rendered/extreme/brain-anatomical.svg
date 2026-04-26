@@ -72,30 +72,30 @@
          hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
          vocabulary, not "rainbow tech demo". -->
     <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#C95E8A" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_b" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#4F8CC4" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_c" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_d" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.50"/>
-      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.20"/>
+      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.10"/>
       <stop offset="100%" stop-color="#6FB28E" stop-opacity="0"/>
     </radialGradient>
     <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="25"/>
     </filter>
-    <filter id="dnaBlur" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur stdDeviation="0.5"/>
+    <filter id="dnaBlur" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2"/>
     </filter>
     <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
           <path d="M 149,168 C 138,178 138,185 145,189"/>
@@ -472,8 +472,11 @@
         0%, 100% { opacity: 0.20; }
         50%      { opacity: 0.85; }
       }
-      /* DNA helixes — duration set inline per element so each helix has a
-         unique timing (no shared period multiples = no synchronization tells). */
+      /* DNA helixes — restraint reads as professional. Each helix has its
+         own animation duration (set inline) so no two ever sync up. The
+         visible phase (40-60% of cycle) is when both the group fade-in AND
+         the strand draw-in are at peak — the strand visibly "draws itself"
+         as the group fades up, then "draws away" as it fades out. */
       .dna {
         opacity: 0;
         animation-name: dnaFade;
@@ -483,28 +486,21 @@
       @keyframes dnaFade {
         0%, 100% { opacity: 0; }
         12%      { opacity: 0; }
-        28%      { opacity: 0.85; }
-        58%      { opacity: 0.85; }
+        28%      { opacity: 0.95; }
+        58%      { opacity: 0.95; }
         72%      { opacity: 0; }
       }
-      /* Pseudo-3D rotation: strands pulse stroke-width + opacity 180° out
-         of phase. The brain reads the alternating thickness as a 3D barrel
-         rotating around its long axis. Same trick used by Pixar for
-         line-weight 3D illusion. */
-      .dna-strand-a, .dna-strand-b {
-        stroke-width: 1.2;
+      .dna-strand {
+        animation-name: dnaDraw;
         animation-timing-function: ease-in-out;
         animation-iteration-count: infinite;
       }
-      .dna-strand-a { animation-name: dnaStrandFront; }
-      .dna-strand-b { animation-name: dnaStrandBack; }
-      @keyframes dnaStrandFront {
-        0%, 100% { stroke-width: 1.7; opacity: 1.0; }
-        50%      { stroke-width: 0.6; opacity: 0.45; }
-      }
-      @keyframes dnaStrandBack {
-        0%, 100% { stroke-width: 0.6; opacity: 0.45; }
-        50%      { stroke-width: 1.7; opacity: 1.0; }
+      @keyframes dnaDraw {
+        0%   { stroke-dashoffset: 100; }
+        28%  { stroke-dashoffset: 0; }
+        58%  { stroke-dashoffset: 0; }
+        72%  { stroke-dashoffset: -100; }
+        100% { stroke-dashoffset: -100; }
       }
     ]]></style>
   </defs>
@@ -561,109 +557,40 @@
   <!-- DNA helix symbols at canvas corners — fade in/out + draw in
        on staggered 16s timers. 1-2 visible at any moment, others hidden. -->
   <g class="dna-helixes">
-      <g class="dna" filter="url(#dnaBlur)" style="animation-delay:11.6s;animation-duration:24.9s" transform="translate(1168,696) rotate(6)">
-  <path id="dnaStrand_0_a" d="M28,-71 L23,-64 L9,-57 L-9,-50 L-23,-43 L-28,-36 L-23,-28 L-9,-21 L9,-14 L23,-7 L28,0 L23,7 L9,14 L-9,21 L-23,28 L-28,36 L-23,43 L-9,50 L9,57 L23,64 L28,71" stroke="#7C3AED" fill="none" class="dna-strand-a" style="animation-duration:4.0s"/>
-  <path d="M-28,-71 L-23,-64 L-9,-57 L9,-50 L23,-43 L28,-36 L23,-28 L9,-21 L-9,-14 L-23,-7 L-28,0 L-23,7 L-9,14 L9,21 L23,28 L28,36 L23,43 L9,50 L-9,57 L-23,64 L-28,71" stroke="#7C3AED" fill="none" class="dna-strand-b" style="animation-duration:4.0s"/>
-    <line x1="-23" y1="-28" x2="23" y2="-28" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="9" y1="14" x2="-9" y2="14" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="9" y1="57" x2="-9" y2="57" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#7C3AED" class="dna-packet" opacity="0">
-    <animateMotion dur="10.9s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_0_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="10.9s" repeatCount="indefinite"/>
-  </circle>
+      <g class="dna" filter="url(#dnaBlur)" style="animation-delay:3.8s;animation-duration:26.6s" transform="translate(1136,742)">
+  <path d="M28.5,-82.0 C28.5,-77.4 22.9,-72.9 14.3,-68.3 C5.6,-63.8 -5.6,-59.2 -14.2,-54.7 C-22.9,-50.1 -28.5,-45.6 -28.5,-41.0 C-28.5,-36.4 -22.9,-31.9 -14.3,-27.3 C-5.6,-22.8 5.6,-18.2 14.3,-13.7 C22.9,-9.1 28.5,-4.6 28.5,0.0 C28.5,4.6 22.9,9.1 14.2,13.7 C5.6,18.2 -5.6,22.8 -14.2,27.3 C-22.9,31.9 -28.5,36.4 -28.5,41.0 C-28.5,45.6 -22.9,50.1 -14.2,54.7 C-5.6,59.2 5.6,63.8 14.2,68.3 C22.9,72.9 28.5,77.4 28.5,82.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:26.6s;animation-delay:3.8s"/>
+  <path d="M-28.5,-82.0 C-28.5,-77.4 -22.9,-72.9 -14.3,-68.3 C-5.6,-63.8 5.6,-59.2 14.2,-54.7 C22.9,-50.1 28.5,-45.6 28.5,-41.0 C28.5,-36.4 22.9,-31.9 14.3,-27.3 C5.6,-22.8 -5.6,-18.2 -14.3,-13.7 C-22.9,-9.1 -28.5,-4.6 -28.5,0.0 C-28.5,4.6 -22.9,9.1 -14.2,13.7 C-5.6,18.2 5.6,22.8 14.2,27.3 C22.9,31.9 28.5,36.4 28.5,41.0 C28.5,45.6 22.9,50.1 14.2,54.7 C5.6,59.2 -5.6,63.8 -14.2,68.3 C-22.9,72.9 -28.5,77.4 -28.5,82.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:26.6s;animation-delay:3.8s"/>
+    <line x1="-28" y1="-41" x2="28" y2="-41" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="28" y1="0" x2="-28" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-28" y1="41" x2="28" y2="41" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
   </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:1.5s;animation-duration:24.9s" transform="translate(1301,117) rotate(30)">
-  <path id="dnaStrand_1_a" d="M32,-82 L26,-73 L10,-65 L-10,-57 L-26,-49 L-32,-41 L-26,-33 L-10,-24 L10,-16 L26,-8 L32,0 L26,8 L10,16 L-10,24 L-26,33 L-32,41 L-26,49 L-10,57 L10,65 L26,73 L32,82" stroke="#7C3AED" fill="none" class="dna-strand-a" style="animation-duration:4.1s"/>
-  <path d="M-32,-82 L-26,-73 L-10,-65 L10,-57 L26,-49 L32,-41 L26,-33 L10,-24 L-10,-16 L-26,-8 L-32,0 L-26,8 L-10,16 L10,24 L26,33 L32,41 L26,49 L10,57 L-10,65 L-26,73 L-32,82" stroke="#7C3AED" fill="none" class="dna-strand-b" style="animation-duration:4.1s"/>
-    <line x1="-26" y1="-33" x2="26" y2="-33" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="10" y1="16" x2="-10" y2="16" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="10" y1="65" x2="-10" y2="65" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#7C3AED" class="dna-packet" opacity="0">
-    <animateMotion dur="8.2s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_1_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="8.2s" repeatCount="indefinite"/>
-  </circle>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:5.2s;animation-duration:29.7s" transform="translate(1302,816)">
+  <path d="M32.0,-92.0 C32.0,-86.9 25.7,-81.8 16.0,-76.7 C6.3,-71.6 -6.3,-66.4 -16.0,-61.3 C-25.7,-56.2 -32.0,-51.1 -32.0,-46.0 C-32.0,-40.9 -25.7,-35.8 -16.0,-30.7 C-6.3,-25.6 6.3,-20.4 16.0,-15.3 C25.7,-10.2 32.0,-5.1 32.0,0.0 C32.0,5.1 25.7,10.2 16.0,15.3 C6.3,20.4 -6.3,25.6 -16.0,30.7 C-25.7,35.8 -32.0,40.9 -32.0,46.0 C-32.0,51.1 -25.7,56.2 -16.0,61.3 C-6.3,66.4 6.3,71.6 16.0,76.7 C25.7,81.8 32.0,86.9 32.0,92.0" stroke="#4F8CC4" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.7s;animation-delay:5.2s"/>
+  <path d="M-32.0,-92.0 C-32.0,-86.9 -25.7,-81.8 -16.0,-76.7 C-6.3,-71.6 6.3,-66.4 16.0,-61.3 C25.7,-56.2 32.0,-51.1 32.0,-46.0 C32.0,-40.9 25.7,-35.8 16.0,-30.7 C6.3,-25.6 -6.3,-20.4 -16.0,-15.3 C-25.7,-10.2 -32.0,-5.1 -32.0,0.0 C-32.0,5.1 -25.7,10.2 -16.0,15.3 C-6.3,20.4 6.3,25.6 16.0,30.7 C25.7,35.8 32.0,40.9 32.0,46.0 C32.0,51.1 25.7,56.2 16.0,61.3 C6.3,66.4 -6.3,71.6 -16.0,76.7 C-25.7,81.8 -32.0,86.9 -32.0,92.0" stroke="#4F8CC4" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.7s;animation-delay:5.2s"/>
+    <line x1="-32" y1="-46" x2="32" y2="-46" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="32" y1="0" x2="-32" y2="0" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-32" y1="46" x2="32" y2="46" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
   </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:10.6s;animation-duration:25.7s" transform="translate(1184,90) rotate(-23)">
-  <path id="dnaStrand_2_a" d="M22,-54 L17,-49 L7,-43 L-7,-38 L-17,-32 L-22,-27 L-17,-22 L-7,-16 L7,-11 L17,-5 L22,0 L17,5 L7,11 L-7,16 L-17,22 L-22,27 L-17,32 L-7,38 L7,43 L17,49 L22,54" stroke="#7C3AED" fill="none" class="dna-strand-a" style="animation-duration:5.0s"/>
-  <path d="M-22,-54 L-17,-49 L-7,-43 L7,-38 L17,-32 L22,-27 L17,-22 L7,-16 L-7,-11 L-17,-5 L-22,0 L-17,5 L-7,11 L7,16 L17,22 L22,27 L17,32 L7,38 L-7,43 L-17,49 L-22,54" stroke="#7C3AED" fill="none" class="dna-strand-b" style="animation-duration:5.0s"/>
-    <line x1="-17" y1="-22" x2="17" y2="-22" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="7" y1="11" x2="-7" y2="11" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="7" y1="43" x2="-7" y2="43" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#7C3AED" class="dna-packet" opacity="0">
-    <animateMotion dur="9.7s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_2_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="9.7s" repeatCount="indefinite"/>
-  </circle>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:8.6s;animation-duration:27.5s" transform="translate(135,711)">
+  <path d="M40.0,-114.0 C40.0,-107.7 32.1,-101.3 20.0,-95.0 C7.9,-88.7 -7.9,-82.3 -20.0,-76.0 C-32.1,-69.7 -40.0,-63.3 -40.0,-57.0 C-40.0,-50.7 -32.1,-44.3 -20.0,-38.0 C-7.9,-31.7 7.9,-25.3 20.0,-19.0 C32.1,-12.7 40.0,-6.3 40.0,0.0 C40.0,6.3 32.1,12.7 20.0,19.0 C7.9,25.3 -7.9,31.7 -20.0,38.0 C-32.1,44.3 -40.0,50.7 -40.0,57.0 C-40.0,63.3 -32.1,69.7 -20.0,76.0 C-7.9,82.3 7.9,88.7 20.0,95.0 C32.1,101.3 40.0,107.7 40.0,114.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:27.5s;animation-delay:8.6s"/>
+  <path d="M-40.0,-114.0 C-40.0,-107.7 -32.1,-101.3 -20.0,-95.0 C-7.9,-88.7 7.9,-82.3 20.0,-76.0 C32.1,-69.7 40.0,-63.3 40.0,-57.0 C40.0,-50.7 32.1,-44.3 20.0,-38.0 C7.9,-31.7 -7.9,-25.3 -20.0,-19.0 C-32.1,-12.7 -40.0,-6.3 -40.0,0.0 C-40.0,6.3 -32.1,12.7 -20.0,19.0 C-7.9,25.3 7.9,31.7 20.0,38.0 C32.1,44.3 40.0,50.7 40.0,57.0 C40.0,63.3 32.1,69.7 20.0,76.0 C7.9,82.3 -7.9,88.7 -20.0,95.0 C-32.1,101.3 -40.0,107.7 -40.0,114.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:27.5s;animation-delay:8.6s"/>
+    <line x1="-40" y1="-57" x2="40" y2="-57" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="40" y1="0" x2="-40" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-40" y1="57" x2="40" y2="57" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
   </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:2.2s;animation-duration:26.4s" transform="translate(150,82) rotate(15)">
-  <path id="dnaStrand_3_a" d="M34,-84 L27,-75 L10,-67 L-10,-58 L-27,-50 L-34,-42 L-27,-33 L-10,-25 L10,-17 L27,-8 L34,0 L27,8 L10,17 L-10,25 L-27,33 L-34,42 L-27,50 L-10,58 L10,67 L27,75 L34,84" stroke="#34D399" fill="none" class="dna-strand-a" style="animation-duration:4.4s"/>
-  <path d="M-34,-84 L-27,-75 L-10,-67 L10,-58 L27,-50 L34,-42 L27,-33 L10,-25 L-10,-17 L-27,-8 L-34,0 L-27,8 L-10,17 L10,25 L27,33 L34,42 L27,50 L10,58 L-10,67 L-27,75 L-34,84" stroke="#34D399" fill="none" class="dna-strand-b" style="animation-duration:4.4s"/>
-    <line x1="-27" y1="-33" x2="27" y2="-33" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="10" y1="17" x2="-10" y2="17" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="10" y1="67" x2="-10" y2="67" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#34D399" class="dna-packet" opacity="0">
-    <animateMotion dur="6.9s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_3_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="6.9s" repeatCount="indefinite"/>
-  </circle>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:4.9s;animation-duration:24.9s" transform="translate(1313,90)">
+  <path d="M30.0,-86.0 C30.0,-81.2 24.1,-76.4 15.0,-71.7 C5.9,-66.9 -5.9,-62.1 -15.0,-57.3 C-24.1,-52.6 -30.0,-47.8 -30.0,-43.0 C-30.0,-38.2 -24.1,-33.4 -15.0,-28.7 C-5.9,-23.9 5.9,-19.1 15.0,-14.3 C24.1,-9.6 30.0,-4.8 30.0,0.0 C30.0,4.8 24.1,9.6 15.0,14.3 C5.9,19.1 -5.9,23.9 -15.0,28.7 C-24.1,33.4 -30.0,38.2 -30.0,43.0 C-30.0,47.8 -24.1,52.6 -15.0,57.3 C-5.9,62.1 5.9,66.9 15.0,71.7 C24.1,76.4 30.0,81.2 30.0,86.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:24.9s;animation-delay:4.9s"/>
+  <path d="M-30.0,-86.0 C-30.0,-81.2 -24.1,-76.4 -15.0,-71.7 C-5.9,-66.9 5.9,-62.1 15.0,-57.3 C24.1,-52.6 30.0,-47.8 30.0,-43.0 C30.0,-38.2 24.1,-33.4 15.0,-28.7 C5.9,-23.9 -5.9,-19.1 -15.0,-14.3 C-24.1,-9.6 -30.0,-4.8 -30.0,0.0 C-30.0,4.8 -24.1,9.6 -15.0,14.3 C-5.9,19.1 5.9,23.9 15.0,28.7 C24.1,33.4 30.0,38.2 30.0,43.0 C30.0,47.8 24.1,52.6 15.0,57.3 C5.9,62.1 -5.9,66.9 -15.0,71.7 C-24.1,76.4 -30.0,81.2 -30.0,86.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:24.9s;animation-delay:4.9s"/>
+    <line x1="-30" y1="-43" x2="30" y2="-43" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="30" y1="0" x2="-30" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-30" y1="43" x2="30" y2="43" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
   </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:7.6s;animation-duration:27.0s" transform="translate(134,795) rotate(2)">
-  <path id="dnaStrand_4_a" d="M26,-64 L21,-58 L8,-52 L-8,-45 L-21,-39 L-26,-32 L-21,-26 L-8,-19 L8,-13 L21,-6 L26,0 L21,6 L8,13 L-8,19 L-21,26 L-26,32 L-21,39 L-8,45 L8,52 L21,58 L26,64" stroke="#22D3EE" fill="none" class="dna-strand-a" style="animation-duration:3.3s"/>
-  <path d="M-26,-64 L-21,-58 L-8,-52 L8,-45 L21,-39 L26,-32 L21,-26 L8,-19 L-8,-13 L-21,-6 L-26,0 L-21,6 L-8,13 L8,19 L21,26 L26,32 L21,39 L8,45 L-8,52 L-21,58 L-26,64" stroke="#22D3EE" fill="none" class="dna-strand-b" style="animation-duration:3.3s"/>
-    <line x1="-21" y1="-26" x2="21" y2="-26" stroke="#22D3EE" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="8" y1="13" x2="-8" y2="13" stroke="#22D3EE" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="8" y1="52" x2="-8" y2="52" stroke="#22D3EE" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#22D3EE" class="dna-packet" opacity="0">
-    <animateMotion dur="7.6s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_4_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="7.6s" repeatCount="indefinite"/>
-  </circle>
-  </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:8.8s;animation-duration:25.7s" transform="translate(1338,771) rotate(-7)">
-  <path id="dnaStrand_5_a" d="M44,-110 L36,-99 L14,-88 L-14,-77 L-36,-66 L-44,-55 L-36,-44 L-14,-33 L14,-22 L36,-11 L44,0 L36,11 L14,22 L-14,33 L-36,44 L-44,55 L-36,66 L-14,77 L14,88 L36,99 L44,110" stroke="#EC4899" fill="none" class="dna-strand-a" style="animation-duration:4.3s"/>
-  <path d="M-44,-110 L-36,-99 L-14,-88 L14,-77 L36,-66 L44,-55 L36,-44 L14,-33 L-14,-22 L-36,-11 L-44,0 L-36,11 L-14,22 L14,33 L36,44 L44,55 L36,66 L14,77 L-14,88 L-36,99 L-44,110" stroke="#EC4899" fill="none" class="dna-strand-b" style="animation-duration:4.3s"/>
-    <line x1="-36" y1="-44" x2="36" y2="-44" stroke="#EC4899" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="14" y1="22" x2="-14" y2="22" stroke="#EC4899" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="14" y1="88" x2="-14" y2="88" stroke="#EC4899" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#EC4899" class="dna-packet" opacity="0">
-    <animateMotion dur="10.2s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_5_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="10.2s" repeatCount="indefinite"/>
-  </circle>
-  </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:6.5s;animation-duration:19.4s" transform="translate(1214,118) rotate(9)">
-  <path id="dnaStrand_6_a" d="M34,-85 L28,-76 L11,-68 L-11,-59 L-28,-51 L-34,-42 L-28,-34 L-11,-26 L11,-17 L28,-8 L34,0 L28,9 L11,17 L-11,26 L-28,34 L-34,42 L-28,51 L-11,59 L11,68 L28,76 L34,85" stroke="#34D399" fill="none" class="dna-strand-a" style="animation-duration:4.7s"/>
-  <path d="M-34,-85 L-28,-76 L-11,-68 L11,-59 L28,-51 L34,-42 L28,-34 L11,-26 L-11,-17 L-28,-8 L-34,0 L-28,9 L-11,17 L11,26 L28,34 L34,42 L28,51 L11,59 L-11,68 L-28,76 L-34,85" stroke="#34D399" fill="none" class="dna-strand-b" style="animation-duration:4.7s"/>
-    <line x1="-28" y1="-34" x2="28" y2="-34" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="11" y1="17" x2="-11" y2="17" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="11" y1="68" x2="-11" y2="68" stroke="#34D399" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#34D399" class="dna-packet" opacity="0">
-    <animateMotion dur="8.9s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_6_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="8.9s" repeatCount="indefinite"/>
-  </circle>
-  </g>
-    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:1.0s;animation-duration:22.8s" transform="translate(1188,86) rotate(-1)">
-  <path id="dnaStrand_7_a" d="M34,-86 L28,-77 L11,-69 L-11,-60 L-28,-52 L-34,-43 L-28,-34 L-11,-26 L11,-17 L28,-9 L34,0 L28,9 L11,17 L-11,26 L-28,34 L-34,43 L-28,52 L-11,60 L11,69 L28,77 L34,86" stroke="#7C3AED" fill="none" class="dna-strand-a" style="animation-duration:4.8s"/>
-  <path d="M-34,-86 L-28,-77 L-11,-69 L11,-60 L28,-52 L34,-43 L28,-34 L11,-26 L-11,-17 L-28,-9 L-34,0 L-28,9 L-11,17 L11,26 L28,34 L34,43 L28,52 L11,60 L-11,69 L-28,77 L-34,86" stroke="#7C3AED" fill="none" class="dna-strand-b" style="animation-duration:4.8s"/>
-    <line x1="-28" y1="-34" x2="28" y2="-34" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="11" y1="17" x2="-11" y2="17" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-    <line x1="11" y1="69" x2="-11" y2="69" stroke="#7C3AED" stroke-width="0.7" stroke-opacity="0.5"/>
-  <circle r="2.5" fill="#7C3AED" class="dna-packet" opacity="0">
-    <animateMotion dur="7.5s" repeatCount="indefinite">
-      <mpath href="#dnaStrand_7_a"/>
-    </animateMotion>
-    <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.2;0.8;1" dur="7.5s" repeatCount="indefinite"/>
-  </circle>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:13.5s;animation-duration:29.6s" transform="translate(275,82)">
+  <path d="M32.5,-92.5 C32.5,-87.4 26.1,-82.2 16.3,-77.1 C6.4,-71.9 -6.4,-66.8 -16.2,-61.7 C-26.1,-56.5 -32.5,-51.4 -32.5,-46.2 C-32.5,-41.1 -26.1,-36.0 -16.3,-30.8 C-6.4,-25.7 6.4,-20.6 16.3,-15.4 C26.1,-10.3 32.5,-5.1 32.5,0.0 C32.5,5.1 26.1,10.3 16.2,15.4 C6.4,20.6 -6.4,25.7 -16.2,30.8 C-26.1,36.0 -32.5,41.1 -32.5,46.2 C-32.5,51.4 -26.1,56.5 -16.2,61.7 C-6.4,66.8 6.4,71.9 16.2,77.1 C26.1,82.2 32.5,87.4 32.5,92.5" stroke="#7B5EAA" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.6s;animation-delay:13.5s"/>
+  <path d="M-32.5,-92.5 C-32.5,-87.4 -26.1,-82.2 -16.3,-77.1 C-6.4,-71.9 6.4,-66.8 16.2,-61.7 C26.1,-56.5 32.5,-51.4 32.5,-46.2 C32.5,-41.1 26.1,-36.0 16.3,-30.8 C6.4,-25.7 -6.4,-20.6 -16.3,-15.4 C-26.1,-10.3 -32.5,-5.1 -32.5,0.0 C-32.5,5.1 -26.1,10.3 -16.2,15.4 C-6.4,20.6 6.4,25.7 16.2,30.8 C26.1,36.0 32.5,41.1 32.5,46.2 C32.5,51.4 26.1,56.5 16.2,61.7 C6.4,66.8 -6.4,71.9 -16.2,77.1 C-26.1,82.2 -32.5,87.4 -32.5,92.5" stroke="#7B5EAA" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.6s;animation-delay:13.5s"/>
+    <line x1="-32" y1="-46" x2="32" y2="-46" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="32" y1="0" x2="-32" y2="0" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-32" y1="46" x2="32" y2="46" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
   </g>
   </g>
 
