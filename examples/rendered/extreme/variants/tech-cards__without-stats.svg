@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="850" viewBox="0 0 1300 850" role="img" aria-label="Tech stack — Backend, Frontend, Architecture, Data Layer, DevOps, AI &amp; Data">
+  <style>
+    .t-caption  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.20em; text-transform: uppercase; }
+    .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
+    .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
+    .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
+    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-num-sm { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
+    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
+
+    /* Travelling edge highlight — a colored segment loops around each card
+       perimeter every 4s, staggered per card. Same pattern brain region cards
+       got in R2-4 — replaces the static "breathe stripe" at the top with a
+       continuously-moving glow that gives the card visible energy. */
+    .card-edge {
+      stroke-dasharray: 80 1480;
+      animation: cardEdgeTravel 4s linear infinite;
+      filter: url(#cardEdgeGlow);
+      opacity: 0.95;
+    }
+    @keyframes cardEdgeTravel { to { stroke-dashoffset: -1560; } }
+    .ce1 { animation-delay: 0s; }
+    .ce2 { animation-delay: 0.7s; }
+    .ce3 { animation-delay: 1.4s; }
+    .ce4 { animation-delay: 2.1s; }
+    .ce5 { animation-delay: 2.8s; }
+    .ce6 { animation-delay: 3.5s; }
+
+    /* Inner radial glow — soft accent-colored pulse from card center, slow 5s
+       ease-in-out, gives the card warmth from within without pulling focus. */
+    .card-inner-pulse { animation: cardPulse 5s ease-in-out infinite; }
+    @keyframes cardPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1.0; } }
+
+    .draw-bar { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawBar 1.8s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes drawBar { to { stroke-dashoffset: 0; } }
+
+    /* opacity-only fade — never set transform here, it would overwrite the parent's translate() */
+    .card-fade { opacity: 0; animation: cardFade 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }
+    @keyframes cardFade { to { opacity: 1; } }
+    .c1{animation-delay:0.0s}.c2{animation-delay:0.08s}.c3{animation-delay:0.16s}
+    .c4{animation-delay:0.24s}.c5{animation-delay:0.32s}.c6{animation-delay:0.40s}
+    .b1{animation-delay:0.5s}.b2{animation-delay:0.6s}.b3{animation-delay:0.7s}
+    .b4{animation-delay:0.8s}.b5{animation-delay:0.9s}.b6{animation-delay:1.0s}
+  </style>
+  <defs>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#1A2028" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#0D1117" stop-opacity="0.96"/>
+    </linearGradient>
+    <linearGradient id="cardHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.06"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="accentRed"    x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#F90001"/><stop offset="100%" stop-color="#FF4D4F"/></linearGradient>
+    <linearGradient id="accentOrange" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FF652F"/><stop offset="100%" stop-color="#FFB088"/></linearGradient>
+    <linearGradient id="accentGreen"  x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#34D399"/><stop offset="100%" stop-color="#6EE7B7"/></linearGradient>
+    <linearGradient id="accentGold"   x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FFD23F"/><stop offset="100%" stop-color="#FFE680"/></linearGradient>
+    <linearGradient id="accentCyan"   x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22D3EE"/><stop offset="100%" stop-color="#67E8F9"/></linearGradient>
+    <linearGradient id="accentPurple" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A78BFA"/><stop offset="100%" stop-color="#C4B5FD"/></linearGradient>
+    <linearGradient id="profGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#F90001"/><stop offset="100%" stop-color="#FF652F"/></linearGradient>
+    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="0.9" fill="#F90001" fill-opacity="0.08"/>
+    </pattern>
+    <!-- Stacked drop shadow: 3 layered feDropShadow for real depth perception
+         (single shadow reads as flat). Same pattern brain cards got in R2-4. -->
+    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
+      <feDropShadow dx="0" dy="6"  stdDeviation="12" flood-color="#000" flood-opacity="0.40"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/>
+    </filter>
+    <!-- Edge-glow filter — soft halo on the traveling edge segment so the glow
+         radiates beyond the stroke. -->
+    <filter id="cardEdgeGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <!-- Per-accent inner glow gradients for the soft pulsing fill inside each
+         card. Each lobe color radiates from card center at low opacity. -->
+    <radialGradient id="innerGlowRed"    cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#F90001" stop-opacity="0.18"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowOrange" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#FF652F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowGreen"  cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#34D399" stop-opacity="0.18"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowGold"   cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#FFD23F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FFD23F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowCyan"   cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#22D3EE" stop-opacity="0.18"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowPurple" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#A78BFA" stop-opacity="0.18"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="1300" height="850" fill="url(#dots)"/>
+  <g transform="translate(30,30)">
+    <g class="card-fade c1">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowRed)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#F90001" stroke-width="2" pathLength="1560" class="card-edge ce1"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#F90001">SERVER · APIS · LOGIC</text>
+      <text x="32" y="96" class="t-title">⚙️ Backend</text>
+      <text x="32" y="130" class="t-tagline">Robust, well-tested server-side systems.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Python · Django</text>
+      <text x="32" y="208" class="t-tool">DRF · FastAPI</text>
+      <text x="32" y="236" class="t-tool" fill="#9BA1A6">Flask</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b1"/>
+    </g>
+  </g>
+  <g transform="translate(450,30)">
+    <g class="card-fade c2">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowOrange)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#FF652F" stroke-width="2" pathLength="1560" class="card-edge ce2"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#FF652F">CLIENT · UI · INTERACTION</text>
+      <text x="32" y="96" class="t-title">🎨 Frontend</text>
+      <text x="32" y="130" class="t-tagline">Interactive, accessible interfaces.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Vue · Nuxt</text>
+      <text x="32" y="208" class="t-tool">TypeScript · Tailwind</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b2"/>
+    </g>
+  </g>
+  <g transform="translate(870,30)">
+    <g class="card-fade c3">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowGreen)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#34D399" stroke-width="2" pathLength="1560" class="card-edge ce3"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#34D399">SYSTEMS · DESIGN · SCALE</text>
+      <text x="32" y="96" class="t-title">🏗️ Architecture</text>
+      <text x="32" y="130" class="t-tagline">Distributed, event-driven systems.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Microservices · RabbitMQ</text>
+      <text x="32" y="208" class="t-tool">Event-Driven</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="302" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b3"/>
+    </g>
+  </g>
+  <g transform="translate(30,440)">
+    <g class="card-fade c4">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowGold)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#FFD23F" stroke-width="2" pathLength="1560" class="card-edge ce4"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#FFD23F">PERSISTENCE · STATE · CACHE</text>
+      <text x="32" y="96" class="t-title">💾 Data Layer</text>
+      <text x="32" y="130" class="t-tagline">Modeling, indexing, performance.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">PostgreSQL · Redis</text>
+      <text x="32" y="208" class="t-tool">MySQL · SQLite</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b4"/>
+    </g>
+  </g>
+  <g transform="translate(450,440)">
+    <g class="card-fade c5">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowCyan)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#22D3EE" stroke-width="2" pathLength="1560" class="card-edge ce5"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#22D3EE">PLATFORM · CI/CD · DEPLOY</text>
+      <text x="32" y="96" class="t-title">🛠️ DevOps</text>
+      <text x="32" y="130" class="t-tagline">Pipelines that don&apos;t break on Friday.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">Docker · Git</text>
+      <text x="32" y="208" class="t-tool">GitHub Actions · AWS</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b5"/>
+    </g>
+  </g>
+  <g transform="translate(870,440)">
+    <g class="card-fade c6">
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>
+      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#innerGlowPurple)" class="card-inner-pulse"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="#A78BFA" stroke-width="2" pathLength="1560" class="card-edge ce6"/>
+      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>
+      <text x="32" y="52" class="t-caption" fill="#A78BFA">INTELLIGENCE · ANALYTICS</text>
+      <text x="32" y="96" class="t-title">🤖 AI &amp; Data</text>
+      <text x="32" y="130" class="t-tagline">LLMs, RAG, agents, notebooks.</text>
+      <text x="32" y="180" class="t-tool" fill="#FFFFFF" font-weight="700">PyTorch · TensorFlow</text>
+      <text x="32" y="208" class="t-tool">LLMs · RAG</text>
+      <line x1="32" y1="266" x2="368" y2="266" stroke="#21262D" stroke-width="1"/>
+      <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
+      <line x1="32" y1="355.5" x2="257" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b6"/>
+    </g>
+  </g>
+</svg>

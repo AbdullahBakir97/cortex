@@ -15,7 +15,11 @@ Ported from the prototype at:
 
 from __future__ import annotations
 
+import hashlib
+import math
+import random
 import re
+from dataclasses import dataclass
 from importlib import resources
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
@@ -33,11 +37,11 @@ def _x(text: str) -> str:
 # Fallback: paths the per-lobe classifier doesn't recognize fall through here
 # and get the global brainGrad. Should rarely fire after classification.
 _FILL_REPLACEMENTS: dict[str, str] = {
-    "#fff0cd": "url(#brainGrad)",
-    "#fdd99b": "url(#brainGrad)",
-    "#d9bb7a": "url(#brainGradAlt)",
-    "#ffffff": "url(#brainGrad)",
-    "#816647": "url(#brainGradAlt)",
+    "#fff0cd": "url(#brainGrad_unified)",
+    "#fdd99b": "url(#brainGrad_unified)",
+    "#d9bb7a": "url(#brainGrad_unified)",
+    "#ffffff": "url(#brainGrad_unified)",
+    "#816647": "url(#brainGrad_unified)",
 }
 
 
@@ -60,13 +64,16 @@ def _stroke_replacements(palette_primary: str, palette_secondary: str) -> dict[s
 #   parietal:  350 <= cx <= 700 AND cy < 300  (top middle)
 #   temporal:  350 <= cx <= 700 AND cy >= 300 (bottom middle)
 #
-# Brain group transform in the wrapper SVG is translate(332,152) scale(0.7),
-# so canvas centroid = brain-local centroid * 0.7 + (332, 152).
+# Brain group transform in the wrapper SVG is translate(332,260) scale(0.7),
+# so canvas centroid = brain-local centroid * 0.7 + (332, 260).
 
 _LOBE_KEYS = ("frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem")
 _LOBE_PATH_IDS: dict[str, set[str]] | None = None  # populated lazily
 _LOBE_CENTROIDS: dict[str, tuple[int, int]] | None = None  # canvas-space
-_LOBE_BBOXES: dict[str, tuple[float, float, float, float]] | None = None  # brain-local (xmin,ymin,xmax,ymax)
+_LOBE_BBOXES: dict[str, tuple[float, float, float, float]] | None = (
+    None  # brain-local (xmin,ymin,xmax,ymax)
+)
+_LOBE_PATHS_BY_LOBE: dict[str, list[tuple[str, str]]] | None = None
 
 
 def _path_centroid_d(d_attr: str) -> tuple[float, float] | None:
@@ -111,26 +118,251 @@ def _iter_paths(group: str):
             yield im.group(1), dm.group(1)
 
 
+def _seed_from_name(name: str) -> int:
+    """Stable 32-bit seed derived from the identity name. Deterministic per user."""
+    digest = hashlib.sha256(name.encode("utf-8")).hexdigest()
+    return int(digest[:8], 16)
+
+
+def _random_cells_in_bbox(
+    bbox: tuple[float, float, float, float],
+    n: int,
+    rng: random.Random,
+) -> list[tuple[int, int]]:
+    """Return n cells at random normalized offsets in [0.15, 0.85] inside bbox.
+
+    Inset 15% from each edge so cells sit well inside the lobe rather than on its edge.
+    Coords are returned as ints (SVG tolerates floats but ints render slightly tighter).
+    """
+    xmin, ymin, xmax, ymax = bbox
+    w = xmax - xmin
+    h = ymax - ymin
+    out: list[tuple[int, int]] = []
+    for _ in range(n):
+        nx = rng.uniform(0.15, 0.85)
+        ny = rng.uniform(0.15, 0.85)
+        out.append((round(xmin + nx * w), round(ymin + ny * h)))
+    return out
+
+
+@dataclass(frozen=True)
+class _Arc:
+    """One randomized synaptic arc between two cells, with Bezier control point."""
+
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+    cx: int  # quadratic Bezier control point x
+    cy: int  # quadratic Bezier control point y
+    color: str
+    begin_s: float
+    dur_s: float
+
+
+def _random_arc_network(
+    cells_by_lobe: dict[str, list[tuple[int, int]]],
+    n: int,
+    rng: random.Random,
+    lobe_colors: dict[str, str],
+) -> list[_Arc]:
+    """n random arcs across the union of cells, colored by source lobe.
+
+    Each arc:
+      - source cell picked uniformly from the union of all lobes' cells
+      - target cell picked uniformly from the union (resampled if equal to source)
+      - color = source-lobe's accent
+      - quadratic Bezier control point at midpoint + random offset (±60px each axis)
+      - begin_s in [0, 12), dur_s in [0.8, 1.6)
+    """
+    cell_lobe: list[tuple[tuple[int, int], str]] = []
+    for lobe, cells in cells_by_lobe.items():
+        for c in cells:
+            cell_lobe.append((c, lobe))
+
+    arcs: list[_Arc] = []
+    for _ in range(n):
+        (p1, lobe1) = rng.choice(cell_lobe)
+        (p2, _lobe2) = rng.choice(cell_lobe)
+        # Resample if we drew the same cell twice (no self-loops)
+        attempts = 0
+        while p2 == p1 and attempts < 5:
+            (p2, _lobe2) = rng.choice(cell_lobe)
+            attempts += 1
+        if p2 == p1:
+            # Pathological: skip rather than emit a degenerate arc.
+            continue
+        mid_x = (p1[0] + p2[0]) // 2
+        mid_y = (p1[1] + p2[1]) // 2
+        cx = mid_x + rng.randint(-60, 60)
+        cy = mid_y + rng.randint(-60, 60)
+        arcs.append(
+            _Arc(
+                x1=p1[0],
+                y1=p1[1],
+                x2=p2[0],
+                y2=p2[1],
+                cx=cx,
+                cy=cy,
+                color=lobe_colors[lobe1],
+                begin_s=rng.uniform(0.0, 12.0),
+                dur_s=rng.uniform(0.8, 1.6),
+            )
+        )
+    return arcs
+
+
+def _build_lobe_stroke_overlay(
+    paths_by_lobe: dict[str, list[tuple[str, str]]],
+    lobe_colors: dict[str, str],
+    n_per_lobe: int = 8,
+) -> list[str]:
+    """Build per-lobe duplicate <path/> elements for the stroke-draw animation.
+
+    For each lobe, emit the top n_per_lobe paths (ranked by len(d), descending)
+    as fresh <path> elements with:
+      - d="<original d>" (geometry copied from the source path)
+      - fill="none" + stroke=<lobe_color> + stroke-width=2.2
+      - pathLength="100" + stroke-dasharray="100 100" (so dashoffset animation
+        works without per-path length measurement)
+      - class="lobe-stroke ls-<lobe>" (CSS keyframes provide the draw-in/out)
+
+    The overlay layer (parent <g>) gets filter="url(#electricGlow)" applied
+    once, not per-path.
+    """
+    out: list[str] = []
+    for lobe, pairs in paths_by_lobe.items():
+        if not pairs:
+            continue
+        color = lobe_colors[lobe]
+        ranked = sorted(pairs, key=lambda p: len(p[1]), reverse=True)
+        for _pid, d in ranked[:n_per_lobe]:
+            out.append(
+                f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2.2" '
+                f'pathLength="100" stroke-dasharray="100 100" '
+                f'class="lobe-stroke ls-{lobe}"/>'
+            )
+    return out
+
+
+def _dna_helix_paths(
+    cx: int,
+    cy: int,
+    width: int = 80,
+    height: int = 170,
+    samples: int = 12,
+) -> tuple[str, str, list[tuple[tuple[int, int], tuple[int, int]]]]:
+    """Generate smooth cubic-Bezier helix strands + base-pair rung connectors.
+
+    Returns (strand_a_path_d, strand_b_path_d, rungs).
+    Strands are mathematically smooth: each segment between anchor points is a
+    cubic Bezier whose control points are derived from the tangent of the
+    cosine wave at each anchor — produces a true smooth curve, not a polygon
+    approximation.
+
+    Strand A: cosine wave. Strand B: -cosine (anti-phase, mirrored).
+    Rungs: horizontal connectors at every 3rd sample point (excluding endpoints).
+    """
+    cycles = 2.0  # 2 full helix turns over the height
+    omega = cycles * 2 * math.pi
+    seg = height / samples  # vertical distance per segment
+    cp_offset = seg / 3.0  # cubic-Bezier control points offset along tangent
+
+    # Anchors + tangents (dx/dy at that anchor) for each strand.
+    pts_a: list[tuple[float, float, float]] = []  # (x, y, dx_dy)
+    pts_b: list[tuple[float, float, float]] = []
+    rungs_anchors: list[tuple[tuple[int, int], tuple[int, int]]] = []
+    for i in range(samples + 1):
+        t = i / samples
+        y = cy + (t - 0.5) * height
+        # cosine wave in t-space
+        ax = cx + math.cos(omega * t) * (width / 2.0)
+        bx = cx - math.cos(omega * t) * (width / 2.0)
+        # dx/dy = derivative of cosine wave w.r.t. y. Since y = cy + (t-0.5)*height,
+        # dy/dt = height, so dt/dy = 1/height. d(cos(omega*t))/dt = -omega*sin(omega*t).
+        # dx/dy = -omega * sin(omega*t) * (width/2) / height.
+        dx_dy = -omega * math.sin(omega * t) * (width / 2.0) / height
+        pts_a.append((ax, y, dx_dy))
+        pts_b.append((bx, y, -dx_dy))
+        if i % 3 == 0 and i not in (0, samples):
+            rungs_anchors.append(((round(ax), round(y)), (round(bx), round(y))))
+
+    def _to_bezier_path(pts: list[tuple[float, float, float]]) -> str:
+        x0, y0, _ = pts[0]
+        d_parts = [f"M{x0:.1f},{y0:.1f}"]
+        for i in range(1, len(pts)):
+            xa, ya, ta = pts[i - 1]
+            xb, yb, tb = pts[i]
+            cp1x = xa + ta * cp_offset
+            cp1y = ya + cp_offset
+            cp2x = xb - tb * cp_offset
+            cp2y = yb - cp_offset
+            d_parts.append(f" C{cp1x:.1f},{cp1y:.1f} {cp2x:.1f},{cp2y:.1f} {xb:.1f},{yb:.1f}")
+        return "".join(d_parts)
+
+    strand_a = _to_bezier_path(pts_a)
+    strand_b = _to_bezier_path(pts_b)
+    return strand_a, strand_b, rungs_anchors
+
+
+def _dna_specs_random(rng: random.Random, count: int = 5) -> list[dict]:
+    """Generate `count` deterministic-random DNA helix specs scattered around
+    canvas edge zones. Restrained design: vertical orientation (no tilt),
+    monochromatic jewel-tone palette (3 colors only — same family as aurora),
+    fewer helixes (5 default vs. 8) for visual restraint, larger sizes for
+    legibility. Each spec has unique cycle/delay so no synchronization tells.
+    """
+    # Same jewel-tone palette as aurora — 3 cool tones for visual unity
+    palette = ["#4F8CC4", "#7B5EAA", "#C95E8A"]
+    # 4 corner zones — keep helixes outside brain + card area
+    zones = [
+        (60, 280, 60, 220),  # top-left
+        (1120, 1340, 60, 220),  # top-right
+        (60, 280, 680, 840),  # bottom-left
+        (1120, 1340, 680, 840),  # bottom-right
+    ]
+    specs: list[dict] = []
+    for _ in range(count):
+        xmin, xmax, ymin, ymax = rng.choice(zones)
+        size = rng.randint(140, 260)
+        specs.append(
+            {
+                "cx": rng.randint(xmin, xmax),
+                "cy": rng.randint(ymin, ymax),
+                "size": size,
+                "width": round(size * 0.35),  # narrower helix for elegance
+                "color": rng.choice(palette),
+                "cycle": round(rng.uniform(24, 32), 1),
+                "delay": round(rng.uniform(0, 16), 1),
+            }
+        )
+    return specs
+
+
 def _classify_brain_paths(
     svg: str,
 ) -> tuple[
     dict[str, set[str]],
     dict[str, tuple[int, int]],
     dict[str, tuple[float, float, float, float]],
+    dict[str, list[tuple[str, str]]],
 ]:
-    """Classify every brain path into one of 6 lobes; return paths/centroids/bboxes.
+    """Classify every brain path into one of 6 lobes; return paths/centroids/bboxes/pairs.
 
-    Returns a 3-tuple:
+    Returns a 4-tuple:
       classification: lobe -> set of path IDs
       centroids:      lobe -> (cx, cy) in CANVAS space (after wrapper transform)
       bboxes:         lobe -> (xmin, ymin, xmax, ymax) in BRAIN-LOCAL space
+      paths_by_lobe:  lobe -> list of (id, d) tuples
     """
     # Cerebellum first (it's nested inside brain-stem in this source SVG).
     cere_g = _extract_g_by_id(svg, "cerebellum")
     cere_ids: set[str] = set()
     cere_centroids: list[tuple[float, float]] = []
+    cere_pairs: list[tuple[str, str]] = []
     for pid, d in _iter_paths(cere_g):
         cere_ids.add(pid)
+        cere_pairs.append((pid, d))
         c = _path_centroid_d(d)
         if c is not None:
             cere_centroids.append(c)
@@ -139,10 +371,12 @@ def _classify_brain_paths(
     bs_g = _extract_g_by_id(svg, "brain-stem")
     bs_ids: set[str] = set()
     bs_centroids: list[tuple[float, float]] = []
+    bs_pairs: list[tuple[str, str]] = []
     for pid, d in _iter_paths(bs_g):
         if pid in cere_ids:
             continue
         bs_ids.add(pid)
+        bs_pairs.append((pid, d))
         c = _path_centroid_d(d)
         if c is not None:
             bs_centroids.append(c)
@@ -151,6 +385,7 @@ def _classify_brain_paths(
     cb_g = _extract_g_by_id(svg, "cerebrum")
     classification: dict[str, set[str]] = {k: set() for k in _LOBE_KEYS}
     centroids_by_lobe: dict[str, list[tuple[float, float]]] = {k: [] for k in _LOBE_KEYS}
+    paths_by_lobe: dict[str, list[tuple[str, str]]] = {k: [] for k in _LOBE_KEYS}
     for pid, d in _iter_paths(cb_g):
         c = _path_centroid_d(d)
         if c is None:
@@ -165,22 +400,25 @@ def _classify_brain_paths(
         else:
             lobe = "temporal"
         classification[lobe].add(pid)
+        paths_by_lobe[lobe].append((pid, d))
         centroids_by_lobe[lobe].append(c)
 
     classification["cerebellum"] = cere_ids
     classification["brainstem"] = bs_ids
     centroids_by_lobe["cerebellum"] = cere_centroids
     centroids_by_lobe["brainstem"] = bs_centroids
+    paths_by_lobe["cerebellum"] = cere_pairs
+    paths_by_lobe["brainstem"] = bs_pairs
 
     # Convert each lobe's centroid average to canvas space.
-    # Brain group transform: translate(332, 152) scale(0.7).
+    # Brain group transform: translate(332, 260) scale(0.7).
     canvas_centroids: dict[str, tuple[int, int]] = {}
     bboxes: dict[str, tuple[float, float, float, float]] = {}
     for lobe, cs in centroids_by_lobe.items():
         if cs:
             ax = sum(c[0] for c in cs) / len(cs)
             ay = sum(c[1] for c in cs) / len(cs)
-            canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 152))
+            canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 260))
             xs = [c[0] for c in cs]
             ys = [c[1] for c in cs]
             bboxes[lobe] = (min(xs), min(ys), max(xs), max(ys))
@@ -188,58 +426,52 @@ def _classify_brain_paths(
             canvas_centroids[lobe] = (700, 400)  # fallback to brain center
             bboxes[lobe] = (400.0, 300.0, 600.0, 500.0)  # fallback bbox
 
-    return classification, canvas_centroids, bboxes
+    return classification, canvas_centroids, bboxes, paths_by_lobe
 
 
 def _ensure_classification() -> tuple[
     dict[str, set[str]],
     dict[str, tuple[int, int]],
     dict[str, tuple[float, float, float, float]],
+    dict[str, list[tuple[str, str]]],
 ]:
     """Lazy module-level cache. First call parses + classifies; later calls reuse."""
-    global _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
-    if _LOBE_PATH_IDS is None or _LOBE_CENTROIDS is None or _LOBE_BBOXES is None:
+    global _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES, _LOBE_PATHS_BY_LOBE
+    if (
+        _LOBE_PATH_IDS is None
+        or _LOBE_CENTROIDS is None
+        or _LOBE_BBOXES is None
+        or _LOBE_PATHS_BY_LOBE is None
+    ):
         src_text = (
             resources.files("cortex.assets")
             .joinpath("brain-source.svg")
             .read_text(encoding="utf-8")
         )
-        _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES = _classify_brain_paths(src_text)
-    return _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
+        (
+            _LOBE_PATH_IDS,
+            _LOBE_CENTROIDS,
+            _LOBE_BBOXES,
+            _LOBE_PATHS_BY_LOBE,
+        ) = _classify_brain_paths(src_text)
+    return _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES, _LOBE_PATHS_BY_LOBE
 
 
 def _recolor(
     content: str,
     palette_primary: str,
     palette_secondary: str,
-    classification: dict[str, set[str]] | None = None,
 ) -> str:
-    """Per-lobe fill gradients + global stroke replacements.
+    """All source fills → brainGrad_unified; strokes → palette colors.
 
-    If a classification dict is provided, each path gets its lobe-specific
-    gradient (url(#brainGrad_<lobe>)). Paths not in any lobe set fall back
-    to the global brainGrad via _FILL_REPLACEMENTS.
+    The body fill is unified across the brain (single gradient on every path).
+    Lobe identity is conveyed by the stroke-overlay layer added later in the
+    composition, not by per-path fill substitution.
     """
-    # Per-lobe fill replacement (precise, ID-targeted) — runs first so the
-    # fallback can patch any unclassified leftovers.
-    if classification is not None:
-        for lobe, path_ids in classification.items():
-            if not path_ids:
-                continue
-            gradient_url = f"url(#brainGrad_{lobe})"
-            for pid in path_ids:
-                pattern = (
-                    rf'(<path\b[^>]*?\sid="{re.escape(pid)}"[^>]*?\sstyle="[^"]*?fill:)'
-                    rf'[^;"]+([^"]*?")'
-                )
-                content = re.sub(pattern, rf"\1{gradient_url}\2", content)
-
-    # Fallback: any path the classifier missed gets the global gradient.
     for old, new in _FILL_REPLACEMENTS.items():
         for variant in (old, old.upper(), old.lower()):
             content = content.replace(f"fill:{variant}", f"fill:{new}")
 
-    # Strokes are still global (lobe outlines all share palette colors).
     strokes = _stroke_replacements(palette_primary, palette_secondary)
     for old, new in strokes.items():
         for variant in (old, old.upper(), old.lower()):
@@ -254,12 +486,36 @@ _REGION_POSITIONS = {
     # overridden at build time with classified centroids — the values here are
     # fallbacks if classification fails.
     # Brain orientation: faces LEFT, so frontal at canvas-left, occipital at canvas-right.
-    "frontal":    {"label_xy": (20,   200), "target_xy": (471, 395), "color": "primary"},   # left  (lobe at canvas left)
-    "parietal":   {"label_xy": (540,  130), "target_xy": (710, 260), "color": "accent_d"},  # top center
-    "occipital":  {"label_xy": (1060, 200), "target_xy": (909, 398), "color": "secondary"}, # right (lobe at canvas right)
-    "temporal":   {"label_xy": (1060, 480), "target_xy": (706, 468), "color": "accent_c"},  # right-mid
-    "cerebellum": {"label_xy": (1060, 660), "target_xy": (824, 568), "color": "accent_a"},  # right-bottom
-    "brainstem":  {"label_xy": (20,   660), "target_xy": (823, 569), "color": "accent_b"},  # left-bottom
+    "frontal": {
+        "label_xy": (20, 200),
+        "target_xy": (471, 395),
+        "color": "primary",
+    },  # left  (lobe at canvas left)
+    "parietal": {
+        "label_xy": (540, 130),
+        "target_xy": (710, 260),
+        "color": "accent_d",
+    },  # top center
+    "occipital": {
+        "label_xy": (1060, 200),
+        "target_xy": (909, 398),
+        "color": "secondary",
+    },  # right (lobe at canvas right)
+    "temporal": {
+        "label_xy": (1060, 480),
+        "target_xy": (706, 468),
+        "color": "accent_c",
+    },  # right-mid
+    "cerebellum": {
+        "label_xy": (1060, 660),
+        "target_xy": (824, 568),
+        "color": "accent_a",
+    },  # right-bottom
+    "brainstem": {
+        "label_xy": (20, 660),
+        "target_xy": (823, 569),
+        "color": "accent_b",
+    },  # left-bottom
 }
 
 _REGION_CAPTIONS = {
@@ -310,13 +566,26 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # from the actual classified paths in the source SVG. This fixes the bug
     # where, e.g., the "frontal" leader line pointed to canvas (850, 320) when
     # the actual frontal lobe centroid is at (471, 395).
-    _, lobe_centroids, lobe_bboxes = _ensure_classification()
+    _, lobe_centroids, lobe_bboxes, paths_by_lobe = _ensure_classification()
+
+    # Clip source: each brain path's d attribute as a minimal <path d="..."/>
+    # for inclusion in <clipPath id="brainClip">. Anything outside the union
+    # of these path geometries is clipped — so the aurora flow layer below
+    # shows only inside the brain anatomy. clipPath uses geometry-only
+    # clipping (fills are ignored), which is more predictable across SVG
+    # renderers than <mask>.
+    brain_clip_paths: list[str] = []
+    for _lobe, pairs in paths_by_lobe.items():
+        for _pid, d in pairs:
+            brain_clip_paths.append(f'<path d="{d}"/>')
+
     region_positions: dict[str, dict[str, object]] = {}
     for key, region_data in _REGION_POSITIONS.items():
         region_positions[key] = {
             "label_xy": region_data["label_xy"],
             "target_xy": lobe_centroids.get(
-                key, region_data["target_xy"]  # fallback to hardcoded
+                key,
+                region_data["target_xy"],  # fallback to hardcoded
             ),
             "color": region_data["color"],
         }
@@ -328,8 +597,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # leader stroke fades to lower opacity near the brain.
     region_blocks: list[str] = []
     region_lines: list[str] = []
-    region_grads: list[str] = []  # one radial gradient per lobe color
-    region_glows: list[str] = []  # large soft tint circles in card colors (always rendered)
     halos: list[str] = []  # ring around each spark dot (gated by atm.show_halos)
     spark_dots: list[str] = []  # central dot at each lobe target (always rendered)
     data_packets: list[str] = []  # small dots traveling card->brain along each leader path
@@ -344,28 +611,22 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         domain = _x(region_obj.domain)
         tools_preview = _x(" · ".join(region_obj.tools[:4])) if region_obj.tools else ""
 
-        # Glassmorphism lobe card: base + highlight overlay + top breathing stripe.
+        # Glassmorphism lobe card: base + traveling edge glow + highlight overlay.
         # Matches the visual language of tech-cards.svg (also card-based).
         region_blocks.append(
             f'<g transform="translate({lx},{ly})"><g class="label-fade lf{i + 1}">'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" '
-            f'stroke="{color}" stroke-width="1.8" filter="url(#cardShadow)"/>'
+            f'filter="url(#cardShadowStacked)"/>'
+            f'<rect x="6" y="6" width="308" height="128" rx="10" '
+            f'fill="url(#cardInnerGlow_{key})" class="card-inner-pulse"/>'
+            f'<rect x="0" y="0" width="320" height="140" rx="14" fill="none" '
+            f'stroke="{color}" stroke-width="2" pathLength="1000" '
+            f'class="card-edge ce{i + 1}"/>'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/>'
-            f'<rect x="0" y="0" width="320" height="4" rx="2" fill="{color}" class="breathe-stripe"/>'
             f'<text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
             f'<text x="160" y="80" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
             f'<text x="160" y="116" class="t-skill" text-anchor="middle">{tools_preview}</text>'
             f"</g></g>"
-        )
-
-        # Per-region radial gradient — used by the region glow inside brain-3d.
-        # Soft falloff: full color at center, fading to transparent at edge.
-        region_grads.append(
-            f'<radialGradient id="rgrad_{key}" cx="50%" cy="50%" r="50%">'
-            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.55"/>'
-            f'<stop offset="55%"  stop-color="{color}" stop-opacity="0.18"/>'
-            f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
-            f"</radialGradient>"
         )
 
         # Leader line from label edge to brain target (canvas space).
@@ -415,17 +676,10 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         # Spark dot, halo, and region color glow all live in BRAIN-LOCAL
         # coordinates inside the brain-3d transform group, so they wobble in
         # lockstep with the brain anatomy. Brain group transform is
-        # translate(332,152) scale(0.7), so brain-local = (canvas - 332)/0.7.
+        # translate(332,260) scale(0.7), so brain-local = (canvas - 332)/0.7.
         bx = round((tx - 332) / 0.7)
-        by = round((ty - 152) / 0.7)
+        by = round((ty - 260) / 0.7)
 
-        # Region color glow — a large soft radial gradient circle in the
-        # card's color. With mix-blend-mode: screen this tints the brain
-        # anatomy underneath without recoloring the source paths.
-        region_glows.append(
-            f'<circle cx="{bx}" cy="{by}" r="200" fill="url(#rgrad_{key})" '
-            f'class="region-glow region-pulse rg{i + 1}"/>'
-        )
         # Halo ring — wobbles with brain (r=20 renders as ~14 after 0.7 scale).
         halos.append(
             f'<circle cx="{bx}" cy="{by}" r="20" fill="none" stroke="{color}" '
@@ -436,6 +690,18 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         spark_dots.append(
             f'<circle cx="{bx}" cy="{by}" r="6" fill="{color}" class="target-pulse" '
             f'style="animation-delay:{i * 0.3}s"/>'
+        )
+
+    # Per-card inner glow — radial gradient in the lobe color, used by the
+    # card-inner-pulse rect inside each card.
+    card_inner_grads: list[str] = []
+    for key, region_data in region_positions.items():
+        color = palette[region_data["color"]]  # type: ignore[index]
+        card_inner_grads.append(
+            f'<radialGradient id="cardInnerGlow_{key}" cx="50%" cy="50%" r="60%">'
+            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.18"/>'
+            f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
+            f"</radialGradient>"
         )
 
     # Synaptic firing — 4 micro-cells per lobe placed inside that lobe's
@@ -453,53 +719,186 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         "cerebellum": p_accent_a,
         "brainstem": p_accent_b,
     }
-    # Phase offset per lobe (in seconds) so the 6 networks don't fire in unison.
-    lobe_phase = {
-        "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
-        "temporal": 1.2, "cerebellum": 1.6, "brainstem": 2.0,
-    }
-    cell_offsets = (0.0, 0.6, 1.2, 1.8)  # within-lobe stagger (chase pattern)
 
-    def _cells_for_bbox(b: tuple[float, float, float, float]) -> list[tuple[int, int]]:
-        """4 cell positions inscribed in the lobe bbox (top-left, top-right,
-        bottom-right, bottom-left in clockwise order — so the arcs connecting
-        them form a clean quadrilateral perimeter)."""
-        xmin, ymin, xmax, ymax = b
-        w = xmax - xmin
-        h = ymax - ymin
-        # Inset 25% from each edge so cells sit well inside the lobe
-        x1 = round(xmin + 0.25 * w)
-        x2 = round(xmin + 0.75 * w)
-        y1 = round(ymin + 0.25 * h)
-        y2 = round(ymin + 0.75 * h)
-        return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]  # clockwise
+    # Per-lobe stroke overlay — top 8 paths per lobe, duplicated as colored
+    # stroke <path/> elements with stroke-dashoffset animation. Lobe identity
+    # comes from this layer, not the body fill.
+    lobe_stroke_overlay = _build_lobe_stroke_overlay(
+        paths_by_lobe,
+        lobe_color_tokens,
+        n_per_lobe=8,
+    )
+    # Deterministic-but-disordered RNG seeded by the user's name. Same user →
+    # same arc layout every render (so CI diffs of examples/rendered/ are stable
+    # across builds); different users → unique signatures.
+    rng = random.Random(_seed_from_name(config.identity.name))
 
-    micro_cells: list[str] = []
-    lobe_arcs: list[str] = []
+    # 6 random cells per lobe inside its bbox.
+    cells_by_lobe: dict[str, list[tuple[int, int]]] = {}
     for lobe in _LOBE_KEYS:
         bbox = lobe_bboxes.get(lobe)
         if bbox is None:
             continue
-        cells = _cells_for_bbox(bbox)
+        cells_by_lobe[lobe] = _random_cells_in_bbox(bbox, n=6, rng=rng)
+
+    # 20 random Bezier arcs across the union of all cells.
+    arcs = _random_arc_network(cells_by_lobe, n=20, rng=rng, lobe_colors=lobe_color_tokens)
+
+    # Cells render as the existing .lobe-cell synaptic-flash, but at random
+    # positions instead of bbox-corner quadrilateral.
+    micro_cells: list[str] = []
+    cell_offsets = (0.0, 0.6, 1.2, 1.8, 2.4, 3.0)  # 6 cells x 0.6s within-lobe stagger
+    lobe_phase = {
+        "frontal": 0.0,
+        "parietal": 0.4,
+        "occipital": 0.8,
+        "temporal": 1.2,
+        "cerebellum": 1.6,
+        "brainstem": 2.0,
+    }
+    for lobe, cells in cells_by_lobe.items():
         color = lobe_color_tokens[lobe]
         phase = lobe_phase[lobe]
-        # Cells (4 per lobe)
         for i, (cx, cy) in enumerate(cells):
-            delay = phase + cell_offsets[i]
+            delay = phase + cell_offsets[i % len(cell_offsets)]
             micro_cells.append(
                 f'<circle cx="{cx}" cy="{cy}" r="4" fill="{color}" '
                 f'class="lobe-cell" style="animation-delay:{delay:.2f}s"/>'
             )
-        # Arcs connecting consecutive cells in the quadrilateral (4 per lobe)
-        for i in range(4):
-            a = cells[i]
-            b = cells[(i + 1) % 4]
-            delay = phase + cell_offsets[i]
-            lobe_arcs.append(
-                f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
-                f'stroke="{color}" stroke-width="1.4" '
-                f'class="lobe-arc" style="animation-delay:{delay:.2f}s"/>'
-            )
+
+    # Arcs render as quadratic Bezier <path/> with the existing .lobe-arc keyframes
+    # (arcflow + arcfade). The animation-delay/duration come from the random per-arc
+    # values so the network reads as continuous firing.
+    lobe_arcs: list[str] = []
+    for a in arcs:
+        lobe_arcs.append(
+            f'<path d="M{a.x1},{a.y1} Q{a.cx},{a.cy} {a.x2},{a.y2}" '
+            f'stroke="{a.color}" stroke-width="2.2" fill="none" '
+            f'pathLength="100" stroke-dasharray="100 100" '
+            f'class="lobe-arc" '
+            f'style="animation-delay:{a.begin_s:.2f}s;animation-duration:{a.dur_s:.2f}s"/>'
+        )
+
+    # 16 ambient particle positions (must match the render below exactly).
+    particle_positions: list[tuple[int, int]] = [
+        (120, 180),
+        (260, 540),
+        (380, 120),
+        (420, 760),
+        (560, 380),
+        (700, 220),
+        (780, 700),
+        (900, 160),
+        (980, 520),
+        (1080, 340),
+        (1180, 780),
+        (1260, 240),
+        (160, 780),
+        (340, 660),
+        (640, 80),
+        (1320, 500),
+    ]
+
+    # Constellation lines: connect particles within 220px. Indices into
+    # particle_positions. Deterministic by definition since positions are fixed.
+    constellation_pairs: list[tuple[int, int]] = []
+    threshold_sq = 220 * 220
+    for ip in range(len(particle_positions)):
+        for jp in range(ip + 1, len(particle_positions)):
+            dxp = particle_positions[ip][0] - particle_positions[jp][0]
+            dyp = particle_positions[ip][1] - particle_positions[jp][1]
+            if dxp * dxp + dyp * dyp <= threshold_sq:
+                constellation_pairs.append((ip, jp))
+
+    constellation_lines: list[str] = []
+    for n, (ip, jp) in enumerate(constellation_pairs):
+        x1c, y1c = particle_positions[ip]
+        x2c, y2c = particle_positions[jp]
+        constellation_lines.append(
+            f'<line x1="{x1c}" y1="{y1c}" x2="{x2c}" y2="{y2c}" '
+            f'stroke="{p_accent_b}" stroke-width="0.8" stroke-opacity="0" '
+            f'class="constellation-line cl{n + 1}"/>'
+        )
+
+    # Far star field — 30 dim points spread deterministically across the canvas.
+    # Smaller and dimmer than ambient particles; reads as deep-space depth.
+    star_rng = random.Random(_seed_from_name(config.identity.name) ^ 0xDEADBEEF)
+    far_stars: list[str] = []
+    for _ in range(30):
+        sx = star_rng.randint(40, 1360)
+        sy = star_rng.randint(40, 860)
+        sr = round(star_rng.uniform(0.6, 1.2), 1)
+        s_op = round(star_rng.uniform(0.20, 0.50), 2)
+        s_dur = star_rng.choice([8, 10, 12, 14])
+        far_stars.append(
+            f'<circle cx="{sx}" cy="{sy}" r="{sr}" fill="#FFFFFF" '
+            f'opacity="{s_op}" class="far-star fs{s_dur}"/>'
+        )
+
+    # Nebula clouds — 4 large soft blurred radial gradients drifting on
+    # staggered phases. More organic than aurora bands (which are flat
+    # circles); these have feGaussianBlur for amorphous edges.
+    nebula_blocks: list[str] = []
+    nebula_specs = [
+        ("#EC4899", -100, -100, 38),
+        ("#7C3AED", 700, -100, 44),
+        ("#22D3EE", -100, 500, 41),
+        ("#34D399", 700, 500, 47),
+    ]
+    for n, (_ncolor, nx, ny, ndur) in enumerate(nebula_specs):
+        ndx = -50 if n % 2 == 0 else 50
+        ndy = -30 if n < 2 else 30
+        nebula_blocks.append(
+            f'<g class="nebula" filter="url(#nebulaBlur)">'
+            f'<rect x="{nx}" y="{ny}" width="1100" height="1100" fill="url(#nebula_{n})">'
+            f'<animateTransform attributeName="transform" type="translate" '
+            f'values="0,0; {ndx},{ndy}; 0,0" '
+            f'dur="{ndur}s" repeatCount="indefinite"/>'
+            f"</rect></g>"
+        )
+
+    # DNA helix symbols — 4 double-helix line drawings at canvas corners,
+    # each fading in/out + drawing in via stroke-dashoffset on staggered 16s
+    # timers. Reads as a scientific/biological motif tying the brain theme
+    # to the organic atmosphere (no longer competing with the digital grid,
+    # which was removed in R4-2).
+    # 5 deterministic-random DNA helixes scattered around canvas edges.
+    # Vertical orientation (no tilt) for scientific feel. Monochromatic
+    # jewel-tone palette (cyan/violet/dusty-rose — same as aurora). Cubic
+    # Bezier strands for smooth curves. Simple opacity fade + draw animation
+    # — restraint reads as professional. Strong Gaussian blur (stdDev=2) for
+    # soft luminous look.
+    dna_rng = random.Random(_seed_from_name(config.identity.name) ^ 0xCAFEBABE)
+    dna_specs_list = _dna_specs_random(dna_rng, count=5)
+    dna_blocks: list[str] = []
+    for spec in dna_specs_list:
+        strand_a, strand_b, rungs = _dna_helix_paths(
+            cx=0,
+            cy=0,
+            width=spec["width"],
+            height=spec["size"],
+            samples=12,
+        )
+        rung_lines = "\n".join(
+            f'    <line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
+            f'stroke="{spec["color"]}" stroke-width="0.9" stroke-opacity="0.6"/>'
+            for a, b in rungs
+        )
+        dna_blocks.append(
+            f'<g class="dna" filter="url(#dnaBlur)" '
+            f'style="animation-delay:{spec["delay"]}s;animation-duration:{spec["cycle"]}s" '
+            f'transform="translate({spec["cx"]},{spec["cy"]})">\n'
+            f'  <path d="{strand_a}" stroke="{spec["color"]}" stroke-width="1.4" '
+            f'fill="none" pathLength="100" stroke-dasharray="100 100" '
+            f'class="dna-strand" '
+            f'style="animation-duration:{spec["cycle"]}s;animation-delay:{spec["delay"]}s"/>\n'
+            f'  <path d="{strand_b}" stroke="{spec["color"]}" stroke-width="1.4" '
+            f'fill="none" pathLength="100" stroke-dasharray="100 100" '
+            f'class="dna-strand" '
+            f'style="animation-duration:{spec["cycle"]}s;animation-delay:{spec["delay"]}s"/>\n'
+            f"{rung_lines}\n"
+            f"  </g>"
+        )
 
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -514,65 +913,19 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
      viewBox="0 0 1400 900" role="img"
      aria-label="Cortex Neural Skill Atlas — {name}">
   <defs>
-    <linearGradient id="brainGrad" x1="0" y1="0.05" x2="1" y2="0.95"
+    <linearGradient id="brainGrad_unified" x1="0" y1="0" x2="1" y2="1"
                     gradientUnits="objectBoundingBox">
       <animateTransform attributeName="gradientTransform" type="rotate"
-                        from="0 0.5 0.5" to="360 0.5 0.5" dur="22s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_a}"/>
-      <stop offset="22%"  stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="76%"  stop-color="{p_secondary}"/>
-      <stop offset="100%" stop-color="{p_primary}"/>
-    </linearGradient>
-    <linearGradient id="brainGradAlt" x1="0" y1="0" x2="1" y2="1"
-                    gradientUnits="objectBoundingBox">
-      <stop offset="0%"   stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_secondary}"/>
-    </linearGradient>
-    <!-- Per-lobe gradients — each lobe paints in its card's accent color
-         blending through pink (#EC4899) for vibrancy. Different rotation
-         periods so the lobes don't sync visually. -->
-    <linearGradient id="brainGrad_frontal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="13s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_primary}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_primary}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_parietal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="11s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_d}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_d}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_occipital" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="17s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_secondary}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_secondary}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_temporal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="19s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_c}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_c}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_cerebellum" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="15s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_a}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_a}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_brainstem" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="21s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_b}"/>
+                        from="0 0.5 0.5" to="360 0.5 0.5" dur="40s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="#3A1A28"/>
+      <stop offset="33%"  stop-color="#4D2438"/>
+      <stop offset="66%"  stop-color="#5C2E45"/>
+      <stop offset="100%" stop-color="#3A1A28"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
       <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#180826"/>
-      <stop offset="60%"  stop-color="#080410"/>
+      <stop offset="0%"   stop-color="#280816"/>
+      <stop offset="60%"  stop-color="#100308"/>
       <stop offset="100%" stop-color="{p_background}"/>
     </radialGradient>
     <radialGradient id="bgAura" cx="50%" cy="50%" r="40%">
@@ -580,6 +933,76 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="nebula_0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#34D399" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#34D399" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="nebulaBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <radialGradient id="aurora_a" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_b" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_c" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Aurora flow palette: jewel tones (deeper, less saturated than primary
+         hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
+         vocabulary, not "rainbow tech demo". -->
+    <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#C95E8A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_b" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#4F8CC4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_c" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_d" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#6FB28E" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="25"/>
+    </filter>
+    <filter id="dnaBlur" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
+    {chr(10).join("      " + p for p in brain_clip_paths)}
+    </clipPath>
     <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
       <stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/>
@@ -588,13 +1011,11 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
-    {chr(10).join("    " + g for g in region_grads)}
-    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-      <feOffset dx="0" dy="3" result="shadow"/>
-      <feFlood flood-color="#000000" flood-opacity="0.7"/>
-      <feComposite in2="shadow" operator="in"/>
-      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    {chr(10).join("    " + g for g in card_inner_grads)}
+    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
+      <feDropShadow dx="0" dy="6"  stdDeviation="12" flood-color="#000" flood-opacity="0.40"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/>
     </filter>
     <filter id="brainGlow" x="-15%" y="-15%" width="130%" height="130%">
       <feGaussianBlur stdDeviation="2" result="blur"/>
@@ -603,18 +1024,12 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <!-- Plasma fog: feTurbulence generates animated Perlin noise; feColorMatrix
-         tints it pink/purple at low alpha. Renders as a swirling cosmic
-         atmosphere when applied to a covering rect. -->
-    <filter id="plasmaFog" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="noise">
-        <animate attributeName="baseFrequency" values="0.010;0.022;0.010" dur="14s" repeatCount="indefinite"/>
+    <filter id="brainRipple" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="2" result="noise">
+        <animate attributeName="baseFrequency" values="0.018;0.024;0.018"
+                 dur="11s" repeatCount="indefinite"/>
       </feTurbulence>
-      <feColorMatrix in="noise" type="matrix" values="
-        0 0 0 0 0.55
-        0 0 0 0 0.30
-        0 0 0 0 0.85
-        0 0 0 0.42 0"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5"/>
     </filter>
     <!-- Electric glow: dilate the source then blur it then merge under the
          original. Applied to lobe-cells via CSS so each synaptic flash gets
@@ -629,10 +1044,12 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     </filter>
     <style><![CDATA[
       .t-display   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }}
-      .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: {p_accent_b}; }}
-      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.20em; text-transform: uppercase; }}
-      .t-region    {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }}
-      .t-skill     {{ font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 18px; fill: #E5E7EB; }}
+      .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: {
+        p_accent_b
+    }; }}
+      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.25em; text-transform: uppercase; }}
+      .t-region    {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 22px; fill: #FFFFFF; }}
+      .t-skill     {{ font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 16px; fill: #E5E7EB; }}
       .brain-pulse {{ animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
       @keyframes brainPulse {{
         0%, 100% {{ filter: drop-shadow(0 0 16px rgba(236,72,153,0.45)); }}
@@ -655,28 +1072,53 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       @keyframes lfade {{ to {{ opacity: 1; }} }}
       .lf1{{animation-delay:0.4s}} .lf2{{animation-delay:0.55s}} .lf3{{animation-delay:0.7s}}
       .lf4{{animation-delay:0.85s}} .lf5{{animation-delay:1.0s}} .lf6{{animation-delay:1.15s}}
-      .breathe-stripe {{ animation: stripeBreathe 3s ease-in-out infinite; }}
-      @keyframes stripeBreathe {{ 0%,100%{{opacity:0.85}} 50%{{opacity:1}} }}
-      .region-glow {{ mix-blend-mode: screen; }}
-      .region-pulse {{ animation: rpulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
-      @keyframes rpulse {{
-        0%, 100% {{ opacity: 0.65; transform: scale(1); }}
-        50%      {{ opacity: 1.0;  transform: scale(1.10); }}
+      .card-inner-pulse {{ animation: cardPulse 5s ease-in-out infinite; }}
+      @keyframes cardPulse {{ 0%, 100% {{ opacity: 0.6; }} 50% {{ opacity: 1.0; }} }}
+      .card-edge {{
+        stroke-dasharray: 80 1000;
+        animation: cardEdgeTravel 4s linear infinite;
+        filter: url(#electricGlow);
+        opacity: 0.95;
       }}
-      .rg1{{animation-delay:0s}}    .rg2{{animation-delay:0.6s}}
-      .rg3{{animation-delay:1.2s}}  .rg4{{animation-delay:1.8s}}
-      .rg5{{animation-delay:2.4s}}  .rg6{{animation-delay:3.0s}}
+      @keyframes cardEdgeTravel {{ to {{ stroke-dashoffset: -1080; }} }}
+      .ce1 {{ animation-delay: 0s; }}
+      .ce2 {{ animation-delay: 0.7s; }}
+      .ce3 {{ animation-delay: 1.4s; }}
+      .ce4 {{ animation-delay: 2.1s; }}
+      .ce5 {{ animation-delay: 2.8s; }}
+      .ce6 {{ animation-delay: 3.5s; }}
       /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
          around the lobe's quadrilateral. */
-      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; filter: url(#electricGlow); }}
+      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
       @keyframes lcell {{
         0%, 100% {{ opacity: 0;   transform: scale(0.6); }}
         10%      {{ opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }}
         20%      {{ opacity: 0.7; transform: scale(1.2); }}
         30%      {{ opacity: 0;   transform: scale(0.8); }}
       }}
+      /* Per-lobe stroke-draw overlay — duplicate paths above the body fill,
+         each lobe's outline draws in over 1s, holds, draws out over 1s, rests.
+         Six lobes staggered by 1s on a shared 6s cycle. */
+      .lobe-stroke {{
+        animation: lstroke 6s ease-in-out infinite;
+        stroke-dashoffset: 100;
+        opacity: 0;
+      }}
+      @keyframes lstroke {{
+        0%   {{ stroke-dashoffset: 100; opacity: 0; }}
+        16%  {{ stroke-dashoffset: 0;   opacity: 1; }}
+        26%  {{ stroke-dashoffset: 0;   opacity: 1; }}
+        43%  {{ stroke-dashoffset:-100; opacity: 0; }}
+        100% {{ stroke-dashoffset:-100; opacity: 0; }}
+      }}
+      .ls-frontal    {{ animation-delay: 0s; }}
+      .ls-parietal   {{ animation-delay: 1s; }}
+      .ls-occipital  {{ animation-delay: 2s; }}
+      .ls-temporal   {{ animation-delay: 3s; }}
+      .ls-cerebellum {{ animation-delay: 4s; }}
+      .ls-brainstem  {{ animation-delay: 5s; }}
       .lobe-arc {{
         stroke-dasharray: 4 22;
         animation: arcflow 1.6s linear infinite, arcfade 2.4s ease-in-out infinite;
@@ -703,32 +1145,197 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .p11{{animation-delay:0.5s;animation-duration:19s}} .p12{{animation-delay:8s;animation-duration:13s}}
       .p13{{animation-delay:1s;animation-duration:15s}} .p14{{animation-delay:2.5s;animation-duration:18s}}
       .p15{{animation-delay:9s;animation-duration:12s}} .p16{{animation-delay:4s;animation-duration:16s}}
+      .constellation-line {{
+        animation: clFade 8s ease-in-out infinite;
+      }}
+      @keyframes clFade {{
+        0%, 100% {{ stroke-opacity: 0; }}
+        50%      {{ stroke-opacity: 0.30; }}
+      }}
+      .cl1{{animation-delay:0s}}    .cl2{{animation-delay:0.6s}}
+      .cl3{{animation-delay:1.2s}}  .cl4{{animation-delay:1.8s}}
+      .cl5{{animation-delay:2.4s}}  .cl6{{animation-delay:3.0s}}
+      .cl7{{animation-delay:3.6s}}  .cl8{{animation-delay:4.2s}}
+      .cl9{{animation-delay:4.8s}}  .cl10{{animation-delay:5.4s}}
+      .cl11{{animation-delay:6.0s}} .cl12{{animation-delay:6.6s}}
+      .cl13{{animation-delay:7.2s}} .cl14{{animation-delay:7.8s}}
+      .cl15{{animation-delay:0.3s}} .cl16{{animation-delay:1.5s}}
+      .far-star {{
+        animation-name: starTwinkle;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }}
+      .fs8  {{ animation-duration:  8s; }}
+      .fs10 {{ animation-duration: 10s; }}
+      .fs12 {{ animation-duration: 12s; }}
+      .fs14 {{ animation-duration: 14s; }}
+      @keyframes starTwinkle {{
+        0%, 100% {{ opacity: 0.20; }}
+        50%      {{ opacity: 0.85; }}
+      }}
+      /* DNA helixes — restraint reads as professional. Each helix has its
+         own animation duration (set inline) so no two ever sync up. The
+         visible phase (40-60% of cycle) is when both the group fade-in AND
+         the strand draw-in are at peak — the strand visibly "draws itself"
+         as the group fades up, then "draws away" as it fades out. */
+      .dna {{
+        opacity: 0;
+        animation-name: dnaFade;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }}
+      @keyframes dnaFade {{
+        0%, 100% {{ opacity: 0; }}
+        12%      {{ opacity: 0; }}
+        28%      {{ opacity: 0.95; }}
+        58%      {{ opacity: 0.95; }}
+        72%      {{ opacity: 0; }}
+      }}
+      .dna-strand {{
+        animation-name: dnaDraw;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }}
+      @keyframes dnaDraw {{
+        0%   {{ stroke-dashoffset: 100; }}
+        28%  {{ stroke-dashoffset: 0; }}
+        58%  {{ stroke-dashoffset: 0; }}
+        72%  {{ stroke-dashoffset: -100; }}
+        100% {{ stroke-dashoffset: -100; }}
+      }}
     ]]></style>
   </defs>
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
-  {('<rect width="1400" height="900" fill="url(#bgAura)"/>') if atm.show_aura else ""}
-  {('<rect x="200" y="120" width="1000" height="660" fill="white" filter="url(#plasmaFog)" opacity="0.55"/>') if atm.show_aura else ""}
+  {
+        (
+            '''<rect width="1400" height="900" fill="url(#bgAura)">
+    <animateTransform attributeName="transform" type="translate"
+                      values="0,0; 100,80; -60,40; 0,0" dur="40s" repeatCount="indefinite"/>
+  </rect>'''
+        )
+        if atm.show_aura
+        else ""
+    }
+  {
+        (
+            '''<!-- Far star field: 30 dim points twinkling at deep-space distance.
+       Each star uses a CSS class fs8/fs10/fs12/fs14 for varied twinkle speed. -->
+  <g class="stars">
+  '''
+            + chr(10).join("    " + s for s in far_stars)
+            + '''
+  </g>'''
+        )
+        if atm.show_aura
+        else ""
+    }
 
-  {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
-  <g fill="''' + p_accent_b + '''">
+  {
+        (
+            '''<!-- Nebula clouds: 4 large blurred radial gradients drifting slowly.
+       More organic than aurora bands; adds color depth behind the brain. -->
+  <g class="nebulae">
+  '''
+            + chr(10).join("    " + nb for nb in nebula_blocks)
+            + '''
+  </g>'''
+        )
+        if atm.show_aura
+        else ""
+    }
+
+  {
+        (
+            '''<!-- DNA helix symbols at canvas corners — fade in/out + draw in
+       on staggered 16s timers. 1-2 visible at any moment, others hidden. -->
+  <g class="dna-helixes">
+  '''
+            + chr(10).join("    " + db for db in dna_blocks)
+            + '''
+  </g>'''
+        )
+        if atm.show_aura
+        else ""
+    }
+
+  {
+        (
+            '''<!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
+       on staggered timers. Replaces the old turbulence plasma fog with smooth
+       color flow that reads as atmospheric light, not noise. -->
+  <g class="aurora">
+    <rect x="-200" y="-200" width="900" height="900" fill="url(#aurora_a)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 200,150; 0,0" dur="28s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="700" y="200" width="900" height="900" fill="url(#aurora_b)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; -180,-120; 0,0" dur="35s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="200" y="500" width="900" height="900" fill="url(#aurora_c)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 160,-80; 0,0" dur="31s" repeatCount="indefinite"/>
+    </rect>
+  </g>'''
+        )
+        if atm.show_aura
+        else ""
+    }
+
+  {
+        (
+            '''<!-- Constellation lines: thin links between nearby particles, fading in/out
+       on staggered timers. Reads as a neural-web behind the brain. -->
+  <g class="constellation">
+  '''
+            + chr(10).join("    " + ln for ln in constellation_lines)
+            + '''
+  </g>'''
+        )
+        if atm.show_particles
+        else ""
+    }
+
+{
+        (
+            '''<!-- Ambient particle drift — atmospheric depth behind the brain -->
+  <g fill="'''
+            + p_accent_b
+            + '''">
     <circle cx="120"  cy="180" r="1.8" class="particle p1"/>
     <circle cx="260"  cy="540" r="1.4" class="particle p2"/>
-    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="''' + p_accent_a + '''"/>
+    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="'''
+            + p_accent_a
+            + '''"/>
     <circle cx="420"  cy="760" r="1.2" class="particle p4"/>
-    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="''' + p_accent_a + '''"/>
+    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="'''
+            + p_accent_a
+            + '''"/>
     <circle cx="700"  cy="220" r="2.2" class="particle p6"/>
-    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="''' + p_secondary + '''"/>
+    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="'''
+            + p_secondary
+            + '''"/>
     <circle cx="900"  cy="160" r="1.8" class="particle p8"/>
-    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="''' + p_accent_a + '''"/>
+    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="'''
+            + p_accent_a
+            + '''"/>
     <circle cx="1080" cy="340" r="2.0" class="particle p10"/>
     <circle cx="1180" cy="780" r="1.4" class="particle p11"/>
-    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="''' + p_secondary + '''"/>
+    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="'''
+            + p_secondary
+            + '''"/>
     <circle cx="160"  cy="780" r="1.6" class="particle p13"/>
-    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="''' + p_accent_a + '''"/>
+    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="'''
+            + p_accent_a
+            + '''"/>
     <circle cx="640"  cy="80"  r="1.8" class="particle p15"/>
     <circle cx="1320" cy="500" r="1.4" class="particle p16"/>
-  </g>''') if atm.show_particles else ""}
+  </g>'''
+        )
+        if atm.show_particles
+        else ""
+    }
 
   <!-- Title -->
   <text x="700" y="50" class="t-tag" text-anchor="middle">⏵ NEURAL · SKILL · ATLAS · v1.0 ⏴</text>
@@ -753,15 +1360,58 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
        wobble around their dots, micro-cells pulse like synaptic firing
        throughout the brain interior. atm.show_halos and atm.show_particles
        gate the optional layers. -->
-  <g transform="translate(332,152) scale(0.7)">
-    <g class="brain-pulse" filter="url(#brainGlow)">
-      <g class="{brain_3d_class}">
-        {brain_content}
-        {chr(10).join("        " + rg for rg in region_glows)}
-        {chr(10).join("        " + la for la in lobe_arcs)}
-        {chr(10).join("        " + mc for mc in micro_cells)}
-        {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
-        {chr(10).join("        " + sd for sd in spark_dots)}
+  <g transform="translate(332,260) scale(0.7)">
+    <g filter="url(#brainRipple)">
+      <g class="brain-pulse" filter="url(#brainGlow)">
+        <g class="{brain_3d_class}">
+          {brain_content}
+        <!-- Aurora flow inside the brain anatomy: 4 large palette-colored
+             radial gradients drifting freely, masked by the brain shape so
+             colors are visible only inside the anatomy. R7 replacement for
+             R6 region_glow. -->
+        <g clip-path="url(#brainClip)" class="brain-aurora" filter="url(#auroraBlur)">
+          <!-- Each rect's center starts in a different brain quadrant. Translate
+               vectors keep each rect oscillating WITHIN its quadrant so coverage
+               stays balanced across the brain throughout the cycle (no clumping
+               at the back). Brain anatomy spans brain-local (0,0) to (1024,732).
+               calcMode="spline" + keyTimes/keySplines = SMIL ease-in-out for
+               organic motion (not linear/mechanical). auroraBlur softens the
+               radial gradient edges so colors melt into each other. -->
+          <rect x="-150" y="-200" width="800" height="800" fill="url(#brainAurora_a)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; 200,150; 0,0" dur="32s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="350" y="-200" width="800" height="800" fill="url(#brainAurora_b)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; -200,150; 0,0" dur="38s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="-150" y="130" width="800" height="800" fill="url(#brainAurora_c)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; 250,-150; 0,0" dur="41s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="350" y="130" width="800" height="800" fill="url(#brainAurora_d)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; -250,-150; 0,0" dur="45s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+        </g>
+          <g class="lobe-stroke-layer" filter="url(#electricGlow)">
+          {chr(10).join("            " + lso for lso in lobe_stroke_overlay)}
+          </g>
+          <g class="arc-network" filter="url(#electricGlow)">
+          {chr(10).join("            " + la for la in lobe_arcs)}
+          {chr(10).join("            " + mc for mc in micro_cells)}
+          </g>
+          {chr(10).join("          " + h for h in halos) if atm.show_halos else ""}
+          {chr(10).join("          " + sd for sd in spark_dots)}
+        </g>
       </g>
     </g>
   </g>
@@ -787,14 +1437,13 @@ def build(config: Config, output: str | Path) -> Path:
     # the wrapper SVG provides its own transform group around this content).
     brain_group = _extract_g_by_id(src_text, "brain")
 
-    # Recolor with the user's palette + per-lobe classification
+    # Recolor with the user's palette
     palette = (
         resolve_palette(config.brand.palette)
         if config.brand.palette in {"neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"}
         else config.brand.colors.model_dump()
     )
-    classification, _, _ = _ensure_classification()
-    recolored = _recolor(brain_group, palette["primary"], palette["secondary"], classification)
+    recolored = _recolor(brain_group, palette["primary"], palette["secondary"])
 
     # Compose into the wrapper
     svg = _compose_wrapper(recolored, config)

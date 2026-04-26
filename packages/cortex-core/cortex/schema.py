@@ -215,10 +215,52 @@ class YearlyHighlightsCard(_Strict):
     years: list[YearEntry] = Field(default_factory=list, max_length=6)
 
 
+# ── Header / Footer banner ───────────────────────────────────────────────
+# Capsule-render replacement: animated banner with configurable shape, palette,
+# and animation style. Renders as a wide SVG used at the top/bottom of the
+# README. Colors default to the jewel-tone palette that ties to the brain
+# DNA / aurora / divider; can be overridden via `colors` list.
+class BannerConfig(_Strict):
+    enabled: bool = True
+    shape: Literal["wave", "slice", "rect"] = "wave"
+    title: str = ""
+    subtitle: str = ""
+    # Banner height in px. Header default 220, footer 160 — but each spec
+    # overrides this default via factory below.
+    height: int = 220
+    # Optional explicit hex colors (3-5 stops). Empty → use jewel-tone defaults.
+    colors: list[str] = Field(default_factory=list)
+    # Animation style. "drift" = gradient stops translate left↔right.
+    # "pulse" = opacity breathes. "static" = no animation.
+    animation: Literal["drift", "pulse", "static"] = "drift"
+
+
+def _default_footer() -> BannerConfig:
+    return BannerConfig(height=160, title="", subtitle="")
+
+
+class ShowcaseConfig(_Strict):
+    """Tuning for the auto-generated CORTEX:SHOWCASE block in the README.
+
+    For most users, the defaults work — variant SVGs are written to
+    ``assets/variants/`` of their <user>/<user> profile repo and the showcase
+    points to that path. Override ``base_url`` only when assets live somewhere
+    non-standard (e.g. the cortex project's own marketing README, where
+    variants ship in ``examples/rendered/extreme/variants/``).
+    """
+
+    # Override the URL prefix the showcase uses for variant image src attrs.
+    # Empty → default ``https://raw.githubusercontent.com/<user>/<user>/main/assets``.
+    base_url: str = ""
+
+
 class Cards(_Strict):
     tech_stack: TechStackCard = Field(default_factory=TechStackCard)
     current_focus: CurrentFocusCard = Field(default_factory=CurrentFocusCard)
     yearly_highlights: YearlyHighlightsCard = Field(default_factory=YearlyHighlightsCard)
+    header: BannerConfig = Field(default_factory=BannerConfig)
+    footer: BannerConfig = Field(default_factory=_default_footer)
+    showcase: ShowcaseConfig = Field(default_factory=ShowcaseConfig)
 
 
 # ── Auto-update markers ──────────────────────────────────────────────────
@@ -241,6 +283,10 @@ class Markers(_Strict):
     city_grid: bool = True
     stl_links: bool = True
     gitcity_links: bool = True
+    # Showcase: auto-generated "What Cortex Generates" section listing every
+    # widget with preview + config snippet. Targets a CORTEX:SHOWCASE block
+    # in the user's README. Disable if your README documents widgets manually.
+    showcase: bool = True
     pagespeed: PageSpeedConfig = Field(default_factory=PageSpeedConfig)
     wakatime: WakaTimeConfig = Field(default_factory=WakaTimeConfig)
 

@@ -238,7 +238,32 @@
             "bullets_per_year": { "type": "integer", "minimum": 1, "maximum": 8, "default": 3 },
             "years":            { "type": "array", "items": { "$ref": "#/definitions/yearEntry" }, "maxItems": 6, "default": [] }
           }
+        },
+        "header": { "$ref": "#/definitions/banner" },
+        "footer": { "$ref": "#/definitions/banner" },
+        "showcase": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Tuning for the auto-generated CORTEX:SHOWCASE block.",
+          "properties": {
+            "base_url": { "type": "string", "default": "", "description": "Override the URL prefix for variant image src. Empty = default <user>/<user>/main/assets path." }
+          }
         }
+      }
+    },
+
+    "banner": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Animated header/footer banner — capsule-render replacement.",
+      "properties": {
+        "enabled":   { "type": "boolean", "default": true },
+        "shape":     { "type": "string", "enum": ["wave", "slice", "rect"], "default": "wave" },
+        "title":     { "type": "string", "default": "" },
+        "subtitle":  { "type": "string", "default": "" },
+        "height":    { "type": "integer", "minimum": 60, "maximum": 600, "default": 220 },
+        "colors":    { "type": "array", "items": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }, "default": [] },
+        "animation": { "type": "string", "enum": ["drift", "pulse", "static"], "default": "drift" }
       }
     },
 
@@ -269,6 +294,12 @@
             "latest_releases":  { "type": "boolean", "default": true },
             "quote_of_the_day": { "type": "boolean", "default": true },
             "gitgraph":         { "type": "boolean", "default": true },
+            "highlights_stats": { "type": "boolean", "default": true },
+            "skyline_grid":     { "type": "boolean", "default": true },
+            "city_grid":        { "type": "boolean", "default": true },
+            "stl_links":        { "type": "boolean", "default": true },
+            "gitcity_links":    { "type": "boolean", "default": true },
+            "showcase":         { "type": "boolean", "default": true, "description": "Auto-update CORTEX:SHOWCASE block in README with all-widgets gallery + config snippets." },
             "pagespeed": {
               "type": "object",
               "additionalProperties": false,

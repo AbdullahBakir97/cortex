@@ -110,13 +110,69 @@ _MASTERY_BAR: dict[str, int] = {
 }
 
 # Six card slots: position + accent color + stagger class.
+# `inner` references the radial-gradient id for the per-accent inner glow rect.
+# `edge` is the per-card stagger class for the traveling edge highlight.
 _SLOTS: list[dict] = [
-    {"x": 30, "y": 30, "accent": "Red", "hex": "#F90001", "fade": "c1", "bar": "b1"},
-    {"x": 450, "y": 30, "accent": "Orange", "hex": "#FF652F", "fade": "c2", "bar": "b2"},
-    {"x": 870, "y": 30, "accent": "Green", "hex": "#34D399", "fade": "c3", "bar": "b3"},
-    {"x": 30, "y": 440, "accent": "Gold", "hex": "#FFD23F", "fade": "c4", "bar": "b4"},
-    {"x": 450, "y": 440, "accent": "Cyan", "hex": "#22D3EE", "fade": "c5", "bar": "b5"},
-    {"x": 870, "y": 440, "accent": "Purple", "hex": "#A78BFA", "fade": "c6", "bar": "b6"},
+    {
+        "x": 30,
+        "y": 30,
+        "accent": "Red",
+        "hex": "#F90001",
+        "fade": "c1",
+        "bar": "b1",
+        "edge": "ce1",
+        "inner": "innerGlowRed",
+    },
+    {
+        "x": 450,
+        "y": 30,
+        "accent": "Orange",
+        "hex": "#FF652F",
+        "fade": "c2",
+        "bar": "b2",
+        "edge": "ce2",
+        "inner": "innerGlowOrange",
+    },
+    {
+        "x": 870,
+        "y": 30,
+        "accent": "Green",
+        "hex": "#34D399",
+        "fade": "c3",
+        "bar": "b3",
+        "edge": "ce3",
+        "inner": "innerGlowGreen",
+    },
+    {
+        "x": 30,
+        "y": 440,
+        "accent": "Gold",
+        "hex": "#FFD23F",
+        "fade": "c4",
+        "bar": "b4",
+        "edge": "ce4",
+        "inner": "innerGlowGold",
+    },
+    {
+        "x": 450,
+        "y": 440,
+        "accent": "Cyan",
+        "hex": "#22D3EE",
+        "fade": "c5",
+        "bar": "b5",
+        "edge": "ce5",
+        "inner": "innerGlowCyan",
+    },
+    {
+        "x": 870,
+        "y": 440,
+        "accent": "Purple",
+        "hex": "#A78BFA",
+        "fade": "c6",
+        "bar": "b6",
+        "edge": "ce6",
+        "inner": "innerGlowPurple",
+    },
 ]
 
 # Brain regions render in this order (matches the reference layout).
@@ -174,11 +230,32 @@ _HEAD = """<?xml version="1.0" encoding="UTF-8"?>
     .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
     .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
     .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
-    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
-    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
+    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-num-sm { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
+    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
 
-    .breathe-stripe { animation: stripeBreathe 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-    @keyframes stripeBreathe { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }
+    /* Travelling edge highlight — a colored segment loops around each card
+       perimeter every 4s, staggered per card. Same pattern brain region cards
+       got in R2-4 — replaces the static "breathe stripe" at the top with a
+       continuously-moving glow that gives the card visible energy. */
+    .card-edge {
+      stroke-dasharray: 80 1480;
+      animation: cardEdgeTravel 4s linear infinite;
+      filter: url(#cardEdgeGlow);
+      opacity: 0.95;
+    }
+    @keyframes cardEdgeTravel { to { stroke-dashoffset: -1560; } }
+    .ce1 { animation-delay: 0s; }
+    .ce2 { animation-delay: 0.7s; }
+    .ce3 { animation-delay: 1.4s; }
+    .ce4 { animation-delay: 2.1s; }
+    .ce5 { animation-delay: 2.8s; }
+    .ce6 { animation-delay: 3.5s; }
+
+    /* Inner radial glow — soft accent-colored pulse from card center, slow 5s
+       ease-in-out, gives the card warmth from within without pulling focus. */
+    .card-inner-pulse { animation: cardPulse 5s ease-in-out infinite; }
+    @keyframes cardPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1.0; } }
 
     .draw-bar { stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawBar 1.8s cubic-bezier(0.22,1,0.36,1) forwards; }
     @keyframes drawBar { to { stroke-dashoffset: 0; } }
@@ -210,13 +287,26 @@ _HEAD = """<?xml version="1.0" encoding="UTF-8"?>
     <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
       <circle cx="2" cy="2" r="0.9" fill="#F90001" fill-opacity="0.08"/>
     </pattern>
-    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-      <feOffset dx="0" dy="3" result="shadow"/>
-      <feFlood flood-color="#000000" flood-opacity="0.55"/>
-      <feComposite in2="shadow" operator="in"/>
-      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    <!-- Stacked drop shadow: 3 layered feDropShadow for real depth perception
+         (single shadow reads as flat). Same pattern brain cards got in R2-4. -->
+    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
+      <feDropShadow dx="0" dy="6"  stdDeviation="12" flood-color="#000" flood-opacity="0.40"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/>
     </filter>
+    <!-- Edge-glow filter — soft halo on the traveling edge segment so the glow
+         radiates beyond the stroke. -->
+    <filter id="cardEdgeGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <!-- Per-accent inner glow gradients for the soft pulsing fill inside each
+         card. Each lobe color radiates from card center at low opacity. -->
+    <radialGradient id="innerGlowRed"    cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#F90001" stop-opacity="0.18"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowOrange" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#FF652F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowGreen"  cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#34D399" stop-opacity="0.18"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowGold"   cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#FFD23F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FFD23F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowCyan"   cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#22D3EE" stop-opacity="0.18"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient>
+    <radialGradient id="innerGlowPurple" cx="50%" cy="50%" r="60%"><stop offset="0%" stop-color="#A78BFA" stop-opacity="0.18"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
   </defs>
   <rect width="1300" height="850" fill="url(#dots)"/>
 """
@@ -235,13 +325,16 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
     parts.append(f'  <g transform="translate({slot["x"]},{slot["y"]})">')
     parts.append(f'    <g class="card-fade {slot["fade"]}">')
     parts.append(
-        '      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>'
+        '      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>'
+    )
+    parts.append(
+        f'      <rect x="6" y="6" width="388" height="368" rx="10" fill="url(#{slot["inner"]})" class="card-inner-pulse"/>'
+    )
+    parts.append(
+        f'      <rect x="0" y="0" width="400" height="380" rx="14" fill="none" stroke="{slot["hex"]}" stroke-width="2" pathLength="1560" class="card-edge {slot["edge"]}"/>'
     )
     parts.append(
         '      <rect x="0" y="0" width="400" height="380" rx="14" fill="url(#cardHighlight)"/>'
-    )
-    parts.append(
-        f'      <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accent{slot["accent"]})" class="breathe-stripe"/>'
     )
     parts.append(
         f'      <text x="32" y="52" class="t-caption" fill="{slot["hex"]}">{_x(visual["caption"])}</text>'
@@ -263,8 +356,16 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
     if show_stats:
         for i, stat in enumerate(stats):
             sx = 32 + i * 120
+            # Long stat values (>5 chars, typically mastery words like
+            # "PROFICIENT" or "ADVANCED") get a smaller font so they don't
+            # overflow the ~96px-wide column. Short numeric values like "4+"
+            # or "30+" stay at the larger 26px for visual prominence.
+            num_class = "t-stat-num-sm" if len(stat.num) > 5 else "t-stat-num"
+            # Smaller font sits 4px lower so its baseline visually aligns
+            # with the larger numeric stats in adjacent columns.
+            num_y = 308 if len(stat.num) > 5 else 306
             parts.append(
-                f'      <text x="{sx}"  y="306" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>'
+                f'      <text x="{sx}"  y="{num_y}" class="{num_class}" fill="{slot["hex"]}">{_x(stat.num)}</text>'
             )
             parts.append(
                 f'      <text x="{sx}"  y="324" class="t-stat-lbl">{_x(stat.label)}</text>'
