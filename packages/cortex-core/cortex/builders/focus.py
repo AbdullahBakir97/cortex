@@ -34,8 +34,8 @@ _ACCENT_HEX: dict[str, str] = {
 }
 
 # Tile geometry
-_TILE_W = 420
-_TILE_H = 220
+_TILE_W = 460
+_TILE_H = 280
 _GAP = 20
 _PAD = 40
 _COLS = 3
@@ -66,19 +66,19 @@ def _wrap_desc(text: str, max_chars: int = 38) -> list[str]:
 
 
 def _pill_width(label: str) -> int:
-    """Approximate pixel width of a tech pill at 10px JetBrains Mono."""
-    return max(40, len(label) * 7 + 16)
+    """Approximate pixel width of a tech pill at 13px JetBrains Mono."""
+    return max(52, len(label) * 9 + 22)
 
 
 def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> str:
     accent = _ACCENT_HEX.get(tile.accent, _ACCENT_HEX["red"])
     title = f"{tile.emoji} {tile.project}".strip()
-    desc_lines = _wrap_desc(tile.description, max_chars=38)
+    desc_lines = _wrap_desc(tile.description, max_chars=33)
 
     # Status pill auto-sizes to the label
     status_label = tile.status
-    status_w = max(72, len(status_label) * 7 + 36)
-    status_text_x = (status_w + 18) // 2  # offset right of the dot
+    status_w = max(92, len(status_label) * 9 + 44)
+    status_text_x = (status_w + 22) // 2  # offset right of the dot
 
     parts = [
         f'  <g transform="translate({slot_x},{slot_y})">',
@@ -86,28 +86,28 @@ def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> st
         f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileBg)" filter="url(#tileShadow)"/>',
         f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileHighlight)"/>',
         f'      <rect x="0" y="0" width="{_TILE_W}" height="3" rx="1.5" fill="{accent}" class="stripe-glow"/>',
-        '      <g transform="translate(20, 24)">',
-        f'        <rect x="0" y="0" width="{status_w}" height="22" rx="11" fill="{accent}" fill-opacity="0.18" stroke="{accent}" stroke-width="1"/>',
-        f'        <circle cx="14" cy="11" r="3.5" fill="{accent}" class="live-dot"/>',
-        f'        <text x="{status_text_x}" y="15" class="t-status" fill="{accent}" text-anchor="middle">{_x(status_label)}</text>',
+        '      <g transform="translate(24, 28)">',
+        f'        <rect x="0" y="0" width="{status_w}" height="28" rx="14" fill="{accent}" fill-opacity="0.18" stroke="{accent}" stroke-width="1"/>',
+        f'        <circle cx="16" cy="14" r="4" fill="{accent}" class="live-dot"/>',
+        f'        <text x="{status_text_x}" y="19" class="t-status" fill="{accent}" text-anchor="middle">{_x(status_label)}</text>',
         "      </g>",
-        f'      <text x="20" y="84" class="t-title">{_x(title)}</text>',
+        f'      <text x="24" y="106" class="t-title">{_x(title)}</text>',
     ]
 
     # Description lines (up to 3)
     for li, line in enumerate(desc_lines):
-        parts.append(f'      <text x="20" y="{116 + li * 18}" class="t-desc">{_x(line)}</text>')
+        parts.append(f'      <text x="24" y="{146 + li * 22}" class="t-desc">{_x(line)}</text>')
 
     # Tech pills
     if tile.tech:
         pill_x = 0
-        pill_parts = ['      <g transform="translate(20, 178)">']
+        pill_parts = ['      <g transform="translate(24, 226)">']
         for label in tile.tech[:4]:
             w = _pill_width(label)
             pill_parts.append(
-                f'        <g><rect x="{pill_x}" y="0" width="{w}" height="22" rx="11" fill="none" stroke="{accent}" stroke-width="1"/><text x="{pill_x + w // 2}" y="15" class="t-pill" fill="{accent}" text-anchor="middle">{_x(label)}</text></g>'
+                f'        <g><rect x="{pill_x}" y="0" width="{w}" height="28" rx="14" fill="none" stroke="{accent}" stroke-width="1"/><text x="{pill_x + w // 2}" y="19" class="t-pill" fill="{accent}" text-anchor="middle">{_x(label)}</text></g>'
             )
-            pill_x += w + 8
+            pill_x += w + 10
         pill_parts.append("      </g>")
         parts.extend(pill_parts)
 
@@ -144,12 +144,12 @@ def build(config: Config, output: str | Path) -> Path:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}" '
         f'role="img" aria-label="Currently working on — {n} active focus tiles">\n'
         "  <style>\n"
-        "    .t-display   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
-        "    .t-tag       { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
-        "    .t-status    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.20em; text-transform: uppercase; }\n"
-        "    .t-title     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.005em; fill: #FFFFFF; }\n"
-        "    .t-desc      { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 12.5px; fill: #C9CDD3; }\n"
-        "    .t-pill      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 600; font-size: 10px; }\n"
+        "    .t-display   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 36px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
+        "    .t-tag       { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
+        "    .t-status    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.20em; text-transform: uppercase; }\n"
+        "    .t-title     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.005em; fill: #FFFFFF; }\n"
+        "    .t-desc      { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 16px; fill: #C9CDD3; }\n"
+        "    .t-pill      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 13px; }\n"
         "    .live-dot { animation: liveDot 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
         "    @keyframes liveDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.8); opacity: 0.4; } }\n"
         "    .stripe-glow { animation: stripeGlow 3s ease-in-out infinite; }\n"

@@ -147,11 +147,11 @@ def _render_card(
     # Compose bullets — wrap each into up to 3 lines, total 3 bullets per card.
     bullets = entry.bullets[:3]
     bullet_blocks: list[tuple[int, list[str]]] = []  # (start_y, wrapped lines)
-    y_cursor = 124
+    y_cursor = 144
     for body in bullets:
         wrapped = _wrap_bullet(body, max_chars=34)
         bullet_blocks.append((y_cursor, wrapped))
-        y_cursor += 18 * len(wrapped) + 18  # 18px line height + 18px gap
+        y_cursor += 20 * len(wrapped) + 18  # 20px line height + 18px gap
 
     # Stats default if not supplied
     stats = list(entry.stats)[:3]
@@ -165,22 +165,22 @@ def _render_card(
     parts = [
         f'  <g transform="translate({card_x}, 230)" class="card-rise {fade_class}">',
         f'    <line x1="{rel_marker_x}" y1="0" x2="{rel_marker_x}" y2="-60" stroke="{color}" stroke-width="1" stroke-opacity="0.5"/>',
-        f'    <rect x="0" y="0" width="{card_w}" height="360" rx="16" fill="url(#cardBg)" filter="url(#cardShadow)"/>',
-        f'    <rect x="0" y="0" width="{card_w}" height="360" rx="16" fill="none" stroke="{color}" stroke-width="2" class="breathe-border"/>',
-        f'    <text x="24" y="36" class="t-year-tag" fill="{color}">{_x(f"{entry.year} · {label}")}</text>',
-        f'    <text x="24" y="72" class="t-headline">{_x(headline)}</text>',
-        f'    <line x1="24" y1="92" x2="{card_w - 24}" y2="92" stroke="#21262D" stroke-width="1"/>',
+        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="url(#cardBg)" filter="url(#cardShadow)"/>',
+        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="none" stroke="{color}" stroke-width="2" class="breathe-border"/>',
+        f'    <text x="24" y="42" class="t-year-tag" fill="{color}">{_x(f"{entry.year} · {label}")}</text>',
+        f'    <text x="24" y="84" class="t-headline">{_x(headline)}</text>',
+        f'    <line x1="24" y1="108" x2="{card_w - 24}" y2="108" stroke="#21262D" stroke-width="1"/>',
     ]
 
     for start_y, lines in bullet_blocks:
         parts.append(f'    <text x="24"  y="{start_y}" class="t-bullet" fill="{color}">▸</text>')
         for li, line in enumerate(lines):
             parts.append(
-                f'    <text x="48"  y="{start_y + li * 18}" class="t-highlight">{_x(line)}</text>'
+                f'    <text x="48"  y="{start_y + li * 20}" class="t-highlight">{_x(line)}</text>'
             )
 
     parts.append(
-        f'    <line x1="24" y1="284" x2="{card_w - 24}" y2="284" stroke="#21262D" stroke-width="1"/>'
+        f'    <line x1="24" y1="388" x2="{card_w - 24}" y2="388" stroke="#21262D" stroke-width="1"/>'
     )
 
     # Stats row — 3 columns evenly spread inside card width
@@ -188,9 +188,9 @@ def _render_card(
     for i, stat in enumerate(stats[:3]):
         sx = 24 + i * stat_x_step
         parts.append(
-            f'    <text x="{sx}"  y="316" class="t-stat-num" fill="{color}">{_x(stat.num)}</text>'
+            f'    <text x="{sx}"  y="422" class="t-stat-num" fill="{color}">{_x(stat.num)}</text>'
         )
-        parts.append(f'    <text x="{sx}"  y="334" class="t-stat-lbl">{_x(stat.label)}</text>')
+        parts.append(f'    <text x="{sx}"  y="444" class="t-stat-lbl">{_x(stat.label)}</text>')
 
     parts.append("  </g>")
     return "\n".join(parts)
@@ -223,7 +223,7 @@ def build(config: Config, output: str | Path) -> Path:
     gap = 20
     side_pad = 20
     svg_w = side_pad * 2 + n * card_w + (n - 1) * gap
-    svg_h = 660
+    svg_h = 760
 
     # Marker x = center of each card; timeline line spans first→last marker
     card_xs = [side_pad + i * (card_w + gap) for i in range(n)]
@@ -239,15 +239,15 @@ def build(config: Config, output: str | Path) -> Path:
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}" '
         f'role="img" aria-label="{_x(f"Career timeline {span_label}")}">\n'
         "  <style>\n"
-        "    .t-display     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
-        "    .t-tag         { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
-        "    .t-year        { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 800; font-size: 20px; letter-spacing: -0.04em; }\n"
-        "    .t-year-tag    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; }\n"
-        "    .t-headline    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
-        "    .t-highlight   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 11.5px; fill: #E8E8E8; }\n"
-        "    .t-bullet      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 13px; }\n"
-        "    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }\n"
-        "    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 7.5px; letter-spacing: 0.15em; text-transform: uppercase; fill: #6E7681; }\n"
+        "    .t-display     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 36px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
+        "    .t-tag         { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
+        "    .t-year        { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 800; font-size: 26px; letter-spacing: -0.04em; }\n"
+        "    .t-year-tag    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }\n"
+        "    .t-headline    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 26px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
+        "    .t-highlight   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 15px; fill: #E8E8E8; }\n"
+        "    .t-bullet      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 17px; }\n"
+        "    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 22px; }\n"
+        "    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; fill: #8B95A1; }\n"
         "    .timeline-pulse { stroke-dasharray: 4 8; animation: tlflow 3s linear infinite; }\n"
         "    @keyframes tlflow { to { stroke-dashoffset: -36; } }\n"
         "    .marker-pulse { animation: markerPulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
