@@ -11,6 +11,7 @@ Anything that needs a GitHub PAT will gracefully degrade when the token is
 empty — anonymous calls still work for public REST, just with stricter
 rate limits.
 """
+
 from __future__ import annotations
 
 import os

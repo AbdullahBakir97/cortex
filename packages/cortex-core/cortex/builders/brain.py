@@ -12,6 +12,7 @@ Pipeline:
 Ported from the prototype at:
   https://github.com/AbdullahBakir97/AbdullahBakir97/blob/main/scripts/build_anatomical_brain.py
 """
+
 from __future__ import annotations
 
 import re
@@ -27,6 +28,7 @@ def _x(text: str) -> str:
     """XML-escape user-provided text before injection into the SVG template."""
     return xml_escape(text, {"'": "&apos;", '"': "&quot;"})
 
+
 # ── Color replacement maps (Wikimedia source uses these specific hexes) ──
 _FILL_REPLACEMENTS: dict[str, str] = {
     "#fff0cd": "url(#brainGrad)",
@@ -39,7 +41,7 @@ _FILL_REPLACEMENTS: dict[str, str] = {
 
 def _stroke_replacements(palette_primary: str, palette_secondary: str) -> dict[str, str]:
     return {
-        "#816647": palette_primary,    # main brown outline → palette primary
+        "#816647": palette_primary,  # main brown outline → palette primary
         "#000000": palette_secondary,  # any black outlines → palette secondary
     }
 
@@ -49,7 +51,7 @@ def _extract_brain_group(svg: str) -> str:
     """Pull the entire ``<g id="brain">…</g>`` block via balanced-tag walk."""
     m = re.search(r'<g\b[^>]*?id="brain"[^>]*?>', svg, re.DOTALL)
     if not m:
-        raise RuntimeError("Could not find <g id=\"brain\"> in source SVG")
+        raise RuntimeError('Could not find <g id="brain"> in source SVG')
     start = m.start()
     pos = m.end()
     depth = 1
@@ -83,32 +85,32 @@ def _recolor(content: str, palette_primary: str, palette_secondary: str) -> str:
 
 # ── Region label data (positions on the wrapper canvas) ──────────────────
 _REGION_POSITIONS = {
-    "frontal":    {"label_xy": (1180, 150), "target_xy": (850, 310), "color": "primary"},
-    "parietal":   {"label_xy": (600, 90),   "target_xy": (700, 260), "color": "accent_d"},
-    "occipital":  {"label_xy": (20, 150),   "target_xy": (480, 300), "color": "secondary"},
-    "temporal":   {"label_xy": (1180, 470), "target_xy": (830, 500), "color": "accent_c"},
-    "cerebellum": {"label_xy": (20, 690),   "target_xy": (470, 600), "color": "accent_a"},
-    "brainstem":  {"label_xy": (1180, 690), "target_xy": (760, 620), "color": "accent_b"},
+    "frontal": {"label_xy": (1180, 150), "target_xy": (850, 310), "color": "primary"},
+    "parietal": {"label_xy": (600, 90), "target_xy": (700, 260), "color": "accent_d"},
+    "occipital": {"label_xy": (20, 150), "target_xy": (480, 300), "color": "secondary"},
+    "temporal": {"label_xy": (1180, 470), "target_xy": (830, 500), "color": "accent_c"},
+    "cerebellum": {"label_xy": (20, 690), "target_xy": (470, 600), "color": "accent_a"},
+    "brainstem": {"label_xy": (1180, 690), "target_xy": (760, 620), "color": "accent_b"},
 }
 
 _REGION_CAPTIONS = {
-    "frontal":    "FRONTAL · LOBE",
-    "parietal":   "PARIETAL · LOBE",
-    "occipital":  "OCCIPITAL · LOBE",
-    "temporal":   "TEMPORAL · LOBE",
+    "frontal": "FRONTAL · LOBE",
+    "parietal": "PARIETAL · LOBE",
+    "occipital": "OCCIPITAL · LOBE",
+    "temporal": "TEMPORAL · LOBE",
     "cerebellum": "CEREBELLUM",
-    "brainstem":  "BRAINSTEM",
+    "brainstem": "BRAINSTEM",
 }
 
 
 def _emoji_for_region(region: str) -> str:
     return {
-        "frontal":    "⚙️",
-        "parietal":   "🏗️",
-        "occipital":  "🎨",
-        "temporal":   "💾",
+        "frontal": "⚙️",
+        "parietal": "🏗️",
+        "occipital": "🎨",
+        "temporal": "💾",
         "cerebellum": "🛠️",
-        "brainstem":  "🤖",
+        "brainstem": "🤖",
     }.get(region, "🧠")
 
 
@@ -123,12 +125,10 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     if palette is None:
         palette = config.brand.colors.model_dump()  # explicit colors override
 
-    p_primary    = palette["primary"]
-    p_secondary  = palette["secondary"]
-    p_accent_a   = palette["accent_a"]
-    p_accent_b   = palette["accent_b"]
-    p_accent_c   = palette["accent_c"]
-    p_accent_d   = palette["accent_d"]
+    p_primary = palette["primary"]
+    p_secondary = palette["secondary"]
+    p_accent_a = palette["accent_a"]
+    p_accent_b = palette["accent_b"]
     p_background = palette["background"]
 
     name = _x(config.identity.name)
@@ -297,7 +297,9 @@ def build(config: Config, output: str | Path) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     # Load the cached source SVG from package data
-    src_text = resources.files("cortex.assets").joinpath("brain-source.svg").read_text(encoding="utf-8")
+    src_text = (
+        resources.files("cortex.assets").joinpath("brain-source.svg").read_text(encoding="utf-8")
+    )
 
     # Pull just the brain group
     brain_group = _extract_brain_group(src_text)

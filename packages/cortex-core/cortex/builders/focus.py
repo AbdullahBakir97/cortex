@@ -1,6 +1,6 @@
 """Current-focus tile dashboard — Netflix-style "now playing" cards.
 
-Renders up to 6 rich tiles in a 3×2 grid. Each tile = one project the user is
+Renders up to 6 rich tiles in a 3x2 grid. Each tile = one project the user is
 working on right now. Status pill pulses ("RECORDING NOW" feel), accent stripe
 glows, tiles stagger-fade in.
 
@@ -10,6 +10,7 @@ Per-tile content:
   • description (word-wrapped to ≤3 lines)
   • up to 4 tech pills (auto-sized by label width)
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -24,20 +25,20 @@ def _x(s: str) -> str:
 
 # Accent name → hex (matches the brain palette + tech-cards palette)
 _ACCENT_HEX: dict[str, str] = {
-    "red":    "#F90001",
+    "red": "#F90001",
     "orange": "#FF652F",
-    "green":  "#34D399",
-    "gold":   "#FFD23F",
-    "cyan":   "#22D3EE",
+    "green": "#34D399",
+    "gold": "#FFD23F",
+    "cyan": "#22D3EE",
     "purple": "#A78BFA",
 }
 
 # Tile geometry
 _TILE_W = 420
 _TILE_H = 220
-_GAP    = 20
-_PAD    = 40
-_COLS   = 3
+_GAP = 20
+_PAD = 40
+_COLS = 3
 
 # Stagger classes per slot
 _STAGGER = ["t1", "t2", "t3", "t4", "t5", "t6"]
@@ -51,7 +52,7 @@ def _wrap_desc(text: str, max_chars: int = 38) -> list[str]:
     lines: list[str] = []
     current: list[str] = []
     for word in words:
-        candidate = (" ".join(current + [word])).strip()
+        candidate = (" ".join([*current, word])).strip()
         if len(candidate) <= max_chars or not current:
             current.append(word)
         else:
@@ -71,7 +72,7 @@ def _pill_width(label: str) -> int:
 
 def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> str:
     accent = _ACCENT_HEX.get(tile.accent, _ACCENT_HEX["red"])
-    title  = f"{tile.emoji} {tile.project}".strip()
+    title = f"{tile.emoji} {tile.project}".strip()
     desc_lines = _wrap_desc(tile.description, max_chars=38)
 
     # Status pill auto-sizes to the label
@@ -85,11 +86,11 @@ def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> st
         f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileBg)" filter="url(#tileShadow)"/>',
         f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileHighlight)"/>',
         f'      <rect x="0" y="0" width="{_TILE_W}" height="3" rx="1.5" fill="{accent}" class="stripe-glow"/>',
-        f'      <g transform="translate(20, 24)">',
+        '      <g transform="translate(20, 24)">',
         f'        <rect x="0" y="0" width="{status_w}" height="22" rx="11" fill="{accent}" fill-opacity="0.18" stroke="{accent}" stroke-width="1"/>',
         f'        <circle cx="14" cy="11" r="3.5" fill="{accent}" class="live-dot"/>',
         f'        <text x="{status_text_x}" y="15" class="t-status" fill="{accent}" text-anchor="middle">{_x(status_label)}</text>',
-        f'      </g>',
+        "      </g>",
         f'      <text x="20" y="84" class="t-title">{_x(title)}</text>',
     ]
 
@@ -100,16 +101,18 @@ def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> st
     # Tech pills
     if tile.tech:
         pill_x = 0
-        pill_parts = [f'      <g transform="translate(20, 178)">']
+        pill_parts = ['      <g transform="translate(20, 178)">']
         for label in tile.tech[:4]:
             w = _pill_width(label)
-            pill_parts.append(f'        <g><rect x="{pill_x}" y="0" width="{w}" height="22" rx="11" fill="none" stroke="{accent}" stroke-width="1"/><text x="{pill_x + w // 2}" y="15" class="t-pill" fill="{accent}" text-anchor="middle">{_x(label)}</text></g>')
+            pill_parts.append(
+                f'        <g><rect x="{pill_x}" y="0" width="{w}" height="22" rx="11" fill="none" stroke="{accent}" stroke-width="1"/><text x="{pill_x + w // 2}" y="15" class="t-pill" fill="{accent}" text-anchor="middle">{_x(label)}</text></g>'
+            )
             pill_x += w + 8
-        pill_parts.append('      </g>')
+        pill_parts.append("      </g>")
         parts.extend(pill_parts)
 
-    parts.append('    </g>')
-    parts.append('  </g>')
+    parts.append("    </g>")
+    parts.append("  </g>")
     return "\n".join(parts)
 
 
@@ -124,8 +127,10 @@ def build(config: Config, output: str | Path) -> Path:
             '<?xml version="1.0" encoding="UTF-8"?>\n'
             '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="120" viewBox="0 0 800 120">'
             '<text x="400" y="60" font-family="Inter,sans-serif" fill="#9BA1A6" text-anchor="middle">'
-            'Add tiles to cards.current_focus.tiles in cortex.yml.'
-            '</text></svg>\n', encoding="utf-8")
+            "Add tiles to cards.current_focus.tiles in cortex.yml."
+            "</text></svg>\n",
+            encoding="utf-8",
+        )
         return out
 
     n = len(tiles)
@@ -138,7 +143,7 @@ def build(config: Config, output: str | Path) -> Path:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}" '
         f'role="img" aria-label="Currently working on — {n} active focus tiles">\n'
-        '  <style>\n'
+        "  <style>\n"
         "    .t-display   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
         "    .t-tag       { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
         "    .t-status    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.20em; text-transform: uppercase; }\n"
@@ -153,14 +158,14 @@ def build(config: Config, output: str | Path) -> Path:
         "    @keyframes tileRise { to { opacity: 1; } }\n"
         "    .t1 { animation-delay: 0.0s; } .t2 { animation-delay: 0.08s; } .t3 { animation-delay: 0.16s; }\n"
         "    .t4 { animation-delay: 0.24s; } .t5 { animation-delay: 0.32s; } .t6 { animation-delay: 0.40s; }\n"
-        '  </style>\n'
-        '  <defs>\n'
+        "  </style>\n"
+        "  <defs>\n"
         '    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%"><stop offset="0%" stop-color="#0F0816"/><stop offset="100%" stop-color="#000000"/></radialGradient>\n'
         '    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#F90001" fill-opacity="0.07"/></pattern>\n'
         '    <linearGradient id="tileBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A2028" stop-opacity="0.96"/><stop offset="100%" stop-color="#0D1117" stop-opacity="0.96"/></linearGradient>\n'
         '    <linearGradient id="tileHighlight" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08"/><stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>\n'
         '    <filter id="tileShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="0" dy="3" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.65"/><feComposite in2="shadow" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n'
-        '  </defs>\n'
+        "  </defs>\n"
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#bgRadial)"/>\n'
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#dots)"/>\n'
         f'  <text x="{svg_w // 2}" y="42" class="t-tag" text-anchor="middle">⏵ NOW · WORKING · ON ⏴</text>\n'

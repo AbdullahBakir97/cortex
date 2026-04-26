@@ -16,6 +16,7 @@ Personal lines auto-substitute the user's identity fields where applicable
 (github_user, primary projects from current_focus, etc.) so each profile
 gets a personalized version without the user editing template strings.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -33,121 +34,122 @@ Category = Literal["generic", "personal"]
 # ─────────────────────────────────────────────────────────────────────────
 
 ABOUT_LINES_GENERIC: list[tuple[str, str]] = [
-    ("$ whoami",                                       "#00C853"),  # green: terminal prompt
-    ("$ pwd",                                          "#22D3EE"),  # cyan: location
-    ("$ cat about.py",                                 "#FF652F"),  # orange: file path
-    ("$ ls projects/",                                 "#EC4899"),  # magenta: listing
-    ("$ git status",                                   "#F90001"),  # red: state check
-    ("$ history | head",                               "#A78BFA"),  # purple: past commands
-    ("$ uptime",                                       "#34D399"),  # green: system info
-    ("$ cat skills.json",                              "#FFD700"),  # gold: skills
-    ("$ python --version",                             "#00C853"),
-    ("$ tree -L 1",                                    "#22D3EE"),
-    ("$ docker ps",                                    "#FF652F"),
-    ("$ git log --oneline | head -3",                  "#EC4899"),
-    ("$ stack list",                                   "#F90001"),
-    ("$ npm list -g --depth=0",                        "#A78BFA"),
-    ("$ which python",                                 "#34D399"),
-    ("$ ls -la ~/code",                                "#FFD700"),
-    ("$ pytest -q",                                    "#00C853"),
-    ("$ make build",                                   "#22D3EE"),
-    ("$ curl api.github.com/users/{github_user}",      "#FF652F"),
-    ("$ docker compose up -d",                         "#EC4899"),
-    ("$ tmux attach",                                  "#F90001"),
-    ("$ vim ~/.config/me",                             "#A78BFA"),
-    ("$ echo $LANG",                                   "#34D399"),
-    ("$ ssh prod -t htop",                             "#FFD700"),
-    ("$ ps aux | grep python",                         "#00C853"),
-    ("$ git push origin main",                         "#22D3EE"),
-    ("$ tail -f /var/log/app.log",                     "#FF652F"),
-    ("$ man developer",                                "#EC4899"),
-    ("$ exit 0",                                       "#A78BFA"),
-    ("# open to collab",                               "#FFD700"),
+    ("$ whoami", "#00C853"),  # green: terminal prompt
+    ("$ pwd", "#22D3EE"),  # cyan: location
+    ("$ cat about.py", "#FF652F"),  # orange: file path
+    ("$ ls projects/", "#EC4899"),  # magenta: listing
+    ("$ git status", "#F90001"),  # red: state check
+    ("$ history | head", "#A78BFA"),  # purple: past commands
+    ("$ uptime", "#34D399"),  # green: system info
+    ("$ cat skills.json", "#FFD700"),  # gold: skills
+    ("$ python --version", "#00C853"),
+    ("$ tree -L 1", "#22D3EE"),
+    ("$ docker ps", "#FF652F"),
+    ("$ git log --oneline | head -3", "#EC4899"),
+    ("$ stack list", "#F90001"),
+    ("$ npm list -g --depth=0", "#A78BFA"),
+    ("$ which python", "#34D399"),
+    ("$ ls -la ~/code", "#FFD700"),
+    ("$ pytest -q", "#00C853"),
+    ("$ make build", "#22D3EE"),
+    ("$ curl api.github.com/users/{github_user}", "#FF652F"),
+    ("$ docker compose up -d", "#EC4899"),
+    ("$ tmux attach", "#F90001"),
+    ("$ vim ~/.config/me", "#A78BFA"),
+    ("$ echo $LANG", "#34D399"),
+    ("$ ssh prod -t htop", "#FFD700"),
+    ("$ ps aux | grep python", "#00C853"),
+    ("$ git push origin main", "#22D3EE"),
+    ("$ tail -f /var/log/app.log", "#FF652F"),
+    ("$ man developer", "#EC4899"),
+    ("$ exit 0", "#A78BFA"),
+    ("# open to collab", "#FFD700"),
 ]
 
 ABOUT_LINES_PERSONAL: list[tuple[str, str]] = [
     ("$ cd ~/projects/{primary_project} && make dev", "#34D399"),
-    ("$ python -m {primary_project} create my-app",    "#F90001"),
-    ("$ {primary_project} --status",                   "#FFD700"),
-    ("$ docker compose -f {primary_project}.yml up",   "#FFD700"),
-    ("$ deploy.sh {primary_project}-prod",             "#F90001"),
-    ("$ tail -f /var/log/{primary_project}.log",       "#34D399"),
-    ("$ python manage.py migrate {primary_project}",   "#A78BFA"),
-    ("$ ssh {github_user}-prod",                       "#EC4899"),
-    ("$ git checkout -b feature/new-thing",            "#00C853"),
-    ("$ pytest tests/ -v",                             "#FFD700"),
+    ("$ python -m {primary_project} create my-app", "#F90001"),
+    ("$ {primary_project} --status", "#FFD700"),
+    ("$ docker compose -f {primary_project}.yml up", "#FFD700"),
+    ("$ deploy.sh {primary_project}-prod", "#F90001"),
+    ("$ tail -f /var/log/{primary_project}.log", "#34D399"),
+    ("$ python manage.py migrate {primary_project}", "#A78BFA"),
+    ("$ ssh {github_user}-prod", "#EC4899"),
+    ("$ git checkout -b feature/new-thing", "#00C853"),
+    ("$ pytest tests/ -v", "#FFD700"),
     ("$ gh extension install {github_user}/{primary_project}", "#F90001"),
-    ("$ python -c 'import {github_user_pkg}'",         "#A78BFA"),
-    ("# made by {github_user}",                        "#22D3EE"),
-    ("$ rabbitmq-plugins enable rabbitmq_management",  "#FF652F"),
-    ("$ npx nuxt build && npx nuxt start",             "#22D3EE"),
-    ("$ kubectl get pods -n {primary_project}",        "#A78BFA"),
-    ("$ redis-cli FLUSHDB",                            "#F90001"),
-    ("$ celery worker -A {primary_project}",           "#34D399"),
-    ("$ make migrate && make seed",                    "#FFD700"),
-    ("# from {location} with code",                    "#22D3EE"),
+    ("$ python -c 'import {github_user_pkg}'", "#A78BFA"),
+    ("# made by {github_user}", "#22D3EE"),
+    ("$ rabbitmq-plugins enable rabbitmq_management", "#FF652F"),
+    ("$ npx nuxt build && npx nuxt start", "#22D3EE"),
+    ("$ kubectl get pods -n {primary_project}", "#A78BFA"),
+    ("$ redis-cli FLUSHDB", "#F90001"),
+    ("$ celery worker -A {primary_project}", "#34D399"),
+    ("$ make migrate && make seed", "#FFD700"),
+    ("# from {location} with code", "#22D3EE"),
 ]
 
 MOTTO_LINES_GENERIC: list[tuple[str, str]] = [
-    ("// Curious about how systems break",                          "#FF652F"),
-    ("// Stubborn about how they're rebuilt",                       "#F90001"),
-    ("// Code should be useful before it's clever",                 "#FFD700"),
-    ("// Boring architecture is usually the right one",             "#34D399"),
-    ("// Tests are letters from past me to future me",              "#A78BFA"),
-    ("// A good name is half the documentation",                    "#22D3EE"),
-    ("// Ship -> measure -> learn -> ship again",                   "#EC4899"),
-    ("// The simplest thing that could possibly work",              "#00C853"),
-    ("// Read the code, not the comments",                          "#FF652F"),
-    ("// Premature optimization is the root of all evil",           "#F90001"),
-    ("// Make it work, make it right, make it fast",                "#FFD700"),
-    ("// Never trust user input",                                   "#34D399"),
-    ("// Naming things is the second-hardest problem",              "#A78BFA"),
-    ("// Off-by-one errors are inevitable -- design for them",      "#22D3EE"),
-    ("// Documentation is a love letter to your future self",       "#EC4899"),
-    ("// Refactor mercilessly once you understand more",            "#00C853"),
-    ("// Bugs are features waiting to be understood",               "#FF652F"),
-    ("// Empathy for the on-call engineer at 3am",                  "#F90001"),
-    ("// YAGNI -- you aren't gonna need it",                        "#FFD700"),
-    ("// The code is the source of truth -- comments lie",          "#34D399"),
-    ("// Done is better than perfect",                              "#A78BFA"),
-    ("// First, do no harm to production",                          "#22D3EE"),
-    ("// Question every assumption, including this one",            "#EC4899"),
-    ("// Patience is a feature, latency is a bug",                  "#00C853"),
-    ("// Write code as if the next maintainer is psychotic",        "#FF652F"),
-    ("// Cache invalidation is one of two hard problems",           "#F90001"),
-    ("// The best code is code you don't have to write",            "#FFD700"),
-    ("// Build with care, deploy with confidence",                  "#34D399"),
-    ("// Stay hungry, stay foolish -- keep shipping",               "#A78BFA"),
-    ("// Done > Perfect > Started",                                 "#22D3EE"),
+    ("// Curious about how systems break", "#FF652F"),
+    ("// Stubborn about how they're rebuilt", "#F90001"),
+    ("// Code should be useful before it's clever", "#FFD700"),
+    ("// Boring architecture is usually the right one", "#34D399"),
+    ("// Tests are letters from past me to future me", "#A78BFA"),
+    ("// A good name is half the documentation", "#22D3EE"),
+    ("// Ship -> measure -> learn -> ship again", "#EC4899"),
+    ("// The simplest thing that could possibly work", "#00C853"),
+    ("// Read the code, not the comments", "#FF652F"),
+    ("// Premature optimization is the root of all evil", "#F90001"),
+    ("// Make it work, make it right, make it fast", "#FFD700"),
+    ("// Never trust user input", "#34D399"),
+    ("// Naming things is the second-hardest problem", "#A78BFA"),
+    ("// Off-by-one errors are inevitable -- design for them", "#22D3EE"),
+    ("// Documentation is a love letter to your future self", "#EC4899"),
+    ("// Refactor mercilessly once you understand more", "#00C853"),
+    ("// Bugs are features waiting to be understood", "#FF652F"),
+    ("// Empathy for the on-call engineer at 3am", "#F90001"),
+    ("// YAGNI -- you aren't gonna need it", "#FFD700"),
+    ("// The code is the source of truth -- comments lie", "#34D399"),
+    ("// Done is better than perfect", "#A78BFA"),
+    ("// First, do no harm to production", "#22D3EE"),
+    ("// Question every assumption, including this one", "#EC4899"),
+    ("// Patience is a feature, latency is a bug", "#00C853"),
+    ("// Write code as if the next maintainer is psychotic", "#FF652F"),
+    ("// Cache invalidation is one of two hard problems", "#F90001"),
+    ("// The best code is code you don't have to write", "#FFD700"),
+    ("// Build with care, deploy with confidence", "#34D399"),
+    ("// Stay hungry, stay foolish -- keep shipping", "#A78BFA"),
+    ("// Done > Perfect > Started", "#22D3EE"),
 ]
 
 MOTTO_LINES_PERSONAL: list[tuple[str, str]] = [
-    ("// I build for small businesses, not hyperscalers",           "#FFD700"),
-    ("// One keyboard, one ambition",                                "#FF652F"),
-    ("// Code I write today runs in production tomorrow",           "#34D399"),
-    ("// Started in HTML, ended up in production",                  "#F90001"),
-    ("// Production beats demo, every single Friday",               "#FF652F"),
-    ("// I write Python the way I'd explain it to a friend",        "#FFD700"),
-    ("// Build it once for yourself, then share it widely",         "#00C853"),
-    ("// Microservices for problems, monoliths for solutions",      "#FFD700"),
-    ("// Every commit is a small gift to my future team",           "#22D3EE"),
-    ("// From learning loop to long-running production",            "#EC4899"),
-    ("// Open-source what you wish others had shared with you",     "#A78BFA"),
-    ("// Made in {location}, for the world",                         "#A78BFA"),
-    ("// Real users don't read API docs -- write smaller APIs",     "#FF652F"),
-    ("// Vue 3 because composition beats inheritance",              "#34D399"),
-    ("// The system never sleeps, the code shouldn't crash",        "#F90001"),
-    ("// I write what I'd want to maintain at 3am",                 "#A78BFA"),
-    ("// Every shipped feature is a small bet that paid off",       "#22D3EE"),
-    ("// Less code, fewer bugs, happier users",                     "#FFD700"),
-    ("// First principles over framework theology",                 "#FF652F"),
-    ("// Still excited to type 'git init'",                          "#34D399"),
+    ("// I build for small businesses, not hyperscalers", "#FFD700"),
+    ("// One keyboard, one ambition", "#FF652F"),
+    ("// Code I write today runs in production tomorrow", "#34D399"),
+    ("// Started in HTML, ended up in production", "#F90001"),
+    ("// Production beats demo, every single Friday", "#FF652F"),
+    ("// I write Python the way I'd explain it to a friend", "#FFD700"),
+    ("// Build it once for yourself, then share it widely", "#00C853"),
+    ("// Microservices for problems, monoliths for solutions", "#FFD700"),
+    ("// Every commit is a small gift to my future team", "#22D3EE"),
+    ("// From learning loop to long-running production", "#EC4899"),
+    ("// Open-source what you wish others had shared with you", "#A78BFA"),
+    ("// Made in {location}, for the world", "#A78BFA"),
+    ("// Real users don't read API docs -- write smaller APIs", "#FF652F"),
+    ("// Vue 3 because composition beats inheritance", "#34D399"),
+    ("// The system never sleeps, the code shouldn't crash", "#F90001"),
+    ("// I write what I'd want to maintain at 3am", "#A78BFA"),
+    ("// Every shipped feature is a small bet that paid off", "#22D3EE"),
+    ("// Less code, fewer bugs, happier users", "#FFD700"),
+    ("// First principles over framework theology", "#FF652F"),
+    ("// Still excited to type 'git init'", "#34D399"),
 ]
 
 
 # ─────────────────────────────────────────────────────────────────────────
 # Personal-line variable substitution
 # ─────────────────────────────────────────────────────────────────────────
+
 
 def _placeholder_values(config: Config) -> dict[str, str]:
     """Build the substitution map for personal-line placeholders."""
@@ -157,10 +159,10 @@ def _placeholder_values(config: Config) -> dict[str, str]:
         else config.identity.github_user.lower()
     )
     return {
-        "github_user":     config.identity.github_user,
+        "github_user": config.identity.github_user,
         "github_user_pkg": config.identity.github_user.lower().replace("-", "_"),
         "primary_project": primary_project.lower().replace(" ", "-"),
-        "location":        config.identity.location or "Earth",
+        "location": config.identity.location or "Earth",
     }
 
 
@@ -178,8 +180,8 @@ def _expand_personal(line: str, vars: dict[str, str]) -> str:
 #   12% type / 62% hold / 10% erase / 16% off
 # ─────────────────────────────────────────────────────────────────────────
 
-_TYPE_RATIO  = 0.12
-_HOLD_RATIO  = 0.62
+_TYPE_RATIO = 0.12
+_HOLD_RATIO = 0.62
 _ERASE_RATIO = 0.10
 
 
@@ -191,8 +193,8 @@ def _clip_animate(line_idx: int, n: int, reveal_w: int) -> tuple[str, str]:
     """Build (values, keyTimes) attribute strings for one line's animation."""
     window = 1.0 / n
     start = line_idx * window
-    type_end  = start + window * _TYPE_RATIO
-    hold_end  = start + window * (_TYPE_RATIO + _HOLD_RATIO)
+    type_end = start + window * _TYPE_RATIO
+    hold_end = start + window * (_TYPE_RATIO + _HOLD_RATIO)
     erase_end = start + window * (_TYPE_RATIO + _HOLD_RATIO + _ERASE_RATIO)
 
     if line_idx == 0:
@@ -203,16 +205,14 @@ def _clip_animate(line_idx: int, n: int, reveal_w: int) -> tuple[str, str]:
         kt = f"0;{_round3(start)};{_round3(type_end)};{_round3(hold_end)};1"
     else:
         values = f"0;0;{reveal_w};{reveal_w};0;0"
-        kt = (
-            f"0;{_round3(start)};{_round3(type_end)};"
-            f"{_round3(hold_end)};{_round3(erase_end)};1"
-        )
+        kt = f"0;{_round3(start)};{_round3(type_end)};{_round3(hold_end)};{_round3(erase_end)};1"
     return values, kt
 
 
 # ─────────────────────────────────────────────────────────────────────────
 # SVG composition
 # ─────────────────────────────────────────────────────────────────────────
+
 
 def _compose(
     lines: list[tuple[str, str]],
@@ -280,6 +280,7 @@ def _compose(
 # Line selection (filter by ``include`` + truncate to ``lines`` count)
 # ─────────────────────────────────────────────────────────────────────────
 
+
 def _select_lines(
     generic: list[tuple[str, str]],
     personal: list[tuple[str, str]],
@@ -307,6 +308,7 @@ def _select_lines(
 # ─────────────────────────────────────────────────────────────────────────
 # Public API
 # ─────────────────────────────────────────────────────────────────────────
+
 
 def build_about(config: Config, output: str | Path) -> Path:
     """Build the about-typing SVG (cycling terminal commands)."""

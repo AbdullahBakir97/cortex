@@ -9,6 +9,7 @@ Visual metadata (emoji, caption, tagline, mastery, stats) is optional on each
 BrainRegion. When not supplied, Cortex falls back to a domain-keyed preset
 table so the simple case still looks polished out of the box.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -27,49 +28,49 @@ def _x(s: str) -> str:
 # Keyed by canonical (lowercased, stripped) domain name.
 _PRESETS: dict[str, dict[str, str]] = {
     "backend": {
-        "emoji":   "⚙️",
+        "emoji": "⚙️",
         "caption": "SERVER · APIS · LOGIC",
         "tagline": "Robust, well-tested server-side systems.",
         "mastery": "EXPERT",
     },
     "frontend": {
-        "emoji":   "🎨",
+        "emoji": "🎨",
         "caption": "CLIENT · UI · INTERACTION",
         "tagline": "Interactive, accessible interfaces.",
         "mastery": "ADVANCED",
     },
     "architecture": {
-        "emoji":   "🏗️",
+        "emoji": "🏗️",
         "caption": "SYSTEMS · DESIGN · SCALE",
         "tagline": "Distributed, event-driven systems.",
         "mastery": "PROFICIENT",
     },
     "data layer": {
-        "emoji":   "💾",
+        "emoji": "💾",
         "caption": "PERSISTENCE · STATE · CACHE",
         "tagline": "Modeling, indexing, performance.",
         "mastery": "EXPERT",
     },
     "data": {
-        "emoji":   "💾",
+        "emoji": "💾",
         "caption": "PERSISTENCE · STATE · CACHE",
         "tagline": "Modeling, indexing, performance.",
         "mastery": "EXPERT",
     },
     "devops": {
-        "emoji":   "🛠️",
+        "emoji": "🛠️",
         "caption": "PLATFORM · CI/CD · DEPLOY",
         "tagline": "Pipelines that don't break on Friday.",
         "mastery": "ADVANCED",
     },
     "ai & data": {
-        "emoji":   "🤖",
+        "emoji": "🤖",
         "caption": "INTELLIGENCE · ANALYTICS",
         "tagline": "LLMs, RAG, agents, notebooks.",
         "mastery": "GROWING",
     },
     "ai": {
-        "emoji":   "🤖",
+        "emoji": "🤖",
         "caption": "INTELLIGENCE · ANALYTICS",
         "tagline": "LLMs, RAG, agents, notebooks.",
         "mastery": "GROWING",
@@ -78,32 +79,55 @@ _PRESETS: dict[str, dict[str, str]] = {
 
 # Default stats per mastery — used when the region didn't specify any.
 _DEFAULT_STATS: dict[str, list[StatEntry]] = {
-    "EXPERT":     [StatEntry(num="4+",  label="YEARS"), StatEntry(num="30+", label="PROJECTS"), StatEntry(num="EXPERT",     label="MASTERY")],
-    "ADVANCED":   [StatEntry(num="4+",  label="YEARS"), StatEntry(num="20+", label="PROJECTS"), StatEntry(num="ADVANCED",   label="MASTERY")],
-    "PROFICIENT": [StatEntry(num="3+",  label="YEARS"), StatEntry(num="10+", label="PROJECTS"), StatEntry(num="PROFICIENT", label="MASTERY")],
-    "GROWING":    [StatEntry(num="2+",  label="YEARS"), StatEntry(num="5+",  label="PROJECTS"), StatEntry(num="GROWING",    label="MASTERY")],
+    "EXPERT": [
+        StatEntry(num="4+", label="YEARS"),
+        StatEntry(num="30+", label="PROJECTS"),
+        StatEntry(num="EXPERT", label="MASTERY"),
+    ],
+    "ADVANCED": [
+        StatEntry(num="4+", label="YEARS"),
+        StatEntry(num="20+", label="PROJECTS"),
+        StatEntry(num="ADVANCED", label="MASTERY"),
+    ],
+    "PROFICIENT": [
+        StatEntry(num="3+", label="YEARS"),
+        StatEntry(num="10+", label="PROJECTS"),
+        StatEntry(num="PROFICIENT", label="MASTERY"),
+    ],
+    "GROWING": [
+        StatEntry(num="2+", label="YEARS"),
+        StatEntry(num="5+", label="PROJECTS"),
+        StatEntry(num="GROWING", label="MASTERY"),
+    ],
 }
 
 # Mastery level → bar fill width (out of 336 visible track width).
 _MASTERY_BAR: dict[str, int] = {
-    "EXPERT":     336,
-    "ADVANCED":   305,
+    "EXPERT": 336,
+    "ADVANCED": 305,
     "PROFICIENT": 270,
-    "GROWING":    225,
+    "GROWING": 225,
 }
 
 # Six card slots: position + accent color + stagger class.
 _SLOTS: list[dict] = [
-    {"x":  30, "y":  30, "accent": "Red",    "hex": "#F90001", "fade": "c1", "bar": "b1"},
-    {"x": 450, "y":  30, "accent": "Orange", "hex": "#FF652F", "fade": "c2", "bar": "b2"},
-    {"x": 870, "y":  30, "accent": "Green",  "hex": "#34D399", "fade": "c3", "bar": "b3"},
-    {"x":  30, "y": 380, "accent": "Gold",   "hex": "#FFD23F", "fade": "c4", "bar": "b4"},
-    {"x": 450, "y": 380, "accent": "Cyan",   "hex": "#22D3EE", "fade": "c5", "bar": "b5"},
+    {"x": 30, "y": 30, "accent": "Red", "hex": "#F90001", "fade": "c1", "bar": "b1"},
+    {"x": 450, "y": 30, "accent": "Orange", "hex": "#FF652F", "fade": "c2", "bar": "b2"},
+    {"x": 870, "y": 30, "accent": "Green", "hex": "#34D399", "fade": "c3", "bar": "b3"},
+    {"x": 30, "y": 380, "accent": "Gold", "hex": "#FFD23F", "fade": "c4", "bar": "b4"},
+    {"x": 450, "y": 380, "accent": "Cyan", "hex": "#22D3EE", "fade": "c5", "bar": "b5"},
     {"x": 870, "y": 380, "accent": "Purple", "hex": "#A78BFA", "fade": "c6", "bar": "b6"},
 ]
 
 # Brain regions render in this order (matches the reference layout).
-_REGION_ORDER: list[str] = ["frontal", "occipital", "parietal", "temporal", "cerebellum", "brainstem"]
+_REGION_ORDER: list[str] = [
+    "frontal",
+    "occipital",
+    "parietal",
+    "temporal",
+    "cerebellum",
+    "brainstem",
+]
 
 
 # ── Region → visual metadata resolution ──────────────────────────────────
@@ -116,7 +140,7 @@ def _resolve_visual(region: BrainRegion) -> dict[str, str]:
     key = region.domain.strip().lower()
     preset = _PRESETS.get(key, {})
     return {
-        "emoji":   region.emoji   or preset.get("emoji",   "🧠"),
+        "emoji": region.emoji or preset.get("emoji", "🧠"),
         "caption": region.caption or preset.get("caption", region.domain.upper()),
         "tagline": region.tagline or preset.get("tagline", "Tools, patterns, taste."),
         "mastery": region.mastery or preset.get("mastery", "PROFICIENT"),
@@ -206,31 +230,51 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
     stats = _stats_for(region, visual["mastery"])
     bar_x_end = 32 + _MASTERY_BAR.get(visual["mastery"], 270)
 
-    title    = f"{visual['emoji']} {region.domain}"
+    title = f"{visual['emoji']} {region.domain}"
     parts: list[str] = []
     parts.append(f'  <g transform="translate({slot["x"]},{slot["y"]})">')
     parts.append(f'    <g class="card-fade {slot["fade"]}">')
-    parts.append('      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>')
-    parts.append('      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>')
-    parts.append(f'      <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accent{slot["accent"]})" class="breathe-stripe"/>')
-    parts.append(f'      <text x="32" y="48" class="t-caption" fill="{slot["hex"]}">{_x(visual["caption"])}</text>')
+    parts.append(
+        '      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardBg)" filter="url(#cardShadow)"/>'
+    )
+    parts.append(
+        '      <rect x="0" y="0" width="400" height="320" rx="14" fill="url(#cardHighlight)"/>'
+    )
+    parts.append(
+        f'      <rect x="0" y="0" width="400" height="4" rx="2" fill="url(#accent{slot["accent"]})" class="breathe-stripe"/>'
+    )
+    parts.append(
+        f'      <text x="32" y="48" class="t-caption" fill="{slot["hex"]}">{_x(visual["caption"])}</text>'
+    )
     parts.append(f'      <text x="32" y="86" class="t-title">{_x(title)}</text>')
     parts.append(f'      <text x="32" y="114" class="t-tagline">{_x(visual["tagline"])}</text>')
-    parts.append(f'      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">{_x(primary)}</text>')
+    parts.append(
+        f'      <text x="32" y="158" class="t-tool" fill="#FFFFFF" font-weight="700">{_x(primary)}</text>'
+    )
     if secondary:
         parts.append(f'      <text x="32" y="180" class="t-tool">{_x(secondary)}</text>')
     if tertiary:
-        parts.append(f'      <text x="32" y="202" class="t-tool" fill="#9BA1A6">{_x(tertiary)}</text>')
-    parts.append('      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>')
+        parts.append(
+            f'      <text x="32" y="202" class="t-tool" fill="#9BA1A6">{_x(tertiary)}</text>'
+        )
+    parts.append(
+        '      <line x1="32" y1="228" x2="368" y2="228" stroke="#21262D" stroke-width="1"/>'
+    )
     if show_stats:
         for i, stat in enumerate(stats):
             sx = 32 + i * 120
-            parts.append(f'      <text x="{sx}"  y="260" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>')
-            parts.append(f'      <text x="{sx}"  y="276" class="t-stat-lbl">{_x(stat.label)}</text>')
+            parts.append(
+                f'      <text x="{sx}"  y="260" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>'
+            )
+            parts.append(
+                f'      <text x="{sx}"  y="276" class="t-stat-lbl">{_x(stat.label)}</text>'
+            )
     parts.append('      <rect x="32" y="298" width="336" height="3" rx="1.5" fill="#21262D"/>')
-    parts.append(f'      <line x1="32" y1="299.5" x2="{bar_x_end}" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar {slot["bar"]}"/>')
-    parts.append('    </g>')
-    parts.append('  </g>')
+    parts.append(
+        f'      <line x1="32" y1="299.5" x2="{bar_x_end}" y2="299.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar {slot["bar"]}"/>'
+    )
+    parts.append("    </g>")
+    parts.append("  </g>")
     return "\n".join(parts)
 
 
@@ -238,7 +282,7 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
 def build(config: Config, output: str | Path) -> Path:
     """Emit assets/tech-cards.svg from the user's brain regions.
 
-    Layout: 3 columns × 2 rows of glassmorphism cards. Each card draws from
+    Layout: 3 columns x 2 rows of glassmorphism cards. Each card draws from
     one brain region — domain becomes the title, tools become the tech list,
     and visual metadata (emoji/caption/tagline/mastery/stats) comes from the
     region itself or domain-keyed presets.
@@ -253,8 +297,10 @@ def build(config: Config, output: str | Path) -> Path:
     head = _HEAD.replace("__ARIA__", _x(f"Tech stack — {aria_domains}"))
 
     show_stats = config.cards.tech_stack.show_stats
-    cards = "\n".join(_render_card(slot, region, show_stats=show_stats)
-                      for slot, region in zip(_SLOTS, regions, strict=True))
+    cards = "\n".join(
+        _render_card(slot, region, show_stats=show_stats)
+        for slot, region in zip(_SLOTS, regions, strict=True)
+    )
 
     out.write_text(head + cards + "\n" + _TAIL, encoding="utf-8")
     return out

@@ -9,6 +9,7 @@ Usage:
     cortex --version
     cortex --help
 """
+
 from __future__ import annotations
 
 import sys
@@ -35,14 +36,28 @@ def cli() -> None:
 
 @cli.command("init")
 @click.option(
-    "-t", "--template",
-    type=click.Choice(["minimal", "standard", "extreme", "backend-engineer", "frontend-specialist", "full-stack", "data-scientist", "devops", "student"]),
+    "-t",
+    "--template",
+    type=click.Choice(
+        [
+            "minimal",
+            "standard",
+            "extreme",
+            "backend-engineer",
+            "frontend-specialist",
+            "full-stack",
+            "data-scientist",
+            "devops",
+            "student",
+        ]
+    ),
     default="standard",
     show_default=True,
     help="Starter template archetype.",
 )
 @click.option(
-    "-o", "--output",
+    "-o",
+    "--output",
     type=click.Path(),
     default=DEFAULT_CONFIG,
     show_default=True,
@@ -66,14 +81,16 @@ def validate_command(config: str) -> None:
 
 @cli.command("build")
 @click.option(
-    "-c", "--config",
+    "-c",
+    "--config",
     type=click.Path(exists=True, dir_okay=False),
     default=DEFAULT_CONFIG,
     show_default=True,
     help="Path to your cortex.yml.",
 )
 @click.option(
-    "-o", "--output",
+    "-o",
+    "--output",
     type=click.Path(),
     default=DEFAULT_OUTPUT,
     show_default=True,
@@ -86,13 +103,15 @@ def build_command(config: str, output: str) -> None:
 
 @cli.command("update-readme")
 @click.option(
-    "-c", "--config",
+    "-c",
+    "--config",
     type=click.Path(exists=True, dir_okay=False),
     default=DEFAULT_CONFIG,
     show_default=True,
 )
 @click.option(
-    "-r", "--readme",
+    "-r",
+    "--readme",
     type=click.Path(),
     default="README.md",
     show_default=True,
@@ -105,13 +124,15 @@ def update_readme_command(config: str, readme: str) -> None:
 
 @cli.command("viewer")
 @click.option(
-    "-c", "--config",
+    "-c",
+    "--config",
     type=click.Path(exists=True, dir_okay=False),
     default=DEFAULT_CONFIG,
     show_default=True,
 )
 @click.option(
-    "-o", "--output",
+    "-o",
+    "--output",
     type=click.Path(),
     default="docs",
     show_default=True,
@@ -131,7 +152,7 @@ def main() -> int:
     except click.exceptions.UsageError as e:
         click.echo(f"Error: {e.message}", err=True)
         return 2
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         click.echo(f"Unhandled error: {e}", err=True)
         return 1
 

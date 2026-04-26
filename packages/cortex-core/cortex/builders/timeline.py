@@ -11,6 +11,7 @@ Auto-extends each year:
     so the page is never blank for first-time users.
   • The current calendar year always gets the gold accent + a pulsing LIVE badge.
 """
+
 from __future__ import annotations
 
 from datetime import date
@@ -30,14 +31,14 @@ _DEFAULT_ACCENTS = ["#A78BFA", "#F90001", "#FF652F", "#22D3EE", "#34D399", "#FFD
 _GOLD = "#FFD23F"
 
 _DEFAULT_LABELS_BY_INDEX = {
-    0:  "ORIGIN",
-    1:  "FOUNDATION",
-    2:  "GROWTH",
+    0: "ORIGIN",
+    1: "FOUNDATION",
+    2: "GROWTH",
 }
 _DEFAULT_HEADLINE_BY_INDEX = {
-    0:  "First Steps",
-    1:  "A Year of Shipping",
-    2:  "Production & Growth",
+    0: "First Steps",
+    1: "A Year of Shipping",
+    2: "Production & Growth",
 }
 
 
@@ -56,14 +57,22 @@ def _resolve_entries(config: Config) -> list[YearEntry]:
     out: list[YearEntry] = []
     for i in range(n):
         year = yh.start_year + i
-        is_current = (year == today_year)
-        out.append(YearEntry(
-            year=year,
-            label="CURRENT YEAR" if is_current else _DEFAULT_LABELS_BY_INDEX.get(i, "MILESTONE"),
-            headline=_DEFAULT_HEADLINE_BY_INDEX.get(i, "Continuing the Journey"),
-            bullets=["Configure cards.yearly_highlights.years in cortex.yml", "to fill this card with your own highlights.", "See examples/extreme.yml for the full schema."],
-            stats=[],
-        ))
+        is_current = year == today_year
+        out.append(
+            YearEntry(
+                year=year,
+                label="CURRENT YEAR"
+                if is_current
+                else _DEFAULT_LABELS_BY_INDEX.get(i, "MILESTONE"),
+                headline=_DEFAULT_HEADLINE_BY_INDEX.get(i, "Continuing the Journey"),
+                bullets=[
+                    "Configure cards.yearly_highlights.years in cortex.yml",
+                    "to fill this card with your own highlights.",
+                    "See examples/extreme.yml for the full schema.",
+                ],
+                stats=[],
+            )
+        )
     return out
 
 
@@ -82,7 +91,7 @@ def _wrap_bullet(text: str, max_chars: int = 36) -> list[str]:
     lines: list[str] = []
     current: list[str] = []
     for word in words:
-        candidate = (" ".join(current + [word])).strip()
+        candidate = (" ".join([*current, word])).strip()
         if len(candidate) <= max_chars or not current:
             current.append(word)
         else:
@@ -95,12 +104,14 @@ def _wrap_bullet(text: str, max_chars: int = 36) -> list[str]:
     return lines[:3]
 
 
-def _render_marker(x: int, y: int, year: int, color: str, anim_delay_s: float, *, with_live: bool) -> str:
+def _render_marker(
+    x: int, y: int, year: int, color: str, anim_delay_s: float, *, with_live: bool
+) -> str:
     """One big circle with the 2-digit year inside, optionally with a LIVE badge."""
     yy = f"'{year % 100:02d}"
     parts = [
         f'  <g transform="translate({x},{y})">',
-        f'    <circle r="34" fill="url(#markerGlow)"/>',
+        '    <circle r="34" fill="url(#markerGlow)"/>',
         f'    <circle r="24" fill="#0D1117" stroke="{color}" stroke-width="2" class="marker-pulse" style="animation-delay:{anim_delay_s:.1f}s"/>',
         f'    <text x="0" y="6" class="t-year" fill="{color}" text-anchor="middle">{_x(yy)}</text>',
     ]
@@ -109,15 +120,23 @@ def _render_marker(x: int, y: int, year: int, color: str, anim_delay_s: float, *
             '    <g transform="translate(60, 0)" class="live-pulse">',
             f'      <rect x="0" y="-12" width="60" height="22" rx="11" fill="{color}"/>',
             '      <circle cx="11" cy="-1" r="3.5" fill="#0D1117"/>',
-            f'      <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>',
-            '    </g>',
+            '      <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>',
+            "    </g>",
         ]
-    parts.append('  </g>')
+    parts.append("  </g>")
     return "\n".join(parts)
 
 
-def _render_card(card_x: int, card_w: int, marker_x: int, entry: YearEntry, color: str,
-                 fade_class: str, *, is_current: bool) -> str:
+def _render_card(
+    card_x: int,
+    card_w: int,
+    marker_x: int,
+    entry: YearEntry,
+    color: str,
+    fade_class: str,
+    *,
+    is_current: bool,
+) -> str:
     """Tall year card with breathing border, headline, bullets, and stats."""
     # Connector line from card top → timeline marker
     rel_marker_x = marker_x - card_x
@@ -137,7 +156,11 @@ def _render_card(card_x: int, card_w: int, marker_x: int, entry: YearEntry, colo
     # Stats default if not supplied
     stats = list(entry.stats)[:3]
     if not stats:
-        stats = [StatEntry(num="—", label="STATS"), StatEntry(num="—", label="COMING"), StatEntry(num="—", label="SOON")]
+        stats = [
+            StatEntry(num="—", label="STATS"),
+            StatEntry(num="—", label="COMING"),
+            StatEntry(num="—", label="SOON"),
+        ]
 
     parts = [
         f'  <g transform="translate({card_x}, 230)" class="card-rise {fade_class}">',
@@ -152,18 +175,24 @@ def _render_card(card_x: int, card_w: int, marker_x: int, entry: YearEntry, colo
     for start_y, lines in bullet_blocks:
         parts.append(f'    <text x="24"  y="{start_y}" class="t-bullet" fill="{color}">▸</text>')
         for li, line in enumerate(lines):
-            parts.append(f'    <text x="48"  y="{start_y + li * 18}" class="t-highlight">{_x(line)}</text>')
+            parts.append(
+                f'    <text x="48"  y="{start_y + li * 18}" class="t-highlight">{_x(line)}</text>'
+            )
 
-    parts.append(f'    <line x1="24" y1="284" x2="{card_w - 24}" y2="284" stroke="#21262D" stroke-width="1"/>')
+    parts.append(
+        f'    <line x1="24" y1="284" x2="{card_w - 24}" y2="284" stroke="#21262D" stroke-width="1"/>'
+    )
 
     # Stats row — 3 columns evenly spread inside card width
     stat_x_step = (card_w - 48) // 3
     for i, stat in enumerate(stats[:3]):
         sx = 24 + i * stat_x_step
-        parts.append(f'    <text x="{sx}"  y="316" class="t-stat-num" fill="{color}">{_x(stat.num)}</text>')
+        parts.append(
+            f'    <text x="{sx}"  y="316" class="t-stat-num" fill="{color}">{_x(stat.num)}</text>'
+        )
         parts.append(f'    <text x="{sx}"  y="334" class="t-stat-lbl">{_x(stat.label)}</text>')
 
-    parts.append('  </g>')
+    parts.append("  </g>")
     return "\n".join(parts)
 
 
@@ -179,8 +208,10 @@ def build(config: Config, output: str | Path) -> Path:
             '<?xml version="1.0" encoding="UTF-8"?>\n'
             '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="120" viewBox="0 0 800 120">'
             '<text x="400" y="60" font-family="Inter,sans-serif" fill="#9BA1A6" text-anchor="middle">'
-            'Configure cards.yearly_highlights to populate the timeline.'
-            '</text></svg>\n', encoding="utf-8")
+            "Configure cards.yearly_highlights to populate the timeline."
+            "</text></svg>\n",
+            encoding="utf-8",
+        )
         return out
 
     n = len(entries)
@@ -207,7 +238,7 @@ def build(config: Config, output: str | Path) -> Path:
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}" '
         f'role="img" aria-label="{_x(f"Career timeline {span_label}")}">\n'
-        '  <style>\n'
+        "  <style>\n"
         "    .t-display     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
         "    .t-tag         { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
         "    .t-year        { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 800; font-size: 20px; letter-spacing: -0.04em; }\n"
@@ -230,15 +261,15 @@ def build(config: Config, output: str | Path) -> Path:
         "    .y4 { animation-delay: 1.10s; } .y5 { animation-delay: 1.30s; }\n"
         "    .breathe-border { animation: breathe 3.4s ease-in-out infinite; }\n"
         "    @keyframes breathe { 0%,100%{stroke-opacity:0.7} 50%{stroke-opacity:1} }\n"
-        '  </style>\n'
-        '  <defs>\n'
+        "  </style>\n"
+        "  <defs>\n"
         '    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%"><stop offset="0%" stop-color="#0F0816"/><stop offset="100%" stop-color="#000000"/></radialGradient>\n'
         '    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#F90001" fill-opacity="0.07"/></pattern>\n'
         '    <linearGradient id="tlGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A78BFA"/><stop offset="33%" stop-color="#F90001"/><stop offset="66%" stop-color="#FF652F"/><stop offset="100%" stop-color="#FFD23F"/></linearGradient>\n'
         '    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1C1428" stop-opacity="0.94"/><stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/></linearGradient>\n'
         '    <radialGradient id="markerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>\n'
         '    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="0" dy="3" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.65"/><feComposite in2="shadow" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n'
-        '  </defs>\n'
+        "  </defs>\n"
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#bgRadial)"/>\n'
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#dots)"/>\n'
         f'  <text x="{svg_w // 2}" y="42" class="t-tag" text-anchor="middle">{_x(f"⏵ CAREER · TIMELINE · {span_label} ⏴")}</text>\n'
@@ -248,16 +279,27 @@ def build(config: Config, output: str | Path) -> Path:
     )
 
     markers = "\n".join(
-        _render_marker(marker_xs[i], 160, entries[i].year,
-                       _accent_for(i, n, is_current[i]),
-                       0.3 * i, with_live=is_current[i])
+        _render_marker(
+            marker_xs[i],
+            160,
+            entries[i].year,
+            _accent_for(i, n, is_current[i]),
+            0.3 * i,
+            with_live=is_current[i],
+        )
         for i in range(n)
     )
 
     cards = "\n".join(
-        _render_card(card_xs[i], card_w, marker_xs[i], entries[i],
-                     _accent_for(i, n, is_current[i]),
-                     f"y{i}", is_current=is_current[i])
+        _render_card(
+            card_xs[i],
+            card_w,
+            marker_xs[i],
+            entries[i],
+            _accent_for(i, n, is_current[i]),
+            f"y{i}",
+            is_current=is_current[i],
+        )
         for i in range(n)
     )
 

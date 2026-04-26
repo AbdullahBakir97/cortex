@@ -14,13 +14,14 @@ their existing block intact instead of crashing the whole run.
 Marker prefix is always ``CORTEX:`` so we never collide with user-written
 markers. Sections are toggled via ``config.auto_update.markers.*``.
 """
+
 from __future__ import annotations
 
 import datetime as dt
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable
 
 from .github_api import GitHubClient
 from .schema import Config
@@ -62,35 +63,68 @@ def _years_for(start_year: int) -> list[int]:
 # ── Section renderers (token-free) ──────────────────────────────────────
 QUOTES: list[tuple[str, str]] = [
     ("First, solve the problem. Then, write the code.", "John Johnson"),
-    ("Programs must be written for people to read, and only incidentally for machines to execute.", "Harold Abelson"),
+    (
+        "Programs must be written for people to read, and only incidentally for machines to execute.",
+        "Harold Abelson",
+    ),
     ("Premature optimization is the root of all evil.", "Donald Knuth"),
     ("Simplicity is prerequisite for reliability.", "Edsger W. Dijkstra"),
     ("The best error message is the one that never shows up.", "Thomas Fuchs"),
     ("Make it work, make it right, make it fast.", "Kent Beck"),
-    ("Walking on water and developing software from a specification are easy if both are frozen.", "Edward V. Berard"),
+    (
+        "Walking on water and developing software from a specification are easy if both are frozen.",
+        "Edward V. Berard",
+    ),
     ("Code is like humor. When you have to explain it, it's bad.", "Cory House"),
-    ("There are only two kinds of languages: the ones people complain about and the ones nobody uses.", "Bjarne Stroustrup"),
-    ("Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", "Martin Fowler"),
+    (
+        "There are only two kinds of languages: the ones people complain about and the ones nobody uses.",
+        "Bjarne Stroustrup",
+    ),
+    (
+        "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
+        "Martin Fowler",
+    ),
     ("Talk is cheap. Show me the code.", "Linus Torvalds"),
-    ("If debugging is the process of removing software bugs, then programming must be the process of putting them in.", "Edsger W. Dijkstra"),
+    (
+        "If debugging is the process of removing software bugs, then programming must be the process of putting them in.",
+        "Edsger W. Dijkstra",
+    ),
     ("Truth can only be found in one place: the code.", "Robert C. Martin"),
     ("Programming isn't about what you know; it's about what you can figure out.", "Chris Pine"),
     ("It's not a bug — it's an undocumented feature.", "Anonymous"),
-    ("The most damaging phrase in the language is: 'We've always done it this way!'", "Grace Hopper"),
+    (
+        "The most damaging phrase in the language is: 'We've always done it this way!'",
+        "Grace Hopper",
+    ),
     ("Software is a great combination of artistry and engineering.", "Bill Gates"),
     ("Java is to JavaScript what car is to carpet.", "Chris Heilmann"),
     ("Good code is its own best documentation.", "Steve McConnell"),
     ("In order to be irreplaceable, one must always be different.", "Coco Chanel"),
     ("Don't comment bad code — rewrite it.", "Brian Kernighan"),
-    ("Programs are meant to be read by humans and only incidentally for computers to execute.", "Donald Knuth"),
+    (
+        "Programs are meant to be read by humans and only incidentally for computers to execute.",
+        "Donald Knuth",
+    ),
     ("The function of good software is to make the complex appear to be simple.", "Grady Booch"),
     ("Code never lies, comments sometimes do.", "Ron Jeffries"),
-    ("Quality is more important than quantity. One home run is much better than two doubles.", "Steve Jobs"),
-    ("Software undergoes beta testing shortly before it's released. Beta is Latin for 'still doesn't work'.", "Anonymous"),
+    (
+        "Quality is more important than quantity. One home run is much better than two doubles.",
+        "Steve Jobs",
+    ),
+    (
+        "Software undergoes beta testing shortly before it's released. Beta is Latin for 'still doesn't work'.",
+        "Anonymous",
+    ),
     ("Real programmers count from 0.", "Anonymous"),
-    ("Programming is the art of telling another human being what one wants the computer to do.", "Donald Knuth"),
+    (
+        "Programming is the art of telling another human being what one wants the computer to do.",
+        "Donald Knuth",
+    ),
     ("If you don't fail at least 90% of the time, you're not aiming high enough.", "Alan Kay"),
-    ("The only way to learn a new programming language is by writing programs in it.", "Dennis Ritchie"),
+    (
+        "The only way to learn a new programming language is by writing programs in it.",
+        "Dennis Ritchie",
+    ),
     ("Computers are good at following instructions, but not at reading your mind.", "Donald Knuth"),
 ]
 
@@ -99,12 +133,7 @@ def quote_of_the_day(_config: Config, _client: GitHubClient) -> str:
     """Pick a quote indexed by day-of-year so it rotates daily and stays stable for the day."""
     day = dt.datetime.now(dt.timezone.utc).timetuple().tm_yday
     quote, author = QUOTES[day % len(QUOTES)]
-    return (
-        '<p align="center">\n'
-        f'  <i>"{quote}"</i><br/>\n'
-        f'  <sub>— <b>{author}</b></sub>\n'
-        '</p>'
-    )
+    return f'<p align="center">\n  <i>"{quote}"</i><br/>\n  <sub>— <b>{author}</b></sub>\n</p>'
 
 
 # ── Activity / gitGraph (REST, public, token-optional) ──────────────────
@@ -209,7 +238,9 @@ def gitgraph(_config: Config, client: GitHubClient, *, limit: int = 8) -> str:
 
 
 # ── Skyline / city grids (no API — pure URL composition) ────────────────
-def _grid(years: list[int], href_for: Callable[[int], str], svg_for: Callable[[int], str], alt_kind: str) -> str:
+def _grid(
+    years: list[int], href_for: Callable[[int], str], svg_for: Callable[[int], str], alt_kind: str
+) -> str:
     if not years:
         return f"_No {alt_kind.lower()} years configured._"
     cy = _current_year()
@@ -221,7 +252,7 @@ def _grid(years: list[int], href_for: Callable[[int], str], svg_for: Callable[[i
             f'<td width="{width}%" align="center">'
             f'<a href="{href_for(y)}">'
             f'<img src="{svg_for(y)}" width="100%" alt="{alt_kind} {y}">'
-            f'</a><p><b>{label}</b></p></td>'
+            f"</a><p><b>{label}</b></p></td>"
         )
     return '<table align="center" width="100%"><tr>' + "".join(cells) + "</tr></table>"
 
@@ -260,7 +291,9 @@ def city_grid(config: Config, _client: GitHubClient) -> str:
     )
 
 
-def _link_bar(years: list[int], prefix: str, href_for: Callable[[int], str], label_for: Callable[[int], str]) -> str:
+def _link_bar(
+    years: list[int], prefix: str, href_for: Callable[[int], str], label_for: Callable[[int], str]
+) -> str:
     if not years:
         return f'<p align="center"><b>{prefix}</b> <em>none configured</em></p>'
     cy = _current_year()
@@ -316,13 +349,15 @@ def latest_releases(config: Config, client: GitHubClient, *, limit: int = 5) -> 
     rows = []
     for repo in data["user"]["repositories"]["nodes"]:
         for rel in repo["releases"]["nodes"]:
-            rows.append({
-                "repo": repo["name"],
-                "tag": rel["tagName"],
-                "name": rel["name"] or rel["tagName"],
-                "url": rel["url"],
-                "at": rel["publishedAt"],
-            })
+            rows.append(
+                {
+                    "repo": repo["name"],
+                    "tag": rel["tagName"],
+                    "name": rel["name"] or rel["tagName"],
+                    "url": rel["url"],
+                    "at": rel["publishedAt"],
+                }
+            )
     rows.sort(key=lambda r: r["at"], reverse=True)
     if not rows:
         return "_No releases yet._"
@@ -379,6 +414,7 @@ def pagespeed(config: Config, _client: GitHubClient) -> str:
     """Render Lighthouse mobile scores from Google PageSpeed Insights."""
     import time
     import urllib.parse
+
     import requests
 
     psi_cfg = config.auto_update.markers.pagespeed
@@ -387,7 +423,12 @@ def pagespeed(config: Config, _client: GitHubClient) -> str:
 
     api_key = __import__("os").environ.get("PSI_API_KEY", "")
     categories = ["PERFORMANCE", "ACCESSIBILITY", "BEST_PRACTICES", "SEO"]
-    labels = {"PERFORMANCE": "Performance", "ACCESSIBILITY": "Accessibility", "BEST_PRACTICES": "Best_Practices", "SEO": "SEO"}
+    labels = {
+        "PERFORMANCE": "Performance",
+        "ACCESSIBILITY": "Accessibility",
+        "BEST_PRACTICES": "Best_Practices",
+        "SEO": "SEO",
+    }
 
     params: list[tuple[str, str]] = [("url", psi_cfg.url), ("strategy", "mobile")]
     for cat in categories:
@@ -424,8 +465,10 @@ def pagespeed(config: Config, _client: GitHubClient) -> str:
         return "_PageSpeed scores unavailable._"
 
     def color(pct: int) -> str:
-        if pct >= 90: return "success"
-        if pct >= 50: return "yellow"
+        if pct >= 90:
+            return "success"
+        if pct >= 50:
+            return "yellow"
         return "red"
 
     badges = []
@@ -438,14 +481,14 @@ def pagespeed(config: Config, _client: GitHubClient) -> str:
             f'<img src="https://img.shields.io/badge/{label}-{pct}%25-{color(pct)}'
             f'?style=for-the-badge&logo=google&logoColor=white" alt="{label}: {pct}%" />'
         )
-        rows.append(f'<tr><td>{label.replace("_", " ")}</td><td>{pct}/100</td></tr>')
+        rows.append(f"<tr><td>{label.replace('_', ' ')}</td><td>{pct}/100</td></tr>")
 
     today = dt.date.today().isoformat()
     return (
         '<p align="center">' + "\n  ".join(badges) + "</p>\n\n"
         '<table align="center"><tr><th>Metric</th><th>Score</th></tr>\n'
-        + "\n".join(rows) +
-        "\n</table>\n\n"
+        + "\n".join(rows)
+        + "\n</table>\n\n"
         f'<p align="center"><em>Last updated {today} (mobile strategy).</em></p>'
     )
 
@@ -453,23 +496,23 @@ def pagespeed(config: Config, _client: GitHubClient) -> str:
 # ── Section registry ────────────────────────────────────────────────────
 @dataclass(frozen=True)
 class _Section:
-    name: str                        # marker name (becomes CORTEX:NAME)
-    enabled_attr: str                # field on config.auto_update.markers
+    name: str  # marker name (becomes CORTEX:NAME)
+    enabled_attr: str  # field on config.auto_update.markers
     render: Callable[[Config, GitHubClient], str]
-    needs_token: bool                # if true, skip cleanly when no token set
+    needs_token: bool  # if true, skip cleanly when no token set
 
 
 _SECTIONS: list[_Section] = [
-    _Section("QUOTE",            "quote_of_the_day", quote_of_the_day, needs_token=False),
-    _Section("ACTIVITY",         "activity",         activity,         needs_token=False),
-    _Section("GITGRAPH",         "gitgraph",         gitgraph,         needs_token=False),
-    _Section("SKYLINE_GRID",     "skyline_grid",     skyline_grid,     needs_token=False),
-    _Section("CITY_GRID",        "city_grid",        city_grid,        needs_token=False),
-    _Section("STL_LINKS",        "stl_links",        stl_links,        needs_token=False),
-    _Section("GITCITY_LINKS",    "gitcity_links",    gitcity_links,    needs_token=False),
-    _Section("LATEST_RELEASES",  "latest_releases",  latest_releases,  needs_token=True),
+    _Section("QUOTE", "quote_of_the_day", quote_of_the_day, needs_token=False),
+    _Section("ACTIVITY", "activity", activity, needs_token=False),
+    _Section("GITGRAPH", "gitgraph", gitgraph, needs_token=False),
+    _Section("SKYLINE_GRID", "skyline_grid", skyline_grid, needs_token=False),
+    _Section("CITY_GRID", "city_grid", city_grid, needs_token=False),
+    _Section("STL_LINKS", "stl_links", stl_links, needs_token=False),
+    _Section("GITCITY_LINKS", "gitcity_links", gitcity_links, needs_token=False),
+    _Section("LATEST_RELEASES", "latest_releases", latest_releases, needs_token=True),
     _Section("HIGHLIGHTS_STATS", "highlights_stats", highlights_stats, needs_token=True),
-    _Section("PAGESPEED",        "pagespeed",        pagespeed,        needs_token=False),
+    _Section("PAGESPEED", "pagespeed", pagespeed, needs_token=False),
 ]
 
 
@@ -477,16 +520,18 @@ _SECTIONS: list[_Section] = [
 @dataclass
 class UpdateResult:
     sections_updated: list[str]
-    sections_failed:  list[tuple[str, str]]    # (name, error)
-    sections_missing: list[str]                 # marker pair not present in README
-    sections_skipped: list[tuple[str, str]]     # (name, reason)
+    sections_failed: list[tuple[str, str]]  # (name, error)
+    sections_missing: list[str]  # marker pair not present in README
+    sections_skipped: list[tuple[str, str]]  # (name, reason)
 
     @property
     def changed(self) -> bool:
         return bool(self.sections_updated)
 
 
-def update(config: Config, readme_path: str | Path, *, client: GitHubClient | None = None) -> UpdateResult:
+def update(
+    config: Config, readme_path: str | Path, *, client: GitHubClient | None = None
+) -> UpdateResult:
     """Refresh all enabled marker blocks in ``readme_path`` from live data.
 
     Returns an ``UpdateResult`` summarizing what changed, what failed, and
@@ -499,6 +544,7 @@ def update(config: Config, readme_path: str | Path, *, client: GitHubClient | No
 
     if client is None:
         from .github_api import client_from_env
+
         client = client_from_env(config.identity.github_user)
 
     result = UpdateResult([], [], [], [])

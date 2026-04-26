@@ -11,7 +11,9 @@ Builder API contract:
 
 Importable builders:
 """
-from cortex.builders import brain  # noqa: F401
+
+from cortex.builders import brain
+
 # Future:
 # from cortex.builders import tech_cards, timeline, focus, typing, github_icon
 

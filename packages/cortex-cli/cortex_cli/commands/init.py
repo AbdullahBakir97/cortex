@@ -1,4 +1,5 @@
 """`cortex init` — scaffold a starter cortex.yml from a template archetype."""
+
 from __future__ import annotations
 
 from importlib import resources
@@ -18,7 +19,11 @@ def run(*, template: str, output: Path) -> None:
     # In v0.1 the templates aren't shipped yet — fall back to a minimal default.
     # When the templates/ directory is populated, this will load from package data.
     try:
-        template_text = resources.files("cortex_cli.templates").joinpath(f"{template}.yml").read_text(encoding="utf-8")
+        template_text = (
+            resources.files("cortex_cli.templates")
+            .joinpath(f"{template}.yml")
+            .read_text(encoding="utf-8")
+        )
     except (FileNotFoundError, ModuleNotFoundError):
         template_text = _minimal_template()
 
@@ -28,7 +33,7 @@ def run(*, template: str, output: Path) -> None:
     click.echo("Next steps:")
     click.echo(f"  1. Edit {output} to taste")
     click.echo(f"  2. cortex validate {output}")
-    click.echo(f"  3. cortex build")
+    click.echo("  3. cortex build")
 
 
 def _minimal_template() -> str:
