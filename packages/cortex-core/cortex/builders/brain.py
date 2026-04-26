@@ -36,11 +36,11 @@ def _x(text: str) -> str:
 # Fallback: paths the per-lobe classifier doesn't recognize fall through here
 # and get the global brainGrad. Should rarely fire after classification.
 _FILL_REPLACEMENTS: dict[str, str] = {
-    "#fff0cd": "url(#brainGrad)",
-    "#fdd99b": "url(#brainGrad)",
-    "#d9bb7a": "url(#brainGradAlt)",
-    "#ffffff": "url(#brainGrad)",
-    "#816647": "url(#brainGradAlt)",
+    "#fff0cd": "url(#brainGrad_unified)",
+    "#fdd99b": "url(#brainGrad_unified)",
+    "#d9bb7a": "url(#brainGrad_unified)",
+    "#ffffff": "url(#brainGrad_unified)",
+    "#816647": "url(#brainGrad_unified)",
 }
 
 
@@ -357,34 +357,17 @@ def _recolor(
     content: str,
     palette_primary: str,
     palette_secondary: str,
-    classification: dict[str, set[str]] | None = None,
 ) -> str:
-    """Per-lobe fill gradients + global stroke replacements.
+    """All source fills → brainGrad_unified; strokes → palette colors.
 
-    If a classification dict is provided, each path gets its lobe-specific
-    gradient (url(#brainGrad_<lobe>)). Paths not in any lobe set fall back
-    to the global brainGrad via _FILL_REPLACEMENTS.
+    The body fill is unified across the brain (single gradient on every path).
+    Lobe identity is conveyed by the stroke-overlay layer added later in the
+    composition, not by per-path fill substitution.
     """
-    # Per-lobe fill replacement (precise, ID-targeted) — runs first so the
-    # fallback can patch any unclassified leftovers.
-    if classification is not None:
-        for lobe, path_ids in classification.items():
-            if not path_ids:
-                continue
-            gradient_url = f"url(#brainGrad_{lobe})"
-            for pid in path_ids:
-                pattern = (
-                    rf'(<path\b[^>]*?\sid="{re.escape(pid)}"[^>]*?\sstyle="[^"]*?fill:)'
-                    rf'[^;"]+([^"]*?")'
-                )
-                content = re.sub(pattern, rf"\1{gradient_url}\2", content)
-
-    # Fallback: any path the classifier missed gets the global gradient.
     for old, new in _FILL_REPLACEMENTS.items():
         for variant in (old, old.upper(), old.lower()):
             content = content.replace(f"fill:{variant}", f"fill:{new}")
 
-    # Strokes are still global (lobe outlines all share palette colors).
     strokes = _stroke_replacements(palette_primary, palette_secondary)
     for old, new in strokes.items():
         for variant in (old, old.upper(), old.lower()):
@@ -887,14 +870,13 @@ def build(config: Config, output: str | Path) -> Path:
     # the wrapper SVG provides its own transform group around this content).
     brain_group = _extract_g_by_id(src_text, "brain")
 
-    # Recolor with the user's palette + per-lobe classification
+    # Recolor with the user's palette
     palette = (
         resolve_palette(config.brand.palette)
         if config.brand.palette in {"neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"}
         else config.brand.colors.model_dump()
     )
-    classification, _, _, _ = _ensure_classification()
-    recolored = _recolor(brain_group, palette["primary"], palette["secondary"], classification)
+    recolored = _recolor(brain_group, palette["primary"], palette["secondary"])
 
     # Compose into the wrapper
     svg = _compose_wrapper(recolored, config)
