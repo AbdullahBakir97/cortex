@@ -91,6 +91,57 @@ There are dozens of profile README generators. Cortex is the only one that gives
 </p>
 </details>
 
+<details open>
+<summary><strong>🎖️ Skill badges — 4 shapes × 3 layouts × 4 animations</strong> &nbsp;·&nbsp; <code>badges.svg</code> · ~16 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/badges.svg" width="100%" alt="Row of pill-shaped badges with brand-colored gradients, monogram icons (PY, RS, TS, etc.), labels and seniority values, fading in with a stagger animation"/>
+</p>
+
+The compact "skills strip" most profile READMEs need. Picks brand colors from 40+ built-in tech slugs (`python`, `rust`, `aws`, `kubernetes`, …) — or supply your own SVG path + hex color. Mix & match shapes (`pill` · `hex` · `shield` · `circle`), layouts (`row` · `grid` · `marquee`), animations (`stagger` · `shimmer` · `pulse` · `static`).
+
+<table width="100%">
+<tr>
+<td width="50%" align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__hex-grid.svg" alt="Hexagon grid of certification badges" width="100%"/>
+  <br/><sub><b>hex grid</b> — certifications, achievements</sub>
+</td>
+<td width="50%" align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__shield-marquee.svg" alt="Heraldic shield badges scrolling horizontally" width="100%"/>
+  <br/><sub><b>shield marquee</b> — eye-catching hero strip</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__circle-static.svg" alt="Round badges with monogram-only" width="100%"/>
+  <br/><sub><b>circle static</b> — minimal, accessibility-friendly</sub>
+</td>
+<td width="50%" align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__custom-svg-icons.svg" alt="Pill badges with custom SVG path icons" width="100%"/>
+  <br/><sub><b>custom SVG paths</b> — bring your own glyph</sub>
+</td>
+</tr>
+</table>
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: pill          # pill | hex | shield | circle
+    layout: row          # row | grid | marquee
+    animation: stagger   # stagger | shimmer | pulse | static
+    items:
+      - { icon: python,     label: "Python",     value: "Senior" }
+      - { icon: rust,       label: "Rust",       value: "85%" }
+      - { icon: typescript, label: "TypeScript", value: "Senior" }
+      - { icon: aws,        label: "AWS",        value: "Certified" }
+      - { icon: docker,     label: "Docker",     value: "Daily" }
+      # …or full custom:
+      - { label: "Build", color: "#7C3AED", icon_svg: "M12 2L2 22h20z", href: "https://..." }
+```
+
+</details>
+
 <details>
 <summary><strong>⌨️ About typing — multilingual rotating headlines</strong> &nbsp;·&nbsp; <code>about-typing.svg</code> · 16 KB</summary>
 <br/>
@@ -451,6 +502,152 @@ cards:
       - { project: "Pydev",      status: BUILDING,    accent: orange, emoji: "🐍", description: "Local-first Python dev environment manager.",            tech: [Tauri, Vue, TypeScript] }
       - { project: "Skill DNA",  status: EXPLORING,   accent: cyan,   emoji: "🧬", description: "AI-driven skill atlas + portfolio generator.",            tech: [LangChain, RAG] }
       - { project: "Brain 3D",   status: MAINTAINING, accent: purple, emoji: "🌌", description: "Three.js viewer for the cortex brain.",                  tech: [Three.js, Vite] }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Skill Badges</strong> &nbsp;·&nbsp; <code>badges.svg</code> &nbsp;·&nbsp; 5 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/badges.svg" alt="Skill Badges" width="100%"/>
+</p>
+
+_Compact skill / tech / achievement badges. 4 shapes (pill, hex, shield, circle) x 3 layouts (row, grid, marquee) x 4 animations (stagger, shimmer, pulse, static). Built-in monogram icons + custom SVG path support, per-badge brand color._
+
+<details>
+<summary><em>Pill row with values (default)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__pill-row.svg" alt="Skill Badges — Pill row with values (default)" width="100%"/>
+</p>
+
+Horizontal row of rounded-rectangle badges, each with icon monogram + label + value (e.g. Senior, 85%, Certified). Wraps when wider than the SVG.
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: pill
+    layout: row
+    animation: stagger
+    items:
+      - { icon: python,     label: "Python",      value: "Senior" }
+      - { icon: rust,       label: "Rust",        value: "85%" }
+      - { icon: typescript, label: "TypeScript",  value: "Senior" }
+      - { icon: react,      label: "React",       value: "Mid" }
+      - { icon: aws,        label: "AWS",         value: "Certified" }
+      - { icon: docker,     label: "Docker",      value: "Daily" }
+```
+
+</details>
+
+<details>
+<summary><em>Hexagon grid</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__hex-grid.svg" alt="Skill Badges — Hexagon grid" width="100%"/>
+</p>
+
+Achievement / certificate vibe. Hexagons in a fixed N-column grid, label below each.
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: hex
+    layout: grid
+    columns: 6
+    animation: shimmer
+    items:
+      - { icon: aws,        label: "AWS Pro" }
+      - { icon: gcp,        label: "GCP Eng" }
+      - { icon: azure,      label: "Az Solu" }
+      - { icon: kubernetes, label: "CKA" }
+      - { icon: terraform,  label: "TF Assoc" }
+      - { icon: docker,     label: "Docker" }
+```
+
+</details>
+
+<details>
+<summary><em>Heraldic shields, scrolling marquee</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__shield-marquee.svg" alt="Skill Badges — Heraldic shields, scrolling marquee" width="100%"/>
+</p>
+
+Power feature: badges scroll horizontally on a single line forever. Eye-catching for hero sections.
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: shield
+    layout: marquee
+    animation: static
+    items:
+      - { icon: python,     label: "Python" }
+      - { icon: rust,       label: "Rust" }
+      - { icon: go,         label: "Go" }
+      - { icon: typescript, label: "TS" }
+      - { icon: react,      label: "React" }
+      - { icon: nodejs,     label: "Node" }
+      - { icon: postgres,   label: "PostgreSQL" }
+      - { icon: redis,      label: "Redis" }
+```
+
+</details>
+
+<details>
+<summary><em>Circle chips, no animation</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__circle-static.svg" alt="Skill Badges — Circle chips, no animation" width="100%"/>
+</p>
+
+Most compact form — just an icon and a tiny label. Good for accessibility / reduced-motion users.
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: circle
+    layout: row
+    animation: static
+    items:
+      - { icon: python,     label: "Py" }
+      - { icon: typescript, label: "TS" }
+      - { icon: rust,       label: "Rs" }
+      - { icon: go,         label: "Go" }
+      - { icon: docker,     label: "Dk" }
+      - { icon: kubernetes, label: "K8s" }
+```
+
+</details>
+
+<details>
+<summary><em>Custom SVG icons + custom colors</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/badges__custom-svg-icons.svg" alt="Skill Badges — Custom SVG icons + custom colors" width="100%"/>
+</p>
+
+Bypass the built-in monogram library by passing raw SVG path data normalized to a 24-unit canvas, plus an explicit hex color per badge.
+
+```yaml
+cards:
+  badges:
+    enabled: true
+    shape: pill
+    layout: row
+    animation: pulse
+    items:
+      - { label: "Custom A", color: "#F90001", icon_svg: "M12 2L2 22h20L12 2z" }
+      - { label: "Custom B", color: "#34D399", icon_svg: "M12 2a10 10 0 100 20 10 10 0 000-20z" }
+      - { label: "Custom C", color: "#7C3AED", icon_svg: "M3 3h18v18H3V3z" }
 ```
 
 </details>
