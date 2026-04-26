@@ -66,6 +66,7 @@ def _stroke_replacements(palette_primary: str, palette_secondary: str) -> dict[s
 _LOBE_KEYS = ("frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem")
 _LOBE_PATH_IDS: dict[str, set[str]] | None = None  # populated lazily
 _LOBE_CENTROIDS: dict[str, tuple[int, int]] | None = None  # canvas-space
+_LOBE_BBOXES: dict[str, tuple[float, float, float, float]] | None = None  # brain-local (xmin,ymin,xmax,ymax)
 
 
 def _path_centroid_d(d_attr: str) -> tuple[float, float] | None:
@@ -112,8 +113,18 @@ def _iter_paths(group: str):
 
 def _classify_brain_paths(
     svg: str,
-) -> tuple[dict[str, set[str]], dict[str, tuple[int, int]]]:
-    """Classify every brain path into one of 6 lobes; compute canvas centroid per lobe."""
+) -> tuple[
+    dict[str, set[str]],
+    dict[str, tuple[int, int]],
+    dict[str, tuple[float, float, float, float]],
+]:
+    """Classify every brain path into one of 6 lobes; return paths/centroids/bboxes.
+
+    Returns a 3-tuple:
+      classification: lobe -> set of path IDs
+      centroids:      lobe -> (cx, cy) in CANVAS space (after wrapper transform)
+      bboxes:         lobe -> (xmin, ymin, xmax, ymax) in BRAIN-LOCAL space
+    """
     # Cerebellum first (it's nested inside brain-stem in this source SVG).
     cere_g = _extract_g_by_id(svg, "cerebellum")
     cere_ids: set[str] = set()
@@ -164,28 +175,37 @@ def _classify_brain_paths(
     # Convert each lobe's centroid average to canvas space.
     # Brain group transform: translate(332, 152) scale(0.7).
     canvas_centroids: dict[str, tuple[int, int]] = {}
+    bboxes: dict[str, tuple[float, float, float, float]] = {}
     for lobe, cs in centroids_by_lobe.items():
         if cs:
             ax = sum(c[0] for c in cs) / len(cs)
             ay = sum(c[1] for c in cs) / len(cs)
             canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 152))
+            xs = [c[0] for c in cs]
+            ys = [c[1] for c in cs]
+            bboxes[lobe] = (min(xs), min(ys), max(xs), max(ys))
         else:
             canvas_centroids[lobe] = (700, 400)  # fallback to brain center
+            bboxes[lobe] = (400.0, 300.0, 600.0, 500.0)  # fallback bbox
 
-    return classification, canvas_centroids
+    return classification, canvas_centroids, bboxes
 
 
-def _ensure_classification() -> tuple[dict[str, set[str]], dict[str, tuple[int, int]]]:
+def _ensure_classification() -> tuple[
+    dict[str, set[str]],
+    dict[str, tuple[int, int]],
+    dict[str, tuple[float, float, float, float]],
+]:
     """Lazy module-level cache. First call parses + classifies; later calls reuse."""
-    global _LOBE_PATH_IDS, _LOBE_CENTROIDS
-    if _LOBE_PATH_IDS is None or _LOBE_CENTROIDS is None:
+    global _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
+    if _LOBE_PATH_IDS is None or _LOBE_CENTROIDS is None or _LOBE_BBOXES is None:
         src_text = (
             resources.files("cortex.assets")
             .joinpath("brain-source.svg")
             .read_text(encoding="utf-8")
         )
-        _LOBE_PATH_IDS, _LOBE_CENTROIDS = _classify_brain_paths(src_text)
-    return _LOBE_PATH_IDS, _LOBE_CENTROIDS
+        _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES = _classify_brain_paths(src_text)
+    return _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
 
 
 def _recolor(
@@ -290,7 +310,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # from the actual classified paths in the source SVG. This fixes the bug
     # where, e.g., the "frontal" leader line pointed to canvas (850, 320) when
     # the actual frontal lobe centroid is at (471, 395).
-    _, lobe_centroids = _ensure_classification()
+    _, lobe_centroids, lobe_bboxes = _ensure_classification()
     region_positions: dict[str, dict[str, object]] = {}
     for key, region_data in _REGION_POSITIONS.items():
         region_positions[key] = {
@@ -387,24 +407,68 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'style="animation-delay:{i * 0.3}s"/>'
         )
 
-    # Synaptic firing — 14 micro-cells scattered through the brain interior
-    # in brain-local coordinates. Each fires on a staggered keyframe so the
-    # interior reads as a living network of impulses. Positions chosen by
-    # eye to fall inside the brain bounds (rough source SVG span 0-1024 x 0-732).
-    micro_cell_positions = [
-        (180, 180), (310, 140), (450, 100), (560, 230),  # frontal/parietal area
-        (700, 160), (820, 200), (250, 320), (380, 380),  # occipital/parietal area
-        (520, 380), (640, 350), (760, 380), (340, 520),  # temporal area
-        (500, 540), (650, 540),  # cerebellum/brainstem area
-    ]
+    # Synaptic firing — 4 micro-cells per lobe placed inside that lobe's
+    # actual bounding box (computed from classified path centroids). Each
+    # lobe also gets 4 arcs connecting its cells in a quadrilateral so the
+    # firing reads as electric impulses traveling between cells WITHIN the
+    # same brain region. Each lobe paints in its own accent color, on its
+    # own staggered phase so the brain reads as 6 independent micro-networks
+    # firing concurrently.
+    lobe_color_tokens = {
+        "frontal": p_primary,
+        "parietal": p_accent_d,
+        "occipital": p_secondary,
+        "temporal": p_accent_c,
+        "cerebellum": p_accent_a,
+        "brainstem": p_accent_b,
+    }
+    # Phase offset per lobe (in seconds) so the 6 networks don't fire in unison.
+    lobe_phase = {
+        "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
+        "temporal": 1.2, "cerebellum": 1.6, "brainstem": 2.0,
+    }
+    cell_offsets = (0.0, 0.6, 1.2, 1.8)  # within-lobe stagger (chase pattern)
+
+    def _cells_for_bbox(b: tuple[float, float, float, float]) -> list[tuple[int, int]]:
+        """4 cell positions inscribed in the lobe bbox (top-left, top-right,
+        bottom-right, bottom-left in clockwise order — so the arcs connecting
+        them form a clean quadrilateral perimeter)."""
+        xmin, ymin, xmax, ymax = b
+        w = xmax - xmin
+        h = ymax - ymin
+        # Inset 25% from each edge so cells sit well inside the lobe
+        x1 = round(xmin + 0.25 * w)
+        x2 = round(xmin + 0.75 * w)
+        y1 = round(ymin + 0.25 * h)
+        y2 = round(ymin + 0.75 * h)
+        return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]  # clockwise
+
     micro_cells: list[str] = []
-    synapse_colors = [p_accent_a, p_accent_b, p_secondary, p_primary]
-    for i, (mx, my) in enumerate(micro_cell_positions):
-        sc = synapse_colors[i % len(synapse_colors)]
-        micro_cells.append(
-            f'<circle cx="{mx}" cy="{my}" r="3" fill="{sc}" '
-            f'class="synapse sy{i + 1}"/>'
-        )
+    lobe_arcs: list[str] = []
+    for lobe in _LOBE_KEYS:
+        bbox = lobe_bboxes.get(lobe)
+        if bbox is None:
+            continue
+        cells = _cells_for_bbox(bbox)
+        color = lobe_color_tokens[lobe]
+        phase = lobe_phase[lobe]
+        # Cells (4 per lobe)
+        for i, (cx, cy) in enumerate(cells):
+            delay = phase + cell_offsets[i]
+            micro_cells.append(
+                f'<circle cx="{cx}" cy="{cy}" r="4" fill="{color}" '
+                f'class="lobe-cell" style="animation-delay:{delay:.2f}s"/>'
+            )
+        # Arcs connecting consecutive cells in the quadrilateral (4 per lobe)
+        for i in range(4):
+            a = cells[i]
+            b = cells[(i + 1) % 4]
+            delay = phase + cell_offsets[i]
+            lobe_arcs.append(
+                f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
+                f'stroke="{color}" stroke-width="1.4" '
+                f'class="lobe-arc" style="animation-delay:{delay:.2f}s"/>'
+            )
 
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -547,18 +611,28 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .rg1{{animation-delay:0s}}    .rg2{{animation-delay:0.6s}}
       .rg3{{animation-delay:1.2s}}  .rg4{{animation-delay:1.8s}}
       .rg5{{animation-delay:2.4s}}  .rg6{{animation-delay:3.0s}}
-      .synapse {{ animation: spark 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
-      @keyframes spark {{
-        0%, 100% {{ opacity: 0;    transform: scale(0.5); }}
-        8%       {{ opacity: 1;    transform: scale(1.8); filter: drop-shadow(0 0 6px currentColor); }}
-        16%      {{ opacity: 0.7;  transform: scale(1.2); }}
-        25%      {{ opacity: 0;    transform: scale(0.8); }}
+      /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
+         + within-lobe stagger; the lobe-arcs between cells animate a
+         traveling dash so the firing reads as electric impulses moving
+         around the lobe's quadrilateral. */
+      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
+      @keyframes lcell {{
+        0%, 100% {{ opacity: 0;   transform: scale(0.6); }}
+        10%      {{ opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }}
+        20%      {{ opacity: 0.7; transform: scale(1.2); }}
+        30%      {{ opacity: 0;   transform: scale(0.8); }}
       }}
-      .sy1{{animation-delay:0s}}    .sy2{{animation-delay:0.18s}} .sy3{{animation-delay:0.36s}}
-      .sy4{{animation-delay:0.54s}} .sy5{{animation-delay:0.72s}} .sy6{{animation-delay:0.9s}}
-      .sy7{{animation-delay:1.08s}} .sy8{{animation-delay:1.26s}} .sy9{{animation-delay:1.44s}}
-      .sy10{{animation-delay:1.62s}} .sy11{{animation-delay:1.8s}} .sy12{{animation-delay:1.98s}}
-      .sy13{{animation-delay:2.16s}} .sy14{{animation-delay:0.45s}}
+      .lobe-arc {{
+        stroke-dasharray: 4 22;
+        animation: arcflow 1.6s linear infinite, arcfade 2.4s ease-in-out infinite;
+        stroke-opacity: 0;
+      }}
+      @keyframes arcflow {{ to {{ stroke-dashoffset: -26; }} }}
+      @keyframes arcfade {{
+        0%, 35%, 100% {{ stroke-opacity: 0; }}
+        10%           {{ stroke-opacity: 0.85; }}
+        20%           {{ stroke-opacity: 0.45; }}
+      }}
       .particle {{ animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }}
       @keyframes pdrift {{
         0%,100% {{ opacity: 0.18; transform: translate(0, 0); }}
@@ -621,6 +695,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <g class="{brain_3d_class}">
         {brain_content}
         {chr(10).join("        " + rg for rg in region_glows)}
+        {chr(10).join("        " + la for la in lobe_arcs)}
         {chr(10).join("        " + mc for mc in micro_cells)}
         {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
         {chr(10).join("        " + sd for sd in spark_dots)}
@@ -655,7 +730,7 @@ def build(config: Config, output: str | Path) -> Path:
         if config.brand.palette in {"neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"}
         else config.brand.colors.model_dump()
     )
-    classification, _ = _ensure_classification()
+    classification, _, _ = _ensure_classification()
     recolored = _recolor(brain_group, palette["primary"], palette["secondary"], classification)
 
     # Compose into the wrapper

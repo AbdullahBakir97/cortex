@@ -143,18 +143,28 @@
       .rg1{animation-delay:0s}    .rg2{animation-delay:0.6s}
       .rg3{animation-delay:1.2s}  .rg4{animation-delay:1.8s}
       .rg5{animation-delay:2.4s}  .rg6{animation-delay:3.0s}
-      .synapse { animation: spark 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }
-      @keyframes spark {
-        0%, 100% { opacity: 0;    transform: scale(0.5); }
-        8%       { opacity: 1;    transform: scale(1.8); filter: drop-shadow(0 0 6px currentColor); }
-        16%      { opacity: 0.7;  transform: scale(1.2); }
-        25%      { opacity: 0;    transform: scale(0.8); }
+      /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
+         + within-lobe stagger; the lobe-arcs between cells animate a
+         traveling dash so the firing reads as electric impulses moving
+         around the lobe's quadrilateral. */
+      .lobe-cell { animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }
+      @keyframes lcell {
+        0%, 100% { opacity: 0;   transform: scale(0.6); }
+        10%      { opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }
+        20%      { opacity: 0.7; transform: scale(1.2); }
+        30%      { opacity: 0;   transform: scale(0.8); }
       }
-      .sy1{animation-delay:0s}    .sy2{animation-delay:0.18s} .sy3{animation-delay:0.36s}
-      .sy4{animation-delay:0.54s} .sy5{animation-delay:0.72s} .sy6{animation-delay:0.9s}
-      .sy7{animation-delay:1.08s} .sy8{animation-delay:1.26s} .sy9{animation-delay:1.44s}
-      .sy10{animation-delay:1.62s} .sy11{animation-delay:1.8s} .sy12{animation-delay:1.98s}
-      .sy13{animation-delay:2.16s} .sy14{animation-delay:0.45s}
+      .lobe-arc {
+        stroke-dasharray: 4 22;
+        animation: arcflow 1.6s linear infinite, arcfade 2.4s ease-in-out infinite;
+        stroke-opacity: 0;
+      }
+      @keyframes arcflow { to { stroke-dashoffset: -26; } }
+      @keyframes arcfade {
+        0%, 35%, 100% { stroke-opacity: 0; }
+        10%           { stroke-opacity: 0.85; }
+        20%           { stroke-opacity: 0.45; }
+      }
       .particle { animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }
       @keyframes pdrift {
         0%,100% { opacity: 0.18; transform: translate(0, 0); }
@@ -1039,20 +1049,54 @@
         <circle cx="534" cy="451" r="200" fill="url(#rgrad_temporal)" class="region-glow region-pulse rg4"/>
         <circle cx="703" cy="594" r="200" fill="url(#rgrad_cerebellum)" class="region-glow region-pulse rg5"/>
         <circle cx="587" cy="643" r="200" fill="url(#rgrad_brainstem)" class="region-glow region-pulse rg6"/>
-                <circle cx="180" cy="180" r="3" fill="#22D3EE" class="synapse sy1"/>
-        <circle cx="310" cy="140" r="3" fill="#A78BFA" class="synapse sy2"/>
-        <circle cx="450" cy="100" r="3" fill="#FF652F" class="synapse sy3"/>
-        <circle cx="560" cy="230" r="3" fill="#F90001" class="synapse sy4"/>
-        <circle cx="700" cy="160" r="3" fill="#22D3EE" class="synapse sy5"/>
-        <circle cx="820" cy="200" r="3" fill="#A78BFA" class="synapse sy6"/>
-        <circle cx="250" cy="320" r="3" fill="#FF652F" class="synapse sy7"/>
-        <circle cx="380" cy="380" r="3" fill="#F90001" class="synapse sy8"/>
-        <circle cx="520" cy="380" r="3" fill="#22D3EE" class="synapse sy9"/>
-        <circle cx="640" cy="350" r="3" fill="#A78BFA" class="synapse sy10"/>
-        <circle cx="760" cy="380" r="3" fill="#FF652F" class="synapse sy11"/>
-        <circle cx="340" cy="520" r="3" fill="#F90001" class="synapse sy12"/>
-        <circle cx="500" cy="540" r="3" fill="#22D3EE" class="synapse sy13"/>
-        <circle cx="650" cy="540" r="3" fill="#A78BFA" class="synapse sy14"/>
+                <line x1="119" y1="206" x2="270" y2="206" stroke="#F90001" stroke-width="1.4" class="lobe-arc" style="animation-delay:0.00s"/>
+        <line x1="270" y1="206" x2="270" y2="455" stroke="#F90001" stroke-width="1.4" class="lobe-arc" style="animation-delay:0.60s"/>
+        <line x1="270" y1="455" x2="119" y2="455" stroke="#F90001" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.20s"/>
+        <line x1="119" y1="455" x2="119" y2="206" stroke="#F90001" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.80s"/>
+        <line x1="438" y1="117" x2="613" y2="117" stroke="#34D399" stroke-width="1.4" class="lobe-arc" style="animation-delay:0.40s"/>
+        <line x1="613" y1="117" x2="613" y2="239" stroke="#34D399" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.00s"/>
+        <line x1="613" y1="239" x2="438" y2="239" stroke="#34D399" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.60s"/>
+        <line x1="438" y1="239" x2="438" y2="117" stroke="#34D399" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.20s"/>
+        <line x1="779" y1="239" x2="906" y2="239" stroke="#FF652F" stroke-width="1.4" class="lobe-arc" style="animation-delay:0.80s"/>
+        <line x1="906" y1="239" x2="906" y2="422" stroke="#FF652F" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.40s"/>
+        <line x1="906" y1="422" x2="779" y2="422" stroke="#FF652F" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.00s"/>
+        <line x1="779" y1="422" x2="779" y2="239" stroke="#FF652F" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.60s"/>
+        <line x1="435" y1="375" x2="601" y2="375" stroke="#FFD23F" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.20s"/>
+        <line x1="601" y1="375" x2="601" y2="524" stroke="#FFD23F" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.80s"/>
+        <line x1="601" y1="524" x2="435" y2="524" stroke="#FFD23F" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.40s"/>
+        <line x1="435" y1="524" x2="435" y2="375" stroke="#FFD23F" stroke-width="1.4" class="lobe-arc" style="animation-delay:3.00s"/>
+        <line x1="635" y1="574" x2="788" y2="574" stroke="#22D3EE" stroke-width="1.4" class="lobe-arc" style="animation-delay:1.60s"/>
+        <line x1="788" y1="574" x2="788" y2="630" stroke="#22D3EE" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.20s"/>
+        <line x1="788" y1="630" x2="635" y2="630" stroke="#22D3EE" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.80s"/>
+        <line x1="635" y1="630" x2="635" y2="574" stroke="#22D3EE" stroke-width="1.4" class="lobe-arc" style="animation-delay:3.40s"/>
+        <line x1="587" y1="643" x2="587" y2="643" stroke="#A78BFA" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.00s"/>
+        <line x1="587" y1="643" x2="587" y2="643" stroke="#A78BFA" stroke-width="1.4" class="lobe-arc" style="animation-delay:2.60s"/>
+        <line x1="587" y1="643" x2="587" y2="643" stroke="#A78BFA" stroke-width="1.4" class="lobe-arc" style="animation-delay:3.20s"/>
+        <line x1="587" y1="643" x2="587" y2="643" stroke="#A78BFA" stroke-width="1.4" class="lobe-arc" style="animation-delay:3.80s"/>
+                <circle cx="119" cy="206" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:0.00s"/>
+        <circle cx="270" cy="206" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:0.60s"/>
+        <circle cx="270" cy="455" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:1.20s"/>
+        <circle cx="119" cy="455" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:1.80s"/>
+        <circle cx="438" cy="117" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:0.40s"/>
+        <circle cx="613" cy="117" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:1.00s"/>
+        <circle cx="613" cy="239" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:1.60s"/>
+        <circle cx="438" cy="239" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:2.20s"/>
+        <circle cx="779" cy="239" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:0.80s"/>
+        <circle cx="906" cy="239" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:1.40s"/>
+        <circle cx="906" cy="422" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:2.00s"/>
+        <circle cx="779" cy="422" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:2.60s"/>
+        <circle cx="435" cy="375" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:1.20s"/>
+        <circle cx="601" cy="375" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:1.80s"/>
+        <circle cx="601" cy="524" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:2.40s"/>
+        <circle cx="435" cy="524" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:3.00s"/>
+        <circle cx="635" cy="574" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:1.60s"/>
+        <circle cx="788" cy="574" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:2.20s"/>
+        <circle cx="788" cy="630" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:2.80s"/>
+        <circle cx="635" cy="630" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:3.40s"/>
+        <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:2.00s"/>
+        <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:2.60s"/>
+        <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:3.20s"/>
+        <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:3.80s"/>
                 <circle cx="199" cy="347" r="20" fill="none" stroke="#F90001" stroke-width="2.2" class="target-halo" style="animation-delay:0.0s"/>
         <circle cx="540" cy="154" r="20" fill="none" stroke="#34D399" stroke-width="2.2" class="target-halo" style="animation-delay:0.3s"/>
         <circle cx="824" cy="351" r="20" fill="none" stroke="#FF652F" stroke-width="2.2" class="target-halo" style="animation-delay:0.6s"/>
