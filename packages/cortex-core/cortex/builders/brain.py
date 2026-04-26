@@ -477,7 +477,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         region_blocks.append(
             f'<g transform="translate({lx},{ly})"><g class="label-fade lf{i + 1}">'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" '
-            f'filter="url(#cardShadow)"/>'
+            f'filter="url(#cardShadowStacked)"/>'
+            f'<rect x="6" y="6" width="308" height="128" rx="10" '
+            f'fill="url(#cardInnerGlow_{key})" class="card-inner-pulse"/>'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="none" '
             f'stroke="{color}" stroke-width="2" pathLength="1000" '
             f'class="card-edge ce{i + 1}"/>'
@@ -566,6 +568,18 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         spark_dots.append(
             f'<circle cx="{bx}" cy="{by}" r="6" fill="{color}" class="target-pulse" '
             f'style="animation-delay:{i * 0.3}s"/>'
+        )
+
+    # Per-card inner glow — radial gradient in the lobe color, used by the
+    # card-inner-pulse rect inside each card.
+    card_inner_grads: list[str] = []
+    for key, region_data in region_positions.items():
+        color = palette[region_data["color"]]  # type: ignore[index]
+        card_inner_grads.append(
+            f'<radialGradient id="cardInnerGlow_{key}" cx="50%" cy="50%" r="60%">'
+            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.18"/>'
+            f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
+            f"</radialGradient>"
         )
 
     # Synaptic firing — 4 micro-cells per lobe placed inside that lobe's
@@ -715,12 +729,11 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
     {chr(10).join("    " + g for g in region_grads)}
-    <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
-      <feOffset dx="0" dy="3" result="shadow"/>
-      <feFlood flood-color="#000000" flood-opacity="0.7"/>
-      <feComposite in2="shadow" operator="in"/>
-      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    {chr(10).join("    " + g for g in card_inner_grads)}
+    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
+      <feDropShadow dx="0" dy="6"  stdDeviation="12" flood-color="#000" flood-opacity="0.40"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/>
     </filter>
     <filter id="brainGlow" x="-15%" y="-15%" width="130%" height="130%">
       <feGaussianBlur stdDeviation="2" result="blur"/>
@@ -743,7 +756,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     <style><![CDATA[
       .t-display   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }}
       .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: {p_accent_b}; }}
-      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: 0.20em; text-transform: uppercase; }}
+      .t-cat-cap   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.30em; text-transform: uppercase; }}
       .t-region    {{ font-family: 'Inter', sans-serif; font-weight: 700; font-size: 24px; fill: #FFFFFF; }}
       .t-skill     {{ font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 18px; fill: #E5E7EB; }}
       .brain-pulse {{ animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
@@ -768,6 +781,8 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       @keyframes lfade {{ to {{ opacity: 1; }} }}
       .lf1{{animation-delay:0.4s}} .lf2{{animation-delay:0.55s}} .lf3{{animation-delay:0.7s}}
       .lf4{{animation-delay:0.85s}} .lf5{{animation-delay:1.0s}} .lf6{{animation-delay:1.15s}}
+      .card-inner-pulse {{ animation: cardPulse 5s ease-in-out infinite; }}
+      @keyframes cardPulse {{ 0%, 100% {{ opacity: 0.6; }} 50% {{ opacity: 1.0; }} }}
       .card-edge {{
         stroke-dasharray: 80 1000;
         animation: cardEdgeTravel 4s linear infinite;
