@@ -128,3 +128,31 @@ def test_random_arc_network_no_self_loops():
                                 lobe_colors=_sample_lobe_colors())
     for a in arcs:
         assert (a.x1, a.y1) != (a.x2, a.y2)
+
+
+from cortex.builders.brain import _ensure_classification, _LOBE_KEYS
+
+
+def test_ensure_classification_returns_paths_by_lobe():
+    classification, _centroids, _bboxes, paths_by_lobe = _ensure_classification()
+    assert set(paths_by_lobe.keys()) == set(_LOBE_KEYS)
+    # Every lobe should have at least one path
+    for lobe in _LOBE_KEYS:
+        assert len(paths_by_lobe[lobe]) > 0, f"{lobe} has no paths"
+
+
+def test_paths_by_lobe_contains_id_and_d_strings():
+    _classification, _centroids, _bboxes, paths_by_lobe = _ensure_classification()
+    sample = paths_by_lobe["frontal"][0]
+    assert isinstance(sample, tuple)
+    assert len(sample) == 2
+    pid, d = sample
+    assert isinstance(pid, str) and pid
+    assert isinstance(d, str) and d
+
+
+def test_paths_by_lobe_ids_match_classification_set():
+    classification, _centroids, _bboxes, paths_by_lobe = _ensure_classification()
+    for lobe in _LOBE_KEYS:
+        ids_from_pairs = {pid for pid, _d in paths_by_lobe[lobe]}
+        assert ids_from_pairs == classification[lobe], f"{lobe} id mismatch"

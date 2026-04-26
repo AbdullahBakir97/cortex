@@ -70,6 +70,7 @@ _LOBE_KEYS = ("frontal", "parietal", "occipital", "temporal", "cerebellum", "bra
 _LOBE_PATH_IDS: dict[str, set[str]] | None = None  # populated lazily
 _LOBE_CENTROIDS: dict[str, tuple[int, int]] | None = None  # canvas-space
 _LOBE_BBOXES: dict[str, tuple[float, float, float, float]] | None = None  # brain-local (xmin,ymin,xmax,ymax)
+_LOBE_PATHS_BY_LOBE: dict[str, list[tuple[str, str]]] | None = None
 
 
 def _path_centroid_d(d_attr: str) -> tuple[float, float] | None:
@@ -207,20 +208,24 @@ def _classify_brain_paths(
     dict[str, set[str]],
     dict[str, tuple[int, int]],
     dict[str, tuple[float, float, float, float]],
+    dict[str, list[tuple[str, str]]],
 ]:
-    """Classify every brain path into one of 6 lobes; return paths/centroids/bboxes.
+    """Classify every brain path into one of 6 lobes; return paths/centroids/bboxes/pairs.
 
-    Returns a 3-tuple:
+    Returns a 4-tuple:
       classification: lobe -> set of path IDs
       centroids:      lobe -> (cx, cy) in CANVAS space (after wrapper transform)
       bboxes:         lobe -> (xmin, ymin, xmax, ymax) in BRAIN-LOCAL space
+      paths_by_lobe:  lobe -> list of (id, d) tuples
     """
     # Cerebellum first (it's nested inside brain-stem in this source SVG).
     cere_g = _extract_g_by_id(svg, "cerebellum")
     cere_ids: set[str] = set()
     cere_centroids: list[tuple[float, float]] = []
+    cere_pairs: list[tuple[str, str]] = []
     for pid, d in _iter_paths(cere_g):
         cere_ids.add(pid)
+        cere_pairs.append((pid, d))
         c = _path_centroid_d(d)
         if c is not None:
             cere_centroids.append(c)
@@ -229,10 +234,12 @@ def _classify_brain_paths(
     bs_g = _extract_g_by_id(svg, "brain-stem")
     bs_ids: set[str] = set()
     bs_centroids: list[tuple[float, float]] = []
+    bs_pairs: list[tuple[str, str]] = []
     for pid, d in _iter_paths(bs_g):
         if pid in cere_ids:
             continue
         bs_ids.add(pid)
+        bs_pairs.append((pid, d))
         c = _path_centroid_d(d)
         if c is not None:
             bs_centroids.append(c)
@@ -241,6 +248,7 @@ def _classify_brain_paths(
     cb_g = _extract_g_by_id(svg, "cerebrum")
     classification: dict[str, set[str]] = {k: set() for k in _LOBE_KEYS}
     centroids_by_lobe: dict[str, list[tuple[float, float]]] = {k: [] for k in _LOBE_KEYS}
+    paths_by_lobe: dict[str, list[tuple[str, str]]] = {k: [] for k in _LOBE_KEYS}
     for pid, d in _iter_paths(cb_g):
         c = _path_centroid_d(d)
         if c is None:
@@ -255,12 +263,15 @@ def _classify_brain_paths(
         else:
             lobe = "temporal"
         classification[lobe].add(pid)
+        paths_by_lobe[lobe].append((pid, d))
         centroids_by_lobe[lobe].append(c)
 
     classification["cerebellum"] = cere_ids
     classification["brainstem"] = bs_ids
     centroids_by_lobe["cerebellum"] = cere_centroids
     centroids_by_lobe["brainstem"] = bs_centroids
+    paths_by_lobe["cerebellum"] = cere_pairs
+    paths_by_lobe["brainstem"] = bs_pairs
 
     # Convert each lobe's centroid average to canvas space.
     # Brain group transform: translate(332, 152) scale(0.7).
@@ -278,24 +289,35 @@ def _classify_brain_paths(
             canvas_centroids[lobe] = (700, 400)  # fallback to brain center
             bboxes[lobe] = (400.0, 300.0, 600.0, 500.0)  # fallback bbox
 
-    return classification, canvas_centroids, bboxes
+    return classification, canvas_centroids, bboxes, paths_by_lobe
 
 
 def _ensure_classification() -> tuple[
     dict[str, set[str]],
     dict[str, tuple[int, int]],
     dict[str, tuple[float, float, float, float]],
+    dict[str, list[tuple[str, str]]],
 ]:
     """Lazy module-level cache. First call parses + classifies; later calls reuse."""
-    global _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
-    if _LOBE_PATH_IDS is None or _LOBE_CENTROIDS is None or _LOBE_BBOXES is None:
+    global _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES, _LOBE_PATHS_BY_LOBE
+    if (
+        _LOBE_PATH_IDS is None
+        or _LOBE_CENTROIDS is None
+        or _LOBE_BBOXES is None
+        or _LOBE_PATHS_BY_LOBE is None
+    ):
         src_text = (
             resources.files("cortex.assets")
             .joinpath("brain-source.svg")
             .read_text(encoding="utf-8")
         )
-        _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES = _classify_brain_paths(src_text)
-    return _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES
+        (
+            _LOBE_PATH_IDS,
+            _LOBE_CENTROIDS,
+            _LOBE_BBOXES,
+            _LOBE_PATHS_BY_LOBE,
+        ) = _classify_brain_paths(src_text)
+    return _LOBE_PATH_IDS, _LOBE_CENTROIDS, _LOBE_BBOXES, _LOBE_PATHS_BY_LOBE
 
 
 def _recolor(
@@ -400,7 +422,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # from the actual classified paths in the source SVG. This fixes the bug
     # where, e.g., the "frontal" leader line pointed to canvas (850, 320) when
     # the actual frontal lobe centroid is at (471, 395).
-    _, lobe_centroids, lobe_bboxes = _ensure_classification()
+    _, lobe_centroids, lobe_bboxes, _ = _ensure_classification()
     region_positions: dict[str, dict[str, object]] = {}
     for key, region_data in _REGION_POSITIONS.items():
         region_positions[key] = {
@@ -883,7 +905,7 @@ def build(config: Config, output: str | Path) -> Path:
         if config.brand.palette in {"neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"}
         else config.brand.colors.model_dump()
     )
-    classification, _, _ = _ensure_classification()
+    classification, _, _, _ = _ensure_classification()
     recolored = _recolor(brain_group, palette["primary"], palette["secondary"], classification)
 
     # Compose into the wrapper
