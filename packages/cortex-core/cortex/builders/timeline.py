@@ -116,14 +116,20 @@ def _render_marker(
         f'    <text x="0" y="6" class="t-year" fill="{color}" text-anchor="middle">{_x(yy)}</text>',
     ]
     if with_live:
-        # Push badge ~78px right of marker (was 60) so its drop-shadow glow
-        # at peak animation doesn't bleed onto the year text — both are the
-        # same color and would visually merge otherwise.
+        # Two nested groups: outer applies the SVG translate, inner applies
+        # the CSS scale animation. Chrome (and some other renderers) treat
+        # CSS `transform` and SVG `transform=` as the SAME property, so a CSS
+        # `transform: scale(1.06)` on a node with `transform="translate(78,0)"`
+        # OVERWRITES the translate during the animation — the badge then
+        # jumps to (0,0) of the parent and visually covers the year text.
+        # Separating them into two `<g>` levels prevents the override.
         parts += [
-            '    <g transform="translate(78, 0)" class="live-pulse">',
-            f'      <rect x="0" y="-12" width="60" height="22" rx="11" fill="{color}"/>',
-            '      <circle cx="11" cy="-1" r="3.5" fill="#0D1117"/>',
-            '      <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>',
+            '    <g transform="translate(78, 0)">',
+            '      <g class="live-pulse">',
+            f'        <rect x="0" y="-12" width="60" height="22" rx="11" fill="{color}"/>',
+            '        <circle cx="11" cy="-1" r="3.5" fill="#0D1117"/>',
+            '        <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>',
+            "      </g>",
             "    </g>",
         ]
     parts.append("  </g>")
