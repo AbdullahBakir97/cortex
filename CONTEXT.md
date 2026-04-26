@@ -35,18 +35,18 @@
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
-- `c16caba` docs(readme): feature badges widget with handwritten section + 4-variant gallery (#4) _(7 seconds ago by Abdullah Bakir)_
-- `18b9dfb` chore(context): refresh auto-marker sections _(7 minutes ago by cortex-bot[bot])_
-- `4d3ff2b` feat(badges): new compact skill / tech / achievement badges widget (#3) _(7 minutes ago by Abdullah Bakir)_
-- `36a3b18` chore(context): refresh auto-marker sections _(23 minutes ago by cortex-bot[bot])_
-- `03f6f02` revert(readme): restore capsule-render hero + footer banners (#2) _(29 minutes ago by Abdullah Bakir)_
-- `f252725` chore(context): refresh auto-marker sections _(52 minutes ago by cortex-bot[bot])_
-- `d30bc0b` Merge pull request #1 from AbdullahBakir97/feature/brain-professional-visuals _(52 minutes ago by Abdullah Bakir)_
-- `d32ec81` ci: trigger CI on push to feature/fix/chore branches _(55 minutes ago by Abdullah Bakir)_
-- `f5d9676` fix(ci): collapse multi-line commit messages in workflows to single line _(80 minutes ago by Abdullah Bakir)_
-- `484f388` style(ci): ruff format + consolidate test_brain_helpers imports _(83 minutes ago by Abdullah Bakir)_
-- `cb408e1` feat(showcase): render each variant as its own SVG, show real previews per recipe _(2 hours ago by Abdullah Bakir)_
-- `88ba67a` feat(showcase): multi-variant catalog — 2-5 examples per widget in collapsible details _(2 hours ago by Abdullah Bakir)_
+- `5b3ec23` feat: 7 new mind-blowing widgets — galaxy, synthwave, radar, roadmap, heatmap, cubes, trophies (#5) _(8 seconds ago by Abdullah Bakir)_
+- `a63e67b` chore(context): refresh auto-marker sections _(20 minutes ago by cortex-bot[bot])_
+- `c16caba` docs(readme): feature badges widget with handwritten section + 4-variant gallery (#4) _(20 minutes ago by Abdullah Bakir)_
+- `18b9dfb` chore(context): refresh auto-marker sections _(27 minutes ago by cortex-bot[bot])_
+- `4d3ff2b` feat(badges): new compact skill / tech / achievement badges widget (#3) _(27 minutes ago by Abdullah Bakir)_
+- `36a3b18` chore(context): refresh auto-marker sections _(43 minutes ago by cortex-bot[bot])_
+- `03f6f02` revert(readme): restore capsule-render hero + footer banners (#2) _(48 minutes ago by Abdullah Bakir)_
+- `f252725` chore(context): refresh auto-marker sections _(72 minutes ago by cortex-bot[bot])_
+- `d30bc0b` Merge pull request #1 from AbdullahBakir97/feature/brain-professional-visuals _(72 minutes ago by Abdullah Bakir)_
+- `d32ec81` ci: trigger CI on push to feature/fix/chore branches _(75 minutes ago by Abdullah Bakir)_
+- `f5d9676` fix(ci): collapse multi-line commit messages in workflows to single line _(2 hours ago by Abdullah Bakir)_
+- `484f388` style(ci): ruff format + consolidate test_brain_helpers imports _(2 hours ago by Abdullah Bakir)_
 <!-- AUTO:RECENT_COMMITS:END -->
 
 ## Active work
