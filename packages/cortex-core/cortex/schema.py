@@ -204,6 +204,11 @@ class Markers(_Strict):
     latest_releases:  bool = True
     quote_of_the_day: bool = True
     gitgraph:         bool = True
+    highlights_stats: bool = True
+    skyline_grid:     bool = True
+    city_grid:        bool = True
+    stl_links:        bool = True
+    gitcity_links:    bool = True
     pagespeed:        PageSpeedConfig = Field(default_factory=PageSpeedConfig)
     wakatime:         WakaTimeConfig  = Field(default_factory=WakaTimeConfig)
 
