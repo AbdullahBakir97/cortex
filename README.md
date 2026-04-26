@@ -33,7 +33,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" alt="Cortex anatomical neon brain — generated from examples/extreme.yml, 200+ Wikimedia anatomy paths recolored with a multi-stop neon gradient. Each lobe maps to a skill domain." width="92%"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" alt="Cortex anatomical neon brain — generated from examples/extreme.yml, 200+ Wikimedia anatomy paths recolored with a multi-stop neon gradient. Each lobe maps to a skill domain." width="100%"/>
 </p>
 
 <p align="center">
@@ -63,7 +63,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>🧠 Brain — anatomical skill atlas</strong> &nbsp;·&nbsp; <code>brain-anatomical.svg</code> · 42 KB · 200+ paths</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" width="92%" alt="Anatomical brain SVG with neon-rainbow gradient, each lobe labelled with a skill domain"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" width="100%" alt="Anatomical brain SVG with neon-rainbow gradient, each lobe labelled with a skill domain"/>
 </p>
 </details>
 
@@ -71,7 +71,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>🎴 Tech cards — six glassmorphism skill panels</strong> &nbsp;·&nbsp; <code>tech-cards.svg</code> · 13 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/tech-cards.svg" width="92%" alt="Six glassmorphism cards arranged in a 3x2 grid, each one a brain region's tools and stats"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/tech-cards.svg" width="100%" alt="Six glassmorphism cards arranged in a 3x2 grid, each one a brain region's tools and stats"/>
 </p>
 </details>
 
@@ -79,7 +79,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>📅 Yearly highlights — career timeline with LIVE pulse</strong> &nbsp;·&nbsp; <code>yearly-highlights.svg</code> · 14 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/yearly-highlights.svg" width="92%" alt="Year-by-year career timeline with markers and a live-pulsing tag for the current year"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/yearly-highlights.svg" width="100%" alt="Year-by-year career timeline with markers and a live-pulsing tag for the current year"/>
 </p>
 </details>
 
@@ -87,7 +87,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>📺 Current focus — Netflix-tile dashboard</strong> &nbsp;·&nbsp; <code>current-focus.svg</code> · 14 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/current-focus.svg" width="92%" alt="Six tiles in a 3x2 grid, each one a project the author is actively working on with a status pill and tech stack"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/current-focus.svg" width="100%" alt="Six tiles in a 3x2 grid, each one a project the author is actively working on with a status pill and tech stack"/>
 </p>
 </details>
 
@@ -95,7 +95,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>⌨️ About typing — multilingual rotating headlines</strong> &nbsp;·&nbsp; <code>about-typing.svg</code> · 16 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/about-typing.svg" width="92%" alt="Animated typing SVG cycling through about-me lines in multiple languages"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/about-typing.svg" width="100%" alt="Animated typing SVG cycling through about-me lines in multiple languages"/>
 </p>
 </details>
 
@@ -103,7 +103,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>💬 Motto typing — philosophy lines on rotation</strong> &nbsp;·&nbsp; <code>motto-typing.svg</code> · 17 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/motto-typing.svg" width="92%" alt="Animated typing SVG cycling through personal mottos and philosophy lines"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/motto-typing.svg" width="100%" alt="Animated typing SVG cycling through personal mottos and philosophy lines"/>
 </p>
 </details>
 
@@ -111,7 +111,7 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <summary><strong>✨ Animated divider</strong> &nbsp;·&nbsp; <code>animated-divider.svg</code> · 1 KB</summary>
 <br/>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/animated-divider.svg" width="92%" alt="Thin animated gradient divider"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/animated-divider.svg" width="100%" alt="Thin animated gradient divider"/>
 </p>
 </details>
 
