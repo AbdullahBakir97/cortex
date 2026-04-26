@@ -472,14 +472,16 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         domain = _x(region_obj.domain)
         tools_preview = _x(" · ".join(region_obj.tools[:4])) if region_obj.tools else ""
 
-        # Glassmorphism lobe card: base + highlight overlay + top breathing stripe.
+        # Glassmorphism lobe card: base + traveling edge glow + highlight overlay.
         # Matches the visual language of tech-cards.svg (also card-based).
         region_blocks.append(
             f'<g transform="translate({lx},{ly})"><g class="label-fade lf{i + 1}">'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" '
-            f'stroke="{color}" stroke-width="1.8" filter="url(#cardShadow)"/>'
+            f'filter="url(#cardShadow)"/>'
+            f'<rect x="0" y="0" width="320" height="140" rx="14" fill="none" '
+            f'stroke="{color}" stroke-width="2" pathLength="1000" '
+            f'class="card-edge ce{i + 1}"/>'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/>'
-            f'<rect x="0" y="0" width="320" height="4" rx="2" fill="{color}" class="breathe-stripe"/>'
             f'<text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
             f'<text x="160" y="80" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
             f'<text x="160" y="116" class="t-skill" text-anchor="middle">{tools_preview}</text>'
@@ -766,8 +768,19 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       @keyframes lfade {{ to {{ opacity: 1; }} }}
       .lf1{{animation-delay:0.4s}} .lf2{{animation-delay:0.55s}} .lf3{{animation-delay:0.7s}}
       .lf4{{animation-delay:0.85s}} .lf5{{animation-delay:1.0s}} .lf6{{animation-delay:1.15s}}
-      .breathe-stripe {{ animation: stripeBreathe 3s ease-in-out infinite; }}
-      @keyframes stripeBreathe {{ 0%,100%{{opacity:0.85}} 50%{{opacity:1}} }}
+      .card-edge {{
+        stroke-dasharray: 80 1000;
+        animation: cardEdgeTravel 4s linear infinite;
+        filter: url(#electricGlow);
+        opacity: 0.95;
+      }}
+      @keyframes cardEdgeTravel {{ to {{ stroke-dashoffset: -1080; }} }}
+      .ce1 {{ animation-delay: 0s; }}
+      .ce2 {{ animation-delay: 0.7s; }}
+      .ce3 {{ animation-delay: 1.4s; }}
+      .ce4 {{ animation-delay: 2.1s; }}
+      .ce5 {{ animation-delay: 2.8s; }}
+      .ce6 {{ animation-delay: 3.5s; }}
       .region-glow {{ mix-blend-mode: screen; }}
       .region-pulse {{ animation: rpulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
       @keyframes rpulse {{
