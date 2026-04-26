@@ -30,6 +30,8 @@ def _x(text: str) -> str:
 
 
 # ── Color replacement maps (Wikimedia source uses these specific hexes) ──
+# Fallback: paths the per-lobe classifier doesn't recognize fall through here
+# and get the global brainGrad. Should rarely fire after classification.
 _FILL_REPLACEMENTS: dict[str, str] = {
     "#fff0cd": "url(#brainGrad)",
     "#fdd99b": "url(#brainGrad)",
@@ -46,36 +48,178 @@ def _stroke_replacements(palette_primary: str, palette_secondary: str) -> dict[s
     }
 
 
-# ── Brain group extraction (bracket-balanced) ────────────────────────────
-def _extract_brain_group(svg: str) -> str:
-    """Pull the entire ``<g id="brain">…</g>`` block via balanced-tag walk."""
-    m = re.search(r'<g\b[^>]*?id="brain"[^>]*?>', svg, re.DOTALL)
+# ── Anatomical classification of brain-source.svg paths ──────────────────
+# Brain source orientation: viewBox 0 0 1024 732, brain faces LEFT.
+# - cerebrum: 149 paths with no semantic IDs → classified spatially below
+# - cerebellum: nested INSIDE brain-stem group in this source (50 paths)
+# - brain-stem: 51 paths once cerebellum is subtracted
+#
+# Cerebrum classification thresholds (brain-local coords):
+#   frontal:   cx < 350         (front of brain, low x)
+#   occipital: cx > 700         (back of brain, high x)
+#   parietal:  350 <= cx <= 700 AND cy < 300  (top middle)
+#   temporal:  350 <= cx <= 700 AND cy >= 300 (bottom middle)
+#
+# Brain group transform in the wrapper SVG is translate(332,152) scale(0.7),
+# so canvas centroid = brain-local centroid * 0.7 + (332, 152).
+
+_LOBE_KEYS = ("frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem")
+_LOBE_PATH_IDS: dict[str, set[str]] | None = None  # populated lazily
+_LOBE_CENTROIDS: dict[str, tuple[int, int]] | None = None  # canvas-space
+
+
+def _path_centroid_d(d_attr: str) -> tuple[float, float] | None:
+    """Approximate centroid of an SVG path by averaging its numeric d-coordinates."""
+    nums = [float(n) for n in re.findall(r"-?\d+\.?\d*", d_attr)]
+    if len(nums) < 4:
+        return None
+    return (sum(nums[::2]) / len(nums[::2]), sum(nums[1::2]) / len(nums[1::2]))
+
+
+def _extract_g_by_id(svg: str, gid: str) -> str:
+    """Extract content between <g id="gid">...</g> via bracket-balanced walk."""
+    m = re.search(rf'<g\s[^>]*?id="{re.escape(gid)}"[^>]*?>', svg, re.DOTALL)
     if not m:
-        raise RuntimeError('Could not find <g id="brain"> in source SVG')
-    start = m.start()
-    pos = m.end()
+        return ""
+    start = m.end()
+    pos = start
     depth = 1
     while depth > 0 and pos < len(svg):
-        next_open = svg.find("<g", pos)
-        next_close = svg.find("</g>", pos)
-        if next_close == -1:
-            raise RuntimeError("Unbalanced <g> tags in source SVG")
-        if next_open != -1 and next_open < next_close:
-            after = svg[next_open + 2 : next_open + 3]
+        no = svg.find("<g", pos)
+        nc = svg.find("</g>", pos)
+        if nc == -1:
+            break
+        if no != -1 and no < nc:
+            after = svg[no + 2 : no + 3]
             if after in (" ", ">", "\n", "\t", "\r"):
                 depth += 1
-            pos = next_open + 2
+            pos = no + 2
         else:
             depth -= 1
-            pos = next_close + 4
-    return svg[start:pos]
+            pos = nc + 4
+    return svg[start : pos - 4]
 
 
-def _recolor(content: str, palette_primary: str, palette_secondary: str) -> str:
-    """Apply both fill and stroke replacements to a brain SVG fragment."""
+def _iter_paths(group: str):
+    """Yield (id, d) pairs for each <path/> in a group fragment."""
+    for pm in re.finditer(r"<path\b[^>]*?/>", group, re.DOTALL):
+        block = pm.group(0)
+        dm = re.search(r'\sd="([^"]+)"', block)
+        im = re.search(r'\sid="([^"]+)"', block)
+        if dm and im:
+            yield im.group(1), dm.group(1)
+
+
+def _classify_brain_paths(
+    svg: str,
+) -> tuple[dict[str, set[str]], dict[str, tuple[int, int]]]:
+    """Classify every brain path into one of 6 lobes; compute canvas centroid per lobe."""
+    # Cerebellum first (it's nested inside brain-stem in this source SVG).
+    cere_g = _extract_g_by_id(svg, "cerebellum")
+    cere_ids: set[str] = set()
+    cere_centroids: list[tuple[float, float]] = []
+    for pid, d in _iter_paths(cere_g):
+        cere_ids.add(pid)
+        c = _path_centroid_d(d)
+        if c is not None:
+            cere_centroids.append(c)
+
+    # Brain-stem: extract everything, subtract cerebellum.
+    bs_g = _extract_g_by_id(svg, "brain-stem")
+    bs_ids: set[str] = set()
+    bs_centroids: list[tuple[float, float]] = []
+    for pid, d in _iter_paths(bs_g):
+        if pid in cere_ids:
+            continue
+        bs_ids.add(pid)
+        c = _path_centroid_d(d)
+        if c is not None:
+            bs_centroids.append(c)
+
+    # Cerebrum: classified by spatial centroid into 4 lobes.
+    cb_g = _extract_g_by_id(svg, "cerebrum")
+    classification: dict[str, set[str]] = {k: set() for k in _LOBE_KEYS}
+    centroids_by_lobe: dict[str, list[tuple[float, float]]] = {k: [] for k in _LOBE_KEYS}
+    for pid, d in _iter_paths(cb_g):
+        c = _path_centroid_d(d)
+        if c is None:
+            continue
+        cx, cy = c
+        if cx < 350:
+            lobe = "frontal"
+        elif cx > 700:
+            lobe = "occipital"
+        elif cy < 300:
+            lobe = "parietal"
+        else:
+            lobe = "temporal"
+        classification[lobe].add(pid)
+        centroids_by_lobe[lobe].append(c)
+
+    classification["cerebellum"] = cere_ids
+    classification["brainstem"] = bs_ids
+    centroids_by_lobe["cerebellum"] = cere_centroids
+    centroids_by_lobe["brainstem"] = bs_centroids
+
+    # Convert each lobe's centroid average to canvas space.
+    # Brain group transform: translate(332, 152) scale(0.7).
+    canvas_centroids: dict[str, tuple[int, int]] = {}
+    for lobe, cs in centroids_by_lobe.items():
+        if cs:
+            ax = sum(c[0] for c in cs) / len(cs)
+            ay = sum(c[1] for c in cs) / len(cs)
+            canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 152))
+        else:
+            canvas_centroids[lobe] = (700, 400)  # fallback to brain center
+
+    return classification, canvas_centroids
+
+
+def _ensure_classification() -> tuple[dict[str, set[str]], dict[str, tuple[int, int]]]:
+    """Lazy module-level cache. First call parses + classifies; later calls reuse."""
+    global _LOBE_PATH_IDS, _LOBE_CENTROIDS
+    if _LOBE_PATH_IDS is None or _LOBE_CENTROIDS is None:
+        src_text = (
+            resources.files("cortex.assets")
+            .joinpath("brain-source.svg")
+            .read_text(encoding="utf-8")
+        )
+        _LOBE_PATH_IDS, _LOBE_CENTROIDS = _classify_brain_paths(src_text)
+    return _LOBE_PATH_IDS, _LOBE_CENTROIDS
+
+
+def _recolor(
+    content: str,
+    palette_primary: str,
+    palette_secondary: str,
+    classification: dict[str, set[str]] | None = None,
+) -> str:
+    """Per-lobe fill gradients + global stroke replacements.
+
+    If a classification dict is provided, each path gets its lobe-specific
+    gradient (url(#brainGrad_<lobe>)). Paths not in any lobe set fall back
+    to the global brainGrad via _FILL_REPLACEMENTS.
+    """
+    # Per-lobe fill replacement (precise, ID-targeted) — runs first so the
+    # fallback can patch any unclassified leftovers.
+    if classification is not None:
+        for lobe, path_ids in classification.items():
+            if not path_ids:
+                continue
+            gradient_url = f"url(#brainGrad_{lobe})"
+            for pid in path_ids:
+                pattern = (
+                    rf'(<path\b[^>]*?\sid="{re.escape(pid)}"[^>]*?\sstyle="[^"]*?fill:)'
+                    rf'[^;"]+([^"]*?")'
+                )
+                content = re.sub(pattern, rf"\1{gradient_url}\2", content)
+
+    # Fallback: any path the classifier missed gets the global gradient.
     for old, new in _FILL_REPLACEMENTS.items():
         for variant in (old, old.upper(), old.lower()):
             content = content.replace(f"fill:{variant}", f"fill:{new}")
+
+    # Strokes are still global (lobe outlines all share palette colors).
     strokes = _stroke_replacements(palette_primary, palette_secondary)
     for old, new in strokes.items():
         for variant in (old, old.upper(), old.lower()):
@@ -85,12 +229,17 @@ def _recolor(content: str, palette_primary: str, palette_secondary: str) -> str:
 
 # ── Region label data (positions on the wrapper canvas) ──────────────────
 _REGION_POSITIONS = {
-    "frontal": {"label_xy": (1060, 200), "target_xy": (850, 320), "color": "primary"},
-    "parietal": {"label_xy": (540, 130), "target_xy": (700, 280), "color": "accent_d"},
-    "occipital": {"label_xy": (20, 200), "target_xy": (490, 310), "color": "secondary"},
-    "temporal": {"label_xy": (1060, 480), "target_xy": (830, 510), "color": "accent_c"},
-    "cerebellum": {"label_xy": (20, 660), "target_xy": (480, 610), "color": "accent_a"},
-    "brainstem": {"label_xy": (1060, 660), "target_xy": (760, 630), "color": "accent_b"},
+    # Card positions chosen to be on the SAME side of the canvas as the lobe
+    # they point to (avoids crisscrossing leader lines). target_xy values are
+    # overridden at build time with classified centroids — the values here are
+    # fallbacks if classification fails.
+    # Brain orientation: faces LEFT, so frontal at canvas-left, occipital at canvas-right.
+    "frontal":    {"label_xy": (20,   200), "target_xy": (471, 395), "color": "primary"},   # left  (lobe at canvas left)
+    "parietal":   {"label_xy": (540,  130), "target_xy": (710, 260), "color": "accent_d"},  # top center
+    "occipital":  {"label_xy": (1060, 200), "target_xy": (909, 398), "color": "secondary"}, # right (lobe at canvas right)
+    "temporal":   {"label_xy": (1060, 480), "target_xy": (706, 468), "color": "accent_c"},  # right-mid
+    "cerebellum": {"label_xy": (1060, 660), "target_xy": (824, 568), "color": "accent_a"},  # right-bottom
+    "brainstem":  {"label_xy": (20,   660), "target_xy": (823, 569), "color": "accent_b"},  # left-bottom
 }
 
 _REGION_CAPTIONS = {
@@ -129,11 +278,28 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     p_secondary = palette["secondary"]
     p_accent_a = palette["accent_a"]
     p_accent_b = palette["accent_b"]
+    p_accent_c = palette["accent_c"]
+    p_accent_d = palette["accent_d"]
     p_background = palette["background"]
 
     name = _x(config.identity.name)
     atm = config.brain.atmosphere
     brain_3d_class = "brain-3d" if atm.wobble else ""
+
+    # Replace hardcoded target_xy with anatomically-correct centroids computed
+    # from the actual classified paths in the source SVG. This fixes the bug
+    # where, e.g., the "frontal" leader line pointed to canvas (850, 320) when
+    # the actual frontal lobe centroid is at (471, 395).
+    _, lobe_centroids = _ensure_classification()
+    region_positions: dict[str, dict[str, object]] = {}
+    for key, region_data in _REGION_POSITIONS.items():
+        region_positions[key] = {
+            "label_xy": region_data["label_xy"],
+            "target_xy": lobe_centroids.get(
+                key, region_data["target_xy"]  # fallback to hardcoded
+            ),
+            "color": region_data["color"],
+        }
 
     # Region labels (anatomical → user's domain mapping). All endpoint
     # decorations (region glow, halo, spark dot) now live inside brain-3d
@@ -146,7 +312,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     region_glows: list[str] = []  # large soft tint circles in card colors (always rendered)
     halos: list[str] = []  # ring around each spark dot (gated by atm.show_halos)
     spark_dots: list[str] = []  # central dot at each lobe target (always rendered)
-    for i, (key, region_data) in enumerate(_REGION_POSITIONS.items()):
+    for i, (key, region_data) in enumerate(region_positions.items()):
         region_obj: BrainRegion = getattr(config.brain.regions, key)
         color_token = region_data["color"]
         color = palette[color_token]  # type: ignore[index]
@@ -268,6 +434,45 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="0%"   stop-color="{p_accent_b}"/>
       <stop offset="50%"  stop-color="#EC4899"/>
       <stop offset="100%" stop-color="{p_secondary}"/>
+    </linearGradient>
+    <!-- Per-lobe gradients — each lobe paints in its card's accent color
+         blending through pink (#EC4899) for vibrancy. Different rotation
+         periods so the lobes don't sync visually. -->
+    <linearGradient id="brainGrad_frontal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="13s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_primary}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_primary}"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_parietal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="11s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_accent_d}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_accent_d}"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_occipital" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="17s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_secondary}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_secondary}"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_temporal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="19s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_accent_c}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_accent_c}"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_cerebellum" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="15s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_accent_a}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_accent_a}"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_brainstem" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="21s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="{p_accent_b}"/>
+      <stop offset="50%"  stop-color="#EC4899"/>
+      <stop offset="100%" stop-color="{p_accent_b}"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
       <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
@@ -440,16 +645,18 @@ def build(config: Config, output: str | Path) -> Path:
         resources.files("cortex.assets").joinpath("brain-source.svg").read_text(encoding="utf-8")
     )
 
-    # Pull just the brain group
-    brain_group = _extract_brain_group(src_text)
+    # Pull just the inner brain group content (paths without the outer <g> wrapper —
+    # the wrapper SVG provides its own transform group around this content).
+    brain_group = _extract_g_by_id(src_text, "brain")
 
-    # Recolor with the user's palette
+    # Recolor with the user's palette + per-lobe classification
     palette = (
         resolve_palette(config.brand.palette)
         if config.brand.palette in {"neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"}
         else config.brand.colors.model_dump()
     )
-    recolored = _recolor(brain_group, palette["primary"], palette["secondary"])
+    classification, _ = _ensure_classification()
+    recolored = _recolor(brain_group, palette["primary"], palette["secondary"], classification)
 
     # Compose into the wrapper
     svg = _compose_wrapper(recolored, config)
