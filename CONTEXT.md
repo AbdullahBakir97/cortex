@@ -35,18 +35,18 @@
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
-- `03f6f02` revert(readme): restore capsule-render hero + footer banners (#2) _(5 minutes ago by Abdullah Bakir)_
-- `f252725` chore(context): refresh auto-marker sections _(28 minutes ago by cortex-bot[bot])_
-- `d30bc0b` Merge pull request #1 from AbdullahBakir97/feature/brain-professional-visuals _(28 minutes ago by Abdullah Bakir)_
-- `d32ec81` ci: trigger CI on push to feature/fix/chore branches _(31 minutes ago by Abdullah Bakir)_
-- `f5d9676` fix(ci): collapse multi-line commit messages in workflows to single line _(57 minutes ago by Abdullah Bakir)_
-- `484f388` style(ci): ruff format + consolidate test_brain_helpers imports _(60 minutes ago by Abdullah Bakir)_
-- `cb408e1` feat(showcase): render each variant as its own SVG, show real previews per recipe _(68 minutes ago by Abdullah Bakir)_
-- `88ba67a` feat(showcase): multi-variant catalog — 2-5 examples per widget in collapsible details _(79 minutes ago by Abdullah Bakir)_
-- `d2908fd` fix(schema): drop redundant string annotation on _default_footer (ruff UP037) _(82 minutes ago by Abdullah Bakir)_
-- `6b53d8b` feat: replace capsule-render banners with cortex-generated SVGs + auto-showcase _(83 minutes ago by Abdullah Bakir)_
-- `9a5c850` feat(banner): new animated header/footer widget — capsule-render replacement _(2 hours ago by Abdullah Bakir)_
-- `2479727` feat(divider): real sine-wave header/footer — 3 layered waves drifting in counterpoint _(2 hours ago by Abdullah Bakir)_
+- `4d3ff2b` feat(badges): new compact skill / tech / achievement badges widget (#3) _(8 seconds ago by Abdullah Bakir)_
+- `36a3b18` chore(context): refresh auto-marker sections _(16 minutes ago by cortex-bot[bot])_
+- `03f6f02` revert(readme): restore capsule-render hero + footer banners (#2) _(22 minutes ago by Abdullah Bakir)_
+- `f252725` chore(context): refresh auto-marker sections _(45 minutes ago by cortex-bot[bot])_
+- `d30bc0b` Merge pull request #1 from AbdullahBakir97/feature/brain-professional-visuals _(45 minutes ago by Abdullah Bakir)_
+- `d32ec81` ci: trigger CI on push to feature/fix/chore branches _(48 minutes ago by Abdullah Bakir)_
+- `f5d9676` fix(ci): collapse multi-line commit messages in workflows to single line _(73 minutes ago by Abdullah Bakir)_
+- `484f388` style(ci): ruff format + consolidate test_brain_helpers imports _(76 minutes ago by Abdullah Bakir)_
+- `cb408e1` feat(showcase): render each variant as its own SVG, show real previews per recipe _(84 minutes ago by Abdullah Bakir)_
+- `88ba67a` feat(showcase): multi-variant catalog — 2-5 examples per widget in collapsible details _(2 hours ago by Abdullah Bakir)_
+- `d2908fd` fix(schema): drop redundant string annotation on _default_footer (ruff UP037) _(2 hours ago by Abdullah Bakir)_
+- `6b53d8b` feat: replace capsule-render banners with cortex-generated SVGs + auto-showcase _(2 hours ago by Abdullah Bakir)_
 <!-- AUTO:RECENT_COMMITS:END -->
 
 ## Active work
