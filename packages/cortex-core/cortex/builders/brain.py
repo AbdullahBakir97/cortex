@@ -873,6 +873,13 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <filter id="brainRipple" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="2" result="noise">
+        <animate attributeName="baseFrequency" values="0.018;0.024;0.018"
+                 dur="11s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5"/>
+    </filter>
     <!-- Electric glow: dilate the source then blur it then merge under the
          original. Applied to lobe-cells via CSS so each synaptic flash gets
          an electric corona around the dot. -->
@@ -1180,19 +1187,21 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
        throughout the brain interior. atm.show_halos and atm.show_particles
        gate the optional layers. -->
   <g transform="translate(332,152) scale(0.7)">
-    <g class="brain-pulse" filter="url(#brainGlow)">
-      <g class="{brain_3d_class}">
-        {brain_content}
-        {chr(10).join("        " + rg for rg in region_glows)}
-        <g class="lobe-stroke-layer" filter="url(#electricGlow)">
-        {chr(10).join("          " + lso for lso in lobe_stroke_overlay)}
+    <g filter="url(#brainRipple)">
+      <g class="brain-pulse" filter="url(#brainGlow)">
+        <g class="{brain_3d_class}">
+          {brain_content}
+          {chr(10).join("          " + rg for rg in region_glows)}
+          <g class="lobe-stroke-layer" filter="url(#electricGlow)">
+          {chr(10).join("            " + lso for lso in lobe_stroke_overlay)}
+          </g>
+          <g class="arc-network" filter="url(#electricGlow)">
+          {chr(10).join("            " + la for la in lobe_arcs)}
+          {chr(10).join("            " + mc for mc in micro_cells)}
+          </g>
+          {chr(10).join("          " + h for h in halos) if atm.show_halos else ""}
+          {chr(10).join("          " + sd for sd in spark_dots)}
         </g>
-        <g class="arc-network" filter="url(#electricGlow)">
-        {chr(10).join("          " + la for la in lobe_arcs)}
-        {chr(10).join("          " + mc for mc in micro_cells)}
-        </g>
-        {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
-        {chr(10).join("        " + sd for sd in spark_dots)}
       </g>
     </g>
   </g>
