@@ -587,53 +587,53 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     lobe_stroke_overlay = _build_lobe_stroke_overlay(
         paths_by_lobe, lobe_color_tokens, n_per_lobe=8,
     )
-    # Phase offset per lobe (in seconds) so the 6 networks don't fire in unison.
-    lobe_phase = {
-        "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
-        "temporal": 1.2, "cerebellum": 1.6, "brainstem": 2.0,
-    }
-    cell_offsets = (0.0, 0.6, 1.2, 1.8)  # within-lobe stagger (chase pattern)
+    # Deterministic-but-disordered RNG seeded by the user's name. Same user →
+    # same arc layout every render (so CI diffs of examples/rendered/ are stable
+    # across builds); different users → unique signatures.
+    rng = random.Random(_seed_from_name(config.identity.name))
 
-    def _cells_for_bbox(b: tuple[float, float, float, float]) -> list[tuple[int, int]]:
-        """4 cell positions inscribed in the lobe bbox (top-left, top-right,
-        bottom-right, bottom-left in clockwise order — so the arcs connecting
-        them form a clean quadrilateral perimeter)."""
-        xmin, ymin, xmax, ymax = b
-        w = xmax - xmin
-        h = ymax - ymin
-        # Inset 25% from each edge so cells sit well inside the lobe
-        x1 = round(xmin + 0.25 * w)
-        x2 = round(xmin + 0.75 * w)
-        y1 = round(ymin + 0.25 * h)
-        y2 = round(ymin + 0.75 * h)
-        return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]  # clockwise
-
-    micro_cells: list[str] = []
-    lobe_arcs: list[str] = []
+    # 6 random cells per lobe inside its bbox.
+    cells_by_lobe: dict[str, list[tuple[int, int]]] = {}
     for lobe in _LOBE_KEYS:
         bbox = lobe_bboxes.get(lobe)
         if bbox is None:
             continue
-        cells = _cells_for_bbox(bbox)
+        cells_by_lobe[lobe] = _random_cells_in_bbox(bbox, n=6, rng=rng)
+
+    # 20 random Bezier arcs across the union of all cells.
+    arcs = _random_arc_network(cells_by_lobe, n=20, rng=rng,
+                                lobe_colors=lobe_color_tokens)
+
+    # Cells render as the existing .lobe-cell synaptic-flash, but at random
+    # positions instead of bbox-corner quadrilateral.
+    micro_cells: list[str] = []
+    cell_offsets = (0.0, 0.6, 1.2, 1.8, 2.4, 3.0)  # 6 cells × 0.6s within-lobe stagger
+    lobe_phase = {
+        "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
+        "temporal": 1.2, "cerebellum": 1.6, "brainstem": 2.0,
+    }
+    for lobe, cells in cells_by_lobe.items():
         color = lobe_color_tokens[lobe]
         phase = lobe_phase[lobe]
-        # Cells (4 per lobe)
         for i, (cx, cy) in enumerate(cells):
-            delay = phase + cell_offsets[i]
+            delay = phase + cell_offsets[i % len(cell_offsets)]
             micro_cells.append(
                 f'<circle cx="{cx}" cy="{cy}" r="4" fill="{color}" '
                 f'class="lobe-cell" style="animation-delay:{delay:.2f}s"/>'
             )
-        # Arcs connecting consecutive cells in the quadrilateral (4 per lobe)
-        for i in range(4):
-            a = cells[i]
-            b = cells[(i + 1) % 4]
-            delay = phase + cell_offsets[i]
-            lobe_arcs.append(
-                f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
-                f'stroke="{color}" stroke-width="1.4" '
-                f'class="lobe-arc" style="animation-delay:{delay:.2f}s"/>'
-            )
+
+    # Arcs render as quadratic Bezier <path/> with the existing .lobe-arc keyframes
+    # (arcflow + arcfade). The animation-delay/duration come from the random per-arc
+    # values so the network reads as continuous firing.
+    lobe_arcs: list[str] = []
+    for a in arcs:
+        lobe_arcs.append(
+            f'<path d="M{a.x1},{a.y1} Q{a.cx},{a.cy} {a.x2},{a.y2}" '
+            f'stroke="{a.color}" stroke-width="2.2" fill="none" '
+            f'pathLength="100" stroke-dasharray="100 100" '
+            f'class="lobe-arc" '
+            f'style="animation-delay:{a.begin_s:.2f}s;animation-duration:{a.dur_s:.2f}s"/>'
+        )
 
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -759,7 +759,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
          around the lobe's quadrilateral. */
-      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; filter: url(#electricGlow); }}
+      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
       @keyframes lcell {{
         0%, 100% {{ opacity: 0;   transform: scale(0.6); }}
         10%      {{ opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }}
@@ -871,8 +871,10 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         <g class="lobe-stroke-layer" filter="url(#electricGlow)">
         {chr(10).join("          " + lso for lso in lobe_stroke_overlay)}
         </g>
-        {chr(10).join("        " + la for la in lobe_arcs)}
-        {chr(10).join("        " + mc for mc in micro_cells)}
+        <g class="arc-network" filter="url(#electricGlow)">
+        {chr(10).join("          " + la for la in lobe_arcs)}
+        {chr(10).join("          " + mc for mc in micro_cells)}
+        </g>
         {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
         {chr(10).join("        " + sd for sd in spark_dots)}
       </g>
