@@ -64,8 +64,8 @@ def _stroke_replacements(palette_primary: str, palette_secondary: str) -> dict[s
 #   parietal:  350 <= cx <= 700 AND cy < 300  (top middle)
 #   temporal:  350 <= cx <= 700 AND cy >= 300 (bottom middle)
 #
-# Brain group transform in the wrapper SVG is translate(332,152) scale(0.7),
-# so canvas centroid = brain-local centroid * 0.7 + (332, 152).
+# Brain group transform in the wrapper SVG is translate(332,210) scale(0.7),
+# so canvas centroid = brain-local centroid * 0.7 + (332, 210).
 
 _LOBE_KEYS = ("frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem")
 _LOBE_PATH_IDS: dict[str, set[str]] | None = None  # populated lazily
@@ -338,14 +338,14 @@ def _classify_brain_paths(
     paths_by_lobe["brainstem"] = bs_pairs
 
     # Convert each lobe's centroid average to canvas space.
-    # Brain group transform: translate(332, 152) scale(0.7).
+    # Brain group transform: translate(332, 210) scale(0.7).
     canvas_centroids: dict[str, tuple[int, int]] = {}
     bboxes: dict[str, tuple[float, float, float, float]] = {}
     for lobe, cs in centroids_by_lobe.items():
         if cs:
             ax = sum(c[0] for c in cs) / len(cs)
             ay = sum(c[1] for c in cs) / len(cs)
-            canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 152))
+            canvas_centroids[lobe] = (round(ax * 0.7 + 332), round(ay * 0.7 + 210))
             xs = [c[0] for c in cs]
             ys = [c[1] for c in cs]
             bboxes[lobe] = (min(xs), min(ys), max(xs), max(ys))
@@ -578,9 +578,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         # Spark dot, halo, and region color glow all live in BRAIN-LOCAL
         # coordinates inside the brain-3d transform group, so they wobble in
         # lockstep with the brain anatomy. Brain group transform is
-        # translate(332,152) scale(0.7), so brain-local = (canvas - 332)/0.7.
+        # translate(332,210) scale(0.7), so brain-local = (canvas - 332)/0.7.
         bx = round((tx - 332) / 0.7)
-        by = round((ty - 152) / 0.7)
+        by = round((ty - 210) / 0.7)
 
         # Region color glow — a large soft radial gradient circle in the
         # card's color. With mix-blend-mode: screen this tints the brain
@@ -1186,7 +1186,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
        wobble around their dots, micro-cells pulse like synaptic firing
        throughout the brain interior. atm.show_halos and atm.show_particles
        gate the optional layers. -->
-  <g transform="translate(332,152) scale(0.7)">
+  <g transform="translate(332,210) scale(0.7)">
     <g filter="url(#brainRipple)">
       <g class="brain-pulse" filter="url(#brainGlow)">
         <g class="{brain_3d_class}">
