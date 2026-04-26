@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="220"
+     viewBox="0 0 1200 220" preserveAspectRatio="none"
+     role="img" aria-label="Header">
+  <defs>
+    <linearGradient id="bannerBg" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#0E0820"/><stop offset="25%" stop-color="#7B5EAA"/><stop offset="50%" stop-color="#C95E8A"/><stop offset="75%" stop-color="#4F8CC4"/><stop offset="100%" stop-color="#0E0820"/>
+      <animate attributeName="x1" values="-1;1;-1" dur="22s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/><animate attributeName="x2" values="0;2;0" dur="22s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+    </linearGradient>
+    <filter id="bannerWaveGlow" x="-5%" y="-50%" width="110%" height="200%">
+      <feGaussianBlur stdDeviation="0.8"/>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .banner-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 54px; letter-spacing: -0.015em; fill: #FFFFFF; }
+    .banner-subtitle { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; fill-opacity: 0.78; }
+    .banner-pulse { animation: bannerPulse 7s ease-in-out infinite; }
+    @keyframes bannerPulse { 0%, 100% { opacity: 0.85; } 50% { opacity: 1.0; } }
+  ]]></style>
+  <path d="M 0,190.0 Q 70.0,168.0 140.0,190.0 T 280.0,190.0 T 420.0,190.0 T 560.0,190.0 T 700.0,190.0 T 840.0,190.0 T 980.0,190.0 T 1120.0,190.0 T 1260.0,190.0 L 1200,0 L 0,0 Z" fill="url(#bannerBg)"/>
+  <g filter="url(#bannerWaveGlow)" opacity="0.7">  <path d="M 0,140.0 Q 40.0,132.0 80.0,140.0 T 160.0,140.0 T 240.0,140.0 T 320.0,140.0 T 400.0,140.0 T 480.0,140.0 T 560.0,140.0 T 640.0,140.0 T 720.0,140.0 T 800.0,140.0 T 880.0,140.0 T 960.0,140.0 T 1040.0,140.0 T 1120.0,140.0 T 1200.0,140.0" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-opacity="0.35" stroke-linecap="round"/>  <path d="M 0,160.0 Q 50.0,154.0 100.0,160.0 T 200.0,160.0 T 300.0,160.0 T 400.0,160.0 T 500.0,160.0 T 600.0,160.0 T 700.0,160.0 T 800.0,160.0 T 900.0,160.0 T 1000.0,160.0 T 1100.0,160.0 T 1200.0,160.0" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-opacity="0.50" stroke-linecap="round"/>  <path d="M 0,180.0 Q 60.0,175.0 120.0,180.0 T 240.0,180.0 T 360.0,180.0 T 480.0,180.0 T 600.0,180.0 T 720.0,180.0 T 840.0,180.0 T 960.0,180.0 T 1080.0,180.0 T 1200.0,180.0" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-opacity="0.65" stroke-linecap="round"/></g>
+  
+</svg>

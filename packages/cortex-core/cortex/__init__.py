@@ -53,6 +53,7 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
 
     # (enabled_flag, builder_module, builder_func, output_filename)
     plan: list[tuple[bool, str, str, str]] = [
+        (config.cards.header.enabled, "banner", "build_header", "header-banner.svg"),
         (config.brain.enabled, "brain", "build", "brain-anatomical.svg"),
         (config.cards.tech_stack.enabled, "tech_cards", "build", "tech-cards.svg"),
         (config.cards.yearly_highlights.enabled, "timeline", "build", "yearly-highlights.svg"),
@@ -61,6 +62,7 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
         (config.typing.motto.enabled, "typing", "build_motto", "motto-typing.svg"),
         (True, "github_icon", "build", "github-icon.svg"),
         (True, "divider", "build", "animated-divider.svg"),
+        (config.cards.footer.enabled, "banner", "build_footer", "footer-banner.svg"),
     ]
 
     results: dict[str, str] = {}
