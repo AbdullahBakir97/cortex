@@ -239,6 +239,45 @@ def _default_footer() -> BannerConfig:
     return BannerConfig(height=160, title="", subtitle="")
 
 
+class BadgeItem(_Strict):
+    """Single badge spec inside the badges widget.
+
+    ``icon`` picks a built-in monogram + brand color from cortex.icons.
+    Pass ``icon_svg`` (raw SVG path ``d`` string) for full custom iconography
+    — that overrides the monogram. ``color`` overrides the auto-resolved
+    brand color. ``value`` is an optional sublabel below the main label
+    (e.g. "Senior", "85%", "Certified").
+    """
+
+    label: str
+    icon: str = ""
+    icon_svg: str = ""
+    color: str = ""
+    value: str = ""
+    href: str = ""
+
+
+class BadgesConfig(_Strict):
+    """Compact tech / skill / achievement badges widget.
+
+    Designed as the "skills strip" most profile READMEs need. Fills the gap
+    between the brain (everything) and tech_cards (deep dive on 6 skills).
+    """
+
+    enabled: bool = False
+    # Visual shape of each badge.
+    shape: Literal["pill", "hex", "shield", "circle"] = "pill"
+    # Layout strategy. ``row`` wraps to width; ``grid`` uses ``columns``;
+    # ``marquee`` scrolls horizontally on a single line.
+    layout: Literal["row", "grid", "marquee"] = "row"
+    # Columns when layout=grid.
+    columns: int = 6
+    # Animation. Combinable in spirit but only one is rendered at a time.
+    animation: Literal["stagger", "shimmer", "pulse", "static"] = "stagger"
+    # The list of badges. 1-30 items.
+    items: list[BadgeItem] = Field(default_factory=list)
+
+
 class ShowcaseConfig(_Strict):
     """Tuning for the auto-generated CORTEX:SHOWCASE block in the README.
 
@@ -260,6 +299,7 @@ class Cards(_Strict):
     yearly_highlights: YearlyHighlightsCard = Field(default_factory=YearlyHighlightsCard)
     header: BannerConfig = Field(default_factory=BannerConfig)
     footer: BannerConfig = Field(default_factory=_default_footer)
+    badges: BadgesConfig = Field(default_factory=BadgesConfig)
     showcase: ShowcaseConfig = Field(default_factory=ShowcaseConfig)
 
 
