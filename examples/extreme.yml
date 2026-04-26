@@ -260,6 +260,46 @@ cards:
       - { label: "Stars",   value: "3.1k" }
       - { label: "Repos",   value: "47" }
       - { label: "Streak",  value: "112d" }
+  # ─── Tier-3 widgets (batch 3) ───────────────────────────────────────────
+  dna:
+    enabled: true
+    title: "Code DNA"
+    languages: ["Python", "TypeScript", "Rust", "Go", "React", "SQL", "Bash", "Docker"]
+  globe:
+    enabled: true
+    title: "Where I work from"
+    rotate: true
+    pins:
+      - { label: "Berlin",        lon: 13.4,   lat: 52.5 }
+      - { label: "Istanbul",      lon: 28.97,  lat: 41.0 }
+      - { label: "London",        lon: -0.13,  lat: 51.5 }
+      - { label: "New York",      lon: -74.0,  lat: 40.7 }
+      - { label: "San Francisco", lon: -122.4, lat: 37.8 }
+      - { label: "Tokyo",         lon: 139.7,  lat: 35.7 }
+  particles:
+    enabled: true
+    title: "Skill cloud"
+    items:
+      - { label: "Python",     weight: 2.6 }
+      - { label: "Rust",       weight: 2.0 }
+      - { label: "TypeScript", weight: 2.4 }
+      - { label: "React",      weight: 1.8 }
+      - { label: "AWS",        weight: 1.6 }
+      - { label: "Docker",     weight: 1.4 }
+      - { label: "Postgres",   weight: 1.4 }
+      - { label: "Redis",      weight: 1.0 }
+      - { label: "FastAPI",    weight: 1.6 }
+      - { label: "Three.js",   weight: 1.2 }
+      - { label: "Pydantic",   weight: 1.2 }
+      - { label: "Kafka",      weight: 0.8 }
+  now_playing:
+    enabled: true
+    activity: "Coding"
+    language: "Python"
+    project:  "Cortex v0.4"
+    progress: 0.62
+    elapsed:  "1:24"
+
   trophies:
     enabled: true
     title: "Achievements"

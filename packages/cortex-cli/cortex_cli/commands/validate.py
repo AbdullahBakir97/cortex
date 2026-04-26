@@ -54,6 +54,14 @@ def run(*, config: Path) -> None:
         enabled_widgets.append("cubes")
     if cfg.cards.trophies.enabled:
         enabled_widgets.append("trophies")
+    if cfg.cards.dna.enabled:
+        enabled_widgets.append("dna")
+    if cfg.cards.globe.enabled:
+        enabled_widgets.append("globe")
+    if cfg.cards.particles.enabled:
+        enabled_widgets.append("particles")
+    if cfg.cards.now_playing.enabled:
+        enabled_widgets.append("now-playing")
     if cfg.typing.about.enabled:
         enabled_widgets.append("about-typing")
     if cfg.typing.motto.enabled:

@@ -447,6 +447,84 @@ _WIDGET_CATALOG: list[_WidgetEntry] = [
         ],
     ),
     _WidgetEntry(
+        filename="code-dna.svg",
+        builder_module="dna",
+        builder_func="build",
+        name="Code DNA Helix",
+        summary="Twin spiral strands with colored base-pair rungs labelled by your top languages. Sinusoidal strands gradient across the canvas, helix drifts horizontally for a 3D feel.",
+        variants=[
+            _Variant(
+                "languages-only",
+                "8 top languages, default palette",
+                "Eight languages encoded as colored rungs between the twin strands. Auto-colored from the cortex jewel-tone palette.",
+                'cards:\n  dna:\n    enabled: true\n    title: "Code DNA"\n    languages: ["Python","TypeScript","Rust","Go","React","SQL","Bash","Docker"]',
+            ),
+            _Variant(
+                "custom-colors",
+                "Custom per-language colors",
+                "Override palette with explicit brand colors paired by index.",
+                'cards:\n  dna:\n    enabled: true\n    languages: ["Python","Rust","TypeScript"]\n    colors:    ["#3776AB","#CE422B","#3178C6"]',
+            ),
+        ],
+    ),
+    _WidgetEntry(
+        filename="skill-globe.svg",
+        builder_module="globe",
+        builder_func="build",
+        name="Skill Globe",
+        summary="Stylized 2D globe (latitude/longitude grid with rotation) + named neon pins at user-supplied coordinates. Each pin has a pulsing ring + glowing dot + label.",
+        variants=[
+            _Variant(
+                "world-tour",
+                "Locations around the world",
+                "Pins at major tech hubs.",
+                'cards:\n  globe:\n    enabled: true\n    title: "Where I work from"\n    pins:\n      - { label: "Berlin",        lon: 13.4,   lat: 52.5 }\n      - { label: "Lisbon",        lon: -9.1,   lat: 38.7 }\n      - { label: "London",        lon: -0.13,  lat: 51.5 }\n      - { label: "New York",      lon: -74.0,  lat: 40.7 }\n      - { label: "San Francisco", lon: -122.4, lat: 37.8 }',
+            ),
+            _Variant(
+                "static-grid",
+                "Globe without rotation",
+                "Static for accessibility / reduced motion.",
+                'cards:\n  globe:\n    enabled: true\n    rotate: false\n    pins:\n      - { label: "HQ",     lon: 0,    lat: 0 }\n      - { label: "Remote", lon: 30,   lat: 30 }',
+            ),
+        ],
+    ),
+    _WidgetEntry(
+        filename="particle-cloud.svg",
+        builder_module="particles",
+        builder_func="build",
+        name="Particle Cloud",
+        summary="Tag cloud of skills as particles orbiting a glowing core. Each particle drifts on its own elliptical orbit; weight controls font size and ring radius (heavier = closer + bigger).",
+        variants=[
+            _Variant(
+                "tech-cloud",
+                "Tech skill cloud",
+                "12 skills with mixed weights, auto-colored.",
+                'cards:\n  particles:\n    enabled: true\n    title: "Skill cloud"\n    items:\n      - { label: "Python",     weight: 2.6 }\n      - { label: "Rust",       weight: 2.0 }\n      - { label: "TypeScript", weight: 2.4 }\n      - { label: "React",      weight: 1.8 }\n      - { label: "AWS",        weight: 1.6 }\n      - { label: "Docker",     weight: 1.4 }\n      - { label: "Postgres",   weight: 1.4 }\n      - { label: "Redis",      weight: 1.0 }\n      - { label: "Kafka",      weight: 0.8 }\n      - { label: "Three.js",   weight: 1.2 }\n      - { label: "FastAPI",    weight: 1.6 }\n      - { label: "Pydantic",   weight: 1.2 }',
+            ),
+        ],
+    ),
+    _WidgetEntry(
+        filename="now-playing.svg",
+        builder_module="now_playing",
+        builder_func="build",
+        name="Now Playing",
+        summary="Spotify-style 'currently coding in' card. Activity pill, language as track title, project as artist line, animated 32-bar waveform, progress bar with elapsed/duration.",
+        variants=[
+            _Variant(
+                "default",
+                "Currently coding (default)",
+                "Generic 'Coding · Python · MyProject' with mid progress.",
+                'cards:\n  now_playing:\n    enabled: true\n    activity: "Coding"\n    language: "Python"\n    project:  "Cortex v0.4"\n    progress: 0.62\n    elapsed:  "1:24"',
+            ),
+            _Variant(
+                "debugging-rust",
+                "Debugging Rust",
+                "Different activity + language combo with custom accent color.",
+                'cards:\n  now_playing:\n    enabled: true\n    activity: "Debugging"\n    language: "Rust"\n    project:  "tokio race condition"\n    progress: 0.34\n    elapsed:  "0:45"\n    color:    "#CE422B"',
+            ),
+        ],
+    ),
+    _WidgetEntry(
         filename="achievement-wall.svg",
         builder_module="trophies",
         builder_func="build",
