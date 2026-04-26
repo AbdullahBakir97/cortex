@@ -635,6 +635,16 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'style="animation-delay:{a.begin_s:.2f}s;animation-duration:{a.dur_s:.2f}s"/>'
         )
 
+    # Specular highlight overlay: render the brain content again with the
+    # diffuse gradient swapped for the specular gradient. The specular gradient
+    # is mostly transparent except for one bright thin band at the middle stop;
+    # rotating at 18s (vs. 30s for diffuse) on a different start angle gives the
+    # brain a "light catching off curved surface" feel — the visual signature
+    # of liquid glass / metallic 3D.
+    brain_content_specular = brain_content.replace(
+        "url(#brainGrad_unified)", "url(#brainGrad_specular)"
+    )
+
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -654,9 +664,19 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
                         from="0 0.5 0.5" to="360 0.5 0.5" dur="30s" repeatCount="indefinite"/>
       <stop offset="0%"   stop-color="#0E0820"/>
       <stop offset="25%"  stop-color="#1A0F35"/>
-      <stop offset="50%"  stop-color="{p_accent_b}" stop-opacity="0.40"/>
+      <stop offset="50%"  stop-color="{p_accent_b}" stop-opacity="0.55"/>
       <stop offset="75%"  stop-color="#1A0F35"/>
       <stop offset="100%" stop-color="#0E0820"/>
+    </linearGradient>
+    <linearGradient id="brainGrad_specular" x1="0" y1="0" x2="1" y2="1"
+                    gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate"
+                        from="45 0.5 0.5" to="405 0.5 0.5" dur="18s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="42%"  stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="50%"  stop-color="#FFFFFF" stop-opacity="0.40"/>
+      <stop offset="58%"  stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
       <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
@@ -885,6 +905,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="{brain_3d_class}">
         {brain_content}
+        <g class="brain-specular" style="mix-blend-mode: screen">
+        {brain_content_specular}
+        </g>
         {chr(10).join("        " + rg for rg in region_glows)}
         <g class="lobe-stroke-layer" filter="url(#electricGlow)">
         {chr(10).join("          " + lso for lso in lobe_stroke_overlay)}
