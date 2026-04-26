@@ -844,26 +844,32 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
       <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
     </radialGradient>
+    <!-- Aurora flow palette: jewel tones (deeper, less saturated than primary
+         hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
+         vocabulary, not "rainbow tech demo". -->
     <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.45"/>
-      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.50"/>
+      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#C95E8A" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_b" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.45"/>
-      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.50"/>
+      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#4F8CC4" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_c" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.45"/>
-      <stop offset="60%"  stop-color="#A78BFA" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/>
+      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.50"/>
+      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="brainAurora_d" cx="50%" cy="50%" r="50%">
-      <stop offset="0%"   stop-color="#34D399" stop-opacity="0.45"/>
-      <stop offset="60%"  stop-color="#34D399" stop-opacity="0.18"/>
-      <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.50"/>
+      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.20"/>
+      <stop offset="100%" stop-color="#6FB28E" stop-opacity="0"/>
     </radialGradient>
+    <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="25"/>
+    </filter>
     <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
     {chr(10).join("      " + p for p in brain_clip_paths)}
     </clipPath>
@@ -1201,26 +1207,37 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
              radial gradients drifting freely, masked by the brain shape so
              colors are visible only inside the anatomy. R7 replacement for
              R6 region_glow. -->
-        <g clip-path="url(#brainClip)" class="brain-aurora">
+        <g clip-path="url(#brainClip)" class="brain-aurora" filter="url(#auroraBlur)">
           <!-- Each rect's center starts in a different brain quadrant. Translate
                vectors keep each rect oscillating WITHIN its quadrant so coverage
                stays balanced across the brain throughout the cycle (no clumping
-               at the back). Brain anatomy spans brain-local (0,0) to (1024,732). -->
+               at the back). Brain anatomy spans brain-local (0,0) to (1024,732).
+               calcMode="spline" + keyTimes/keySplines = SMIL ease-in-out for
+               organic motion (not linear/mechanical). auroraBlur softens the
+               radial gradient edges so colors melt into each other. -->
           <rect x="-150" y="-200" width="800" height="800" fill="url(#brainAurora_a)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; 200,150; 0,0" dur="32s" repeatCount="indefinite"/>
+                              values="0,0; 200,150; 0,0" dur="32s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
           </rect>
           <rect x="350" y="-200" width="800" height="800" fill="url(#brainAurora_b)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; -200,150; 0,0" dur="38s" repeatCount="indefinite"/>
+                              values="0,0; -200,150; 0,0" dur="38s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
           </rect>
           <rect x="-150" y="130" width="800" height="800" fill="url(#brainAurora_c)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; 250,-150; 0,0" dur="41s" repeatCount="indefinite"/>
+                              values="0,0; 250,-150; 0,0" dur="41s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
           </rect>
           <rect x="350" y="130" width="800" height="800" fill="url(#brainAurora_d)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; -250,-150; 0,0" dur="45s" repeatCount="indefinite"/>
+                              values="0,0; -250,-150; 0,0" dur="45s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
           </rect>
         </g>
           <g class="lobe-stroke-layer" filter="url(#electricGlow)">
