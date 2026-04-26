@@ -88,7 +88,7 @@
       <stop offset="60%"  stop-color="#34D399" stop-opacity="0.18"/>
       <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
     </radialGradient>
-    <mask id="brainMask">
+    <mask id="brainMask" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1500" height="1200">
           <path d="M 149,168 C 138,178 138,185 145,189" fill="white"/>
       <path d="M 178,155 C 227,121 263,118 288,135" fill="white"/>
       <path d="M 254,184 C 273,170 281,143 296,124 C 316,94 354,119 378,117" fill="white"/>
