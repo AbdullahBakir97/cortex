@@ -136,7 +136,8 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # Region labels (anatomical → user's domain mapping)
     region_blocks: list[str] = []
     region_lines: list[str] = []
-    spark_dots: list[str] = []
+    spark_dots: list[str] = []  # rendered INSIDE brain-3d so they wobble with the brain
+    target_halos: list[str] = []  # rendered in canvas space; static anchor for leader-line endpoints
     for i, (key, region_data) in enumerate(_REGION_POSITIONS.items()):
         region_obj: BrainRegion = getattr(config.brain.regions, key)
         color_token = region_data["color"]
@@ -148,23 +149,23 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         domain = _x(region_obj.domain)
         tools_preview = _x(" · ".join(region_obj.tools[:4])) if region_obj.tools else ""
 
+        # Glassmorphism lobe card: base + highlight overlay + top breathing stripe.
+        # Matches the visual language of tech-cards.svg (also card-based).
         region_blocks.append(
             f'<g transform="translate({lx},{ly})"><g class="label-fade lf{i + 1}">'
             f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" '
             f'stroke="{color}" stroke-width="1.8" filter="url(#cardShadow)"/>'
-            f'<rect x="0" y="0" width="7" height="140" rx="3" fill="{color}"/>'
-            f'<text x="160" y="36" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
-            f'<text x="160" y="78" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
-            f'<text x="160" y="114" class="t-skill" text-anchor="middle">{tools_preview}</text>'
+            f'<rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/>'
+            f'<rect x="0" y="0" width="320" height="4" rx="2" fill="{color}" class="breathe-stripe"/>'
+            f'<text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="{color}">{cap}</text>'
+            f'<text x="160" y="80" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
+            f'<text x="160" y="116" class="t-skill" text-anchor="middle">{tools_preview}</text>'
             f"</g></g>"
         )
 
-        # Leader line from label edge to brain target
-        # Pick a midpoint between label and target for a soft curve
+        # Leader line from label edge to brain target (canvas space)
         mid_x = (lx + tx) // 2
         mid_y = (ly + 140 + ty) // 2 if ly < 400 else (ly + ty) // 2
-        # Determine which side of label to anchor (right-side labels start at lx,
-        # left-side labels start at lx+320)
         anchor_x = lx if lx > 600 else lx + 320
         anchor_y = ly + 70
         region_lines.append(
@@ -173,8 +174,22 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'stroke-opacity="0.7" class="leader-flow"/>'
         )
 
+        # Halo ring stays in canvas space — anchors the leader-line endpoint
+        # so the line never visually disconnects when the dot wobbles below.
+        target_halos.append(
+            f'<circle cx="{tx}" cy="{ty}" r="14" fill="none" stroke="{color}" '
+            f'stroke-width="1.5" class="target-halo" '
+            f'style="animation-delay:{i * 0.3}s"/>'
+        )
+
+        # Spark dot lives in brain-local coordinates so it inherits the
+        # brain-3d skew/scale wobble. Brain group transform is
+        # translate(332,152) scale(0.7), so brain-local = (canvas - 332)/0.7.
+        # Dot radius compensates: r=6 here renders as r≈4.2 after the 0.7 scale.
+        bx = round((tx - 332) / 0.7)
+        by = round((ty - 152) / 0.7)
         spark_dots.append(
-            f'<circle cx="{tx}" cy="{ty}" r="4" fill="{color}" class="target-pulse" '
+            f'<circle cx="{bx}" cy="{by}" r="6" fill="{color}" class="target-pulse" '
             f'style="animation-delay:{i * 0.3}s"/>'
         )
 
@@ -208,13 +223,23 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="100%" stop-color="{p_secondary}"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
+      <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
       <stop offset="0%"   stop-color="#180826"/>
       <stop offset="60%"  stop-color="#080410"/>
       <stop offset="100%" stop-color="{p_background}"/>
     </radialGradient>
+    <radialGradient id="bgAura" cx="50%" cy="50%" r="40%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
       <stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/>
+    </linearGradient>
+    <linearGradient id="cardHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
     <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
@@ -252,14 +277,54 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       @keyframes lflow {{ to {{ stroke-dashoffset: -20; }} }}
       .target-pulse {{ animation: tpulse 1.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
       @keyframes tpulse {{ 0%,100%{{transform:scale(1);opacity:0.85}} 50%{{transform:scale(1.5);opacity:1}} }}
+      .target-halo {{ animation: thalo 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
+      @keyframes thalo {{ 0%,100%{{opacity:0.18;transform:scale(0.9)}} 50%{{opacity:0.45;transform:scale(1.25)}} }}
       .label-fade {{ opacity: 0; animation: lfade 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }}
       @keyframes lfade {{ to {{ opacity: 1; }} }}
       .lf1{{animation-delay:0.4s}} .lf2{{animation-delay:0.55s}} .lf3{{animation-delay:0.7s}}
       .lf4{{animation-delay:0.85s}} .lf5{{animation-delay:1.0s}} .lf6{{animation-delay:1.15s}}
+      .breathe-stripe {{ animation: stripeBreathe 3s ease-in-out infinite; }}
+      @keyframes stripeBreathe {{ 0%,100%{{opacity:0.85}} 50%{{opacity:1}} }}
+      .particle {{ animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }}
+      @keyframes pdrift {{
+        0%,100% {{ opacity: 0.18; transform: translate(0, 0); }}
+        25%      {{ opacity: 0.55; transform: translate(8px, -10px); }}
+        50%      {{ opacity: 0.32; transform: translate(-4px, -22px); }}
+        75%      {{ opacity: 0.60; transform: translate(-12px, -8px); }}
+      }}
+      .p1{{animation-delay:0s;animation-duration:14s}} .p2{{animation-delay:1.5s;animation-duration:18s}}
+      .p3{{animation-delay:3s;animation-duration:11s}} .p4{{animation-delay:4.5s;animation-duration:15s}}
+      .p5{{animation-delay:6s;animation-duration:13s}} .p6{{animation-delay:7.5s;animation-duration:16s}}
+      .p7{{animation-delay:2s;animation-duration:12s}} .p8{{animation-delay:3.5s;animation-duration:17s}}
+      .p9{{animation-delay:5s;animation-duration:14s}} .p10{{animation-delay:6.5s;animation-duration:11s}}
+      .p11{{animation-delay:0.5s;animation-duration:19s}} .p12{{animation-delay:8s;animation-duration:13s}}
+      .p13{{animation-delay:1s;animation-duration:15s}} .p14{{animation-delay:2.5s;animation-duration:18s}}
+      .p15{{animation-delay:9s;animation-duration:12s}} .p16{{animation-delay:4s;animation-duration:16s}}
     ]]></style>
   </defs>
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
+  <rect width="1400" height="900" fill="url(#bgAura)"/>
+
+  <!-- Ambient particle drift — atmospheric depth behind the brain -->
+  <g fill="{p_accent_b}">
+    <circle cx="120"  cy="180" r="1.8" class="particle p1"/>
+    <circle cx="260"  cy="540" r="1.4" class="particle p2"/>
+    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="{p_accent_a}"/>
+    <circle cx="420"  cy="760" r="1.2" class="particle p4"/>
+    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="{p_accent_a}"/>
+    <circle cx="700"  cy="220" r="2.2" class="particle p6"/>
+    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="{p_secondary}"/>
+    <circle cx="900"  cy="160" r="1.8" class="particle p8"/>
+    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="{p_accent_a}"/>
+    <circle cx="1080" cy="340" r="2.0" class="particle p10"/>
+    <circle cx="1180" cy="780" r="1.4" class="particle p11"/>
+    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="{p_secondary}"/>
+    <circle cx="160"  cy="780" r="1.6" class="particle p13"/>
+    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="{p_accent_a}"/>
+    <circle cx="640"  cy="80"  r="1.8" class="particle p15"/>
+    <circle cx="1320" cy="500" r="1.4" class="particle p16"/>
+  </g>
 
   <!-- Title -->
   <text x="700" y="50" class="t-tag" text-anchor="middle">⏵ NEURAL · SKILL · ATLAS · v1.0 ⏴</text>
@@ -270,16 +335,21 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     {chr(10).join("    " + ln for ln in region_lines)}
   </g>
 
-  <!-- Synaptic spark dots at leader endpoints -->
+  <!-- Static halo rings in canvas space — anchor the leader-line endpoints
+       so the connection reads as continuous even when the spark dot below
+       drifts with the brain's 3D wobble. -->
   <g>
-    {chr(10).join("    " + sd for sd in spark_dots)}
+    {chr(10).join("    " + ha for ha in target_halos)}
   </g>
 
-  <!-- The neon brain (Wikimedia anatomical, recolored, centered, 3D wobble) -->
+  <!-- The neon brain (Wikimedia anatomical, recolored, centered, 3D wobble).
+       Spark dots live INSIDE the brain-3d group so they inherit the wobble
+       and stay anchored to the actual lobe positions as the brain moves. -->
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="brain-3d">
         {brain_content}
+        {chr(10).join("        " + sd for sd in spark_dots)}
       </g>
     </g>
   </g>
