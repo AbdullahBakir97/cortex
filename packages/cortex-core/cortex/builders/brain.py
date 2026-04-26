@@ -487,8 +487,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # leader stroke fades to lower opacity near the brain.
     region_blocks: list[str] = []
     region_lines: list[str] = []
-    region_grads: list[str] = []  # one radial gradient per lobe color
-    region_glows: list[str] = []  # large soft tint circles in card colors (always rendered)
     halos: list[str] = []  # ring around each spark dot (gated by atm.show_halos)
     spark_dots: list[str] = []  # central dot at each lobe target (always rendered)
     data_packets: list[str] = []  # small dots traveling card->brain along each leader path
@@ -519,16 +517,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'<text x="160" y="80" class="t-region" text-anchor="middle">{emoji} {domain}</text>'
             f'<text x="160" y="116" class="t-skill" text-anchor="middle">{tools_preview}</text>'
             f"</g></g>"
-        )
-
-        # Per-region radial gradient — used by the region glow inside brain-3d.
-        # Soft falloff: full color at center, fading to transparent at edge.
-        region_grads.append(
-            f'<radialGradient id="rgrad_{key}" cx="50%" cy="50%" r="50%">'
-            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.85"/>'
-            f'<stop offset="55%"  stop-color="{color}" stop-opacity="0.30"/>'
-            f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
-            f"</radialGradient>"
         )
 
         # Leader line from label edge to brain target (canvas space).
@@ -582,13 +570,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         bx = round((tx - 332) / 0.7)
         by = round((ty - 210) / 0.7)
 
-        # Region color glow — a large soft radial gradient circle in the
-        # card's color. With mix-blend-mode: screen this tints the brain
-        # anatomy underneath without recoloring the source paths.
-        region_glows.append(
-            f'<circle cx="{bx}" cy="{by}" r="260" fill="url(#rgrad_{key})" '
-            f'class="region-glow region-pulse rg{i + 1}"/>'
-        )
         # Halo ring — wobbles with brain (r=20 renders as ~14 after 0.7 scale).
         halos.append(
             f'<circle cx="{bx}" cy="{by}" r="20" fill="none" stroke="{color}" '
@@ -859,7 +840,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
-    {chr(10).join("    " + g for g in region_grads)}
     {chr(10).join("    " + g for g in card_inner_grads)}
     <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
       <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
@@ -934,15 +914,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .ce4 {{ animation-delay: 2.1s; }}
       .ce5 {{ animation-delay: 2.8s; }}
       .ce6 {{ animation-delay: 3.5s; }}
-      .region-glow {{ mix-blend-mode: screen; }}
-      .region-pulse {{ animation: rpulse 8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
-      @keyframes rpulse {{
-        0%, 100% {{ opacity: 0.55; transform: scale(0.92); }}
-        50%      {{ opacity: 1.0;  transform: scale(1.18); }}
-      }}
-      .rg1{{animation-delay:0s}}    .rg2{{animation-delay:1.3s}}
-      .rg3{{animation-delay:2.6s}}  .rg4{{animation-delay:3.9s}}
-      .rg5{{animation-delay:5.2s}}  .rg6{{animation-delay:6.5s}}
       /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
@@ -1191,7 +1162,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <g class="brain-pulse" filter="url(#brainGlow)">
         <g class="{brain_3d_class}">
           {brain_content}
-          {chr(10).join("          " + rg for rg in region_glows)}
           <g class="lobe-stroke-layer" filter="url(#electricGlow)">
           {chr(10).join("            " + lso for lso in lobe_stroke_overlay)}
           </g>

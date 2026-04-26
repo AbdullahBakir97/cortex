@@ -76,12 +76,6 @@
       <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
-        <radialGradient id="rgrad_frontal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#F90001" stop-opacity="0.85"/><stop offset="55%"  stop-color="#F90001" stop-opacity="0.30"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rgrad_parietal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#34D399" stop-opacity="0.85"/><stop offset="55%"  stop-color="#34D399" stop-opacity="0.30"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rgrad_occipital" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#FF652F" stop-opacity="0.85"/><stop offset="55%"  stop-color="#FF652F" stop-opacity="0.30"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rgrad_temporal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#FFD23F" stop-opacity="0.85"/><stop offset="55%"  stop-color="#FFD23F" stop-opacity="0.30"/><stop offset="100%" stop-color="#FFD23F" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rgrad_cerebellum" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.85"/><stop offset="55%"  stop-color="#22D3EE" stop-opacity="0.30"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient>
-    <radialGradient id="rgrad_brainstem" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.85"/><stop offset="55%"  stop-color="#A78BFA" stop-opacity="0.30"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
         <radialGradient id="cardInnerGlow_frontal" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#F90001" stop-opacity="0.18"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
     <radialGradient id="cardInnerGlow_parietal" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#34D399" stop-opacity="0.18"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
     <radialGradient id="cardInnerGlow_occipital" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#FF652F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
@@ -161,15 +155,6 @@
       .ce4 { animation-delay: 2.1s; }
       .ce5 { animation-delay: 2.8s; }
       .ce6 { animation-delay: 3.5s; }
-      .region-glow { mix-blend-mode: screen; }
-      .region-pulse { animation: rpulse 8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-      @keyframes rpulse {
-        0%, 100% { opacity: 0.55; transform: scale(0.92); }
-        50%      { opacity: 1.0;  transform: scale(1.18); }
-      }
-      .rg1{animation-delay:0s}    .rg2{animation-delay:1.3s}
-      .rg3{animation-delay:2.6s}  .rg4{animation-delay:3.9s}
-      .rg5{animation-delay:5.2s}  .rg6{animation-delay:6.5s}
       /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
@@ -1312,12 +1297,6 @@
          style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
     </g>
   
-                    <circle cx="199" cy="347" r="260" fill="url(#rgrad_frontal)" class="region-glow region-pulse rg1"/>
-          <circle cx="540" cy="154" r="260" fill="url(#rgrad_parietal)" class="region-glow region-pulse rg2"/>
-          <circle cx="824" cy="351" r="260" fill="url(#rgrad_occipital)" class="region-glow region-pulse rg3"/>
-          <circle cx="534" cy="451" r="260" fill="url(#rgrad_temporal)" class="region-glow region-pulse rg4"/>
-          <circle cx="703" cy="594" r="260" fill="url(#rgrad_cerebellum)" class="region-glow region-pulse rg5"/>
-          <circle cx="587" cy="643" r="260" fill="url(#rgrad_brainstem)" class="region-glow region-pulse rg6"/>
           <g class="lobe-stroke-layer" filter="url(#electricGlow)">
                       <path d="M 71,311 C 67,294 98,289 107,279 C 113,274 118,255 149,248 C 166,242 180,224 200,206 C 208,197 223,193 240,192" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
             <path d="M 111,336 C 105,342 92,347 91,355 C 89,363 83,371 78,379 C 70,394 65,406 66,416 C 67,437 90,448 102,461" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
