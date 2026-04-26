@@ -134,10 +134,11 @@ def _render_card(
     entry: YearEntry,
     color: str,
     fade_class: str,
+    edge_class: str,
     *,
     is_current: bool,
 ) -> str:
-    """Tall year card with breathing border, headline, bullets, and stats."""
+    """Tall year card with traveling edge glow, inner pulse, headline, bullets, and stats."""
     # Connector line from card top → timeline marker
     rel_marker_x = marker_x - card_x
 
@@ -162,11 +163,13 @@ def _render_card(
             StatEntry(num="—", label="SOON"),
         ]
 
+    # pathLength on edge rect = card perimeter (~1780 = 2*(320+460+padding))
     parts = [
         f'  <g transform="translate({card_x}, 230)" class="card-rise {fade_class}">',
         f'    <line x1="{rel_marker_x}" y1="0" x2="{rel_marker_x}" y2="-60" stroke="{color}" stroke-width="1" stroke-opacity="0.5"/>',
-        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="url(#cardBg)" filter="url(#cardShadow)"/>',
-        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="none" stroke="{color}" stroke-width="2" class="breathe-border"/>',
+        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/>',
+        f'    <rect x="6" y="6" width="{card_w - 12}" height="448" rx="12" fill="{color}" fill-opacity="0.10" class="card-inner-pulse"/>',
+        f'    <rect x="0" y="0" width="{card_w}" height="460" rx="16" fill="none" stroke="{color}" stroke-width="2" pathLength="1780" class="card-edge {edge_class}"/>',
         f'    <text x="24" y="42" class="t-year-tag" fill="{color}">{_x(f"{entry.year} · {label}")}</text>',
         f'    <text x="24" y="84" class="t-headline">{_x(headline)}</text>',
         f'    <line x1="24" y1="108" x2="{card_w - 24}" y2="108" stroke="#21262D" stroke-width="1"/>',
@@ -259,8 +262,16 @@ def build(config: Config, output: str | Path) -> Path:
         "    .y0 { animation-delay: 0.30s; } .y1 { animation-delay: 0.50s; }\n"
         "    .y2 { animation-delay: 0.70s; } .y3 { animation-delay: 0.90s; }\n"
         "    .y4 { animation-delay: 1.10s; } .y5 { animation-delay: 1.30s; }\n"
-        "    .breathe-border { animation: breathe 3.4s ease-in-out infinite; }\n"
-        "    @keyframes breathe { 0%,100%{stroke-opacity:0.7} 50%{stroke-opacity:1} }\n"
+        "    /* Travelling edge highlight — colored segment loops around card perimeter,\n"
+        "       staggered per card. Matches the brain-region card pattern from R2-4. */\n"
+        "    .card-edge { stroke-dasharray: 80 1700; animation: cardEdgeTravel 4.4s linear infinite; filter: url(#cardEdgeGlow); opacity: 0.95; }\n"
+        "    @keyframes cardEdgeTravel { to { stroke-dashoffset: -1780; } }\n"
+        "    .ce0 { animation-delay: 0s; } .ce1 { animation-delay: 0.7s; }\n"
+        "    .ce2 { animation-delay: 1.4s; } .ce3 { animation-delay: 2.1s; }\n"
+        "    .ce4 { animation-delay: 2.8s; } .ce5 { animation-delay: 3.5s; }\n"
+        "    /* Inner radial glow — soft accent pulse from card center, slow 5s. */\n"
+        "    .card-inner-pulse { animation: cardPulse 5s ease-in-out infinite; }\n"
+        "    @keyframes cardPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1.0; } }\n"
         "  </style>\n"
         "  <defs>\n"
         '    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%"><stop offset="0%" stop-color="#0F0816"/><stop offset="100%" stop-color="#000000"/></radialGradient>\n'
@@ -268,7 +279,9 @@ def build(config: Config, output: str | Path) -> Path:
         '    <linearGradient id="tlGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A78BFA"/><stop offset="33%" stop-color="#F90001"/><stop offset="66%" stop-color="#FF652F"/><stop offset="100%" stop-color="#FFD23F"/></linearGradient>\n'
         '    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1C1428" stop-opacity="0.94"/><stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/></linearGradient>\n'
         '    <radialGradient id="markerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>\n'
-        '    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="0" dy="3" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.65"/><feComposite in2="shadow" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n'
+        '    <!-- Stacked drop shadow — 3 layers for real depth (replaces single shadow). -->\n'
+        '    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.30"/><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.40"/><feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/></filter>\n'
+        '    <filter id="cardEdgeGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.2"/></filter>\n'
         "  </defs>\n"
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#bgRadial)"/>\n'
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#dots)"/>\n'
@@ -298,6 +311,7 @@ def build(config: Config, output: str | Path) -> Path:
             entries[i],
             _accent_for(i, n, is_current[i]),
             f"y{i}",
+            f"ce{i}",
             is_current=is_current[i],
         )
         for i in range(n)
