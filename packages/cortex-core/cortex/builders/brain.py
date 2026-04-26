@@ -697,6 +697,57 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'class="constellation-line cl{n + 1}"/>'
         )
 
+    # Far star field — 30 dim points spread deterministically across the canvas.
+    # Smaller and dimmer than ambient particles; reads as deep-space depth.
+    star_rng = random.Random(_seed_from_name(config.identity.name) ^ 0xDEADBEEF)
+    far_stars: list[str] = []
+    for _ in range(30):
+        sx = star_rng.randint(40, 1360)
+        sy = star_rng.randint(40, 860)
+        sr = round(star_rng.uniform(0.6, 1.2), 1)
+        s_op = round(star_rng.uniform(0.20, 0.50), 2)
+        s_dur = star_rng.choice([8, 10, 12, 14])
+        far_stars.append(
+            f'<circle cx="{sx}" cy="{sy}" r="{sr}" fill="#FFFFFF" '
+            f'opacity="{s_op}" class="far-star fs{s_dur}"/>'
+        )
+
+    # Perspective grid — thin lines forming a 80px grid across the canvas,
+    # faded at edges via a radial mask. Slow diagonal drift evokes data space.
+    grid_lines: list[str] = []
+    for x in range(80, 1400, 80):
+        grid_lines.append(
+            f'<line x1="{x}" y1="0" x2="{x}" y2="900" '
+            f'stroke="{p_accent_b}" stroke-width="0.5" stroke-opacity="0.06"/>'
+        )
+    for y in range(80, 900, 80):
+        grid_lines.append(
+            f'<line x1="0" y1="{y}" x2="1400" y2="{y}" '
+            f'stroke="{p_accent_b}" stroke-width="0.5" stroke-opacity="0.06"/>'
+        )
+
+    # Nebula clouds — 4 large soft blurred radial gradients drifting on
+    # staggered phases. More organic than aurora bands (which are flat
+    # circles); these have feGaussianBlur for amorphous edges.
+    nebula_blocks: list[str] = []
+    nebula_specs = [
+        ("#EC4899", -100, -100, 38),
+        ("#7C3AED", 700, -100, 44),
+        ("#22D3EE", -100, 500, 41),
+        ("#34D399", 700, 500, 47),
+    ]
+    for n, (ncolor, nx, ny, ndur) in enumerate(nebula_specs):
+        ndx = -50 if n % 2 == 0 else 50
+        ndy = -30 if n < 2 else 30
+        nebula_blocks.append(
+            f'<g class="nebula" filter="url(#nebulaBlur)">'
+            f'<rect x="{nx}" y="{ny}" width="1100" height="1100" fill="url(#nebula_{n})">'
+            f'<animateTransform attributeName="transform" type="translate" '
+            f'values="0,0; {ndx},{ndy}; 0,0" '
+            f'dur="{ndur}s" repeatCount="indefinite"/>'
+            f'</rect></g>'
+        )
+
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -785,6 +836,37 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="gridFade" cx="50%" cy="50%" r="55%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="80%"  stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="gridMask">
+      <rect width="1400" height="900" fill="url(#gridFade)"/>
+    </mask>
+    <radialGradient id="nebula_0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#34D399" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#34D399" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="nebulaBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
     <radialGradient id="aurora_a" cx="50%" cy="50%" r="50%">
       <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
       <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.04"/>
@@ -958,6 +1040,19 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .cl11{{animation-delay:6.0s}} .cl12{{animation-delay:6.6s}}
       .cl13{{animation-delay:7.2s}} .cl14{{animation-delay:7.8s}}
       .cl15{{animation-delay:0.3s}} .cl16{{animation-delay:1.5s}}
+      .far-star {{
+        animation-name: starTwinkle;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }}
+      .fs8  {{ animation-duration:  8s; }}
+      .fs10 {{ animation-duration: 10s; }}
+      .fs12 {{ animation-duration: 12s; }}
+      .fs14 {{ animation-duration: 14s; }}
+      @keyframes starTwinkle {{
+        0%, 100% {{ opacity: 0.20; }}
+        50%      {{ opacity: 0.85; }}
+      }}
     ]]></style>
   </defs>
 
@@ -966,6 +1061,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     <animateTransform attributeName="transform" type="translate"
                       values="0,0; 100,80; -60,40; 0,0" dur="40s" repeatCount="indefinite"/>
   </rect>''') if atm.show_aura else ""}
+  {('''<!-- Far star field: 30 dim points twinkling at deep-space distance.
+       Each star uses a CSS class fs8/fs10/fs12/fs14 for varied twinkle speed. -->
+  <g class="stars">
+  ''' + chr(10).join("    " + s for s in far_stars) + '''
+  </g>''') if atm.show_aura else ""}
+
+  {('''<!-- Perspective grid: 80px grid lines, edge-faded via radial mask, slow drift. -->
+  <g class="grid" mask="url(#gridMask)">
+    <g>
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 40,30; 0,0" dur="50s" repeatCount="indefinite"/>
+  ''' + chr(10).join("      " + ln for ln in grid_lines) + '''
+    </g>
+  </g>''') if atm.show_aura else ""}
+
+  {('''<!-- Nebula clouds: 4 large blurred radial gradients drifting slowly.
+       More organic than aurora bands; adds color depth behind the brain. -->
+  <g class="nebulae">
+  ''' + chr(10).join("    " + nb for nb in nebula_blocks) + '''
+  </g>''') if atm.show_aura else ""}
+
   {('''<!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
        on staggered timers. Replaces the old turbulence plasma fog with smooth
        color flow that reads as atmospheric light, not noise. -->

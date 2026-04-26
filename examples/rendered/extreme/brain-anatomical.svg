@@ -85,6 +85,37 @@
       <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="gridFade" cx="50%" cy="50%" r="55%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="80%"  stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+    <mask id="gridMask">
+      <rect width="1400" height="900" fill="url(#gridFade)"/>
+    </mask>
+    <radialGradient id="nebula_0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#34D399" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#34D399" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="nebulaBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
     <radialGradient id="aurora_a" cx="50%" cy="50%" r="50%">
       <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
       <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.04"/>
@@ -268,6 +299,19 @@
       .cl11{animation-delay:6.0s} .cl12{animation-delay:6.6s}
       .cl13{animation-delay:7.2s} .cl14{animation-delay:7.8s}
       .cl15{animation-delay:0.3s} .cl16{animation-delay:1.5s}
+      .far-star {
+        animation-name: starTwinkle;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }
+      .fs8  { animation-duration:  8s; }
+      .fs10 { animation-duration: 10s; }
+      .fs12 { animation-duration: 12s; }
+      .fs14 { animation-duration: 14s; }
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.20; }
+        50%      { opacity: 0.85; }
+      }
     ]]></style>
   </defs>
 
@@ -276,6 +320,86 @@
     <animateTransform attributeName="transform" type="translate"
                       values="0,0; 100,80; -60,40; 0,0" dur="40s" repeatCount="indefinite"/>
   </rect>
+  <!-- Far star field: 30 dim points twinkling at deep-space distance.
+       Each star uses a CSS class fs8/fs10/fs12/fs14 for varied twinkle speed. -->
+  <g class="stars">
+      <circle cx="1016" cy="263" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="1326" cy="436" r="0.7" fill="#FFFFFF" opacity="0.35" class="far-star fs8"/>
+    <circle cx="1131" cy="390" r="1.1" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="972" cy="214" r="0.9" fill="#FFFFFF" opacity="0.3" class="far-star fs10"/>
+    <circle cx="1132" cy="400" r="0.9" fill="#FFFFFF" opacity="0.34" class="far-star fs10"/>
+    <circle cx="41" cy="500" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs10"/>
+    <circle cx="1019" cy="389" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="1129" cy="547" r="1.1" fill="#FFFFFF" opacity="0.43" class="far-star fs8"/>
+    <circle cx="1006" cy="175" r="0.6" fill="#FFFFFF" opacity="0.48" class="far-star fs12"/>
+    <circle cx="1175" cy="188" r="0.7" fill="#FFFFFF" opacity="0.46" class="far-star fs14"/>
+    <circle cx="663" cy="443" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs8"/>
+    <circle cx="1182" cy="679" r="0.7" fill="#FFFFFF" opacity="0.48" class="far-star fs14"/>
+    <circle cx="1052" cy="152" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="611" cy="520" r="1.2" fill="#FFFFFF" opacity="0.21" class="far-star fs14"/>
+    <circle cx="184" cy="678" r="1.1" fill="#FFFFFF" opacity="0.35" class="far-star fs10"/>
+    <circle cx="198" cy="730" r="0.6" fill="#FFFFFF" opacity="0.27" class="far-star fs12"/>
+    <circle cx="462" cy="713" r="0.8" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="198" cy="425" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs12"/>
+    <circle cx="1053" cy="717" r="0.9" fill="#FFFFFF" opacity="0.49" class="far-star fs14"/>
+    <circle cx="67" cy="274" r="1.1" fill="#FFFFFF" opacity="0.43" class="far-star fs12"/>
+    <circle cx="1341" cy="218" r="1.0" fill="#FFFFFF" opacity="0.44" class="far-star fs10"/>
+    <circle cx="1134" cy="348" r="1.0" fill="#FFFFFF" opacity="0.43" class="far-star fs14"/>
+    <circle cx="709" cy="204" r="1.2" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="636" cy="443" r="0.8" fill="#FFFFFF" opacity="0.4" class="far-star fs10"/>
+    <circle cx="691" cy="512" r="0.6" fill="#FFFFFF" opacity="0.23" class="far-star fs8"/>
+    <circle cx="61" cy="452" r="0.6" fill="#FFFFFF" opacity="0.33" class="far-star fs12"/>
+    <circle cx="107" cy="85" r="0.8" fill="#FFFFFF" opacity="0.3" class="far-star fs12"/>
+    <circle cx="1191" cy="51" r="0.6" fill="#FFFFFF" opacity="0.31" class="far-star fs12"/>
+    <circle cx="759" cy="524" r="1.1" fill="#FFFFFF" opacity="0.42" class="far-star fs14"/>
+    <circle cx="541" cy="746" r="0.6" fill="#FFFFFF" opacity="0.33" class="far-star fs10"/>
+  </g>
+
+  <!-- Perspective grid: 80px grid lines, edge-faded via radial mask, slow drift. -->
+  <g class="grid" mask="url(#gridMask)">
+    <g>
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 40,30; 0,0" dur="50s" repeatCount="indefinite"/>
+        <line x1="80" y1="0" x2="80" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="160" y1="0" x2="160" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="240" y1="0" x2="240" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="320" y1="0" x2="320" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="400" y1="0" x2="400" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="480" y1="0" x2="480" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="560" y1="0" x2="560" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="640" y1="0" x2="640" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="720" y1="0" x2="720" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="800" y1="0" x2="800" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="880" y1="0" x2="880" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="960" y1="0" x2="960" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="1040" y1="0" x2="1040" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="1120" y1="0" x2="1120" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="1200" y1="0" x2="1200" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="1280" y1="0" x2="1280" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="1360" y1="0" x2="1360" y2="900" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="80" x2="1400" y2="80" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="160" x2="1400" y2="160" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="240" x2="1400" y2="240" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="320" x2="1400" y2="320" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="400" x2="1400" y2="400" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="480" x2="1400" y2="480" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="560" x2="1400" y2="560" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="640" x2="1400" y2="640" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="720" x2="1400" y2="720" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="800" x2="1400" y2="800" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+      <line x1="0" y1="880" x2="1400" y2="880" stroke="#A78BFA" stroke-width="0.5" stroke-opacity="0.06"/>
+    </g>
+  </g>
+
+  <!-- Nebula clouds: 4 large blurred radial gradients drifting slowly.
+       More organic than aurora bands; adds color depth behind the brain. -->
+  <g class="nebulae">
+      <g class="nebula" filter="url(#nebulaBlur)"><rect x="-100" y="-100" width="1100" height="1100" fill="url(#nebula_0)"><animateTransform attributeName="transform" type="translate" values="0,0; -50,-30; 0,0" dur="38s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="-100" width="1100" height="1100" fill="url(#nebula_1)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,-30; 0,0" dur="44s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="-100" y="500" width="1100" height="1100" fill="url(#nebula_2)"><animateTransform attributeName="transform" type="translate" values="0,0; -50,30; 0,0" dur="41s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="500" width="1100" height="1100" fill="url(#nebula_3)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,30; 0,0" dur="47s" repeatCount="indefinite"/></rect></g>
+  </g>
+
   <!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
        on staggered timers. Replaces the old turbulence plasma fog with smooth
        color flow that reads as atmospheric light, not noise. -->
