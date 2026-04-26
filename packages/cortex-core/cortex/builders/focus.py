@@ -83,9 +83,10 @@ def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> st
     parts = [
         f'  <g transform="translate({slot_x},{slot_y})">',
         f'    <g class="tile-rise {_STAGGER[slot_idx]}">',
-        f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileBg)" filter="url(#tileShadow)"/>',
+        f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileBg)" filter="url(#tileShadowStacked)"/>',
+        f'      <rect x="6" y="6" width="{_TILE_W - 12}" height="{_TILE_H - 12}" rx="10" fill="{accent}" fill-opacity="0.10" class="tile-inner-pulse"/>',
+        f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="none" stroke="{accent}" stroke-width="2" pathLength="1580" class="tile-edge te{slot_idx + 1}"/>',
         f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileHighlight)"/>',
-        f'      <rect x="0" y="0" width="{_TILE_W}" height="3" rx="1.5" fill="{accent}" class="stripe-glow"/>',
         '      <g transform="translate(24, 28)">',
         f'        <rect x="0" y="0" width="{status_w}" height="28" rx="14" fill="{accent}" fill-opacity="0.18" stroke="{accent}" stroke-width="1"/>',
         f'        <circle cx="16" cy="14" r="4" fill="{accent}" class="live-dot"/>',
@@ -152,19 +153,26 @@ def build(config: Config, output: str | Path) -> Path:
         "    .t-pill      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 13px; }\n"
         "    .live-dot { animation: liveDot 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
         "    @keyframes liveDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.8); opacity: 0.4; } }\n"
-        "    .stripe-glow { animation: stripeGlow 3s ease-in-out infinite; }\n"
-        "    @keyframes stripeGlow { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }\n"
         "    .tile-rise { opacity: 0; animation: tileRise 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }\n"
         "    @keyframes tileRise { to { opacity: 1; } }\n"
         "    .t1 { animation-delay: 0.0s; } .t2 { animation-delay: 0.08s; } .t3 { animation-delay: 0.16s; }\n"
         "    .t4 { animation-delay: 0.24s; } .t5 { animation-delay: 0.32s; } .t6 { animation-delay: 0.40s; }\n"
+        "    /* Travelling edge highlight + inner glow — same R2-4 pattern as brain cards. */\n"
+        "    .tile-edge { stroke-dasharray: 80 1500; animation: tileEdgeTravel 4.4s linear infinite; filter: url(#tileEdgeGlow); opacity: 0.95; }\n"
+        "    @keyframes tileEdgeTravel { to { stroke-dashoffset: -1580; } }\n"
+        "    .te1 { animation-delay: 0s; } .te2 { animation-delay: 0.7s; } .te3 { animation-delay: 1.4s; }\n"
+        "    .te4 { animation-delay: 2.1s; } .te5 { animation-delay: 2.8s; } .te6 { animation-delay: 3.5s; }\n"
+        "    .tile-inner-pulse { animation: tilePulse 5s ease-in-out infinite; }\n"
+        "    @keyframes tilePulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1.0; } }\n"
         "  </style>\n"
         "  <defs>\n"
         '    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%"><stop offset="0%" stop-color="#0F0816"/><stop offset="100%" stop-color="#000000"/></radialGradient>\n'
         '    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#F90001" fill-opacity="0.07"/></pattern>\n'
         '    <linearGradient id="tileBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A2028" stop-opacity="0.96"/><stop offset="100%" stop-color="#0D1117" stop-opacity="0.96"/></linearGradient>\n'
         '    <linearGradient id="tileHighlight" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08"/><stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>\n'
-        '    <filter id="tileShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="0" dy="3" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.65"/><feComposite in2="shadow" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n'
+        '    <!-- Stacked drop shadow + edge-glow filter (matches brain + tech-cards). -->\n'
+        '    <filter id="tileShadowStacked" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.30"/><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.40"/><feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/></filter>\n'
+        '    <filter id="tileEdgeGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.2"/></filter>\n'
         "  </defs>\n"
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#bgRadial)"/>\n'
         f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#dots)"/>\n'
