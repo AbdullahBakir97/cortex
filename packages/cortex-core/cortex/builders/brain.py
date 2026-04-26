@@ -607,7 +607,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # Cells render as the existing .lobe-cell synaptic-flash, but at random
     # positions instead of bbox-corner quadrilateral.
     micro_cells: list[str] = []
-    cell_offsets = (0.0, 0.6, 1.2, 1.8, 2.4, 3.0)  # 6 cells × 0.6s within-lobe stagger
+    cell_offsets = (0.0, 0.6, 1.2, 1.8, 2.4, 3.0)  # 6 cells x 0.6s within-lobe stagger
     lobe_phase = {
         "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
         "temporal": 1.2, "cerebellum": 1.6, "brainstem": 2.0,
