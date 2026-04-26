@@ -142,6 +142,123 @@ cards:
 
 </details>
 
+<details open>
+<summary><strong>🌌 Mind-blowing widgets — 7 distinctive SVG generators</strong> &nbsp;·&nbsp; <em>v0.3 batch</em></summary>
+<br/>
+
+> Distinctive widgets that don't exist anywhere else. Each is a separate widget — enable them à la carte in your `cortex.yml`.
+
+<table width="100%">
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/synthwave-banner.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/synthwave-banner.svg" alt="Synthwave horizon: receding neon grid, slatted sun, mountain silhouettes" width="100%"/></a>
+  <br/><sub><b>🌅 synthwave-banner</b> — 80s retro hero (4 palettes: outrun · sunset · neon · miami)</sub>
+</td>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/skill-galaxy.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-galaxy.svg" alt="Constellation of skills as named stars in deep space with connection lines" width="100%"/></a>
+  <br/><sub><b>🌌 skill-galaxy</b> — stars + connections in deep-space / nebula / void</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/skill-radar.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-radar.svg" alt="Polar chart with 6 axes and a translucent breathing polygon" width="100%"/></a>
+  <br/><sub><b>📡 skill-radar</b> — polar chart, breathing polygon, N axes</sub>
+</td>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/code-roadmap.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/code-roadmap.svg" alt="Subway-style metro map with 3 colored lines, stations at year positions, LIVE markers" width="100%"/></a>
+  <br/><sub><b>🚇 code-roadmap</b> — metro map of career tracks, LIVE pulse on current</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/activity-heatmap.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/activity-heatmap.svg" alt="GitHub-style 7x52 contribution grid with neon glow on bright cells" width="100%"/></a>
+  <br/><sub><b>🟩 activity-heatmap</b> — 7×52 grid, neon glow, 4 palettes, sequential reveal</sub>
+</td>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/stat-cubes.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/stat-cubes.svg" alt="Five isometric 3D cubes showing stats with subtle orbit animation" width="100%"/></a>
+  <br/><sub><b>🧊 stat-cubes</b> — isometric 3D blocks, label/value faces, gentle orbit</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/achievement-wall.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/achievement-wall.svg" alt="Beveled trophy cabinet with hexagonal mounted trophies, each with a glyph and date" width="100%"/></a>
+  <br/><sub><b>🏆 achievement-wall</b> — trophy cabinet with hex-mounted milestones</sub>
+</td>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/badges.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/badges.svg" alt="Row of skill badges" width="100%"/></a>
+  <br/><sub><b>🎖️ badges</b> — already shown above (4 shapes × 3 layouts × 4 animations)</sub>
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>Click to see config snippets for each</b></summary>
+
+```yaml
+cards:
+  synthwave:                                    # 80s hero banner
+    enabled: true
+    title:    "CORTEX"
+    subtitle: "Cinematic profile generator"
+    palette:  outrun                            # outrun | sunset | neon | miami
+
+  galaxy:                                        # constellation of skills
+    enabled: true
+    background: nebula                           # deep-space | nebula | void
+    stars:
+      - { label: "Python", color: "#FFD23F", size: 6 }
+      - { label: "Rust",   color: "#CE422B", size: 5 }
+      - { label: "AWS",    color: "#FF9900", size: 5 }
+    connections: [["Python","Rust"], ["Python","AWS"]]
+
+  radar:                                         # polar chart
+    enabled: true
+    title: "Stack profile"
+    breathe: true
+    axes:
+      - { label: "Backend",  value: 92 }
+      - { label: "Frontend", value: 68 }
+      - { label: "DevOps",   value: 78 }
+      - { label: "Mobile",   value: 35 }
+      - { label: "ML",       value: 55 }
+
+  roadmap:                                       # subway-style career map
+    enabled: true
+    title: "Career roadmap"
+    lines:
+      - name: "Backend"
+        color: "#22D3EE"
+        stations:
+          - { label: "Django",  year: 2020 }
+          - { label: "FastAPI", year: 2022 }
+          - { label: "Cortex",  year: 2026, is_current: true }
+
+  heatmap:                                       # contribution grid
+    enabled: true
+    palette: neon-rainbow                        # neon-green | neon-cyan | neon-rainbow | rose
+    glow:    true
+
+  cubes:                                         # 3D stat blocks
+    enabled: true
+    cubes:
+      - { label: "PRs",     value: "1.2k" }
+      - { label: "Commits", value: "8.4k" }
+      - { label: "Stars",   value: "3.1k" }
+
+  trophies:                                      # achievement cabinet
+    enabled: true
+    title: "Achievements"
+    columns: 4
+    trophies:
+      - { label: "First PR",      date: "2018", glyph: "★" }
+      - { label: "1k Commits",    date: "2020", glyph: "🔥" }
+      - { label: "AWS Certified", date: "2023", glyph: "☁" }
+```
+
+</details>
+
+</details>
+
 <details>
 <summary><strong>⌨️ About typing — multilingual rotating headlines</strong> &nbsp;·&nbsp; <code>about-typing.svg</code> · 16 KB</summary>
 <br/>
@@ -509,6 +626,257 @@ cards:
 </details>
 
 <details>
+<summary><strong>Synthwave Horizon</strong> &nbsp;·&nbsp; <code>synthwave-banner.svg</code> &nbsp;·&nbsp; 3 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/synthwave-banner.svg" alt="Synthwave Horizon" width="100%"/>
+</p>
+
+_80s retro-futurist hero banner. Receding perspective grid, slatted neon sun, layered mountain silhouettes, atmospheric gradient. 4 palettes (outrun, sunset, neon, miami)._
+
+<details>
+<summary><em>Outrun palette (default)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/synthwave-banner__outrun.svg" alt="Synthwave Horizon — Outrun palette (default)" width="100%"/>
+</p>
+
+Purple-to-pink-to-yellow atmospheric gradient. Most iconic synthwave look.
+
+```yaml
+cards:
+  synthwave:
+    enabled: true
+    title: "CORTEX"
+    subtitle: "Cinematic profile generator"
+    palette: outrun
+```
+
+</details>
+
+<details>
+<summary><em>Miami vice palette</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/synthwave-banner__miami.svg" alt="Synthwave Horizon — Miami vice palette" width="100%"/>
+</p>
+
+Cyan-pink-orange gradient that screams beachside neon.
+
+```yaml
+cards:
+  synthwave:
+    enabled: true
+    title: "BEACH MODE"
+    palette: miami
+```
+
+</details>
+
+<details>
+<summary><em>Neon palette, no mountains</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/synthwave-banner__neon-minimal.svg" alt="Synthwave Horizon — Neon palette, no mountains" width="100%"/>
+</p>
+
+Cleaner take — dark sky, bright sun, sharp grid. Good when overlaid by other content.
+
+```yaml
+cards:
+  synthwave:
+    enabled: true
+    title: "GRID"
+    palette: neon
+    show_mountains: false
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Skill Galaxy</strong> &nbsp;·&nbsp; <code>skill-galaxy.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-galaxy.svg" alt="Skill Galaxy" width="100%"/>
+</p>
+
+_Constellation of skills as named stars in a deep-space field, with optional connection lines between related techs. Each star twinkles on its own phase, the whole field drifts slowly. Three backgrounds: deep-space, nebula, void._
+
+<details>
+<summary><em>Deep space (default)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-galaxy__deep-space.svg" alt="Skill Galaxy — Deep space (default)" width="100%"/>
+</p>
+
+Subtle radial gradient background, white stars, simple connections.
+
+```yaml
+cards:
+  galaxy:
+    enabled: true
+    title: "Skill galaxy"
+    background: deep-space
+    stars:
+      - { label: "Python" }
+      - { label: "Rust" }
+      - { label: "TypeScript" }
+      - { label: "React" }
+      - { label: "AWS" }
+      - { label: "PostgreSQL" }
+      - { label: "Docker" }
+      - { label: "Kubernetes" }
+    connections:
+      - ["Python", "Rust"]
+      - ["Python", "PostgreSQL"]
+      - ["TypeScript", "React"]
+      - ["AWS", "Docker"]
+      - ["Docker", "Kubernetes"]
+```
+
+</details>
+
+<details>
+<summary><em>Nebula background</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-galaxy__nebula.svg" alt="Skill Galaxy — Nebula background" width="100%"/>
+</p>
+
+Three drifting colored radial blobs (violet, pink, cyan) layered behind the stars.
+
+```yaml
+cards:
+  galaxy:
+    enabled: true
+    title: "Stack universe"
+    background: nebula
+    stars:
+      - { label: "Python", color: "#FFD23F", size: 6 }
+      - { label: "Go",     color: "#22D3EE", size: 5 }
+      - { label: "React",  color: "#FF6B9D", size: 5 }
+      - { label: "AWS" }
+      - { label: "Postgres" }
+    connections: [["Python","AWS"],["React","AWS"]]
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Skill Radar</strong> &nbsp;·&nbsp; <code>skill-radar.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-radar.svg" alt="Skill Radar" width="100%"/>
+</p>
+
+_Polar chart with N axes, one per skill. Translucent polygon shows your level on each. Optional breathing animation pulses the polygon scale subtly._
+
+<details>
+<summary><em>5-axis pentagon</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-radar__pentagon.svg" alt="Skill Radar — 5-axis pentagon" width="100%"/>
+</p>
+
+Five core skills, classic pentagon shape, breathing on.
+
+```yaml
+cards:
+  radar:
+    enabled: true
+    title: "Stack profile"
+    breathe: true
+    axes:
+      - { label: "Backend",   value: 90 }
+      - { label: "Frontend",  value: 65 }
+      - { label: "DevOps",    value: 75 }
+      - { label: "Mobile",    value: 35 }
+      - { label: "ML / Data", value: 55 }
+```
+
+</details>
+
+<details>
+<summary><em>6-axis hexagon, no breathing</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-radar__hexagon-static.svg" alt="Skill Radar — 6-axis hexagon, no breathing" width="100%"/>
+</p>
+
+Six axes for finer granularity; static for accessibility.
+
+```yaml
+cards:
+  radar:
+    enabled: true
+    title: "Skills"
+    breathe: false
+    color: "#22D3EE"
+    axes:
+      - { label: "Python",    value: 95 }
+      - { label: "Rust",      value: 70 }
+      - { label: "TS",        value: 80 }
+      - { label: "AWS",       value: 78 }
+      - { label: "Postgres",  value: 88 }
+      - { label: "Docker",    value: 82 }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Code Roadmap</strong> &nbsp;·&nbsp; <code>code-roadmap.svg</code> &nbsp;·&nbsp; 1 example</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/code-roadmap.svg" alt="Code Roadmap" width="100%"/>
+</p>
+
+_Metro/subway-style multi-line career map. Each line is a tech path; stations are milestones. Live-pulsing marker on the current station per line._
+
+<details>
+<summary><em>Career lines with year axis</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/code-roadmap__career-lines.svg" alt="Code Roadmap — Career lines with year axis" width="100%"/>
+</p>
+
+Three lines along a real year axis (2018-2026) with multiple stations and one LIVE marker.
+
+```yaml
+cards:
+  roadmap:
+    enabled: true
+    title: "Career roadmap"
+    lines:
+      - name: "Backend"
+        color: "#22D3EE"
+        stations:
+          - { label: "Django",    year: 2019 }
+          - { label: "FastAPI",   year: 2022 }
+          - { label: "Cortex",    year: 2026, is_current: true }
+      - name: "Frontend"
+        color: "#FF6B9D"
+        stations:
+          - { label: "Vue 2",     year: 2020 }
+          - { label: "React",     year: 2022 }
+          - { label: "Three.js",  year: 2025, is_current: true }
+      - name: "Cloud"
+        color: "#FFD23F"
+        stations:
+          - { label: "AWS basics", year: 2021 }
+          - { label: "K8s prod",   year: 2024, is_current: true }
+```
+
+</details>
+
+</details>
+
+<details>
 <summary><strong>Skill Badges</strong> &nbsp;·&nbsp; <code>badges.svg</code> &nbsp;·&nbsp; 5 examples</summary>
 
 <p align="center">
@@ -648,6 +1016,188 @@ cards:
       - { label: "Custom A", color: "#F90001", icon_svg: "M12 2L2 22h20L12 2z" }
       - { label: "Custom B", color: "#34D399", icon_svg: "M12 2a10 10 0 100 20 10 10 0 000-20z" }
       - { label: "Custom C", color: "#7C3AED", icon_svg: "M3 3h18v18H3V3z" }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Activity Heatmap</strong> &nbsp;·&nbsp; <code>activity-heatmap.svg</code> &nbsp;·&nbsp; 3 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/activity-heatmap.svg" alt="Activity Heatmap" width="100%"/>
+</p>
+
+_GitHub-style 7x52 contribution grid reimagined with neon glow + sequential cell stagger. 4 palettes (neon-green, neon-cyan, neon-rainbow, rose). Falls back to deterministic mock data when no real data is supplied._
+
+<details>
+<summary><em>Neon green (GitHub-classic with glow)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/activity-heatmap__neon-green.svg" alt="Activity Heatmap — Neon green (GitHub-classic with glow)" width="100%"/>
+</p>
+
+Familiar GitHub green but with a neon halo on bright cells. Mock data deterministically seeded by your name.
+
+```yaml
+cards:
+  heatmap:
+    enabled: true
+    palette: neon-green
+```
+
+</details>
+
+<details>
+<summary><em>Neon rainbow (jewel-tone)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/activity-heatmap__neon-rainbow.svg" alt="Activity Heatmap — Neon rainbow (jewel-tone)" width="100%"/>
+</p>
+
+Cortex jewel-tone palette: purple → pink → gold sweep across intensities.
+
+```yaml
+cards:
+  heatmap:
+    enabled: true
+    palette: neon-rainbow
+```
+
+</details>
+
+<details>
+<summary><em>Rose palette, no glow</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/activity-heatmap__rose-no-glow.svg" alt="Activity Heatmap — Rose palette, no glow" width="100%"/>
+</p>
+
+Subtler look matching the brain widget's body palette. Glow off for accessibility / reduced-motion preference.
+
+```yaml
+cards:
+  heatmap:
+    enabled: true
+    palette: rose
+    glow: false
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>3D Stat Cubes</strong> &nbsp;·&nbsp; <code>stat-cubes.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/stat-cubes.svg" alt="3D Stat Cubes" width="100%"/>
+</p>
+
+_Isometric blocks displaying numeric stats. Each cube has 3 visible faces (top + front + side); top face shows the stat label, front face shows the value. Subtle orbit animation per cube._
+
+<details>
+<summary><em>GitHub-flavored stats</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/stat-cubes__github-stats.svg" alt="3D Stat Cubes — GitHub-flavored stats" width="100%"/>
+</p>
+
+Five cubes for the most common GitHub stats. Auto-colored from the cortex jewel-tone palette.
+
+```yaml
+cards:
+  cubes:
+    enabled: true
+    cubes:
+      - { label: "PRs",     value: "1.2k" }
+      - { label: "Commits", value: "8.4k" }
+      - { label: "Stars",   value: "3.1k" }
+      - { label: "Repos",   value: "47" }
+      - { label: "Streak",  value: "112d" }
+```
+
+</details>
+
+<details>
+<summary><em>Skill stats, no orbit</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/stat-cubes__skills-static.svg" alt="3D Stat Cubes — Skill stats, no orbit" width="100%"/>
+</p>
+
+Show top languages with usage percent. Orbit off for stable composition.
+
+```yaml
+cards:
+  cubes:
+    enabled: true
+    orbit: false
+    cubes:
+      - { label: "Python",     value: "42%" }
+      - { label: "TypeScript", value: "28%" }
+      - { label: "Rust",       value: "18%" }
+      - { label: "Go",         value: "12%" }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Achievement Wall</strong> &nbsp;·&nbsp; <code>achievement-wall.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/achievement-wall.svg" alt="Achievement Wall" width="100%"/>
+</p>
+
+_Bevelled trophy cabinet with hexagonal mounted trophies. Each trophy shows a glyph (emoji or letter), label, and date sub-label. Subtle scale-breathing per trophy._
+
+<details>
+<summary><em>Career milestones</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/achievement-wall__milestones.svg" alt="Achievement Wall — Career milestones" width="100%"/>
+</p>
+
+Six trophies celebrating common dev milestones. Auto-colored from the jewel-tone palette.
+
+```yaml
+cards:
+  trophies:
+    enabled: true
+    title: "Achievements"
+    columns: 4
+    trophies:
+      - { label: "First PR",       date: "2018",     glyph: "★" }
+      - { label: "1k Commits",     date: "2020",     glyph: "🔥" }
+      - { label: "OSS Maintainer", date: "2022",     glyph: "Ⓜ" }
+      - { label: "AWS Certified",  date: "2023",     glyph: "☁" }
+      - { label: "Speaker",        date: "2024",     glyph: "🎤" }
+      - { label: "Cortex v1",      date: "2026-04",  glyph: "🧠" }
+```
+
+</details>
+
+<details>
+<summary><em>Compact 3-column layout</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/achievement-wall__compact-3col.svg" alt="Achievement Wall — Compact 3-column layout" width="100%"/>
+</p>
+
+Same trophies but tighter — fits as an inline section rather than a hero block.
+
+```yaml
+cards:
+  trophies:
+    enabled: true
+    columns: 3
+    trophies:
+      - { label: "Founder",   glyph: "F" }
+      - { label: "Shipper",   glyph: "S" }
+      - { label: "Mentor",    glyph: "M" }
 ```
 
 </details>
