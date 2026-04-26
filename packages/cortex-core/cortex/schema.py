@@ -267,6 +267,10 @@ class Markers(_Strict):
     city_grid: bool = True
     stl_links: bool = True
     gitcity_links: bool = True
+    # Showcase: auto-generated "What Cortex Generates" section listing every
+    # widget with preview + config snippet. Targets a CORTEX:SHOWCASE block
+    # in the user's README. Disable if your README documents widgets manually.
+    showcase: bool = True
     pagespeed: PageSpeedConfig = Field(default_factory=PageSpeedConfig)
     wakatime: WakaTimeConfig = Field(default_factory=WakaTimeConfig)
 

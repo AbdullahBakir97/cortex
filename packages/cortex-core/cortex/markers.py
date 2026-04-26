@@ -136,6 +136,118 @@ def quote_of_the_day(_config: Config, _client: GitHubClient) -> str:
     return f'<p align="center">\n  <i>"{quote}"</i><br/>\n  <sub>— <b>{author}</b></sub>\n</p>'
 
 
+# ── Showcase / config docs ──────────────────────────────────────────────
+# Each tuple: (filename in assets/, display name, brief description, yaml snippet)
+_WIDGET_CATALOG: list[tuple[str, str, str, str]] = [
+    (
+        "header-banner.svg",
+        "Header Banner",
+        "Animated wave-shape header with title + subtitle and drifting jewel-tone gradient.",
+        "cards:\n  header:\n    enabled: true\n    shape: wave           # wave | slice | rect\n    title: \"Your Name\"\n    subtitle: \"FULLSTACK · ENGINEER · BUILDER\"\n    height: 240\n    animation: drift     # drift | pulse | static\n    # colors: [\"#0E0820\", \"#7B5EAA\", \"#C95E8A\"]   # optional",
+    ),
+    (
+        "brain-anatomical.svg",
+        "Anatomical Brain",
+        "200+ Wikimedia anatomy paths recolored with rose-family gradient, masked aurora flow, DNA helixes, electric arcs.",
+        "brain:\n  enabled: true\n  palette: neon-rainbow\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    show_halos: true\n    wobble: true\n  regions:\n    frontal:    { domain: Backend,     tools: [Python, Django] }\n    parietal:   { domain: Architecture, tools: [Microservices] }\n    occipital:  { domain: Frontend,    tools: [Vue, Nuxt] }\n    temporal:   { domain: Data Layer,  tools: [PostgreSQL] }\n    cerebellum: { domain: DevOps,      tools: [Docker, AWS] }\n    brainstem:  { domain: AI & Data,   tools: [PyTorch] }",
+    ),
+    (
+        "tech-cards.svg",
+        "Tech Stack Cards",
+        "6 glassmorphism cards in a 3x2 grid — one per brain region, each with traveling edge glow + inner pulse.",
+        "cards:\n  tech_stack:\n    enabled: true\n    show_stats: true",
+    ),
+    (
+        "current-focus.svg",
+        "Current Focus Tiles",
+        "Netflix-style \"now playing\" tiles for active projects — status pill, live dot, traveling edge highlight.",
+        "cards:\n  current_focus:\n    enabled: true\n    tiles:\n      - project: \"Cortex\"\n        status: SHIPPING       # ACTIVE | SHIPPING | EXPLORING | MAINTAINING | BUILDING\n        accent: red             # red | orange | green | gold | cyan | purple\n        emoji: \"🧠\"\n        description: \"Animated neon-brain README generator.\"\n        tech: [Python, Pydantic, SVG]",
+    ),
+    (
+        "yearly-highlights.svg",
+        "Yearly Timeline",
+        "Horizontal career timeline — year markers + flowing gradient connector + tall cards with stats.",
+        "cards:\n  yearly_highlights:\n    enabled: true\n    start_year: 2023\n    years:\n      - year: 2024\n        label: \"FOUNDATION\"\n        headline: \"A Year of Shipping\"\n        bullets:\n          - \"Built foundations in Python, Django, Vue.\"\n          - \"Earned community recognition.\"\n        stats:\n          - { num: \"25+\", label: \"PROJECTS\" }",
+    ),
+    (
+        "about-typing.svg",
+        "About Typing",
+        "Cycling terminal-style typing animation — 30+ rotating commands with cursor glow.",
+        "typing:\n  about:\n    enabled: true\n    lines: 8                # how many lines to cycle through\n    include: [generic, personal]   # generic = universal dev; personal = your projects",
+    ),
+    (
+        "motto-typing.svg",
+        "Motto Typing",
+        "Philosophy quotes cycling — same engine as About but no cursor, longer hold time per line.",
+        "typing:\n  motto:\n    enabled: true\n    lines: 6",
+    ),
+    (
+        "github-icon.svg",
+        "GitHub Icon",
+        "Pulsing octocat disc with jewel-tone halo — drop-in profile avatar.",
+        "# (no config — rendered automatically from identity.github_user)",
+    ),
+    (
+        "animated-divider.svg",
+        "Animated Divider",
+        "Three layered sine waves drifting in counterpoint — used as section separator.",
+        "# (no config — rendered automatically; matches palette of header/footer)",
+    ),
+    (
+        "footer-banner.svg",
+        "Footer Banner",
+        "Inverted wave-shape footer mirroring the header — title, subtitle, drifting gradient.",
+        "cards:\n  footer:\n    enabled: true\n    shape: wave\n    title: \"@your-handle\"\n    subtitle: \"Built with Cortex\"\n    height: 180\n    animation: drift",
+    ),
+]
+
+
+def showcase(config: Config, _client: GitHubClient) -> str:
+    """Render the all-widgets showcase block — preview + config snippet for each.
+
+    Aimed at the cortex project's own marketing README (and any user who wants
+    a "what cortex can do" reference inline). Each widget gets a centered image
+    pulled from ``assets/<filename>`` plus a copy-pasteable yaml block showing
+    the minimum config needed to enable it. The catalog is sourced from
+    ``_WIDGET_CATALOG`` so adding a new widget == adding one tuple.
+    """
+    user = config.identity.github_user
+    # Where the rendered SVGs live in a user's profile repo. Default convention:
+    # they install the action, which writes to ``assets/`` of their <user>/<user>
+    # profile repo. README image src must be the raw URL.
+    base = f"https://raw.githubusercontent.com/{user}/{user}/main/assets"
+
+    parts: list[str] = ["## 🎨 What Cortex Generates", ""]
+    parts.append(
+        "Every image below is a live SVG generated from your `cortex.yml`. "
+        "Refreshed on every push by the GitHub Action. Configure each via the "
+        "snippet shown — full schema at `cortex.dev/schema/v1.json`."
+    )
+    parts.append("")
+
+    for fname, name, desc, yaml in _WIDGET_CATALOG:
+        parts.append(f"### {name}")
+        parts.append("")
+        parts.append('<p align="center">')
+        parts.append(f'  <img src="{base}/{fname}" alt="{name}" width="100%"/>')
+        parts.append("</p>")
+        parts.append("")
+        parts.append(f"_{desc}_")
+        parts.append("")
+        parts.append("```yaml")
+        parts.append(yaml)
+        parts.append("```")
+        parts.append("")
+
+    parts.append("---")
+    parts.append(
+        "_All animations use SMIL + CSS — no JS, no build step on your side. "
+        "Schema validated at build time; full reference at "
+        "[`packages/cortex-schema/schema.json`](packages/cortex-schema/schema.json)._"
+    )
+    return "\n".join(parts)
+
+
 # ── Activity / gitGraph (REST, public, token-optional) ──────────────────
 def _push_event(e: dict) -> str | None:
     commits = e["payload"].get("commits") or []
@@ -513,6 +625,7 @@ _SECTIONS: list[_Section] = [
     _Section("LATEST_RELEASES", "latest_releases", latest_releases, needs_token=True),
     _Section("HIGHLIGHTS_STATS", "highlights_stats", highlights_stats, needs_token=True),
     _Section("PAGESPEED", "pagespeed", pagespeed, needs_token=False),
+    _Section("SHOWCASE", "showcase", showcase, needs_token=False),
 ]
 
 

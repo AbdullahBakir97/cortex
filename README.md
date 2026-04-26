@@ -3,11 +3,11 @@
      The entire job: convince them in 10 seconds, install in 30. -->
 
 <!-- ════════════════════════════════════════════════════════════════════════ -->
-<!-- 🎬 ANIMATED HERO BANNER — capsule-render with brain-themed gradient     -->
+<!-- 🎬 ANIMATED HERO BANNER — Cortex's own generated banner (no external dep) -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
- 
+
 <a href="https://cortex.dev">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:7C3AED,100:F90001&height=240&section=header&text=Cortex&fontSize=110&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Turn%20your%20GitHub%20into%20a%20cinematic%20neon%20brain%20skill%20atlas&descSize=20&descAlignY=58&descColor=F0F0F0" width="100%" alt="Cortex — turn your GitHub into a cinematic neon brain skill atlas"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/header-banner.svg" width="100%" alt="Cortex — turn your GitHub into a cinematic neon brain skill atlas"/>
 </a>
 
 <p align="center">
@@ -116,6 +116,204 @@ There are dozens of profile README generators. Cortex is the only one that gives
 </details>
 
 > **Want to see other tiers?** [`examples/standard.yml`](./examples/standard.yml) is the default for full-stack devs (~60 lines). [`examples/minimal.yml`](./examples/minimal.yml) is the 10-line starting point. Both render to the same widget set above with smaller payloads.
+
+---
+
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+<!-- 🎨 AUTO-GENERATED WIDGET CATALOG — populated by `cortex update-readme`.   -->
+<!-- Each push refreshes this block with previews of every Cortex widget plus -->
+<!-- the cortex.yml snippet to enable + customize it. Set                    -->
+<!-- `auto_update.markers.showcase: false` to suppress.                       -->
+<!-- ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- CORTEX:SHOWCASE:START -->
+## 🎨 What Cortex Generates
+
+Every image below is a live SVG generated from your `cortex.yml`. Refreshed on every push by the GitHub Action. Configure each via the snippet shown — full schema at `cortex.dev/schema/v1.json`.
+
+### Header Banner
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/header-banner.svg" alt="Header Banner" width="100%"/>
+</p>
+
+_Animated wave-shape header with title + subtitle and drifting jewel-tone gradient._
+
+```yaml
+cards:
+  header:
+    enabled: true
+    shape: wave           # wave | slice | rect
+    title: "Your Name"
+    subtitle: "FULLSTACK · ENGINEER · BUILDER"
+    height: 240
+    animation: drift     # drift | pulse | static
+    # colors: ["#0E0820", "#7B5EAA", "#C95E8A"]   # optional
+```
+
+### Anatomical Brain
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/brain-anatomical.svg" alt="Anatomical Brain" width="100%"/>
+</p>
+
+_200+ Wikimedia anatomy paths recolored with rose-family gradient, masked aurora flow, DNA helixes, electric arcs._
+
+```yaml
+brain:
+  enabled: true
+  palette: neon-rainbow
+  atmosphere:
+    show_aura: true
+    show_particles: true
+    show_halos: true
+    wobble: true
+  regions:
+    frontal:    { domain: Backend,     tools: [Python, Django] }
+    parietal:   { domain: Architecture, tools: [Microservices] }
+    occipital:  { domain: Frontend,    tools: [Vue, Nuxt] }
+    temporal:   { domain: Data Layer,  tools: [PostgreSQL] }
+    cerebellum: { domain: DevOps,      tools: [Docker, AWS] }
+    brainstem:  { domain: AI & Data,   tools: [PyTorch] }
+```
+
+### Tech Stack Cards
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/tech-cards.svg" alt="Tech Stack Cards" width="100%"/>
+</p>
+
+_6 glassmorphism cards in a 3x2 grid — one per brain region, each with traveling edge glow + inner pulse._
+
+```yaml
+cards:
+  tech_stack:
+    enabled: true
+    show_stats: true
+```
+
+### Current Focus Tiles
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/current-focus.svg" alt="Current Focus Tiles" width="100%"/>
+</p>
+
+_Netflix-style "now playing" tiles for active projects — status pill, live dot, traveling edge highlight._
+
+```yaml
+cards:
+  current_focus:
+    enabled: true
+    tiles:
+      - project: "Cortex"
+        status: SHIPPING       # ACTIVE | SHIPPING | EXPLORING | MAINTAINING | BUILDING
+        accent: red             # red | orange | green | gold | cyan | purple
+        emoji: "🧠"
+        description: "Animated neon-brain README generator."
+        tech: [Python, Pydantic, SVG]
+```
+
+### Yearly Timeline
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/yearly-highlights.svg" alt="Yearly Timeline" width="100%"/>
+</p>
+
+_Horizontal career timeline — year markers + flowing gradient connector + tall cards with stats._
+
+```yaml
+cards:
+  yearly_highlights:
+    enabled: true
+    start_year: 2023
+    years:
+      - year: 2024
+        label: "FOUNDATION"
+        headline: "A Year of Shipping"
+        bullets:
+          - "Built foundations in Python, Django, Vue."
+          - "Earned community recognition."
+        stats:
+          - { num: "25+", label: "PROJECTS" }
+```
+
+### About Typing
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/about-typing.svg" alt="About Typing" width="100%"/>
+</p>
+
+_Cycling terminal-style typing animation — 30+ rotating commands with cursor glow._
+
+```yaml
+typing:
+  about:
+    enabled: true
+    lines: 8                # how many lines to cycle through
+    include: [generic, personal]   # generic = universal dev; personal = your projects
+```
+
+### Motto Typing
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/motto-typing.svg" alt="Motto Typing" width="100%"/>
+</p>
+
+_Philosophy quotes cycling — same engine as About but no cursor, longer hold time per line._
+
+```yaml
+typing:
+  motto:
+    enabled: true
+    lines: 6
+```
+
+### GitHub Icon
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/github-icon.svg" alt="GitHub Icon" width="100%"/>
+</p>
+
+_Pulsing octocat disc with jewel-tone halo — drop-in profile avatar._
+
+```yaml
+# (no config — rendered automatically from identity.github_user)
+```
+
+### Animated Divider
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/animated-divider.svg" alt="Animated Divider" width="100%"/>
+</p>
+
+_Three layered sine waves drifting in counterpoint — used as section separator._
+
+```yaml
+# (no config — rendered automatically; matches palette of header/footer)
+```
+
+### Footer Banner
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/footer-banner.svg" alt="Footer Banner" width="100%"/>
+</p>
+
+_Inverted wave-shape footer mirroring the header — title, subtitle, drifting gradient._
+
+```yaml
+cards:
+  footer:
+    enabled: true
+    shape: wave
+    title: "@your-handle"
+    subtitle: "Built with Cortex"
+    height: 180
+    animation: drift
+```
+
+---
+_All animations use SMIL + CSS — no JS, no build step on your side. Schema validated at build time; full reference at [`packages/cortex-schema/schema.json`](packages/cortex-schema/schema.json)._
+<!-- CORTEX:SHOWCASE:END -->
 
 ---
 
@@ -254,5 +452,5 @@ Built something cool with Cortex? **[Open a Showcase issue](https://github.com/A
 </p>
 
 <a href="#-cortex">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:F90001,50:7C3AED,100:0D1117&height=140&section=footer&text=Build%20your%20brain&fontSize=32&fontColor=ffffff&animation=twinkling&fontAlignY=72&reversal=true" width="100%" alt="Build your brain"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/footer-banner.svg" width="100%" alt="Built with Cortex"/>
 </a>

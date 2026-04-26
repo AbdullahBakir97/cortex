@@ -146,6 +146,24 @@ cards:
           - { num: "v1", label: "PYDEV PLATFORM" }
           - { num: "9+", label: "NEW REPOS" }
 
+  # Animated banners — capsule-render replacement. Renders as header-banner.svg
+  # / footer-banner.svg. shape: wave|slice|rect; animation: drift|pulse|static.
+  # colors: optional list of hex stops (defaults to jewel-tone palette).
+  header:
+    enabled:   true
+    shape:     "wave"
+    title:     "Cortex"
+    subtitle:  "Turn your GitHub into a cinematic neon brain skill atlas"
+    height:    240
+    animation: "drift"
+  footer:
+    enabled:   true
+    shape:     "wave"
+    title:     "@AbdullahBakir97"
+    subtitle:  "Built with Cortex · cortex.dev"
+    height:    180
+    animation: "drift"
+
 contributions:
   snake:      true
   skylines:   { years: [2023, 2024, 2025, 2026], stl: true }
