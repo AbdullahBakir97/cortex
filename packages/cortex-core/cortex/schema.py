@@ -369,6 +369,10 @@ class HeatmapConfig(_Strict):
     """Activity Heatmap — 7x52 contribution grid with neon glow."""
 
     enabled: bool = False
+    # When true, ignore ``data`` and pull the real contribution calendar from
+    # GitHub GraphQL. Requires GH_TOKEN. Falls back to deterministic mock if
+    # the token is missing or the API fails.
+    from_github: bool = False
     weeks: int = 52
     # Optional intensity matrix (rows=days 0..6, cols=weeks). Empty → mock.
     data: list[list[int]] = Field(default_factory=list)
@@ -387,6 +391,10 @@ class CubesConfig(_Strict):
     """3D Stat Cubes — isometric blocks orbiting slowly."""
 
     enabled: bool = False
+    # When true, ignore ``cubes`` and auto-populate from the GitHub GraphQL
+    # API (PRs / commits / stars / repos / issues). Requires GH_TOKEN. Falls
+    # back to placeholder dashes if the token is missing or the API fails.
+    from_github: bool = False
     cubes: list[StatCube] = Field(default_factory=list)
     orbit: bool = True
     height: int = 280

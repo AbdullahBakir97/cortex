@@ -378,12 +378,13 @@
       "additionalProperties": false,
       "description": "Activity Heatmap — 7x52 contribution grid with neon glow.",
       "properties": {
-        "enabled": { "type": "boolean", "default": false },
-        "weeks":   { "type": "integer", "minimum": 12, "maximum": 104, "default": 52 },
-        "data":    { "type": "array", "items": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 4 } }, "default": [] },
-        "palette": { "type": "string", "enum": ["neon-green", "neon-cyan", "neon-rainbow", "rose"], "default": "neon-green" },
-        "glow":    { "type": "boolean", "default": true },
-        "height":  { "type": "integer", "minimum": 140, "maximum": 400, "default": 200 }
+        "enabled":     { "type": "boolean", "default": false },
+        "from_github": { "type": "boolean", "default": false, "description": "Pull real contribution calendar from GitHub (requires GH_TOKEN). Falls back to mock if unavailable." },
+        "weeks":       { "type": "integer", "minimum": 12, "maximum": 104, "default": 52 },
+        "data":        { "type": "array", "items": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 4 } }, "default": [] },
+        "palette":     { "type": "string", "enum": ["neon-green", "neon-cyan", "neon-rainbow", "rose"], "default": "neon-green" },
+        "glow":        { "type": "boolean", "default": true },
+        "height":      { "type": "integer", "minimum": 140, "maximum": 400, "default": 200 }
       }
     },
 
@@ -392,10 +393,11 @@
       "additionalProperties": false,
       "description": "3D Stat Cubes — isometric blocks orbiting slowly.",
       "properties": {
-        "enabled": { "type": "boolean", "default": false },
-        "cubes":   { "type": "array", "items": { "$ref": "#/definitions/statCube" }, "default": [] },
-        "orbit":   { "type": "boolean", "default": true },
-        "height":  { "type": "integer", "minimum": 200, "maximum": 600, "default": 280 }
+        "enabled":     { "type": "boolean", "default": false },
+        "from_github": { "type": "boolean", "default": false, "description": "Auto-populate cubes from the user's GitHub stats (requires GH_TOKEN). Overrides ``cubes``." },
+        "cubes":       { "type": "array", "items": { "$ref": "#/definitions/statCube" }, "default": [] },
+        "orbit":       { "type": "boolean", "default": true },
+        "height":      { "type": "integer", "minimum": 200, "maximum": 600, "default": 280 }
       }
     },
 
