@@ -661,6 +661,35 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         "url(#brainGrad_unified)", "url(#brainGrad_specular)"
     )
 
+    # 16 ambient particle positions (must match the render below exactly).
+    particle_positions: list[tuple[int, int]] = [
+        (120, 180), (260, 540), (380, 120), (420, 760),
+        (560, 380), (700, 220), (780, 700), (900, 160),
+        (980, 520), (1080, 340), (1180, 780), (1260, 240),
+        (160, 780), (340, 660), (640, 80),  (1320, 500),
+    ]
+
+    # Constellation lines: connect particles within 220px. Indices into
+    # particle_positions. Deterministic by definition since positions are fixed.
+    constellation_pairs: list[tuple[int, int]] = []
+    threshold_sq = 220 * 220
+    for ip in range(len(particle_positions)):
+        for jp in range(ip + 1, len(particle_positions)):
+            dxp = particle_positions[ip][0] - particle_positions[jp][0]
+            dyp = particle_positions[ip][1] - particle_positions[jp][1]
+            if dxp * dxp + dyp * dyp <= threshold_sq:
+                constellation_pairs.append((ip, jp))
+
+    constellation_lines: list[str] = []
+    for n, (ip, jp) in enumerate(constellation_pairs):
+        x1c, y1c = particle_positions[ip]
+        x2c, y2c = particle_positions[jp]
+        constellation_lines.append(
+            f'<line x1="{x1c}" y1="{y1c}" x2="{x2c}" y2="{y2c}" '
+            f'stroke="{p_accent_b}" stroke-width="0.8" stroke-opacity="0" '
+            f'class="constellation-line cl{n + 1}"/>'
+        )
+
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -863,6 +892,21 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .p11{{animation-delay:0.5s;animation-duration:19s}} .p12{{animation-delay:8s;animation-duration:13s}}
       .p13{{animation-delay:1s;animation-duration:15s}} .p14{{animation-delay:2.5s;animation-duration:18s}}
       .p15{{animation-delay:9s;animation-duration:12s}} .p16{{animation-delay:4s;animation-duration:16s}}
+      .constellation-line {{
+        animation: clFade 8s ease-in-out infinite;
+      }}
+      @keyframes clFade {{
+        0%, 100% {{ stroke-opacity: 0; }}
+        50%      {{ stroke-opacity: 0.30; }}
+      }}
+      .cl1{{animation-delay:0s}}    .cl2{{animation-delay:0.6s}}
+      .cl3{{animation-delay:1.2s}}  .cl4{{animation-delay:1.8s}}
+      .cl5{{animation-delay:2.4s}}  .cl6{{animation-delay:3.0s}}
+      .cl7{{animation-delay:3.6s}}  .cl8{{animation-delay:4.2s}}
+      .cl9{{animation-delay:4.8s}}  .cl10{{animation-delay:5.4s}}
+      .cl11{{animation-delay:6.0s}} .cl12{{animation-delay:6.6s}}
+      .cl13{{animation-delay:7.2s}} .cl14{{animation-delay:7.8s}}
+      .cl15{{animation-delay:0.3s}} .cl16{{animation-delay:1.5s}}
     ]]></style>
   </defs>
 
@@ -885,6 +929,12 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
                         values="0,0; 160,-80; 0,0" dur="31s" repeatCount="indefinite"/>
     </rect>
   </g>''') if atm.show_aura else ""}
+
+  {('''<!-- Constellation lines: thin links between nearby particles, fading in/out
+       on staggered timers. Reads as a neural-web behind the brain. -->
+  <g class="constellation">
+  ''' + chr(10).join("    " + ln for ln in constellation_lines) + '''
+  </g>''') if atm.show_particles else ""}
 
   {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
   <g fill="''' + p_accent_b + '''">
