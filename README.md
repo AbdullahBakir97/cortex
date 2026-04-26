@@ -185,6 +185,26 @@ cards:
   <br/><sub><b>🏆 achievement-wall</b> — trophy cabinet with hex-mounted milestones</sub>
 </td>
 <td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/code-dna.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/code-dna.svg" alt="Twin sinusoidal strands with colored base-pair rungs labelled by top languages" width="100%"/></a>
+  <br/><sub><b>🧬 code-dna</b> — twin helix strands, colored language base-pairs</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/skill-globe.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-globe.svg" alt="Stylized 2D globe with neon contribution pins at world locations" width="100%"/></a>
+  <br/><sub><b>🌍 skill-globe</b> — lat/lon grid + neon pins, hides back-side pins</sub>
+</td>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/particle-cloud.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/particle-cloud.svg" alt="Tag cloud of skills orbiting a glowing central core" width="100%"/></a>
+  <br/><sub><b>✨ particle-cloud</b> — labelled particles orbiting a glowing core</sub>
+</td>
+</tr>
+<tr>
+<td width="50%" align="center" valign="top">
+  <a href="./examples/rendered/extreme/now-playing.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/now-playing.svg" alt="Spotify-style 'currently coding' card with album art, waveform, and progress bar" width="100%"/></a>
+  <br/><sub><b>🎵 now-playing</b> — Spotify-style "currently coding in" card</sub>
+</td>
+<td width="50%" align="center" valign="top">
   <a href="./examples/rendered/extreme/badges.svg"><img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/badges.svg" alt="Row of skill badges" width="100%"/></a>
   <br/><sub><b>🎖️ badges</b> — already shown above (4 shapes × 3 layouts × 4 animations)</sub>
 </td>
@@ -253,6 +273,39 @@ cards:
       - { label: "First PR",      date: "2018", glyph: "★" }
       - { label: "1k Commits",    date: "2020", glyph: "🔥" }
       - { label: "AWS Certified", date: "2023", glyph: "☁" }
+
+  dna:                                            # twin helix with language base-pairs
+    enabled: true
+    title: "Code DNA"
+    languages: ["Python", "TypeScript", "Rust", "Go", "React", "SQL", "Bash", "Docker"]
+    # colors: optional list, paired by index — defaults to jewel-tone palette
+
+  globe:                                          # 2D globe + neon pins
+    enabled: true
+    rotate: true                                  # set false for reduced-motion
+    pins:
+      - { label: "Berlin",   lon: 13.4,  lat: 52.5 }
+      - { label: "New York", lon: -74.0, lat: 40.7 }
+      - { label: "Tokyo",    lon: 139.7, lat: 35.7 }
+      # Pins on the back hemisphere (lon outside ±90) auto-hide.
+
+  particles:                                      # drifting tag cloud
+    enabled: true
+    title: "Skill cloud"
+    items:
+      - { label: "Python",   weight: 2.6 }       # heavier = closer to center, bigger
+      - { label: "Rust",     weight: 2.0 }
+      - { label: "AWS",      weight: 1.6 }
+      - { label: "Three.js", weight: 1.2 }
+
+  now_playing:                                    # Spotify-style activity card
+    enabled: true
+    activity: "Coding"                            # the pill: CODING / DEBUGGING / BUILDING…
+    language: "Python"                            # the "track title"
+    project:  "Cortex v0.4"                       # the "artist line"
+    progress: 0.62                                # 0.0 - 1.0 fill
+    elapsed:  "1:24"
+    duration: "—"
 ```
 
 </details>
@@ -1139,6 +1192,209 @@ cards:
       - { label: "TypeScript", value: "28%" }
       - { label: "Rust",       value: "18%" }
       - { label: "Go",         value: "12%" }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Code DNA Helix</strong> &nbsp;·&nbsp; <code>code-dna.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/code-dna.svg" alt="Code DNA Helix" width="100%"/>
+</p>
+
+_Twin spiral strands with colored base-pair rungs labelled by your top languages. Sinusoidal strands gradient across the canvas, helix drifts horizontally for a 3D feel._
+
+<details>
+<summary><em>8 top languages, default palette</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/code-dna__languages-only.svg" alt="Code DNA Helix — 8 top languages, default palette" width="100%"/>
+</p>
+
+Eight languages encoded as colored rungs between the twin strands. Auto-colored from the cortex jewel-tone palette.
+
+```yaml
+cards:
+  dna:
+    enabled: true
+    title: "Code DNA"
+    languages: ["Python","TypeScript","Rust","Go","React","SQL","Bash","Docker"]
+```
+
+</details>
+
+<details>
+<summary><em>Custom per-language colors</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/code-dna__custom-colors.svg" alt="Code DNA Helix — Custom per-language colors" width="100%"/>
+</p>
+
+Override palette with explicit brand colors paired by index.
+
+```yaml
+cards:
+  dna:
+    enabled: true
+    languages: ["Python","Rust","TypeScript"]
+    colors:    ["#3776AB","#CE422B","#3178C6"]
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Skill Globe</strong> &nbsp;·&nbsp; <code>skill-globe.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/skill-globe.svg" alt="Skill Globe" width="100%"/>
+</p>
+
+_Stylized 2D globe (latitude/longitude grid with rotation) + named neon pins at user-supplied coordinates. Each pin has a pulsing ring + glowing dot + label._
+
+<details>
+<summary><em>Locations around the world</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-globe__world-tour.svg" alt="Skill Globe — Locations around the world" width="100%"/>
+</p>
+
+Pins at major tech hubs.
+
+```yaml
+cards:
+  globe:
+    enabled: true
+    title: "Where I work from"
+    pins:
+      - { label: "Berlin",        lon: 13.4,   lat: 52.5 }
+      - { label: "Lisbon",        lon: -9.1,   lat: 38.7 }
+      - { label: "London",        lon: -0.13,  lat: 51.5 }
+      - { label: "New York",      lon: -74.0,  lat: 40.7 }
+      - { label: "San Francisco", lon: -122.4, lat: 37.8 }
+```
+
+</details>
+
+<details>
+<summary><em>Globe without rotation</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/skill-globe__static-grid.svg" alt="Skill Globe — Globe without rotation" width="100%"/>
+</p>
+
+Static for accessibility / reduced motion.
+
+```yaml
+cards:
+  globe:
+    enabled: true
+    rotate: false
+    pins:
+      - { label: "HQ",     lon: 0,    lat: 0 }
+      - { label: "Remote", lon: 30,   lat: 30 }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Particle Cloud</strong> &nbsp;·&nbsp; <code>particle-cloud.svg</code> &nbsp;·&nbsp; 1 example</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/particle-cloud.svg" alt="Particle Cloud" width="100%"/>
+</p>
+
+_Tag cloud of skills as particles orbiting a glowing core. Each particle drifts on its own elliptical orbit; weight controls font size and ring radius (heavier = closer + bigger)._
+
+<details>
+<summary><em>Tech skill cloud</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/particle-cloud__tech-cloud.svg" alt="Particle Cloud — Tech skill cloud" width="100%"/>
+</p>
+
+12 skills with mixed weights, auto-colored.
+
+```yaml
+cards:
+  particles:
+    enabled: true
+    title: "Skill cloud"
+    items:
+      - { label: "Python",     weight: 2.6 }
+      - { label: "Rust",       weight: 2.0 }
+      - { label: "TypeScript", weight: 2.4 }
+      - { label: "React",      weight: 1.8 }
+      - { label: "AWS",        weight: 1.6 }
+      - { label: "Docker",     weight: 1.4 }
+      - { label: "Postgres",   weight: 1.4 }
+      - { label: "Redis",      weight: 1.0 }
+      - { label: "Kafka",      weight: 0.8 }
+      - { label: "Three.js",   weight: 1.2 }
+      - { label: "FastAPI",    weight: 1.6 }
+      - { label: "Pydantic",   weight: 1.2 }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Now Playing</strong> &nbsp;·&nbsp; <code>now-playing.svg</code> &nbsp;·&nbsp; 2 examples</summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/now-playing.svg" alt="Now Playing" width="100%"/>
+</p>
+
+_Spotify-style 'currently coding in' card. Activity pill, language as track title, project as artist line, animated 32-bar waveform, progress bar with elapsed/duration._
+
+<details>
+<summary><em>Currently coding (default)</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/now-playing__default.svg" alt="Now Playing — Currently coding (default)" width="100%"/>
+</p>
+
+Generic 'Coding · Python · MyProject' with mid progress.
+
+```yaml
+cards:
+  now_playing:
+    enabled: true
+    activity: "Coding"
+    language: "Python"
+    project:  "Cortex v0.4"
+    progress: 0.62
+    elapsed:  "1:24"
+```
+
+</details>
+
+<details>
+<summary><em>Debugging Rust</em></summary>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/variants/now-playing__debugging-rust.svg" alt="Now Playing — Debugging Rust" width="100%"/>
+</p>
+
+Different activity + language combo with custom accent color.
+
+```yaml
+cards:
+  now_playing:
+    enabled: true
+    activity: "Debugging"
+    language: "Rust"
+    project:  "tokio race condition"
+    progress: 0.34
+    elapsed:  "0:45"
+    color:    "#CE422B"
 ```
 
 </details>
