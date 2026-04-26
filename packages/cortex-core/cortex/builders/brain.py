@@ -525,8 +525,8 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         # Soft falloff: full color at center, fading to transparent at edge.
         region_grads.append(
             f'<radialGradient id="rgrad_{key}" cx="50%" cy="50%" r="50%">'
-            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.55"/>'
-            f'<stop offset="55%"  stop-color="{color}" stop-opacity="0.18"/>'
+            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.85"/>'
+            f'<stop offset="55%"  stop-color="{color}" stop-opacity="0.30"/>'
             f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
             f"</radialGradient>"
         )
@@ -586,7 +586,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         # card's color. With mix-blend-mode: screen this tints the brain
         # anatomy underneath without recoloring the source paths.
         region_glows.append(
-            f'<circle cx="{bx}" cy="{by}" r="200" fill="url(#rgrad_{key})" '
+            f'<circle cx="{bx}" cy="{by}" r="260" fill="url(#rgrad_{key})" '
             f'class="region-glow region-pulse rg{i + 1}"/>'
         )
         # Halo ring — wobbles with brain (r=20 renders as ~14 after 0.7 scale).
@@ -928,14 +928,14 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .ce5 {{ animation-delay: 2.8s; }}
       .ce6 {{ animation-delay: 3.5s; }}
       .region-glow {{ mix-blend-mode: screen; }}
-      .region-pulse {{ animation: rpulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
+      .region-pulse {{ animation: rpulse 8s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
       @keyframes rpulse {{
-        0%, 100% {{ opacity: 0.65; transform: scale(1); }}
-        50%      {{ opacity: 1.0;  transform: scale(1.10); }}
+        0%, 100% {{ opacity: 0.55; transform: scale(0.92); }}
+        50%      {{ opacity: 1.0;  transform: scale(1.18); }}
       }}
-      .rg1{{animation-delay:0s}}    .rg2{{animation-delay:0.6s}}
-      .rg3{{animation-delay:1.2s}}  .rg4{{animation-delay:1.8s}}
-      .rg5{{animation-delay:2.4s}}  .rg6{{animation-delay:3.0s}}
+      .rg1{{animation-delay:0s}}    .rg2{{animation-delay:1.3s}}
+      .rg3{{animation-delay:2.6s}}  .rg4{{animation-delay:3.9s}}
+      .rg5{{animation-delay:5.2s}}  .rg6{{animation-delay:6.5s}}
       /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
