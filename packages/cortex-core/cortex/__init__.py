@@ -30,7 +30,7 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
@@ -41,8 +41,9 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
       "disabled"     — config has the widget disabled
       "not-implemented" — builder ships in a later version
 
-    v0.1 only ships the ``brain`` builder. The rest are stubs that report
-    "not-implemented" so users see a clear progress signal.
+    v0.2 ships the full core widget set: brain, tech_cards, timeline, focus,
+    typing-about, typing-motto. Future widgets that aren't on disk yet still
+    report "not-implemented" so users see a clear progress signal.
     """
     import importlib
     import os

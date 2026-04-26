@@ -19,6 +19,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `version: 1` field; mismatches raise a helpful migration error rather than a
   cryptic crash.
 
+## [0.2.0] — 2026-04-26 (alpha — full core widget set)
+
+### Added
+- **`cortex.builders.typing`** — about & motto cycling SVGs
+  (30 generic + 20 personal lines each, with `{github_user}` / `{primary_project}`
+  / `{location}` placeholder substitution; SMIL keyTimes math: 12% type / 62% hold
+  / 10% erase / 16% off per line).
+- **`cortex.builders.tech_cards`** — 3×2 glassmorphism skill cards driven by
+  `brain.regions`. Domain-keyed presets fill any blank visual fields so the
+  simple case still looks polished. Mastery levels (EXPERT/ADVANCED/PROFICIENT/
+  GROWING) drive proficiency-bar widths.
+- **`cortex.builders.timeline`** — auto-extending career timeline with N year
+  cards, breathing borders, and a pulsing LIVE badge on the current calendar
+  year (auto-detected from `datetime.date.today()` — no Jan 1 config edit
+  needed).
+- **`cortex.builders.focus`** — Netflix-style "now playing" tile dashboard
+  with status pills, accent stripes, descriptions (greedy word-wrapped to
+  ≤3 lines), and tech pills (auto-sized by label width).
+
+### Schema additions
+- `BrainRegion` gains optional `emoji`, `caption`, `tagline`, `mastery`, `stats`.
+- `cards.yearly_highlights` gains optional `years: list[YearEntry]` (max 6).
+- `FocusTile` gains optional `emoji`, `description`, `tech` (max 4 pills).
+- `examples/extreme.yml` extended with rich data demonstrating every new field.
+
+### Changed
+- `cortex.builders.brain` no longer carries the v0.1 stub-mate label.
+- CLI: "(not implemented in v0.1)" → "(builder not on disk yet)" — the version
+  pin was misleading once we shipped builders incrementally.
+
+### Verified
+- All 6 widgets emit valid XML end-to-end via `cortex build` against
+  `examples/extreme.yml` (~70 ms total wall clock).
+
 ## [0.1.0] — TBD (initial alpha, not yet released)
 
 ### Added
@@ -41,5 +75,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `templates/` directory with archetype starter packs.
 - Brain anatomy attribution at `LICENSES/BRAIN-ANATOMY-CC-BY-SA-3.0.txt`.
 
-[Unreleased]: https://github.com/AbdullahBakir97/cortex/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/AbdullahBakir97/cortex/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/AbdullahBakir97/cortex/releases/tag/v0.2.0
 [0.1.0]: https://github.com/AbdullahBakir97/cortex/releases/tag/v0.1.0

@@ -31,7 +31,7 @@ def run(*, config: Path, output_dir: Path) -> None:
             size_kb = path.stat().st_size / 1024
             click.echo(click.style(f"     [OK]   {svg_name:30s}  {size_kb:6.1f} KB", fg="green"))
     for svg_name in not_impl:
-        click.echo(click.style(f"     [TODO] {svg_name:30s}  (not implemented in v0.1)", fg="yellow"))
+        click.echo(click.style(f"     [TODO] {svg_name:30s}  (builder not on disk yet)", fg="yellow"))
     for svg_name in disabled:
         click.echo(click.style(f"     [skip] {svg_name:30s}  (disabled in config)", fg="white"))
 
