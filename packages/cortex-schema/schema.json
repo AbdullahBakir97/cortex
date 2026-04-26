@@ -241,6 +241,7 @@
         },
         "header": { "$ref": "#/definitions/banner" },
         "footer": { "$ref": "#/definitions/banner" },
+        "badges": { "$ref": "#/definitions/badges" },
         "showcase": {
           "type": "object",
           "additionalProperties": false,
@@ -249,6 +250,34 @@
             "base_url": { "type": "string", "default": "", "description": "Override the URL prefix for variant image src. Empty = default <user>/<user>/main/assets path." }
           }
         }
+      }
+    },
+
+    "badges": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Compact skill / tech / achievement badges. 4 shapes x 3 layouts x 4 animations.",
+      "properties": {
+        "enabled":   { "type": "boolean", "default": false },
+        "shape":     { "type": "string", "enum": ["pill", "hex", "shield", "circle"], "default": "pill" },
+        "layout":    { "type": "string", "enum": ["row", "grid", "marquee"], "default": "row" },
+        "columns":   { "type": "integer", "minimum": 1, "maximum": 16, "default": 6 },
+        "animation": { "type": "string", "enum": ["stagger", "shimmer", "pulse", "static"], "default": "stagger" },
+        "items":     { "type": "array", "items": { "$ref": "#/definitions/badgeItem" }, "maxItems": 30, "default": [] }
+      }
+    },
+
+    "badgeItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label":    { "type": "string", "description": "Visible badge label (e.g. 'Python', 'AWS Pro')." },
+        "icon":     { "type": "string", "default": "", "description": "Built-in icon slug (e.g. python, rust, aws). Resolves to monogram + brand color." },
+        "icon_svg": { "type": "string", "default": "", "description": "Raw SVG path d-string normalized to a 24-unit canvas. Overrides built-in monogram." },
+        "color":    { "type": "string", "default": "", "description": "Override badge background color (hex). Empty = use brand color from icon slug or jewel-tone violet fallback." },
+        "value":    { "type": "string", "default": "", "description": "Optional sublabel (e.g. 'Senior', '85%', 'Certified'). Shown on pill/hex/shield, hidden on circle." },
+        "href":     { "type": "string", "default": "", "description": "Optional URL — wraps the badge in an anchor." }
       }
     },
 

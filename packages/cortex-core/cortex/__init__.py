@@ -67,6 +67,7 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
         (config.cards.tech_stack.enabled, "tech_cards", "build", "tech-cards.svg"),
         (config.cards.yearly_highlights.enabled, "timeline", "build", "yearly-highlights.svg"),
         (config.cards.current_focus.enabled, "focus", "build", "current-focus.svg"),
+        (config.cards.badges.enabled, "badges", "build", "badges.svg"),
         (config.typing.about.enabled, "typing", "build_about", "about-typing.svg"),
         (config.typing.motto.enabled, "typing", "build_motto", "motto-typing.svg"),
         (True, "github_icon", "build", "github-icon.svg"),

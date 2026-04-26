@@ -163,6 +163,26 @@ cards:
     subtitle:  "Built with Cortex · cortex.dev"
     height:    180
     animation: "drift"
+  # Skill badges — compact tech / skill strip. Configure shape (pill/hex/shield/
+  # circle), layout (row/grid/marquee), and animation (stagger/shimmer/pulse/static).
+  # Each item picks built-in monogram + brand color via `icon: <slug>`, or override
+  # everything with explicit `color` / `icon_svg`.
+  badges:
+    enabled: true
+    shape: pill
+    layout: row
+    animation: stagger
+    items:
+      - { icon: python,     label: "Python",      value: "Senior" }
+      - { icon: rust,       label: "Rust",        value: "85%" }
+      - { icon: typescript, label: "TypeScript",  value: "Senior" }
+      - { icon: react,      label: "React",       value: "Mid" }
+      - { icon: nodejs,     label: "Node.js",     value: "Daily" }
+      - { icon: aws,        label: "AWS",         value: "Certified" }
+      - { icon: docker,     label: "Docker",      value: "Daily" }
+      - { icon: kubernetes, label: "Kubernetes",  value: "CKA" }
+      - { icon: postgres,   label: "PostgreSQL",  value: "Senior" }
+      - { icon: github,     label: "GitHub",      value: "Pro" }
   # Showcase block URL override — cortex's own marketing README points at the
   # example renders inside this repo rather than a user profile repo.
   showcase:

@@ -276,6 +276,45 @@ _WIDGET_CATALOG: list[_WidgetEntry] = [
         ],
     ),
     _WidgetEntry(
+        filename="badges.svg",
+        builder_module="badges",
+        builder_func="build",
+        name="Skill Badges",
+        summary="Compact skill / tech / achievement badges. 4 shapes (pill, hex, shield, circle) x 3 layouts (row, grid, marquee) x 4 animations (stagger, shimmer, pulse, static). Built-in monogram icons + custom SVG path support, per-badge brand color.",
+        variants=[
+            _Variant(
+                "pill-row",
+                "Pill row with values (default)",
+                "Horizontal row of rounded-rectangle badges, each with icon monogram + label + value (e.g. Senior, 85%, Certified). Wraps when wider than the SVG.",
+                'cards:\n  badges:\n    enabled: true\n    shape: pill\n    layout: row\n    animation: stagger\n    items:\n      - { icon: python,     label: "Python",      value: "Senior" }\n      - { icon: rust,       label: "Rust",        value: "85%" }\n      - { icon: typescript, label: "TypeScript",  value: "Senior" }\n      - { icon: react,      label: "React",       value: "Mid" }\n      - { icon: aws,        label: "AWS",         value: "Certified" }\n      - { icon: docker,     label: "Docker",      value: "Daily" }',
+            ),
+            _Variant(
+                "hex-grid",
+                "Hexagon grid",
+                "Achievement / certificate vibe. Hexagons in a fixed N-column grid, label below each.",
+                'cards:\n  badges:\n    enabled: true\n    shape: hex\n    layout: grid\n    columns: 6\n    animation: shimmer\n    items:\n      - { icon: aws,        label: "AWS Pro" }\n      - { icon: gcp,        label: "GCP Eng" }\n      - { icon: azure,      label: "Az Solu" }\n      - { icon: kubernetes, label: "CKA" }\n      - { icon: terraform,  label: "TF Assoc" }\n      - { icon: docker,     label: "Docker" }',
+            ),
+            _Variant(
+                "shield-marquee",
+                "Heraldic shields, scrolling marquee",
+                "Power feature: badges scroll horizontally on a single line forever. Eye-catching for hero sections.",
+                'cards:\n  badges:\n    enabled: true\n    shape: shield\n    layout: marquee\n    animation: static\n    items:\n      - { icon: python,     label: "Python" }\n      - { icon: rust,       label: "Rust" }\n      - { icon: go,         label: "Go" }\n      - { icon: typescript, label: "TS" }\n      - { icon: react,      label: "React" }\n      - { icon: nodejs,     label: "Node" }\n      - { icon: postgres,   label: "PostgreSQL" }\n      - { icon: redis,      label: "Redis" }',
+            ),
+            _Variant(
+                "circle-static",
+                "Circle chips, no animation",
+                "Most compact form — just an icon and a tiny label. Good for accessibility / reduced-motion users.",
+                'cards:\n  badges:\n    enabled: true\n    shape: circle\n    layout: row\n    animation: static\n    items:\n      - { icon: python,     label: "Py" }\n      - { icon: typescript, label: "TS" }\n      - { icon: rust,       label: "Rs" }\n      - { icon: go,         label: "Go" }\n      - { icon: docker,     label: "Dk" }\n      - { icon: kubernetes, label: "K8s" }',
+            ),
+            _Variant(
+                "custom-svg-icons",
+                "Custom SVG icons + custom colors",
+                "Bypass the built-in monogram library by passing raw SVG path data normalized to a 24-unit canvas, plus an explicit hex color per badge.",
+                'cards:\n  badges:\n    enabled: true\n    shape: pill\n    layout: row\n    animation: pulse\n    items:\n      - { label: "Custom A", color: "#F90001", icon_svg: "M12 2L2 22h20L12 2z" }\n      - { label: "Custom B", color: "#34D399", icon_svg: "M12 2a10 10 0 100 20 10 10 0 000-20z" }\n      - { label: "Custom C", color: "#7C3AED", icon_svg: "M3 3h18v18H3V3z" }',
+            ),
+        ],
+    ),
+    _WidgetEntry(
         filename="yearly-highlights.svg",
         builder_module="timeline",
         builder_func="build",

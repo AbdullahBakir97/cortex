@@ -38,6 +38,8 @@ def run(*, config: Path) -> None:
         enabled_widgets.append("current-focus")
     if cfg.cards.yearly_highlights.enabled:
         enabled_widgets.append("yearly-highlights")
+    if cfg.cards.badges.enabled:
+        enabled_widgets.append("badges")
     if cfg.typing.about.enabled:
         enabled_widgets.append("about-typing")
     if cfg.typing.motto.enabled:
