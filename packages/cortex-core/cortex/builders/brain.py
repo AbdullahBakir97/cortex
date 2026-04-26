@@ -120,6 +120,27 @@ def _seed_from_name(name: str) -> int:
     return int(digest[:8], 16)
 
 
+def _random_cells_in_bbox(
+    bbox: tuple[float, float, float, float],
+    n: int,
+    rng: random.Random,
+) -> list[tuple[int, int]]:
+    """Return n cells at random normalized offsets in [0.15, 0.85] inside bbox.
+
+    Inset 15% from each edge so cells sit well inside the lobe rather than on its edge.
+    Coords are returned as ints (SVG tolerates floats but ints render slightly tighter).
+    """
+    xmin, ymin, xmax, ymax = bbox
+    w = xmax - xmin
+    h = ymax - ymin
+    out: list[tuple[int, int]] = []
+    for _ in range(n):
+        nx = rng.uniform(0.15, 0.85)
+        ny = rng.uniform(0.15, 0.85)
+        out.append((round(xmin + nx * w), round(ymin + ny * h)))
+    return out
+
+
 def _classify_brain_paths(
     svg: str,
 ) -> tuple[
