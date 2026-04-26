@@ -45,6 +45,12 @@
       <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
+        <radialGradient id="rgrad_frontal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#F90001" stop-opacity="0.55"/><stop offset="55%"  stop-color="#F90001" stop-opacity="0.18"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rgrad_parietal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#34D399" stop-opacity="0.55"/><stop offset="55%"  stop-color="#34D399" stop-opacity="0.18"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rgrad_occipital" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#FF652F" stop-opacity="0.55"/><stop offset="55%"  stop-color="#FF652F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rgrad_temporal" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#FFD23F" stop-opacity="0.55"/><stop offset="55%"  stop-color="#FFD23F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FFD23F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rgrad_cerebellum" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.55"/><stop offset="55%"  stop-color="#22D3EE" stop-opacity="0.18"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient>
+    <radialGradient id="rgrad_brainstem" cx="50%" cy="50%" r="50%"><stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.55"/><stop offset="55%"  stop-color="#A78BFA" stop-opacity="0.18"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
     <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
       <feOffset dx="0" dy="3" result="shadow"/>
@@ -89,6 +95,27 @@
       .lf4{animation-delay:0.85s} .lf5{animation-delay:1.0s} .lf6{animation-delay:1.15s}
       .breathe-stripe { animation: stripeBreathe 3s ease-in-out infinite; }
       @keyframes stripeBreathe { 0%,100%{opacity:0.85} 50%{opacity:1} }
+      .region-glow { mix-blend-mode: screen; }
+      .region-pulse { animation: rpulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes rpulse {
+        0%, 100% { opacity: 0.65; transform: scale(1); }
+        50%      { opacity: 1.0;  transform: scale(1.10); }
+      }
+      .rg1{animation-delay:0s}    .rg2{animation-delay:0.6s}
+      .rg3{animation-delay:1.2s}  .rg4{animation-delay:1.8s}
+      .rg5{animation-delay:2.4s}  .rg6{animation-delay:3.0s}
+      .synapse { animation: spark 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }
+      @keyframes spark {
+        0%, 100% { opacity: 0;    transform: scale(0.5); }
+        8%       { opacity: 1;    transform: scale(1.8); filter: drop-shadow(0 0 6px currentColor); }
+        16%      { opacity: 0.7;  transform: scale(1.2); }
+        25%      { opacity: 0;    transform: scale(0.8); }
+      }
+      .sy1{animation-delay:0s}    .sy2{animation-delay:0.18s} .sy3{animation-delay:0.36s}
+      .sy4{animation-delay:0.54s} .sy5{animation-delay:0.72s} .sy6{animation-delay:0.9s}
+      .sy7{animation-delay:1.08s} .sy8{animation-delay:1.26s} .sy9{animation-delay:1.44s}
+      .sy10{animation-delay:1.62s} .sy11{animation-delay:1.8s} .sy12{animation-delay:1.98s}
+      .sy13{animation-delay:2.16s} .sy14{animation-delay:0.45s}
       .particle { animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }
       @keyframes pdrift {
         0%,100% { opacity: 0.18; transform: translate(0, 0); }
@@ -136,30 +163,21 @@
 
   <!-- Leader lines (drawn behind brain) -->
   <g fill="none">
-        <path d="M 1060,270 Q 955,330 850,320" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 860,200 Q 620,275 700,280" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 340,270 Q 255,325 490,310" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 1060,550 Q 945,495 830,510" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 340,730 Q 250,635 480,610" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-    <path d="M 1060,730 Q 910,645 760,630" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.7" class="leader-flow"/>
-  </g>
-
-  <!-- Static halo rings in canvas space — anchor the leader-line endpoints
-       so the connection reads as continuous even when the spark dot below
-       drifts with the brain's 3D wobble. -->
-  <g>
-        <circle cx="850" cy="320" r="14" fill="none" stroke="#F90001" stroke-width="1.5" class="target-halo" style="animation-delay:0.0s"/>
-    <circle cx="700" cy="280" r="14" fill="none" stroke="#34D399" stroke-width="1.5" class="target-halo" style="animation-delay:0.3s"/>
-    <circle cx="490" cy="310" r="14" fill="none" stroke="#FF652F" stroke-width="1.5" class="target-halo" style="animation-delay:0.6s"/>
-    <circle cx="830" cy="510" r="14" fill="none" stroke="#FFD23F" stroke-width="1.5" class="target-halo" style="animation-delay:0.8999999999999999s"/>
-    <circle cx="480" cy="610" r="14" fill="none" stroke="#22D3EE" stroke-width="1.5" class="target-halo" style="animation-delay:1.2s"/>
-    <circle cx="760" cy="630" r="14" fill="none" stroke="#A78BFA" stroke-width="1.5" class="target-halo" style="animation-delay:1.5s"/>
+        <path d="M 1060,270 Q 955,330 850,320" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path d="M 860,200 Q 620,275 700,280" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path d="M 340,270 Q 255,325 490,310" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path d="M 1060,550 Q 945,495 830,510" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path d="M 340,730 Q 250,635 480,610" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path d="M 1060,730 Q 910,645 760,630" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
   </g>
 
   <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
-       3D-wobbling). Spark dots live INSIDE the wobble group so they inherit
-       the animation and stay anchored to actual lobe positions. The wobble
-       class is conditional on brain.atmosphere.wobble in the user's config. -->
+       3D-wobbling). All endpoint decorations live INSIDE the wobble group so
+       they track the brain anatomy as it moves: per-region color glows tint
+       each lobe area in its card's color (mix-blend-mode: screen), halo rings
+       wobble around their dots, micro-cells pulse like synaptic firing
+       throughout the brain interior. atm.show_halos and atm.show_particles
+       gate the optional layers. -->
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="brain-3d">
@@ -977,6 +995,32 @@
          style="fill:url(#brainGradAlt);stroke:#F90001;stroke-width:1" />
     </g>
   </g>
+                <circle cx="740" cy="240" r="200" fill="url(#rgrad_frontal)" class="region-glow region-pulse rg1"/>
+        <circle cx="526" cy="183" r="200" fill="url(#rgrad_parietal)" class="region-glow region-pulse rg2"/>
+        <circle cx="226" cy="226" r="200" fill="url(#rgrad_occipital)" class="region-glow region-pulse rg3"/>
+        <circle cx="711" cy="511" r="200" fill="url(#rgrad_temporal)" class="region-glow region-pulse rg4"/>
+        <circle cx="211" cy="654" r="200" fill="url(#rgrad_cerebellum)" class="region-glow region-pulse rg5"/>
+        <circle cx="611" cy="683" r="200" fill="url(#rgrad_brainstem)" class="region-glow region-pulse rg6"/>
+                <circle cx="180" cy="180" r="3" fill="#22D3EE" class="synapse sy1"/>
+        <circle cx="310" cy="140" r="3" fill="#A78BFA" class="synapse sy2"/>
+        <circle cx="450" cy="100" r="3" fill="#FF652F" class="synapse sy3"/>
+        <circle cx="560" cy="230" r="3" fill="#F90001" class="synapse sy4"/>
+        <circle cx="700" cy="160" r="3" fill="#22D3EE" class="synapse sy5"/>
+        <circle cx="820" cy="200" r="3" fill="#A78BFA" class="synapse sy6"/>
+        <circle cx="250" cy="320" r="3" fill="#FF652F" class="synapse sy7"/>
+        <circle cx="380" cy="380" r="3" fill="#F90001" class="synapse sy8"/>
+        <circle cx="520" cy="380" r="3" fill="#22D3EE" class="synapse sy9"/>
+        <circle cx="640" cy="350" r="3" fill="#A78BFA" class="synapse sy10"/>
+        <circle cx="760" cy="380" r="3" fill="#FF652F" class="synapse sy11"/>
+        <circle cx="340" cy="520" r="3" fill="#F90001" class="synapse sy12"/>
+        <circle cx="500" cy="540" r="3" fill="#22D3EE" class="synapse sy13"/>
+        <circle cx="650" cy="540" r="3" fill="#A78BFA" class="synapse sy14"/>
+                <circle cx="740" cy="240" r="20" fill="none" stroke="#F90001" stroke-width="2.2" class="target-halo" style="animation-delay:0.0s"/>
+        <circle cx="526" cy="183" r="20" fill="none" stroke="#34D399" stroke-width="2.2" class="target-halo" style="animation-delay:0.3s"/>
+        <circle cx="226" cy="226" r="20" fill="none" stroke="#FF652F" stroke-width="2.2" class="target-halo" style="animation-delay:0.6s"/>
+        <circle cx="711" cy="511" r="20" fill="none" stroke="#FFD23F" stroke-width="2.2" class="target-halo" style="animation-delay:0.8999999999999999s"/>
+        <circle cx="211" cy="654" r="20" fill="none" stroke="#22D3EE" stroke-width="2.2" class="target-halo" style="animation-delay:1.2s"/>
+        <circle cx="611" cy="683" r="20" fill="none" stroke="#A78BFA" stroke-width="2.2" class="target-halo" style="animation-delay:1.5s"/>
                 <circle cx="740" cy="240" r="6" fill="#F90001" class="target-pulse" style="animation-delay:0.0s"/>
         <circle cx="526" cy="183" r="6" fill="#34D399" class="target-pulse" style="animation-delay:0.3s"/>
         <circle cx="226" cy="226" r="6" fill="#FF652F" class="target-pulse" style="animation-delay:0.6s"/>

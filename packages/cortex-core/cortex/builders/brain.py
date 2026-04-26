@@ -135,11 +135,17 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     atm = config.brain.atmosphere
     brain_3d_class = "brain-3d" if atm.wobble else ""
 
-    # Region labels (anatomical → user's domain mapping)
+    # Region labels (anatomical → user's domain mapping). All endpoint
+    # decorations (region glow, halo, spark dot) now live inside brain-3d
+    # so they wobble with the brain anatomy in lockstep. The leader line
+    # is still in canvas space; its endpoint reads as soft because the
+    # leader stroke fades to lower opacity near the brain.
     region_blocks: list[str] = []
     region_lines: list[str] = []
-    spark_dots: list[str] = []  # rendered INSIDE brain-3d so they wobble with the brain
-    target_halos: list[str] = []  # rendered in canvas space; static anchor for leader-line endpoints
+    region_grads: list[str] = []  # one radial gradient per lobe color
+    region_glows: list[str] = []  # large soft tint circles in card colors (always rendered)
+    halos: list[str] = []  # ring around each spark dot (gated by atm.show_halos)
+    spark_dots: list[str] = []  # central dot at each lobe target (always rendered)
     for i, (key, region_data) in enumerate(_REGION_POSITIONS.items()):
         region_obj: BrainRegion = getattr(config.brain.regions, key)
         color_token = region_data["color"]
@@ -165,7 +171,20 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f"</g></g>"
         )
 
-        # Leader line from label edge to brain target (canvas space)
+        # Per-region radial gradient — used by the region glow inside brain-3d.
+        # Soft falloff: full color at center, fading to transparent at edge.
+        region_grads.append(
+            f'<radialGradient id="rgrad_{key}" cx="50%" cy="50%" r="50%">'
+            f'<stop offset="0%"   stop-color="{color}" stop-opacity="0.55"/>'
+            f'<stop offset="55%"  stop-color="{color}" stop-opacity="0.18"/>'
+            f'<stop offset="100%" stop-color="{color}" stop-opacity="0"/>'
+            f"</radialGradient>"
+        )
+
+        # Leader line from label edge to brain target (canvas space).
+        # Stroke opacity reduced from 0.7 to 0.5 — the line softly arrives
+        # at the brain region rather than terminating with a hard endpoint.
+        # This masks the small visual offset from the wobbling halo+dot below.
         mid_x = (lx + tx) // 2
         mid_y = (ly + 140 + ty) // 2 if ly < 400 else (ly + ty) // 2
         anchor_x = lx if lx > 600 else lx + 320
@@ -173,26 +192,52 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         region_lines.append(
             f'<path d="M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}" '
             f'stroke="{color}" stroke-width="1.2" fill="none" '
-            f'stroke-opacity="0.7" class="leader-flow"/>'
+            f'stroke-opacity="0.5" class="leader-flow"/>'
         )
 
-        # Halo ring stays in canvas space — anchors the leader-line endpoint
-        # so the line never visually disconnects when the dot wobbles below.
-        target_halos.append(
-            f'<circle cx="{tx}" cy="{ty}" r="14" fill="none" stroke="{color}" '
-            f'stroke-width="1.5" class="target-halo" '
-            f'style="animation-delay:{i * 0.3}s"/>'
-        )
-
-        # Spark dot lives in brain-local coordinates so it inherits the
-        # brain-3d skew/scale wobble. Brain group transform is
+        # Spark dot, halo, and region color glow all live in BRAIN-LOCAL
+        # coordinates inside the brain-3d transform group, so they wobble in
+        # lockstep with the brain anatomy. Brain group transform is
         # translate(332,152) scale(0.7), so brain-local = (canvas - 332)/0.7.
-        # Dot radius compensates: r=6 here renders as r≈4.2 after the 0.7 scale.
         bx = round((tx - 332) / 0.7)
         by = round((ty - 152) / 0.7)
+
+        # Region color glow — a large soft radial gradient circle in the
+        # card's color. With mix-blend-mode: screen this tints the brain
+        # anatomy underneath without recoloring the source paths.
+        region_glows.append(
+            f'<circle cx="{bx}" cy="{by}" r="200" fill="url(#rgrad_{key})" '
+            f'class="region-glow region-pulse rg{i + 1}"/>'
+        )
+        # Halo ring — wobbles with brain (r=20 renders as ~14 after 0.7 scale).
+        halos.append(
+            f'<circle cx="{bx}" cy="{by}" r="20" fill="none" stroke="{color}" '
+            f'stroke-width="2.2" class="target-halo" '
+            f'style="animation-delay:{i * 0.3}s"/>'
+        )
+        # Spark dot — r=6 renders as ~4.2 after the 0.7 scale.
         spark_dots.append(
             f'<circle cx="{bx}" cy="{by}" r="6" fill="{color}" class="target-pulse" '
             f'style="animation-delay:{i * 0.3}s"/>'
+        )
+
+    # Synaptic firing — 14 micro-cells scattered through the brain interior
+    # in brain-local coordinates. Each fires on a staggered keyframe so the
+    # interior reads as a living network of impulses. Positions chosen by
+    # eye to fall inside the brain bounds (rough source SVG span 0-1024 x 0-732).
+    micro_cell_positions = [
+        (180, 180), (310, 140), (450, 100), (560, 230),  # frontal/parietal area
+        (700, 160), (820, 200), (250, 320), (380, 380),  # occipital/parietal area
+        (520, 380), (640, 350), (760, 380), (340, 520),  # temporal area
+        (500, 540), (650, 540),  # cerebellum/brainstem area
+    ]
+    micro_cells: list[str] = []
+    synapse_colors = [p_accent_a, p_accent_b, p_secondary, p_primary]
+    for i, (mx, my) in enumerate(micro_cell_positions):
+        sc = synapse_colors[i % len(synapse_colors)]
+        micro_cells.append(
+            f'<circle cx="{mx}" cy="{my}" r="3" fill="{sc}" '
+            f'class="synapse sy{i + 1}"/>'
         )
 
     # Compose the SVG
@@ -243,6 +288,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
       <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
     </linearGradient>
+    {chr(10).join("    " + g for g in region_grads)}
     <filter id="cardShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur in="SourceAlpha" stdDeviation="5"/>
       <feOffset dx="0" dy="3" result="shadow"/>
@@ -287,6 +333,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       .lf4{{animation-delay:0.85s}} .lf5{{animation-delay:1.0s}} .lf6{{animation-delay:1.15s}}
       .breathe-stripe {{ animation: stripeBreathe 3s ease-in-out infinite; }}
       @keyframes stripeBreathe {{ 0%,100%{{opacity:0.85}} 50%{{opacity:1}} }}
+      .region-glow {{ mix-blend-mode: screen; }}
+      .region-pulse {{ animation: rpulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
+      @keyframes rpulse {{
+        0%, 100% {{ opacity: 0.65; transform: scale(1); }}
+        50%      {{ opacity: 1.0;  transform: scale(1.10); }}
+      }}
+      .rg1{{animation-delay:0s}}    .rg2{{animation-delay:0.6s}}
+      .rg3{{animation-delay:1.2s}}  .rg4{{animation-delay:1.8s}}
+      .rg5{{animation-delay:2.4s}}  .rg6{{animation-delay:3.0s}}
+      .synapse {{ animation: spark 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
+      @keyframes spark {{
+        0%, 100% {{ opacity: 0;    transform: scale(0.5); }}
+        8%       {{ opacity: 1;    transform: scale(1.8); filter: drop-shadow(0 0 6px currentColor); }}
+        16%      {{ opacity: 0.7;  transform: scale(1.2); }}
+        25%      {{ opacity: 0;    transform: scale(0.8); }}
+      }}
+      .sy1{{animation-delay:0s}}    .sy2{{animation-delay:0.18s}} .sy3{{animation-delay:0.36s}}
+      .sy4{{animation-delay:0.54s}} .sy5{{animation-delay:0.72s}} .sy6{{animation-delay:0.9s}}
+      .sy7{{animation-delay:1.08s}} .sy8{{animation-delay:1.26s}} .sy9{{animation-delay:1.44s}}
+      .sy10{{animation-delay:1.62s}} .sy11{{animation-delay:1.8s}} .sy12{{animation-delay:1.98s}}
+      .sy13{{animation-delay:2.16s}} .sy14{{animation-delay:0.45s}}
       .particle {{ animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }}
       @keyframes pdrift {{
         0%,100% {{ opacity: 0.18; transform: translate(0, 0); }}
@@ -337,21 +404,20 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     {chr(10).join("    " + ln for ln in region_lines)}
   </g>
 
-  {('''<!-- Static halo rings in canvas space — anchor the leader-line endpoints
-       so the connection reads as continuous even when the spark dot below
-       drifts with the brain's 3D wobble. -->
-  <g>
-    ''' + chr(10).join("    " + ha for ha in target_halos) + '''
-  </g>''') if atm.show_halos else ""}
-
   <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
-       3D-wobbling). Spark dots live INSIDE the wobble group so they inherit
-       the animation and stay anchored to actual lobe positions. The wobble
-       class is conditional on brain.atmosphere.wobble in the user's config. -->
+       3D-wobbling). All endpoint decorations live INSIDE the wobble group so
+       they track the brain anatomy as it moves: per-region color glows tint
+       each lobe area in its card's color (mix-blend-mode: screen), halo rings
+       wobble around their dots, micro-cells pulse like synaptic firing
+       throughout the brain interior. atm.show_halos and atm.show_particles
+       gate the optional layers. -->
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="{brain_3d_class}">
         {brain_content}
+        {chr(10).join("        " + rg for rg in region_glows)}
+        {chr(10).join("        " + mc for mc in micro_cells)}
+        {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
         {chr(10).join("        " + sd for sd in spark_dots)}
       </g>
     </g>
