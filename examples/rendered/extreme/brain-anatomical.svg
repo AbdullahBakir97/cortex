@@ -104,6 +104,30 @@
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <!-- Plasma fog: feTurbulence generates animated Perlin noise; feColorMatrix
+         tints it pink/purple at low alpha. Renders as a swirling cosmic
+         atmosphere when applied to a covering rect. -->
+    <filter id="plasmaFog" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="noise">
+        <animate attributeName="baseFrequency" values="0.010;0.022;0.010" dur="14s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix in="noise" type="matrix" values="
+        0 0 0 0 0.55
+        0 0 0 0 0.30
+        0 0 0 0 0.85
+        0 0 0 0.42 0"/>
+    </filter>
+    <!-- Electric glow: dilate the source then blur it then merge under the
+         original. Applied to lobe-cells via CSS so each synaptic flash gets
+         an electric corona around the dot. -->
+    <filter id="electricGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feMorphology operator="dilate" radius="1.5" in="SourceGraphic" result="dilated"/>
+      <feGaussianBlur in="dilated" stdDeviation="3" result="blurred"/>
+      <feMerge>
+        <feMergeNode in="blurred"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style><![CDATA[
       .t-display   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }
       .t-tag       { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: #A78BFA; }
@@ -147,7 +171,7 @@
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
          around the lobe's quadrilateral. */
-      .lobe-cell { animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }
+      .lobe-cell { animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; filter: url(#electricGlow); }
       @keyframes lcell {
         0%, 100% { opacity: 0;   transform: scale(0.6); }
         10%      { opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }
@@ -185,6 +209,7 @@
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
   <rect width="1400" height="900" fill="url(#bgAura)"/>
+  <rect x="200" y="120" width="1000" height="660" fill="white" filter="url(#plasmaFog)" opacity="0.55"/>
 
   <!-- Ambient particle drift — atmospheric depth behind the brain -->
   <g fill="#A78BFA">
@@ -212,12 +237,30 @@
 
   <!-- Leader lines (drawn behind brain) -->
   <g fill="none">
-        <path d="M 340,270 Q 245,367 471,395" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path d="M 860,200 Q 625,265 710,260" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path d="M 1060,270 Q 984,369 909,398" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path d="M 1060,550 Q 883,474 706,468" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path d="M 1060,730 Q 942,614 824,568" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path d="M 340,730 Q 381,631 743,602" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+        <path id="leaderPath_frontal" d="M 340,270 Q 245,367 471,395" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path id="leaderPath_parietal" d="M 860,200 Q 625,265 710,260" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path id="leaderPath_occipital" d="M 1060,270 Q 984,369 909,398" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path id="leaderPath_temporal" d="M 1060,550 Q 883,474 706,468" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path id="leaderPath_cerebellum" d="M 1060,730 Q 942,614 824,568" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+    <path id="leaderPath_brainstem" d="M 340,730 Q 381,631 743,602" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+  </g>
+
+  <!-- Data packets — small dots traveling card-to-brain along each leader path
+       via SMIL animateMotion. Two per line, half-period staggered, fade in/out
+       so they don't pop at the endpoints. Reads as continuous data flow. -->
+  <g>
+        <circle r="3.5" fill="#F90001" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_frontal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#F90001" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_frontal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#34D399" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_parietal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#34D399" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_parietal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FF652F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_occipital"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FF652F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_occipital"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FFD23F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_temporal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FFD23F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_temporal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#22D3EE" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_cerebellum"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#22D3EE" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_cerebellum"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#A78BFA" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_brainstem"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#A78BFA" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_brainstem"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
   </g>
 
   <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally

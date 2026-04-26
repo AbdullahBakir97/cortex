@@ -332,6 +332,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     region_glows: list[str] = []  # large soft tint circles in card colors (always rendered)
     halos: list[str] = []  # ring around each spark dot (gated by atm.show_halos)
     spark_dots: list[str] = []  # central dot at each lobe target (always rendered)
+    data_packets: list[str] = []  # small dots traveling card->brain along each leader path
     for i, (key, region_data) in enumerate(region_positions.items()):
         region_obj: BrainRegion = getattr(config.brain.regions, key)
         color_token = region_data["color"]
@@ -375,11 +376,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         mid_y = (ly + 140 + ty) // 2 if ly < 400 else (ly + ty) // 2
         anchor_x = lx if lx > 600 else lx + 320
         anchor_y = ly + 70
+        leader_id = f"leaderPath_{key}"
         region_lines.append(
-            f'<path d="M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}" '
+            f'<path id="{leader_id}" d="M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}" '
             f'stroke="{color}" stroke-width="1.2" fill="none" '
             f'stroke-opacity="0.5" class="leader-flow"/>'
         )
+
+        # Data packets — small dots that travel card->brain along the leader path
+        # via SMIL animateMotion. Two packets per line, staggered by half-period,
+        # so the line reads as a continuous data stream. Fade in/out so they
+        # don't pop at the endpoints.
+        for pbegin in (0.0, 1.5):
+            data_packets.append(
+                f'<circle r="3.5" fill="{color}" opacity="0">'
+                f'<animateMotion dur="3s" repeatCount="indefinite" begin="{pbegin}s" rotate="auto">'
+                f'<mpath href="#{leader_id}"/>'
+                f"</animateMotion>"
+                f'<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" '
+                f'dur="3s" begin="{pbegin}s" repeatCount="indefinite"/>'
+                f"</circle>"
+            )
 
         # Spark dot, halo, and region color glow all live in BRAIN-LOCAL
         # coordinates inside the brain-3d transform group, so they wobble in
@@ -572,6 +589,30 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <!-- Plasma fog: feTurbulence generates animated Perlin noise; feColorMatrix
+         tints it pink/purple at low alpha. Renders as a swirling cosmic
+         atmosphere when applied to a covering rect. -->
+    <filter id="plasmaFog" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="noise">
+        <animate attributeName="baseFrequency" values="0.010;0.022;0.010" dur="14s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feColorMatrix in="noise" type="matrix" values="
+        0 0 0 0 0.55
+        0 0 0 0 0.30
+        0 0 0 0 0.85
+        0 0 0 0.42 0"/>
+    </filter>
+    <!-- Electric glow: dilate the source then blur it then merge under the
+         original. Applied to lobe-cells via CSS so each synaptic flash gets
+         an electric corona around the dot. -->
+    <filter id="electricGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feMorphology operator="dilate" radius="1.5" in="SourceGraphic" result="dilated"/>
+      <feGaussianBlur in="dilated" stdDeviation="3" result="blurred"/>
+      <feMerge>
+        <feMergeNode in="blurred"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style><![CDATA[
       .t-display   {{ font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }}
       .t-tag       {{ font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: {p_accent_b}; }}
@@ -615,7 +656,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
          + within-lobe stagger; the lobe-arcs between cells animate a
          traveling dash so the firing reads as electric impulses moving
          around the lobe's quadrilateral. */
-      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }}
+      .lobe-cell {{ animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; filter: url(#electricGlow); }}
       @keyframes lcell {{
         0%, 100% {{ opacity: 0;   transform: scale(0.6); }}
         10%      {{ opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }}
@@ -653,6 +694,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
   {('<rect width="1400" height="900" fill="url(#bgAura)"/>') if atm.show_aura else ""}
+  {('<rect x="200" y="120" width="1000" height="660" fill="white" filter="url(#plasmaFog)" opacity="0.55"/>') if atm.show_aura else ""}
 
   {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
   <g fill="''' + p_accent_b + '''">
@@ -681,6 +723,13 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
   <!-- Leader lines (drawn behind brain) -->
   <g fill="none">
     {chr(10).join("    " + ln for ln in region_lines)}
+  </g>
+
+  <!-- Data packets — small dots traveling card-to-brain along each leader path
+       via SMIL animateMotion. Two per line, half-period staggered, fade in/out
+       so they don't pop at the endpoints. Reads as continuous data flow. -->
+  <g>
+    {chr(10).join("    " + dp for dp in data_packets)}
   </g>
 
   <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
