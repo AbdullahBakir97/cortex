@@ -195,14 +195,21 @@ def _render_card(
         f'    <line x1="24" y1="388" x2="{card_w - 24}" y2="388" stroke="#21262D" stroke-width="1"/>'
     )
 
-    # Stats row — 3 columns evenly spread inside card width
+    # Stats row — 3 columns evenly spread inside card width. Each column has
+    # ~90px usable width. Long values overflow at the default font size, so
+    # shrink them (and their corresponding labels) when they exceed the
+    # threshold. Same length-conditional pattern used in tech_cards.
     stat_x_step = (card_w - 48) // 3
     for i, stat in enumerate(stats[:3]):
         sx = 24 + i * stat_x_step
+        num_class = "t-stat-num-sm" if len(stat.num) > 4 else "t-stat-num"
+        # Smaller num sits 2px lower so its baseline aligns with the bigger ones
+        num_y = 424 if len(stat.num) > 4 else 422
+        lbl_class = "t-stat-lbl-sm" if len(stat.label) > 9 else "t-stat-lbl"
         parts.append(
-            f'    <text x="{sx}"  y="422" class="t-stat-num" fill="{color}">{_x(stat.num)}</text>'
+            f'    <text x="{sx}"  y="{num_y}" class="{num_class}" fill="{color}">{_x(stat.num)}</text>'
         )
-        parts.append(f'    <text x="{sx}"  y="444" class="t-stat-lbl">{_x(stat.label)}</text>')
+        parts.append(f'    <text x="{sx}"  y="444" class="{lbl_class}">{_x(stat.label)}</text>')
 
     parts.append("  </g>")
     return "\n".join(parts)
@@ -259,7 +266,9 @@ def build(config: Config, output: str | Path) -> Path:
         "    .t-highlight   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 15px; fill: #E8E8E8; }\n"
         "    .t-bullet      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 17px; }\n"
         "    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 22px; }\n"
+        "    .t-stat-num-sm { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 16px; }\n"
         "    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; fill: #8B95A1; }\n"
+        "    .t-stat-lbl-sm { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 9px;  letter-spacing: 0.10em; text-transform: uppercase; fill: #8B95A1; }\n"
         "    .timeline-pulse { stroke-dasharray: 4 8; animation: tlflow 3s linear infinite; }\n"
         "    @keyframes tlflow { to { stroke-dashoffset: -36; } }\n"
         "    .marker-pulse { animation: markerPulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
