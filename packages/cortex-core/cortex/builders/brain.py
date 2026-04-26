@@ -15,7 +15,10 @@ Ported from the prototype at:
 
 from __future__ import annotations
 
+import hashlib
+import random
 import re
+from dataclasses import dataclass
 from importlib import resources
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
@@ -109,6 +112,12 @@ def _iter_paths(group: str):
         im = re.search(r'\sid="([^"]+)"', block)
         if dm and im:
             yield im.group(1), dm.group(1)
+
+
+def _seed_from_name(name: str) -> int:
+    """Stable 32-bit seed derived from the identity name. Deterministic per user."""
+    digest = hashlib.sha256(name.encode("utf-8")).hexdigest()
+    return int(digest[:8], 16)
 
 
 def _classify_brain_paths(
