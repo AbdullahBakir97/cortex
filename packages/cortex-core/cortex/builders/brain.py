@@ -471,14 +471,16 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # the actual frontal lobe centroid is at (471, 395).
     _, lobe_centroids, lobe_bboxes, paths_by_lobe = _ensure_classification()
 
-    # Mask source: each brain path's d attribute as a minimal
-    # <path d="..." fill="white"/> for inclusion in <mask id="brainMask">.
-    # The mask is opaque wherever brain anatomy exists, transparent elsewhere
-    # — so the aurora flow layer below shows only inside the brain shape.
-    brain_mask_paths: list[str] = []
+    # Clip source: each brain path's d attribute as a minimal <path d="..."/>
+    # for inclusion in <clipPath id="brainClip">. Anything outside the union
+    # of these path geometries is clipped — so the aurora flow layer below
+    # shows only inside the brain anatomy. clipPath uses geometry-only
+    # clipping (fills are ignored), which is more predictable across SVG
+    # renderers than <mask>.
+    brain_clip_paths: list[str] = []
     for _lobe, pairs in paths_by_lobe.items():
         for _pid, d in pairs:
-            brain_mask_paths.append(f'<path d="{d}" fill="white"/>')
+            brain_clip_paths.append(f'<path d="{d}"/>')
 
     region_positions: dict[str, dict[str, object]] = {}
     for key, region_data in _REGION_POSITIONS.items():
@@ -862,9 +864,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#34D399" stop-opacity="0.18"/>
       <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
     </radialGradient>
-    <mask id="brainMask" maskUnits="userSpaceOnUse" x="-200" y="-200" width="1500" height="1200">
-    {chr(10).join("      " + p for p in brain_mask_paths)}
-    </mask>
+    <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
+    {chr(10).join("      " + p for p in brain_clip_paths)}
+    </clipPath>
     <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
       <stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/>
@@ -1199,22 +1201,26 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
              radial gradients drifting freely, masked by the brain shape so
              colors are visible only inside the anatomy. R7 replacement for
              R6 region_glow. -->
-        <g mask="url(#brainMask)" class="brain-aurora">
-          <rect x="-100" y="0" width="900" height="900" fill="url(#brainAurora_a)">
+        <g clip-path="url(#brainClip)" class="brain-aurora">
+          <!-- Each rect's center starts in a different brain quadrant. Translate
+               vectors keep each rect oscillating WITHIN its quadrant so coverage
+               stays balanced across the brain throughout the cycle (no clumping
+               at the back). Brain anatomy spans brain-local (0,0) to (1024,732). -->
+          <rect x="-150" y="-200" width="800" height="800" fill="url(#brainAurora_a)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; 600,200; 0,0" dur="32s" repeatCount="indefinite"/>
+                              values="0,0; 200,150; 0,0" dur="32s" repeatCount="indefinite"/>
           </rect>
-          <rect x="600" y="0" width="900" height="900" fill="url(#brainAurora_b)">
+          <rect x="350" y="-200" width="800" height="800" fill="url(#brainAurora_b)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; -500,250; 0,0" dur="38s" repeatCount="indefinite"/>
+                              values="0,0; -200,150; 0,0" dur="38s" repeatCount="indefinite"/>
           </rect>
-          <rect x="200" y="-100" width="900" height="900" fill="url(#brainAurora_c)">
+          <rect x="-150" y="130" width="800" height="800" fill="url(#brainAurora_c)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; 200,400; 0,0" dur="41s" repeatCount="indefinite"/>
+                              values="0,0; 250,-150; 0,0" dur="41s" repeatCount="indefinite"/>
           </rect>
-          <rect x="-100" y="500" width="900" height="900" fill="url(#brainAurora_d)">
+          <rect x="350" y="130" width="800" height="800" fill="url(#brainAurora_d)">
             <animateTransform attributeName="transform" type="translate"
-                              values="0,0; 700,-300; 0,0" dur="45s" repeatCount="indefinite"/>
+                              values="0,0; -250,-150; 0,0" dur="45s" repeatCount="indefinite"/>
           </rect>
         </g>
           <g class="lobe-stroke-layer" filter="url(#electricGlow)">
