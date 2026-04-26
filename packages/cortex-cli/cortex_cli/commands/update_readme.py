@@ -30,8 +30,8 @@ def run(*, config: Path, readme: Path) -> None:
         click.echo(click.style(f"     [OK]      CORTEX:{name}", fg="green"))
     for name in result.sections_missing:
         click.echo(click.style(f"     [missing] CORTEX:{name} — paste the marker pair to enable", fg="white"))
-    for name in result.sections_skipped:
-        click.echo(click.style(f"     [skip]    CORTEX:{name} — disabled in config", fg="white"))
+    for name, reason in result.sections_skipped:
+        click.echo(click.style(f"     [skip]    CORTEX:{name} — {reason}", fg="white"))
     for name, err in result.sections_failed:
         click.echo(click.style(f"     [FAIL]    CORTEX:{name} — {err}", fg="red"))
 

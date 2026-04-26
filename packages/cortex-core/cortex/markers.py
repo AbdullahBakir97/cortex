@@ -292,6 +292,164 @@ def gitcity_links(config: Config, _client: GitHubClient) -> str:
     )
 
 
+# ── Section renderers (token-required) ──────────────────────────────────
+_RELEASES_QUERY = """
+query($login: String!) {
+  user(login: $login) {
+    repositories(first: 100, ownerAffiliations: OWNER, orderBy: {field: PUSHED_AT, direction: DESC}) {
+      nodes {
+        name
+        url
+        releases(first: 1, orderBy: {field: CREATED_AT, direction: DESC}) {
+          nodes { name tagName publishedAt url }
+        }
+      }
+    }
+  }
+}
+"""
+
+
+def latest_releases(config: Config, client: GitHubClient, *, limit: int = 5) -> str:
+    """Newest releases across the user's repos, newest first."""
+    data = client.graphql(_RELEASES_QUERY, {"login": config.identity.github_user})
+    rows = []
+    for repo in data["user"]["repositories"]["nodes"]:
+        for rel in repo["releases"]["nodes"]:
+            rows.append({
+                "repo": repo["name"],
+                "tag": rel["tagName"],
+                "name": rel["name"] or rel["tagName"],
+                "url": rel["url"],
+                "at": rel["publishedAt"],
+            })
+    rows.sort(key=lambda r: r["at"], reverse=True)
+    if not rows:
+        return "_No releases yet._"
+    out = []
+    for row in rows[:limit]:
+        date = row["at"][:10]
+        out.append(
+            f"- 📦 [`{row['repo']}` `{row['tag']}`]({row['url']}) — {row['name']} "
+            f"<sub>({date})</sub>"
+        )
+    return "\n".join(out)
+
+
+_STATS_QUERY = """
+query($login: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $login) {
+    contributionsCollection(from: $from, to: $to) {
+      totalCommitContributions
+      totalPullRequestContributions
+      totalRepositoriesWithContributedCommits
+    }
+  }
+}
+"""
+
+
+def highlights_stats(config: Config, client: GitHubClient) -> str:
+    """Current-year commits/PRs/active-repos/new-repos as a row of badges."""
+    user = config.identity.github_user
+    cy = _current_year()
+    start = f"{cy}-01-01T00:00:00Z"
+    end = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    data = client.graphql(_STATS_QUERY, {"login": user, "from": start, "to": end})
+    cc = data["user"]["contributionsCollection"]
+
+    new_repos_count = 0
+    try:
+        rr = client.search_repos(f"user:{user}+created:>={cy}-01-01")
+        new_repos_count = rr.get("total_count", 0)
+    except Exception:
+        pass  # leave at 0 — partial data is better than no badge row
+
+    return (
+        '<p align="center">'
+        f'<img src="https://img.shields.io/badge/Commits-{cc["totalCommitContributions"]}-red?style=for-the-badge&logo=git&logoColor=white" alt="Commits" /> '
+        f'<img src="https://img.shields.io/badge/PRs-{cc["totalPullRequestContributions"]}-red?style=for-the-badge&logo=github&logoColor=white" alt="PRs" /> '
+        f'<img src="https://img.shields.io/badge/New_Repos-{new_repos_count}-red?style=for-the-badge&logo=github&logoColor=white" alt="New repos" /> '
+        f'<img src="https://img.shields.io/badge/Active_in-{cc["totalRepositoriesWithContributedCommits"]}_repos-red?style=for-the-badge&logo=github&logoColor=white" alt="Active repos" />'
+        "</p>"
+    )
+
+
+def pagespeed(config: Config, _client: GitHubClient) -> str:
+    """Render Lighthouse mobile scores from Google PageSpeed Insights."""
+    import time
+    import urllib.parse
+    import requests
+
+    psi_cfg = config.auto_update.markers.pagespeed
+    if not psi_cfg.url:
+        raise RuntimeError("config.auto_update.markers.pagespeed.url is empty")
+
+    api_key = __import__("os").environ.get("PSI_API_KEY", "")
+    categories = ["PERFORMANCE", "ACCESSIBILITY", "BEST_PRACTICES", "SEO"]
+    labels = {"PERFORMANCE": "Performance", "ACCESSIBILITY": "Accessibility", "BEST_PRACTICES": "Best_Practices", "SEO": "SEO"}
+
+    params: list[tuple[str, str]] = [("url", psi_cfg.url), ("strategy", "mobile")]
+    for cat in categories:
+        params.append(("category", cat))
+    if api_key:
+        params.append(("key", api_key))
+    qs = urllib.parse.urlencode(params)
+    url = f"https://www.googleapis.com/pagespeedonline/v5/runPagespeed?{qs}"
+
+    last_exc: Exception | None = None
+    for attempt in range(3):
+        try:
+            r = requests.get(url, timeout=120)
+            if r.status_code == 429:
+                hint = "" if api_key else " (set PSI_API_KEY to lift rate limits)"
+                raise RuntimeError(f"PSI rate-limited{hint}")
+            r.raise_for_status()
+            payload = r.json()
+            break
+        except Exception as e:
+            last_exc = e
+            if attempt < 2:
+                time.sleep(5 * (attempt + 1))
+    else:
+        raise last_exc  # type: ignore[misc]
+
+    cats = payload.get("lighthouseResult", {}).get("categories", {})
+    scores: dict[str, int] = {}
+    for cat in categories:
+        node = cats.get(cat.lower().replace("_", "-"))
+        if node and node.get("score") is not None:
+            scores[cat] = round(node["score"] * 100)
+    if not scores:
+        return "_PageSpeed scores unavailable._"
+
+    def color(pct: int) -> str:
+        if pct >= 90: return "success"
+        if pct >= 50: return "yellow"
+        return "red"
+
+    badges = []
+    rows = []
+    for cat in categories:
+        if cat not in scores:
+            continue
+        pct, label = scores[cat], labels[cat]
+        badges.append(
+            f'<img src="https://img.shields.io/badge/{label}-{pct}%25-{color(pct)}'
+            f'?style=for-the-badge&logo=google&logoColor=white" alt="{label}: {pct}%" />'
+        )
+        rows.append(f'<tr><td>{label.replace("_", " ")}</td><td>{pct}/100</td></tr>')
+
+    today = dt.date.today().isoformat()
+    return (
+        '<p align="center">' + "\n  ".join(badges) + "</p>\n\n"
+        '<table align="center"><tr><th>Metric</th><th>Score</th></tr>\n'
+        + "\n".join(rows) +
+        "\n</table>\n\n"
+        f'<p align="center"><em>Last updated {today} (mobile strategy).</em></p>'
+    )
+
+
 # ── Section registry ────────────────────────────────────────────────────
 @dataclass(frozen=True)
 class _Section:
@@ -302,13 +460,16 @@ class _Section:
 
 
 _SECTIONS: list[_Section] = [
-    _Section("QUOTE",          "quote_of_the_day", quote_of_the_day, needs_token=False),
-    _Section("ACTIVITY",       "activity",         activity,         needs_token=False),
-    _Section("GITGRAPH",       "gitgraph",         gitgraph,         needs_token=False),
-    _Section("SKYLINE_GRID",   "skyline_grid",     skyline_grid,     needs_token=False),
-    _Section("CITY_GRID",      "city_grid",        city_grid,        needs_token=False),
-    _Section("STL_LINKS",      "stl_links",        stl_links,        needs_token=False),
-    _Section("GITCITY_LINKS",  "gitcity_links",    gitcity_links,    needs_token=False),
+    _Section("QUOTE",            "quote_of_the_day", quote_of_the_day, needs_token=False),
+    _Section("ACTIVITY",         "activity",         activity,         needs_token=False),
+    _Section("GITGRAPH",         "gitgraph",         gitgraph,         needs_token=False),
+    _Section("SKYLINE_GRID",     "skyline_grid",     skyline_grid,     needs_token=False),
+    _Section("CITY_GRID",        "city_grid",        city_grid,        needs_token=False),
+    _Section("STL_LINKS",        "stl_links",        stl_links,        needs_token=False),
+    _Section("GITCITY_LINKS",    "gitcity_links",    gitcity_links,    needs_token=False),
+    _Section("LATEST_RELEASES",  "latest_releases",  latest_releases,  needs_token=True),
+    _Section("HIGHLIGHTS_STATS", "highlights_stats", highlights_stats, needs_token=True),
+    _Section("PAGESPEED",        "pagespeed",        pagespeed,        needs_token=False),
 ]
 
 
@@ -316,9 +477,9 @@ _SECTIONS: list[_Section] = [
 @dataclass
 class UpdateResult:
     sections_updated: list[str]
-    sections_failed:  list[tuple[str, str]]   # (name, error)
-    sections_missing: list[str]                # marker pair not present in README
-    sections_skipped: list[str]                # disabled in config
+    sections_failed:  list[tuple[str, str]]    # (name, error)
+    sections_missing: list[str]                 # marker pair not present in README
+    sections_skipped: list[tuple[str, str]]     # (name, reason)
 
     @property
     def changed(self) -> bool:
@@ -343,11 +504,15 @@ def update(config: Config, readme_path: str | Path, *, client: GitHubClient | No
     result = UpdateResult([], [], [], [])
 
     for section in _SECTIONS:
-        if not getattr(config.auto_update.markers, section.enabled_attr):
-            result.sections_skipped.append(section.name)
+        attr = getattr(config.auto_update.markers, section.enabled_attr)
+        # Nested config objects (PageSpeedConfig, WakaTimeConfig) carry an
+        # .enabled flag; bare bool flags are read directly.
+        is_enabled = bool(getattr(attr, "enabled", attr))
+        if not is_enabled:
+            result.sections_skipped.append((section.name, "disabled in config"))
             continue
         if section.needs_token and not client.token:
-            result.sections_skipped.append(section.name)
+            result.sections_skipped.append((section.name, "no GitHub token (set GH_TOKEN)"))
             continue
         try:
             body = section.render(config, client)
