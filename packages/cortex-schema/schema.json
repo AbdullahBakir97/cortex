@@ -25,7 +25,7 @@
         "tagline":     { "type": "string", "default": "" },
         "location":    { "type": "string", "default": "" },
         "pronouns":    { "type": "string", "default": "" },
-        "email":       { "type": "string", "format": "email" },
+        "email":       { "type": "string", "anyOf": [{ "maxLength": 0 }, { "format": "email" }] },
         "socials": {
           "type": "object",
           "additionalProperties": false,
@@ -133,8 +133,36 @@
       "additionalProperties": false,
       "required": ["domain"],
       "properties": {
-        "domain": { "type": "string", "description": "Skill domain shown on the label" },
-        "tools":  { "type": "array", "items": { "type": "string" }, "default": [] }
+        "domain":  { "type": "string", "description": "Skill domain shown on the label" },
+        "tools":   { "type": "array", "items": { "type": "string" }, "default": [] },
+        "emoji":   { "type": "string", "default": "", "description": "Optional emoji for the region's tech card" },
+        "caption": { "type": "string", "default": "", "description": "Optional short caption shown under the title" },
+        "tagline": { "type": "string", "default": "", "description": "Optional tagline shown on the card" },
+        "mastery": { "type": "string", "enum": ["EXPERT", "ADVANCED", "PROFICIENT", "GROWING"], "description": "Self-assessed proficiency level" },
+        "stats":   { "type": "array", "items": { "$ref": "#/definitions/statEntry" }, "maxItems": 3, "default": [] }
+      }
+    },
+
+    "statEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["num", "label"],
+      "properties": {
+        "num":   { "type": "string", "description": "Display value (e.g. '15+', '52★', 'FIRST')" },
+        "label": { "type": "string", "description": "Caption under the value" }
+      }
+    },
+
+    "yearEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year"],
+      "properties": {
+        "year":     { "type": "integer", "minimum": 2008, "maximum": 2100 },
+        "label":    { "type": "string", "default": "", "description": "Era badge (e.g. 'ORIGIN', 'GROWTH', 'CURRENT YEAR')" },
+        "headline": { "type": "string", "default": "", "description": "Short title for the year" },
+        "bullets":  { "type": "array", "items": { "type": "string" }, "maxItems": 8, "default": [] },
+        "stats":    { "type": "array", "items": { "$ref": "#/definitions/statEntry" }, "maxItems": 3, "default": [] }
       }
     },
 
@@ -194,7 +222,8 @@
           "properties": {
             "enabled":          { "type": "boolean", "default": true },
             "start_year":       { "type": "integer", "minimum": 2008, "default": 2023 },
-            "bullets_per_year": { "type": "integer", "minimum": 1, "maximum": 8, "default": 3 }
+            "bullets_per_year": { "type": "integer", "minimum": 1, "maximum": 8, "default": 3 },
+            "years":            { "type": "array", "items": { "$ref": "#/definitions/yearEntry" }, "maxItems": 6, "default": [] }
           }
         }
       }
@@ -205,9 +234,12 @@
       "additionalProperties": false,
       "required": ["project"],
       "properties": {
-        "project": { "type": "string" },
-        "status":  { "type": "string", "enum": ["ACTIVE", "SHIPPING", "EXPLORING", "MAINTAINING", "BUILDING"], "default": "ACTIVE" },
-        "accent":  { "type": "string", "enum": ["red", "orange", "green", "gold", "cyan", "purple"], "default": "red" }
+        "project":     { "type": "string" },
+        "status":      { "type": "string", "enum": ["ACTIVE", "SHIPPING", "EXPLORING", "MAINTAINING", "BUILDING"], "default": "ACTIVE" },
+        "accent":      { "type": "string", "enum": ["red", "orange", "green", "gold", "cyan", "purple"], "default": "red" },
+        "emoji":       { "type": "string", "default": "", "description": "Optional emoji shown on the tile" },
+        "description": { "type": "string", "default": "", "description": "Word-wrapped to <=3 lines" },
+        "tech":        { "type": "array", "items": { "type": "string" }, "maxItems": 4, "default": [] }
       }
     },
 

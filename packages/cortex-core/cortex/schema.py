@@ -9,11 +9,17 @@ These models give us:
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
-from typing import Literal, Self
+from typing import Literal
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 # ── Schema versioning ────────────────────────────────────────────────────
 # Bump on breaking changes. ``Config.from_yaml`` rejects mismatched configs
