@@ -376,11 +376,25 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         mid_y = (ly + 140 + ty) // 2 if ly < 400 else (ly + ty) // 2
         anchor_x = lx if lx > 600 else lx + 320
         anchor_y = ly + 70
+        # Leader path morphs between two slightly different control-point
+        # positions over 7s — the curve breathes. The mid-point oscillates
+        # by ±36px in x and -18px in y (a subtle "lift") on alternating
+        # lobes, so the 6 lines don't all sway in unison. Data packets
+        # animating along this path via animateMotion follow the morphed d.
+        sway_dx = 36 if i % 2 == 0 else -36
+        sway_dy = -18
+        d_rest = f"M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}"
+        d_inhale = f"M {anchor_x},{anchor_y} Q {mid_x + sway_dx},{mid_y + sway_dy} {tx},{ty}"
         leader_id = f"leaderPath_{key}"
         region_lines.append(
-            f'<path id="{leader_id}" d="M {anchor_x},{anchor_y} Q {mid_x},{mid_y} {tx},{ty}" '
+            f'<path id="{leader_id}" d="{d_rest}" '
             f'stroke="{color}" stroke-width="1.2" fill="none" '
-            f'stroke-opacity="0.5" class="leader-flow"/>'
+            f'stroke-opacity="0.5" class="leader-flow">'
+            f'<animate attributeName="d" '
+            f'values="{d_rest};{d_inhale};{d_rest}" '
+            f'dur="7s" repeatCount="indefinite" calcMode="spline" '
+            f'keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>'
+            f"</path>"
         )
 
         # Data packets — small dots that travel card->brain along the leader path

@@ -58,20 +58,25 @@
   - `brand.typography.scale` (0.5-1.5 multiplier) — schema only, builders wire in follow-up
   - `brand.animations.speed` (0.25-4.0 multiplier) — schema only, builders wire in follow-up
   - `brain.atmosphere.{show_particles, show_aura, show_halos, wobble}` — fully wired in `brain.py`; toggling any flag conditionally omits the corresponding template fragment (verified: turning all four off saves ~2.3 KB and removes all atmosphere-related animations)
-- ✅ **Brain professional pass** complete (commit `b9455f4`):
-  - Per-region color glows tint each lobe with its card's color (6 radial gradients with mix-blend-mode screen, inside brain-3d so they wobble in sync)
-  - Halos moved inside brain-3d (now wobble with their dots; leader-line stroke softened 0.7 → 0.5 to mask the canvas-space offset)
-  - 14 synaptic micro-cells scattered through brain interior with staggered firing animation (opacity flash + scale pulse + glow)
+- ✅ **Brain anatomical pass** complete (commits `052dbcb`, `031c88b`):
+  - 200 source paths classified into 6 lobes via spatial centroid bucket on cerebrum + group-ID extraction for cerebellum/brainstem
+  - Per-lobe linearGradient defs (`brainGrad_{lobe}`) — each lobe paints in its card's accent color, rotating on independent periods
+  - `target_xy` overridden at build time with classified centroids — leader lines actually point to lobe positions
+  - Card label_xy positions reordered so cards sit on the same canvas side as their lobes (no crisscrossing leaders)
+  - 4 cells per lobe + 4 arcs forming intra-lobe quadrilaterals; arcs animate stroke-dashoffset for traveling pulse + opacity-fade so each impulse appears only during its window
+  - Each lobe fires on independent phase (frontal 0s → brainstem 2.0s) so the 6 networks don't sync
+- ✅ **Phase C visual polish** complete (commits `2ed853d`, `efb...?`):
+  - `feTurbulence` plasma fog behind brain — animated baseFrequency 0.010→0.022 over 14s, tinted pink/purple via feColorMatrix
+  - `animateMotion` data packets on each leader path — 12 small dots traveling card→brain, half-period staggered, fade in/out so they don't pop at endpoints
+  - `feMorphology + feGaussianBlur` electric-glow filter on lobe-cells — each synaptic flash gets an electric corona
+  - Path morphing on leader lines — d-attribute animates between two control-point positions over 7s (alternating sway direction per lobe), curves breathe; data packets follow the morphed path automatically
 - ⏳ **Wire `typography.scale` + `animations.speed` into all builders** — schema accepts these but builders don't read them yet. Mechanical: multiply font-sizes by `cfg.brand.typography.scale` and animation durations by `cfg.brand.animations.speed`.
-- ⏳ **Advanced SVG technique pass** — see [`TOOLING.md`](./TOOLING.md) for full rationale. Eight queued enhancements ranked by visual-impact-per-hour:
-  1. `feTurbulence` plasma fog behind brain (~30 min)
-  2. `<animateMotion>` data packets on leader lines (~45 min)
-  3. `feMorphology + feGaussianBlur` electric glow on micro-cells (~20 min)
-  4. `feColorMatrix` hue rotation on synapses (~15 min)
-  5. Path morphing on leader lines (breathing) (~30 min)
-  6. Animated mask reveal — scanline effect (~45 min)
-  7. `feDisplacementMap` warp synced to brain wobble (~30 min)
-  8. Cerebrum lobe classification by path centroid (research, ~2h) — unlocks per-region anatomical coloring without overlay tricks
+- ⏳ **Remaining TOOLING.md queue items** (in order of impact):
+  - `feColorMatrix` hue rotation on synapses for shimmer (~15 min)
+  - Animated mask reveal — scanline effect across the brain (~45 min)
+  - `feDisplacementMap` warp synced to brain wobble — brain anatomy itself ripples (~30 min)
+  - Apply atmospheric techniques (plasma fog, traveling packets, electric glow) to OTHER widgets (tech-cards, current-focus, yearly-highlights) so the whole composition reads as one polished family
+- 🔜 Other widgets polish: extend the brain's atmosphere/animation language to current-focus, yearly-highlights, tech-cards so they match the brain's level of finish
 - 🔜 **Phase B.2** — inline README directives like `<!-- CORTEX:STYLE: palette=cyberpunk; animation=intense -->` parsed by `markers.py` for one-off overrides without editing YAML. See VISION.md.
 - 🔜 **Phase B.3** — `apps/dashboard/` Next.js web playground at `app.cortex.dev`. See VISION.md.
 - 🔜 **Phase C** — own animated header/footer banner (drop capsule-render dep), brain heatmap, skill DNA strand. See VISION.md.

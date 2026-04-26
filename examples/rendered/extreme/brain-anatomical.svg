@@ -237,12 +237,12 @@
 
   <!-- Leader lines (drawn behind brain) -->
   <g fill="none">
-        <path id="leaderPath_frontal" d="M 340,270 Q 245,367 471,395" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path id="leaderPath_parietal" d="M 860,200 Q 625,265 710,260" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path id="leaderPath_occipital" d="M 1060,270 Q 984,369 909,398" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path id="leaderPath_temporal" d="M 1060,550 Q 883,474 706,468" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path id="leaderPath_cerebellum" d="M 1060,730 Q 942,614 824,568" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
-    <path id="leaderPath_brainstem" d="M 340,730 Q 381,631 743,602" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"/>
+        <path id="leaderPath_frontal" d="M 340,270 Q 245,367 471,395" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 340,270 Q 245,367 471,395;M 340,270 Q 281,349 471,395;M 340,270 Q 245,367 471,395" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_parietal" d="M 860,200 Q 625,265 710,260" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 860,200 Q 625,265 710,260;M 860,200 Q 589,247 710,260;M 860,200 Q 625,265 710,260" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_occipital" d="M 1060,270 Q 984,369 909,398" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,270 Q 984,369 909,398;M 1060,270 Q 1020,351 909,398;M 1060,270 Q 984,369 909,398" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_temporal" d="M 1060,550 Q 883,474 706,468" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,550 Q 883,474 706,468;M 1060,550 Q 847,456 706,468;M 1060,550 Q 883,474 706,468" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_cerebellum" d="M 1060,730 Q 942,614 824,568" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,730 Q 942,614 824,568;M 1060,730 Q 978,596 824,568;M 1060,730 Q 942,614 824,568" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_brainstem" d="M 340,730 Q 381,631 743,602" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 340,730 Q 381,631 743,602;M 340,730 Q 345,613 743,602;M 340,730 Q 381,631 743,602" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
   </g>
 
   <!-- Data packets — small dots traveling card-to-brain along each leader path
