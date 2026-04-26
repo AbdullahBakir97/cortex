@@ -13,6 +13,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, ParticlesConfig
+from ..themes import REDUCED_MOTION_CSS
 
 
 def _x(s: str) -> str:
@@ -138,6 +139,7 @@ def _render(config: Config) -> str:
   <style><![CDATA[
     .pc-title {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }}
     .pc-label {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 700; letter-spacing: 0.04em; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   {title_svg}
   {core}

@@ -18,6 +18,9 @@ identity:
 
 brand:
   palette: "neon-rainbow"
+  # Coordinated theme — propagates as default colors to every widget.
+  # Try: outrun (default) | sunset | midnight | minimal | cyberpunk | rose
+  theme: "outrun"
   typography:
     display: "Inter"
     mono:    "JetBrains Mono"

@@ -25,6 +25,9 @@
     .np-artist    { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 500; font-size: 16px; fill: #FFFFFF; fill-opacity: 0.65; }
     .np-time      { font-family: 'JetBrains Mono','SF Mono',monospace; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.55; letter-spacing: 0.06em; }
     .np-glyph     { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 900; font-size: 80px; fill: #FFFFFF; }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   <rect x="28" y="28" width="1144" height="164" rx="16"
         fill="url(#np-card)" filter="url(#np-shadow)"/>

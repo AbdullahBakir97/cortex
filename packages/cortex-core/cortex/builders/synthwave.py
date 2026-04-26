@@ -11,6 +11,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, SynthwaveConfig
+from ..themes import REDUCED_MOTION_CSS
 
 
 def _x(s: str) -> str:
@@ -167,6 +168,7 @@ def _render(config: Config) -> str:
   <style><![CDATA[
     .sw-title    {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 900; font-size: 76px; letter-spacing: 0.04em; text-transform: uppercase; fill: #FFFFFF; filter: drop-shadow(0 2px 14px rgba(255,107,157,0.7)); }}
     .sw-subtitle {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 500; font-size: 18px; letter-spacing: 0.32em; text-transform: uppercase; fill: #FFFFFF; fill-opacity: 0.85; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   <rect x="0" y="0" width="{WIDTH}" height="{horizon_y}" fill="url(#sw-sky)"/>
   <rect x="0" y="{horizon_y}" width="{WIDTH}" height="{height - horizon_y}" fill="url(#sw-floor)"/>

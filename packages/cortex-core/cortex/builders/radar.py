@@ -12,6 +12,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, RadarConfig
+from ..themes import REDUCED_MOTION_CSS, resolve_theme
 
 
 def _x(s: str) -> str:
@@ -41,7 +42,7 @@ def _render(config: Config) -> str:
     height = rcfg.height
     cx, cy = WIDTH / 2, height / 2 + 10
     max_r = min(WIDTH * 0.18, (height - 80) / 2)
-    color = rcfg.color or DEFAULT_COLOR
+    color = rcfg.color or resolve_theme(config)["primary"]
     title = rcfg.title or "Skill radar"
 
     axes = rcfg.axes
@@ -128,6 +129,7 @@ def _render(config: Config) -> str:
   <style><![CDATA[
     .r-title  {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }}
     .r-label  {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 600; font-size: 14px; fill: #FFFFFF; fill-opacity: 0.86; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   {title_svg}
   <g transform="translate(0,0)">

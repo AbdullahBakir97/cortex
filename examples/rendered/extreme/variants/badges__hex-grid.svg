@@ -17,6 +17,9 @@
     .b-value  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.78; letter-spacing: 0.06em; text-transform: uppercase; }
     .b-pulse  { animation: bPulse 3.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes bPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   
   <g transform="translate(20,20)"><defs><linearGradient id="bg-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF9900" stop-opacity="0.95"/><stop offset="100%" stop-color="#FF9900" stop-opacity="0.55"/></linearGradient><clipPath id="clip-0"><path d="M 56.0,0.0 L 104.5,29.0 L 104.5,87.0 L 56.0,116.0 L 7.5,87.0 L 7.5,29.0 Z"/></clipPath><linearGradient id="shimmer-0" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.45"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs><path d="M 56.0,0.0 L 104.5,29.0 L 104.5,87.0 L 56.0,116.0 L 7.5,87.0 L 7.5,29.0 Z" fill="url(#bg-0)" filter="url(#glow-0)"/><path d="M 56.0,0.0 L 104.5,29.0 L 104.5,87.0 L 56.0,116.0 L 7.5,87.0 L 7.5,29.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/><rect x="-112" y="0" width="45" height="116" fill="url(#shimmer-0)" clip-path="url(#clip-0)"><animate attributeName="x" from="-112" to="179" begin="0.00s" dur="2.6s" repeatCount="indefinite"/></rect><text x="56.0" y="49.4" class="b-mono" text-anchor="middle">AWS</text><text x="56.0" y="86.0" class="b-label" text-anchor="middle">AWS Pro</text></g>
