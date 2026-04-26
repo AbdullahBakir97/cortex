@@ -176,8 +176,9 @@ _HEAD = """<?xml version="1.0" encoding="UTF-8"?>
     .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
     .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
     .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
-    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
-    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
+    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-num-sm { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
+    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
 
     /* Travelling edge highlight — a colored segment loops around each card
        perimeter every 4s, staggered per card. Same pattern brain region cards
@@ -301,8 +302,16 @@ def _render_card(slot: dict, region: BrainRegion, *, show_stats: bool) -> str:
     if show_stats:
         for i, stat in enumerate(stats):
             sx = 32 + i * 120
+            # Long stat values (>5 chars, typically mastery words like
+            # "PROFICIENT" or "ADVANCED") get a smaller font so they don't
+            # overflow the ~96px-wide column. Short numeric values like "4+"
+            # or "30+" stay at the larger 26px for visual prominence.
+            num_class = "t-stat-num-sm" if len(stat.num) > 5 else "t-stat-num"
+            # Smaller font sits 4px lower so its baseline visually aligns
+            # with the larger numeric stats in adjacent columns.
+            num_y = 308 if len(stat.num) > 5 else 306
             parts.append(
-                f'      <text x="{sx}"  y="306" class="t-stat-num" fill="{slot["hex"]}">{_x(stat.num)}</text>'
+                f'      <text x="{sx}"  y="{num_y}" class="{num_class}" fill="{slot["hex"]}">{_x(stat.num)}</text>'
             )
             parts.append(
                 f'      <text x="{sx}"  y="324" class="t-stat-lbl">{_x(stat.label)}</text>'

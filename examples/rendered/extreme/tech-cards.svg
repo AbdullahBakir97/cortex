@@ -5,8 +5,9 @@
     .t-title    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 34px; letter-spacing: -0.01em; fill: #FFFFFF; }
     .t-tagline  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 17px; font-style: italic; fill: #9BA1A6; }
     .t-tool     { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 500; font-size: 18px; letter-spacing: 0.01em; fill: #E8E8E8; }
-    .t-stat-num { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
-    .t-stat-lbl { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
+    .t-stat-num    { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 26px; }
+    .t-stat-num-sm { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 700; font-size: 18px; }
+    .t-stat-lbl    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; fill: #8B95A1; }
 
     /* Travelling edge highlight — a colored segment loops around each card
        perimeter every 4s, staggered per card. Same pattern brain region cards
@@ -100,7 +101,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#F90001">30+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#F90001">EXPERT</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#F90001">EXPERT</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b1"/>
@@ -122,7 +123,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#FF652F">20+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#FF652F">ADVANCED</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#FF652F">ADVANCED</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b2"/>
@@ -144,7 +145,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#34D399">10+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#34D399">PROFICIENT</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#34D399">PROFICIENT</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="302" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b3"/>
@@ -166,7 +167,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#FFD23F">30+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#FFD23F">EXPERT</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#FFD23F">EXPERT</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="368" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b4"/>
@@ -188,7 +189,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#22D3EE">20+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#22D3EE">ADVANCED</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#22D3EE">ADVANCED</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="337" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b5"/>
@@ -210,7 +211,7 @@
       <text x="32"  y="324" class="t-stat-lbl">YEARS</text>
       <text x="152"  y="306" class="t-stat-num" fill="#A78BFA">5+</text>
       <text x="152"  y="324" class="t-stat-lbl">PROJECTS</text>
-      <text x="272"  y="306" class="t-stat-num" fill="#A78BFA">GROWING</text>
+      <text x="272"  y="308" class="t-stat-num-sm" fill="#A78BFA">GROWING</text>
       <text x="272"  y="324" class="t-stat-lbl">MASTERY</text>
       <rect x="32" y="354" width="336" height="3" rx="1.5" fill="#21262D"/>
       <line x1="32" y1="355.5" x2="257" y2="355.5" stroke="url(#profGrad)" stroke-width="3" stroke-linecap="round" class="draw-bar b6"/>
