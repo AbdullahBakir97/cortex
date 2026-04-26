@@ -132,6 +132,8 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     p_background = palette["background"]
 
     name = _x(config.identity.name)
+    atm = config.brain.atmosphere
+    brain_3d_class = "brain-3d" if atm.wobble else ""
 
     # Region labels (anatomical → user's domain mapping)
     region_blocks: list[str] = []
@@ -304,27 +306,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
   </defs>
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
-  <rect width="1400" height="900" fill="url(#bgAura)"/>
+  {('<rect width="1400" height="900" fill="url(#bgAura)"/>') if atm.show_aura else ""}
 
-  <!-- Ambient particle drift — atmospheric depth behind the brain -->
-  <g fill="{p_accent_b}">
+  {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
+  <g fill="''' + p_accent_b + '''">
     <circle cx="120"  cy="180" r="1.8" class="particle p1"/>
     <circle cx="260"  cy="540" r="1.4" class="particle p2"/>
-    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="{p_accent_a}"/>
+    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="''' + p_accent_a + '''"/>
     <circle cx="420"  cy="760" r="1.2" class="particle p4"/>
-    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="{p_accent_a}"/>
+    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="''' + p_accent_a + '''"/>
     <circle cx="700"  cy="220" r="2.2" class="particle p6"/>
-    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="{p_secondary}"/>
+    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="''' + p_secondary + '''"/>
     <circle cx="900"  cy="160" r="1.8" class="particle p8"/>
-    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="{p_accent_a}"/>
+    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="''' + p_accent_a + '''"/>
     <circle cx="1080" cy="340" r="2.0" class="particle p10"/>
     <circle cx="1180" cy="780" r="1.4" class="particle p11"/>
-    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="{p_secondary}"/>
+    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="''' + p_secondary + '''"/>
     <circle cx="160"  cy="780" r="1.6" class="particle p13"/>
-    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="{p_accent_a}"/>
+    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="''' + p_accent_a + '''"/>
     <circle cx="640"  cy="80"  r="1.8" class="particle p15"/>
     <circle cx="1320" cy="500" r="1.4" class="particle p16"/>
-  </g>
+  </g>''') if atm.show_particles else ""}
 
   <!-- Title -->
   <text x="700" y="50" class="t-tag" text-anchor="middle">⏵ NEURAL · SKILL · ATLAS · v1.0 ⏴</text>
@@ -335,19 +337,20 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     {chr(10).join("    " + ln for ln in region_lines)}
   </g>
 
-  <!-- Static halo rings in canvas space — anchor the leader-line endpoints
+  {('''<!-- Static halo rings in canvas space — anchor the leader-line endpoints
        so the connection reads as continuous even when the spark dot below
        drifts with the brain's 3D wobble. -->
   <g>
-    {chr(10).join("    " + ha for ha in target_halos)}
-  </g>
+    ''' + chr(10).join("    " + ha for ha in target_halos) + '''
+  </g>''') if atm.show_halos else ""}
 
-  <!-- The neon brain (Wikimedia anatomical, recolored, centered, 3D wobble).
-       Spark dots live INSIDE the brain-3d group so they inherit the wobble
-       and stay anchored to the actual lobe positions as the brain moves. -->
+  <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
+       3D-wobbling). Spark dots live INSIDE the wobble group so they inherit
+       the animation and stay anchored to actual lobe positions. The wobble
+       class is conditional on brain.atmosphere.wobble in the user's config. -->
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
-      <g class="brain-3d">
+      <g class="{brain_3d_class}">
         {brain_content}
         {chr(10).join("        " + sd for sd in spark_dots)}
       </g>

@@ -156,9 +156,10 @@
     <circle cx="760" cy="630" r="14" fill="none" stroke="#A78BFA" stroke-width="1.5" class="target-halo" style="animation-delay:1.5s"/>
   </g>
 
-  <!-- The neon brain (Wikimedia anatomical, recolored, centered, 3D wobble).
-       Spark dots live INSIDE the brain-3d group so they inherit the wobble
-       and stay anchored to the actual lobe positions as the brain moves. -->
+  <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
+       3D-wobbling). Spark dots live INSIDE the wobble group so they inherit
+       the animation and stay anchored to actual lobe positions. The wobble
+       class is conditional on brain.atmosphere.wobble in the user's config. -->
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="brain-3d">

@@ -68,7 +68,8 @@
           "additionalProperties": false,
           "properties": {
             "display": { "type": "string", "default": "Inter",          "description": "Display font (any Google Font name)" },
-            "mono":    { "type": "string", "default": "JetBrains Mono", "description": "Monospace font" }
+            "mono":    { "type": "string", "default": "JetBrains Mono", "description": "Monospace font" },
+            "scale":   { "type": "number", "minimum": 0.5, "maximum": 1.5, "default": 1.0, "description": "Global font-size multiplier (0.85 compact, 1.15 comfortable)" }
           }
         },
         "animations": {
@@ -76,7 +77,8 @@
           "additionalProperties": false,
           "properties": {
             "enabled":   { "type": "boolean", "default": true },
-            "intensity": { "type": "string", "enum": ["off", "subtle", "medium", "high"], "default": "high" }
+            "intensity": { "type": "string",  "enum": ["off", "subtle", "medium", "high"], "default": "high" },
+            "speed":     { "type": "number",  "minimum": 0.25, "maximum": 4.0, "default": 1.0, "description": "Animation duration multiplier (>1 slower, <1 faster). Use 2.0+ for reduced-motion preferences." }
           }
         }
       }
@@ -115,6 +117,17 @@
           "description": "Pro tier — lobes glow brighter where you actually contribute",
           "properties": {
             "enabled": { "type": "boolean", "default": false }
+          }
+        },
+        "atmosphere": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Optional ambient-effect toggles. Turn off for a cleaner brain or to honor reduced-motion preferences.",
+          "properties": {
+            "show_particles": { "type": "boolean", "default": true, "description": "16 ambient drifting particles behind the brain" },
+            "show_aura":      { "type": "boolean", "default": true, "description": "Pink/purple radial glow centered on the canvas" },
+            "show_halos":     { "type": "boolean", "default": true, "description": "Static rings at leader-line endpoints" },
+            "wobble":         { "type": "boolean", "default": true, "description": "3D scaleX/skewY breathing animation on brain anatomy" }
           }
         }
       }

@@ -50,13 +50,16 @@
 
 ## Active work
 - ✅ **Phase A** complete — marketing README backed by live-rendered SVGs, auto-render workflow on push, fonts scaled for README legibility (brain + tech-cards), 100% width embeds.
-- ⏳ **Widget polish pass** in progress:
-  - [ ] Brain — leader lines should track the brain's 3D wobble (currently static; lines float while brain moves)
-  - [ ] Brain — atmosphere: particle layer / ambient gradient motion behind the brain
-  - [ ] Brain — refine card style (currently flat dark rect; could use glassmorphism + glow consistent with tech-cards)
-  - [ ] yearly-highlights — bullet font scale-up (same 0.55× downscale fix as tech-cards)
-  - [ ] current-focus — same downscale-aware font bump
-- 🔜 **Phase B** — multi-modal customization (B.1 schema theming knobs · B.2 inline README directives · B.3 `apps/dashboard/` web playground). See VISION.md.
+- ✅ **Widget readability + atmosphere pass** complete:
+  - yearly-highlights + current-focus fonts scaled for README legibility (commit `a157fa5`)
+  - Brain atmosphere: glassmorphism cards, bg pulse, bgAura, 16 ambient particles, spark dots wobble inside brain-3d, static halo rings anchoring leader-line endpoints (commit `132216f`)
+- ✅ **Phase B.1** — schema theming surface complete:
+  - `brand.typography.scale` (0.5-1.5 multiplier) — schema only, builders wire in follow-up
+  - `brand.animations.speed` (0.25-4.0 multiplier) — schema only, builders wire in follow-up
+  - `brain.atmosphere.{show_particles, show_aura, show_halos, wobble}` — fully wired in `brain.py`; toggling any flag conditionally omits the corresponding template fragment (verified: turning all four off saves ~2.3 KB and removes all atmosphere-related animations)
+- ⏳ **Wire `typography.scale` + `animations.speed` into all builders** — currently the schema accepts these but builders don't read them yet. Wiring is mechanical: multiply font-sizes by `cfg.brand.typography.scale` and animation durations by `cfg.brand.animations.speed` everywhere they appear in the f-string templates.
+- 🔜 **Phase B.2** — inline README directives like `<!-- CORTEX:STYLE: palette=cyberpunk; animation=intense -->` parsed by `markers.py` for one-off overrides without editing YAML. See VISION.md.
+- 🔜 **Phase B.3** — `apps/dashboard/` Next.js web playground at `app.cortex.dev`. See VISION.md.
 - 🔜 **Phase C** — own animated header/footer banner (drop capsule-render dep), brain heatmap, skill DNA strand. See VISION.md.
 
 ## Open issues / known TODOs

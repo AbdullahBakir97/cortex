@@ -68,11 +68,18 @@ class BrandColors(_Strict):
 class Typography(_Strict):
     display: str = "Inter"
     mono: str = "JetBrains Mono"
+    # Global font-size multiplier — proportionally scales every widget's text.
+    # Useful for users embedding Cortex in narrower contexts (e.g. organisation
+    # READMEs). 1.0 = builder defaults, 0.85 = compact, 1.15 = comfortable.
+    scale: float = Field(default=1.0, ge=0.5, le=1.5)
 
 
 class Animations(_Strict):
     enabled: bool = True
     intensity: Literal["off", "subtle", "medium", "high"] = "high"
+    # Global animation duration multiplier. >1.0 slows everything down
+    # (good for accessibility / reduced-motion preferences); <1.0 speeds up.
+    speed: float = Field(default=1.0, ge=0.25, le=4.0)
 
 
 class Brand(_Strict):
@@ -126,12 +133,28 @@ class BrainHeatmap(_Strict):
     enabled: bool = False
 
 
+class BrainAtmosphere(_Strict):
+    """Optional ambient-effect toggles for the anatomical brain widget.
+
+    Each flag controls one visual layer added in the brain atmosphere pass.
+    Defaults match the v0.3 reference look; turn flags off for a cleaner,
+    more minimal brain (useful for users on slower connections or with
+    reduced-motion accessibility preferences).
+    """
+
+    show_particles: bool = True  # 16 ambient drifting particles behind brain
+    show_aura: bool = True  # pink/purple radial glow centered on canvas
+    show_halos: bool = True  # static rings at leader-line endpoints
+    wobble: bool = True  # 3D scaleX/skewY animation on brain anatomy
+
+
 class Brain(_Strict):
     enabled: bool = True
     source: Literal["wikimedia", "abstract", "custom"] = "wikimedia"
     regions: BrainRegions = Field(default_factory=BrainRegions)
     three_d: BrainThreeD = Field(default_factory=BrainThreeD)
     heatmap: BrainHeatmap = Field(default_factory=BrainHeatmap)
+    atmosphere: BrainAtmosphere = Field(default_factory=BrainAtmosphere)
 
 
 # ── Typing ───────────────────────────────────────────────────────────────

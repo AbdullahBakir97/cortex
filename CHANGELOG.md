@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added — Phase B.1 theming surface (foundation for inline directives + web playground)
+- **`brain.typography.scale`** — global font-size multiplier (0.5-1.5,
+  default 1.0). Useful for users embedding Cortex in narrower contexts
+  or with smaller READMEs. Schema-only for now; builders wire it in
+  follow-up commits.
+- **`brain.animations.speed`** — global animation duration multiplier
+  (0.25-4.0, default 1.0). >1.0 slows everything down; useful for
+  reduced-motion accessibility preferences.
+- **`brain.atmosphere`** — sub-model with four bool toggles for the
+  visual layers added in the brain atmosphere pass:
+  - `show_particles` (default true) — 16 ambient drifting particles
+  - `show_aura` (default true) — pink/purple radial glow center-canvas
+  - `show_halos` (default true) — static rings at leader-line endpoints
+  - `wobble` (default true) — 3D scaleX/skewY breathing on brain anatomy
+- All four flags wired into `cortex/builders/brain.py` via conditional
+  template fragments — disabling all four trims the rendered SVG by
+  ~2.3 KB and removes all atmosphere-related animations. Backward
+  compatible: existing configs without these fields render identically
+  to before via Pydantic defaults.
+
+### Added — widget readability sweep
+- **`cortex/builders/timeline.py`** — yearly-highlights fonts scaled
+  for the ~0.55x README downscale (display 30->36, headline 22->26,
+  bullet body 11.5->15, etc.). Card height 360->460 + svg_h 660->760
+  + per-card y-positions re-spaced.
+- **`cortex/builders/focus.py`** — current-focus fonts scaled the same
+  way (title 19->24, desc 12.5->16, status 9->12, pill 10->13). Tile
+  dimensions 420x220 -> 460x280 with re-spaced internal positions.
+- **`cortex/builders/brain.py`** — five atmosphere upgrades shipped
+  as part of the polish pass: glassmorphism cards (top stripe + highlight
+  overlay matching tech-cards), background pulse (bgRadial r animation),
+  bgAura radial-gradient overlay, 16 ambient particles, spark dots
+  moved INSIDE brain-3d transform group so they wobble with the brain,
+  static halo rings in canvas space anchoring the leader-line endpoints.
+
 ### Added — operational infrastructure
 - **`CONTEXT.md`** at the repo root — single source of truth for current
   project state. Designed to be read first when resuming work; replaces
