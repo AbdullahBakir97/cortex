@@ -669,6 +669,21 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="aurora_a" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_b" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_c" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
       <stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/>
@@ -691,19 +706,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
-    </filter>
-    <!-- Plasma fog: feTurbulence generates animated Perlin noise; feColorMatrix
-         tints it pink/purple at low alpha. Renders as a swirling cosmic
-         atmosphere when applied to a covering rect. -->
-    <filter id="plasmaFog" x="-10%" y="-10%" width="120%" height="120%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="noise">
-        <animate attributeName="baseFrequency" values="0.010;0.022;0.010" dur="14s" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feColorMatrix in="noise" type="matrix" values="
-        0 0 0 0 0.55
-        0 0 0 0 0.30
-        0 0 0 0 0.85
-        0 0 0 0.42 0"/>
     </filter>
     <!-- Electric glow: dilate the source then blur it then merge under the
          original. Applied to lobe-cells via CSS so each synaptic flash gets
@@ -818,7 +820,23 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
   {('<rect width="1400" height="900" fill="url(#bgAura)"/>') if atm.show_aura else ""}
-  {('<rect x="200" y="120" width="1000" height="660" fill="white" filter="url(#plasmaFog)" opacity="0.55"/>') if atm.show_aura else ""}
+  {('''<!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
+       on staggered timers. Replaces the old turbulence plasma fog with smooth
+       color flow that reads as atmospheric light, not noise. -->
+  <g class="aurora">
+    <rect x="-200" y="-200" width="900" height="900" fill="url(#aurora_a)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 200,150; 0,0" dur="28s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="700" y="200" width="900" height="900" fill="url(#aurora_b)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; -180,-120; 0,0" dur="35s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="200" y="500" width="900" height="900" fill="url(#aurora_c)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 160,-80; 0,0" dur="31s" repeatCount="indefinite"/>
+    </rect>
+  </g>''') if atm.show_aura else ""}
 
   {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
   <g fill="''' + p_accent_b + '''">
