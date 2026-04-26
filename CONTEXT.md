@@ -29,6 +29,7 @@
 | Live showcase | `examples/rendered/extreme/*.svg` | Pre-rendered SVGs embedded in the marketing README |
 | CI | `.github/workflows/{ci.yml, build-examples.yml, refresh-context.yml}` | Lint+test · auto-render showcase · auto-refresh this file |
 | Strategy & roadmap | [`VISION.md`](./VISION.md) | Phases B/C/D, viral strategy, competitive landscape |
+| Visual tooling decision | [`TOOLING.md`](./TOOLING.md) | Why we stay on SVG (not Figma/Lottie/Three.js for README); advanced SVG techniques to ship next |
 | Architecture deep-dive | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Repo layout, data flow, package responsibilities |
 | Changelog | [`CHANGELOG.md`](./CHANGELOG.md) | Keep-a-Changelog format; per-release notes |
 
@@ -57,7 +58,20 @@
   - `brand.typography.scale` (0.5-1.5 multiplier) — schema only, builders wire in follow-up
   - `brand.animations.speed` (0.25-4.0 multiplier) — schema only, builders wire in follow-up
   - `brain.atmosphere.{show_particles, show_aura, show_halos, wobble}` — fully wired in `brain.py`; toggling any flag conditionally omits the corresponding template fragment (verified: turning all four off saves ~2.3 KB and removes all atmosphere-related animations)
-- ⏳ **Wire `typography.scale` + `animations.speed` into all builders** — currently the schema accepts these but builders don't read them yet. Wiring is mechanical: multiply font-sizes by `cfg.brand.typography.scale` and animation durations by `cfg.brand.animations.speed` everywhere they appear in the f-string templates.
+- ✅ **Brain professional pass** complete (commit `b9455f4`):
+  - Per-region color glows tint each lobe with its card's color (6 radial gradients with mix-blend-mode screen, inside brain-3d so they wobble in sync)
+  - Halos moved inside brain-3d (now wobble with their dots; leader-line stroke softened 0.7 → 0.5 to mask the canvas-space offset)
+  - 14 synaptic micro-cells scattered through brain interior with staggered firing animation (opacity flash + scale pulse + glow)
+- ⏳ **Wire `typography.scale` + `animations.speed` into all builders** — schema accepts these but builders don't read them yet. Mechanical: multiply font-sizes by `cfg.brand.typography.scale` and animation durations by `cfg.brand.animations.speed`.
+- ⏳ **Advanced SVG technique pass** — see [`TOOLING.md`](./TOOLING.md) for full rationale. Eight queued enhancements ranked by visual-impact-per-hour:
+  1. `feTurbulence` plasma fog behind brain (~30 min)
+  2. `<animateMotion>` data packets on leader lines (~45 min)
+  3. `feMorphology + feGaussianBlur` electric glow on micro-cells (~20 min)
+  4. `feColorMatrix` hue rotation on synapses (~15 min)
+  5. Path morphing on leader lines (breathing) (~30 min)
+  6. Animated mask reveal — scanline effect (~45 min)
+  7. `feDisplacementMap` warp synced to brain wobble (~30 min)
+  8. Cerebrum lobe classification by path centroid (research, ~2h) — unlocks per-region anatomical coloring without overlay tricks
 - 🔜 **Phase B.2** — inline README directives like `<!-- CORTEX:STYLE: palette=cyberpunk; animation=intense -->` parsed by `markers.py` for one-off overrides without editing YAML. See VISION.md.
 - 🔜 **Phase B.3** — `apps/dashboard/` Next.js web playground at `app.cortex.dev`. See VISION.md.
 - 🔜 **Phase C** — own animated header/footer banner (drop capsule-render dep), brain heatmap, skill DNA strand. See VISION.md.
