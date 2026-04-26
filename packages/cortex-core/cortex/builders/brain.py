@@ -712,20 +712,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'opacity="{s_op}" class="far-star fs{s_dur}"/>'
         )
 
-    # Perspective grid — thin lines forming a 80px grid across the canvas,
-    # faded at edges via a radial mask. Slow diagonal drift evokes data space.
-    grid_lines: list[str] = []
-    for x in range(80, 1400, 80):
-        grid_lines.append(
-            f'<line x1="{x}" y1="0" x2="{x}" y2="900" '
-            f'stroke="{p_accent_b}" stroke-width="0.5" stroke-opacity="0.06"/>'
-        )
-    for y in range(80, 900, 80):
-        grid_lines.append(
-            f'<line x1="0" y1="{y}" x2="1400" y2="{y}" '
-            f'stroke="{p_accent_b}" stroke-width="0.5" stroke-opacity="0.06"/>'
-        )
-
     # Nebula clouds — 4 large soft blurred radial gradients drifting on
     # staggered phases. More organic than aurora bands (which are flat
     # circles); these have feGaussianBlur for amorphous edges.
@@ -841,14 +827,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
       <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="gridFade" cx="50%" cy="50%" r="55%">
-      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
-      <stop offset="80%"  stop-color="#FFFFFF" stop-opacity="0.4"/>
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
-    </radialGradient>
-    <mask id="gridMask">
-      <rect width="1400" height="900" fill="url(#gridFade)"/>
-    </mask>
     <radialGradient id="nebula_0" cx="50%" cy="50%" r="50%">
       <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
       <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.03"/>
@@ -1070,15 +1048,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
        Each star uses a CSS class fs8/fs10/fs12/fs14 for varied twinkle speed. -->
   <g class="stars">
   ''' + chr(10).join("    " + s for s in far_stars) + '''
-  </g>''') if atm.show_aura else ""}
-
-  {('''<!-- Perspective grid: 80px grid lines, edge-faded via radial mask, slow drift. -->
-  <g class="grid" mask="url(#gridMask)">
-    <g>
-      <animateTransform attributeName="transform" type="translate"
-                        values="0,0; 40,30; 0,0" dur="50s" repeatCount="indefinite"/>
-  ''' + chr(10).join("      " + ln for ln in grid_lines) + '''
-    </g>
   </g>''') if atm.show_aura else ""}
 
   {('''<!-- Nebula clouds: 4 large blurred radial gradients drifting slowly.
