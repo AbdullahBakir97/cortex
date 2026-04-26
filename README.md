@@ -127,37 +127,105 @@ There are dozens of profile README generators. Cortex is the only one that gives
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 
 <!-- CORTEX:SHOWCASE:START -->
-## 🎨 What Cortex Generates
+## 🎨 What Cortex Generates — Examples & Recipes
 
-Every image below is a live SVG generated from your `cortex.yml`. Refreshed on every push by the GitHub Action. Configure each via the snippet shown — full schema at `cortex.dev/schema/v1.json`.
+Every preview below is a live SVG generated from your `cortex.yml`. Each widget has multiple example configurations — click any `<details>` to expand the variant and copy the snippet straight into your config. Full schema reference: [`packages/cortex-schema/schema.json`](packages/cortex-schema/schema.json).
 
-### Header Banner
+<details>
+<summary><strong>Header Banner</strong> &nbsp;·&nbsp; <code>header-banner.svg</code> &nbsp;·&nbsp; 4 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/header-banner.svg" alt="Header Banner" width="100%"/>
 </p>
 
-_Animated wave-shape header with title + subtitle and drifting jewel-tone gradient._
+_Wide animated banner with shaped edge — capsule-render replacement. Title, subtitle, drifting gradient._
+
+<details>
+<summary><em>Wave shape, drifting (default)</em></summary>
+
+Sine-wave bottom edge, jewel-tone gradient drifts left↔right on a 22s ease-in-out cycle.
 
 ```yaml
 cards:
   header:
     enabled: true
-    shape: wave           # wave | slice | rect
+    shape: wave
     title: "Your Name"
     subtitle: "FULLSTACK · ENGINEER · BUILDER"
     height: 240
-    animation: drift     # drift | pulse | static
-    # colors: ["#0E0820", "#7B5EAA", "#C95E8A"]   # optional
+    animation: drift
 ```
 
-### Anatomical Brain
+</details>
+
+<details>
+<summary><em>Slice shape, pulsing</em></summary>
+
+Diagonal bottom edge with opacity pulse — minimalist, matches landing-page aesthetics.
+
+```yaml
+cards:
+  header:
+    enabled: true
+    shape: slice
+    title: "Your Name"
+    height: 220
+    animation: pulse
+```
+
+</details>
+
+<details>
+<summary><em>Rect shape, static</em></summary>
+
+No shaped edge, no animation — clean rectangular header for code-focused profiles.
+
+```yaml
+cards:
+  header:
+    enabled: true
+    shape: rect
+    title: "Your Name"
+    subtitle: "github.com/your-handle"
+    height: 180
+    animation: static
+```
+
+</details>
+
+<details>
+<summary><em>Custom color palette</em></summary>
+
+Override the default jewel-tones with your own gradient stops (3-5 hex colors recommended).
+
+```yaml
+cards:
+  header:
+    enabled: true
+    shape: wave
+    title: "Your Name"
+    height: 240
+    animation: drift
+    colors: ["#0D1117", "#1E3A8A", "#2563EB", "#0EA5E9", "#0D1117"]
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Anatomical Brain</strong> &nbsp;·&nbsp; <code>brain-anatomical.svg</code> &nbsp;·&nbsp; 5 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/brain-anatomical.svg" alt="Anatomical Brain" width="100%"/>
 </p>
 
-_200+ Wikimedia anatomy paths recolored with rose-family gradient, masked aurora flow, DNA helixes, electric arcs._
+_200+ Wikimedia anatomy paths recolored with rose-family gradient, masked aurora flow, DNA helixes, electric arcs across 6 lobes._
+
+<details>
+<summary><em>Default neon-rainbow palette</em></summary>
+
+Six lobes mapped to skill domains, full atmospheric layers (aurora, particles, DNA, halos), 3D wobble enabled.
 
 ```yaml
 brain:
@@ -169,21 +237,110 @@ brain:
     show_halos: true
     wobble: true
   regions:
-    frontal:    { domain: Backend,     tools: [Python, Django] }
-    parietal:   { domain: Architecture, tools: [Microservices] }
-    occipital:  { domain: Frontend,    tools: [Vue, Nuxt] }
-    temporal:   { domain: Data Layer,  tools: [PostgreSQL] }
-    cerebellum: { domain: DevOps,      tools: [Docker, AWS] }
-    brainstem:  { domain: AI & Data,   tools: [PyTorch] }
+    frontal:    { domain: Backend,      tools: [Python, Django, FastAPI] }
+    parietal:   { domain: Architecture, tools: [Microservices, RabbitMQ] }
+    occipital:  { domain: Frontend,     tools: [Vue, Nuxt, TypeScript] }
+    temporal:   { domain: Data Layer,   tools: [PostgreSQL, Redis] }
+    cerebellum: { domain: DevOps,       tools: [Docker, GitHub Actions] }
+    brainstem:  { domain: AI & Data,    tools: [PyTorch, LLMs, RAG] }
 ```
 
-### Tech Stack Cards
+</details>
+
+<details>
+<summary><em>Cyberpunk palette</em></summary>
+
+Hot magenta + electric cyan + acid yellow — same brain anatomy, different vibe.
+
+```yaml
+brain:
+  enabled: true
+  palette: cyberpunk
+  atmosphere:
+    show_aura: true
+    show_particles: true
+    wobble: true
+```
+
+</details>
+
+<details>
+<summary><em>Monochrome (atmosphere off)</em></summary>
+
+Subtle, professional single-accent rendering — atmospheric layers disabled for a code-focused look.
+
+```yaml
+brain:
+  enabled: true
+  palette: monochrome
+  atmosphere:
+    show_aura: false
+    show_particles: false
+    show_halos: false
+    wobble: false
+```
+
+</details>
+
+<details>
+<summary><em>Custom palette via brand.colors</em></summary>
+
+Override individual palette tokens directly — useful when your brand has specific brand colors that don't match a preset.
+
+```yaml
+brand:
+  colors:
+    primary:    "#FF2D6F"
+    secondary:  "#FFA94D"
+    accent_a:   "#22D3EE"
+    accent_b:   "#A78BFA"
+    accent_c:   "#FFD23F"
+    accent_d:   "#34D399"
+    background: "#0B0F1A"
+brain:
+  enabled: true
+```
+
+</details>
+
+<details>
+<summary><em>Per-region custom metadata</em></summary>
+
+Override emoji/caption/tagline/mastery/stats per region — full control over what each lobe says.
+
+```yaml
+brain:
+  enabled: true
+  regions:
+    frontal:
+      domain: Backend
+      tools: [Python, Django]
+      emoji: "⚙️"
+      caption: "SERVER · APIS · LOGIC"
+      tagline: "Robust, well-tested server-side systems."
+      mastery: EXPERT
+      stats:
+        - { num: "6+", label: "YEARS" }
+        - { num: "40+", label: "PROJECTS" }
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Tech Stack Cards</strong> &nbsp;·&nbsp; <code>tech-cards.svg</code> &nbsp;·&nbsp; 3 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/tech-cards.svg" alt="Tech Stack Cards" width="100%"/>
 </p>
 
-_6 glassmorphism cards in a 3x2 grid — one per brain region, each with traveling edge glow + inner pulse._
+_6 glassmorphism cards in a 3x2 grid — one per brain region. Stacked drop shadows, traveling edge glow per card, inner color pulse._
+
+<details>
+<summary><em>With stats (default)</em></summary>
+
+Each card shows years/projects/mastery row plus an animated proficiency bar.
 
 ```yaml
 cards:
@@ -192,13 +349,50 @@ cards:
     show_stats: true
 ```
 
-### Current Focus Tiles
+</details>
+
+<details>
+<summary><em>Without stats — text-only</em></summary>
+
+Hide the years/projects/mastery row for a cleaner card focused on the tools list and tagline.
+
+```yaml
+cards:
+  tech_stack:
+    enabled: true
+    show_stats: false
+```
+
+</details>
+
+<details>
+<summary><em>Disabled — skip the widget entirely</em></summary>
+
+Don't render tech-cards.svg at all (e.g., minimal profiles where the brain alone is enough).
+
+```yaml
+cards:
+  tech_stack:
+    enabled: false
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Current Focus Tiles</strong> &nbsp;·&nbsp; <code>current-focus.svg</code> &nbsp;·&nbsp; 3 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/current-focus.svg" alt="Current Focus Tiles" width="100%"/>
 </p>
 
-_Netflix-style "now playing" tiles for active projects — status pill, live dot, traveling edge highlight._
+_Netflix-style "now playing" tiles for active projects — status pill, live dot, traveling edge highlight, tile-rise stagger animation._
+
+<details>
+<summary><em>Single project tile</em></summary>
+
+Just one focus area — the grid auto-reflows so a 1-tile config still looks polished.
 
 ```yaml
 cards:
@@ -206,60 +400,190 @@ cards:
     enabled: true
     tiles:
       - project: "Cortex"
-        status: SHIPPING       # ACTIVE | SHIPPING | EXPLORING | MAINTAINING | BUILDING
-        accent: red             # red | orange | green | gold | cyan | purple
+        status: SHIPPING
+        accent: red
         emoji: "🧠"
-        description: "Animated neon-brain README generator."
-        tech: [Python, Pydantic, SVG]
+        description: "Animated neon-brain README generator with 10 SVG widgets."
+        tech: [Python, Pydantic, SVG, GitHub Actions]
 ```
 
-### Yearly Timeline
+</details>
+
+<details>
+<summary><em>Multiple tiles, mixed statuses + accents</em></summary>
+
+Up to 6 tiles in a 3x2 grid. status: ACTIVE/SHIPPING/EXPLORING/MAINTAINING/BUILDING. accent: red/orange/green/gold/cyan/purple.
+
+```yaml
+cards:
+  current_focus:
+    enabled: true
+    tiles:
+      - { project: "Cortex",     status: SHIPPING,    accent: red,    emoji: "🧠", description: "Profile README brain generator.",                       tech: [Python, SVG] }
+      - { project: "Pydev",      status: BUILDING,    accent: orange, emoji: "🐍", description: "Local-first Python dev environment manager.",            tech: [Tauri, Vue, TypeScript] }
+      - { project: "Skill DNA",  status: EXPLORING,   accent: cyan,   emoji: "🧬", description: "AI-driven skill atlas + portfolio generator.",            tech: [LangChain, RAG] }
+      - { project: "Brain 3D",   status: MAINTAINING, accent: purple, emoji: "🌌", description: "Three.js viewer for the cortex brain.",                  tech: [Three.js, Vite] }
+```
+
+</details>
+
+<details>
+<summary><em>Disabled</em></summary>
+
+Skip the focus widget — useful for minimal profiles or when you don't have active public projects to showcase.
+
+```yaml
+cards:
+  current_focus:
+    enabled: false
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Yearly Timeline</strong> &nbsp;·&nbsp; <code>yearly-highlights.svg</code> &nbsp;·&nbsp; 3 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/yearly-highlights.svg" alt="Yearly Timeline" width="100%"/>
 </p>
 
-_Horizontal career timeline — year markers + flowing gradient connector + tall cards with stats._
+_Horizontal career timeline — gradient connector, year markers with LIVE pulse on current year, tall cards with stats and bullets._
+
+<details>
+<summary><em>Auto-generated from start_year</em></summary>
+
+Just specify when you started — Cortex generates placeholder cards for every year up to today. Replace as you fill them in.
 
 ```yaml
 cards:
   yearly_highlights:
     enabled: true
-    start_year: 2023
+    start_year: 2022
+    bullets_per_year: 3
+```
+
+</details>
+
+<details>
+<summary><em>Fully custom years (recommended)</em></summary>
+
+Hand-curate each year's headline, bullets, and stats. Up to 6 years; oldest first.
+
+```yaml
+cards:
+  yearly_highlights:
+    enabled: true
     years:
       - year: 2024
         label: "FOUNDATION"
         headline: "A Year of Shipping"
         bullets:
-          - "Built foundations in Python, Django, Vue."
-          - "Earned community recognition."
+          - "Built foundations in Python + Vue."
+          - "Earned first community stars."
         stats:
           - { num: "25+", label: "PROJECTS" }
+          - { num: "52★", label: "PEAK STARS" }
+      - year: 2025
+        label: "GROWTH"
+        headline: "Production & AI"
+        bullets:
+          - "Shipped LLM-powered features for clients."
+          - "Open-sourced 3 internal tools."
+        stats:
+          - { num: "10+", label: "AI EXPERIMENTS" }
+          - { num: "200+", label: "DEPLOYS" }
 ```
 
-### About Typing
+</details>
+
+<details>
+<summary><em>Tighter — start in 2024, 2 bullets per year</em></summary>
+
+Shorter cards for early-career profiles or when you want the timeline to feel tight rather than expansive.
+
+```yaml
+cards:
+  yearly_highlights:
+    enabled: true
+    start_year: 2024
+    bullets_per_year: 2
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>About Typing</strong> &nbsp;·&nbsp; <code>about-typing.svg</code> &nbsp;·&nbsp; 3 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/about-typing.svg" alt="About Typing" width="100%"/>
 </p>
 
-_Cycling terminal-style typing animation — 30+ rotating commands with cursor glow._
+_Cycling terminal-style typing animation — 30+ rotating commands with jewel-tone cursor glow._
+
+<details>
+<summary><em>Generic only</em></summary>
+
+Universal dev terminal commands ($ whoami, $ git status, etc.) — no personal references. Works for any profile.
 
 ```yaml
 typing:
   about:
     enabled: true
-    lines: 8                # how many lines to cycle through
-    include: [generic, personal]   # generic = universal dev; personal = your projects
+    lines: 8
+    include: [generic]
 ```
 
-### Motto Typing
+</details>
+
+<details>
+<summary><em>Personal only</em></summary>
+
+References your specific projects from current_focus + identity (your github_user, project names, etc.). More personal.
+
+```yaml
+typing:
+  about:
+    enabled: true
+    lines: 6
+    include: [personal]
+```
+
+</details>
+
+<details>
+<summary><em>Both — recommended mix</em></summary>
+
+Mix of universal + personal lines — best balance of relatability and personality.
+
+```yaml
+typing:
+  about:
+    enabled: true
+    lines: 10
+    include: [generic, personal]
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>Motto Typing</strong> &nbsp;·&nbsp; <code>motto-typing.svg</code> &nbsp;·&nbsp; 2 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/motto-typing.svg" alt="Motto Typing" width="100%"/>
 </p>
 
-_Philosophy quotes cycling — same engine as About but no cursor, longer hold time per line._
+_Philosophy quotes cycling — same engine as About but no cursor, longer hold time per line. Use for taglines/principles._
+
+<details>
+<summary><em>Default — 6 rotating mottos</em></summary>
+
+Cortex ships 30+ curated dev-philosophy quotes; the typer cycles through 6 of them by default.
 
 ```yaml
 typing:
@@ -268,37 +592,83 @@ typing:
     lines: 6
 ```
 
-### GitHub Icon
+</details>
+
+<details>
+<summary><em>Tight — 4 lines, faster cycle</em></summary>
+
+Fewer lines = each one shows for longer. Good when you want each motto to register fully before rotating.
+
+```yaml
+typing:
+  motto:
+    enabled: true
+    lines: 4
+```
+
+</details>
+
+</details>
+
+<details>
+<summary><strong>GitHub Icon</strong> &nbsp;·&nbsp; <code>github-icon.svg</code> &nbsp;·&nbsp; 1 example</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/github-icon.svg" alt="GitHub Icon" width="100%"/>
 </p>
 
-_Pulsing octocat disc with jewel-tone halo — drop-in profile avatar._
+_Pulsing octocat disc with jewel-tone violet halo + soft Gaussian-blur glow — drop-in 96x96 profile icon._
+
+<details>
+<summary><em>Default (no config required)</em></summary>
+
+Renders automatically from identity.github_user — no widget-level config exists. Halo color is the jewel-tone violet that ties to the rest of the composition.
 
 ```yaml
-# (no config — rendered automatically from identity.github_user)
+identity:
+  github_user: "your-handle"  # the icon picks up your handle automatically
 ```
 
-### Animated Divider
+</details>
+
+</details>
+
+<details>
+<summary><strong>Animated Divider</strong> &nbsp;·&nbsp; <code>animated-divider.svg</code> &nbsp;·&nbsp; 1 example</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/animated-divider.svg" alt="Animated Divider" width="100%"/>
 </p>
 
-_Three layered sine waves drifting in counterpoint — used as section separator._
+_Three layered sine waves drifting in counterpoint at different speeds (9s/11s/14s) — used between sections._
+
+<details>
+<summary><em>Default (no config required)</em></summary>
+
+Always-on, no widget-level config — the divider matches the jewel-tone palette of header/footer/brain. Drop the SVG anywhere in your README.
 
 ```yaml
-# (no config — rendered automatically; matches palette of header/footer)
+# Place the rendered SVG anywhere in your README:
+# ![](https://raw.githubusercontent.com/<user>/<user>/main/assets/animated-divider.svg)
 ```
 
-### Footer Banner
+</details>
+
+</details>
+
+<details>
+<summary><strong>Footer Banner</strong> &nbsp;·&nbsp; <code>footer-banner.svg</code> &nbsp;·&nbsp; 3 examples</summary>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/AbdullahBakir97/AbdullahBakir97/main/assets/footer-banner.svg" alt="Footer Banner" width="100%"/>
 </p>
 
-_Inverted wave-shape footer mirroring the header — title, subtitle, drifting gradient._
+_Inverted wave-shape footer mirroring the header — title, subtitle, drifting jewel-tone gradient. Capsule-render replacement._
+
+<details>
+<summary><em>Wave shape, drifting (default)</em></summary>
+
+Sine-wave top edge with the same drift animation as the header — symmetric bookends.
 
 ```yaml
 cards:
@@ -311,8 +681,47 @@ cards:
     animation: drift
 ```
 
+</details>
+
+<details>
+<summary><em>Slice shape, static</em></summary>
+
+Diagonal top edge, no animation — minimal footer for understated profiles.
+
+```yaml
+cards:
+  footer:
+    enabled: true
+    shape: slice
+    title: "@your-handle"
+    height: 140
+    animation: static
+```
+
+</details>
+
+<details>
+<summary><em>Rect shape with custom palette</em></summary>
+
+Flat rectangular footer with your own brand colors — e.g., warm sunset gradient.
+
+```yaml
+cards:
+  footer:
+    enabled: true
+    shape: rect
+    title: "@your-handle"
+    height: 120
+    animation: drift
+    colors: ["#1A0612", "#7C2D12", "#EA580C", "#FBBF24", "#1A0612"]
+```
+
+</details>
+
+</details>
+
 ---
-_All animations use SMIL + CSS — no JS, no build step on your side. Schema validated at build time; full reference at [`packages/cortex-schema/schema.json`](packages/cortex-schema/schema.json)._
+_All widgets render to pure SVG with SMIL + CSS animations — no JS, no build step, no external CDN dependency. Schema is validated at build time; mismatched configs fail loudly with field-specific error messages._
 <!-- CORTEX:SHOWCASE:END -->
 
 ---
