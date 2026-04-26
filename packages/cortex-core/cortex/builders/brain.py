@@ -202,6 +202,39 @@ def _random_arc_network(
     return arcs
 
 
+def _build_lobe_stroke_overlay(
+    paths_by_lobe: dict[str, list[tuple[str, str]]],
+    lobe_colors: dict[str, str],
+    n_per_lobe: int = 8,
+) -> list[str]:
+    """Build per-lobe duplicate <path/> elements for the stroke-draw animation.
+
+    For each lobe, emit the top n_per_lobe paths (ranked by len(d), descending)
+    as fresh <path> elements with:
+      - d="<original d>" (geometry copied from the source path)
+      - fill="none" + stroke=<lobe_color> + stroke-width=2.2
+      - pathLength="100" + stroke-dasharray="100 100" (so dashoffset animation
+        works without per-path length measurement)
+      - class="lobe-stroke ls-<lobe>" (CSS keyframes provide the draw-in/out)
+
+    The overlay layer (parent <g>) gets filter="url(#electricGlow)" applied
+    once, not per-path.
+    """
+    out: list[str] = []
+    for lobe, pairs in paths_by_lobe.items():
+        if not pairs:
+            continue
+        color = lobe_colors[lobe]
+        ranked = sorted(pairs, key=lambda p: len(p[1]), reverse=True)
+        for _pid, d in ranked[:n_per_lobe]:
+            out.append(
+                f'<path d="{d}" fill="none" stroke="{color}" stroke-width="2.2" '
+                f'pathLength="100" stroke-dasharray="100 100" '
+                f'class="lobe-stroke ls-{lobe}"/>'
+            )
+    return out
+
+
 def _classify_brain_paths(
     svg: str,
 ) -> tuple[

@@ -156,3 +156,73 @@ def test_paths_by_lobe_ids_match_classification_set():
     for lobe in _LOBE_KEYS:
         ids_from_pairs = {pid for pid, _d in paths_by_lobe[lobe]}
         assert ids_from_pairs == classification[lobe], f"{lobe} id mismatch"
+
+
+from cortex.builders.brain import _build_lobe_stroke_overlay
+
+
+def test_overlay_picks_n_largest_per_lobe():
+    paths_by_lobe = {
+        "frontal":    [("a", "x" * 10), ("b", "x" * 100), ("c", "x" * 50),
+                       ("d", "x" * 200), ("e", "x" * 30)],
+        "parietal":   [("f", "x" * 80), ("g", "x" * 20)],
+        "occipital":  [("h", "x" * 5)],
+        "temporal":   [],
+        "cerebellum": [("i", "x" * 60), ("j", "x" * 70), ("k", "x" * 65)],
+        "brainstem":  [],
+    }
+    colors = {
+        "frontal":    "#FF0000",
+        "parietal":   "#00FF00",
+        "occipital":  "#0000FF",
+        "temporal":   "#FFFF00",
+        "cerebellum": "#00FFFF",
+        "brainstem":  "#FF00FF",
+    }
+    overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=2)
+    # frontal: 2 (b, d), parietal: 2 (f, g), occipital: 1 (h),
+    # temporal: 0, cerebellum: 2 (j, k or i, j), brainstem: 0 → 7 total
+    assert len(overlay) == 7
+
+
+def test_overlay_picks_largest_d_first():
+    """Top-N selection ranks by len(d), descending."""
+    paths_by_lobe = {
+        "frontal": [("small", "x"), ("big", "x" * 999), ("med", "x" * 50)],
+        "parietal": [], "occipital": [], "temporal": [],
+        "cerebellum": [], "brainstem": [],
+    }
+    colors = {k: "#000000" for k in [
+        "frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem"]}
+    overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=2)
+    assert len(overlay) == 2
+    # Both elements should reference the d-strings, with the longer d included
+    joined = " ".join(overlay)
+    assert ("x" * 999) in joined
+    assert ("x" * 50) in joined
+    assert " x\"" not in joined or joined.count('d="x"') == 0  # the 1-char d not picked
+
+
+def test_overlay_emits_fill_none_and_lobe_color_stroke():
+    paths_by_lobe = {
+        "frontal": [("p1", "M0,0 L10,10")],
+        "parietal": [], "occipital": [], "temporal": [],
+        "cerebellum": [], "brainstem": [],
+    }
+    colors = {
+        "frontal":    "#F90001",
+        "parietal":   "#34D399",
+        "occipital":  "#FF652F",
+        "temporal":   "#FFD23F",
+        "cerebellum": "#22D3EE",
+        "brainstem":  "#A78BFA",
+    }
+    overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=8)
+    assert len(overlay) == 1
+    el = overlay[0]
+    assert 'fill="none"' in el
+    assert 'stroke="#F90001"' in el
+    assert 'pathLength="100"' in el
+    assert 'stroke-dasharray="100 100"' in el
+    assert 'class="lobe-stroke ls-frontal"' in el
+    assert 'd="M0,0 L10,10"' in el
