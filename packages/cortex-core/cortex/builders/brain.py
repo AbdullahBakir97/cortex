@@ -141,6 +141,66 @@ def _random_cells_in_bbox(
     return out
 
 
+@dataclass(frozen=True)
+class _Arc:
+    """One randomized synaptic arc between two cells, with Bezier control point."""
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+    cx: int   # quadratic Bezier control point x
+    cy: int   # quadratic Bezier control point y
+    color: str
+    begin_s: float
+    dur_s: float
+
+
+def _random_arc_network(
+    cells_by_lobe: dict[str, list[tuple[int, int]]],
+    n: int,
+    rng: random.Random,
+    lobe_colors: dict[str, str],
+) -> list[_Arc]:
+    """n random arcs across the union of cells, colored by source lobe.
+
+    Each arc:
+      - source cell picked uniformly from the union of all lobes' cells
+      - target cell picked uniformly from the union (resampled if equal to source)
+      - color = source-lobe's accent
+      - quadratic Bezier control point at midpoint + random offset (±60px each axis)
+      - begin_s in [0, 12), dur_s in [0.8, 1.6)
+    """
+    cell_lobe: list[tuple[tuple[int, int], str]] = []
+    for lobe, cells in cells_by_lobe.items():
+        for c in cells:
+            cell_lobe.append((c, lobe))
+
+    arcs: list[_Arc] = []
+    for _ in range(n):
+        (p1, lobe1) = rng.choice(cell_lobe)
+        (p2, _lobe2) = rng.choice(cell_lobe)
+        # Resample if we drew the same cell twice (no self-loops)
+        attempts = 0
+        while p2 == p1 and attempts < 5:
+            (p2, _lobe2) = rng.choice(cell_lobe)
+            attempts += 1
+        if p2 == p1:
+            # Pathological: skip rather than emit a degenerate arc.
+            continue
+        mid_x = (p1[0] + p2[0]) // 2
+        mid_y = (p1[1] + p2[1]) // 2
+        cx = mid_x + rng.randint(-60, 60)
+        cy = mid_y + rng.randint(-60, 60)
+        arcs.append(_Arc(
+            x1=p1[0], y1=p1[1], x2=p2[0], y2=p2[1],
+            cx=cx, cy=cy,
+            color=lobe_colors[lobe1],
+            begin_s=rng.uniform(0.0, 12.0),
+            dur_s=rng.uniform(0.8, 1.6),
+        ))
+    return arcs
+
+
 def _classify_brain_paths(
     svg: str,
 ) -> tuple[

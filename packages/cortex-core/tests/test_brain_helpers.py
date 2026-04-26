@@ -51,3 +51,80 @@ def test_random_cells_returns_int_tuples():
     for cx, cy in cells:
         assert isinstance(cx, int)
         assert isinstance(cy, int)
+
+
+from cortex.builders.brain import _Arc, _random_arc_network
+
+
+def _sample_cells_by_lobe() -> dict[str, list[tuple[int, int]]]:
+    return {
+        "frontal":    [(100, 100), (120, 100), (110, 130)],
+        "parietal":   [(200, 100), (220, 100), (210, 130)],
+        "occipital":  [(300, 100), (320, 100), (310, 130)],
+        "temporal":   [(200, 200), (220, 200), (210, 230)],
+        "cerebellum": [(280, 250), (300, 250), (290, 280)],
+        "brainstem":  [(280, 320), (300, 320), (290, 350)],
+    }
+
+
+def _sample_lobe_colors() -> dict[str, str]:
+    return {
+        "frontal":    "#F90001",
+        "parietal":   "#34D399",
+        "occipital":  "#FF652F",
+        "temporal":   "#FFD23F",
+        "cerebellum": "#22D3EE",
+        "brainstem":  "#A78BFA",
+    }
+
+
+def test_random_arc_network_returns_n_arcs():
+    rng = _random.Random(42)
+    arcs = _random_arc_network(_sample_cells_by_lobe(), n=20, rng=rng,
+                                lobe_colors=_sample_lobe_colors())
+    assert len(arcs) == 20
+
+
+def test_random_arc_network_endpoints_are_real_cells():
+    rng = _random.Random(42)
+    cells = _sample_cells_by_lobe()
+    all_cells = {pt for lst in cells.values() for pt in lst}
+    arcs = _random_arc_network(cells, n=15, rng=rng, lobe_colors=_sample_lobe_colors())
+    for a in arcs:
+        assert (a.x1, a.y1) in all_cells
+        assert (a.x2, a.y2) in all_cells
+
+
+def test_random_arc_network_color_matches_source_lobe():
+    rng = _random.Random(42)
+    cells = _sample_cells_by_lobe()
+    colors = _sample_lobe_colors()
+    arcs = _random_arc_network(cells, n=30, rng=rng, lobe_colors=colors)
+    valid_colors = set(colors.values())
+    for a in arcs:
+        assert a.color in valid_colors
+
+
+def test_random_arc_network_timing_in_range():
+    rng = _random.Random(42)
+    arcs = _random_arc_network(_sample_cells_by_lobe(), n=30, rng=rng,
+                                lobe_colors=_sample_lobe_colors())
+    for a in arcs:
+        assert 0.0 <= a.begin_s < 12.0
+        assert 0.8 <= a.dur_s < 1.6
+
+
+def test_random_arc_network_is_deterministic():
+    a = _random_arc_network(_sample_cells_by_lobe(), n=10, rng=_random.Random(99),
+                              lobe_colors=_sample_lobe_colors())
+    b = _random_arc_network(_sample_cells_by_lobe(), n=10, rng=_random.Random(99),
+                              lobe_colors=_sample_lobe_colors())
+    assert a == b
+
+
+def test_random_arc_network_no_self_loops():
+    rng = _random.Random(42)
+    arcs = _random_arc_network(_sample_cells_by_lobe(), n=30, rng=rng,
+                                lobe_colors=_sample_lobe_colors())
+    for a in arcs:
+        assert (a.x1, a.y1) != (a.x2, a.y2)
