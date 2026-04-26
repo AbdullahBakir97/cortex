@@ -438,7 +438,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # from the actual classified paths in the source SVG. This fixes the bug
     # where, e.g., the "frontal" leader line pointed to canvas (850, 320) when
     # the actual frontal lobe centroid is at (471, 395).
-    _, lobe_centroids, lobe_bboxes, _ = _ensure_classification()
+    _, lobe_centroids, lobe_bboxes, paths_by_lobe = _ensure_classification()
     region_positions: dict[str, dict[str, object]] = {}
     for key, region_data in _REGION_POSITIONS.items():
         region_positions[key] = {
@@ -581,6 +581,12 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         "cerebellum": p_accent_a,
         "brainstem": p_accent_b,
     }
+    # Per-lobe stroke overlay — top 8 paths per lobe, duplicated as colored
+    # stroke <path/> elements with stroke-dashoffset animation. Lobe identity
+    # comes from this layer, not the body fill.
+    lobe_stroke_overlay = _build_lobe_stroke_overlay(
+        paths_by_lobe, lobe_color_tokens, n_per_lobe=8,
+    )
     # Phase offset per lobe (in seconds) so the 6 networks don't fire in unison.
     lobe_phase = {
         "frontal": 0.0, "parietal": 0.4, "occipital": 0.8,
@@ -862,6 +868,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <g class="{brain_3d_class}">
         {brain_content}
         {chr(10).join("        " + rg for rg in region_glows)}
+        <g class="lobe-stroke-layer" filter="url(#electricGlow)">
+        {chr(10).join("          " + lso for lso in lobe_stroke_overlay)}
+        </g>
         {chr(10).join("        " + la for la in lobe_arcs)}
         {chr(10).join("        " + mc for mc in micro_cells)}
         {chr(10).join("        " + h for h in halos) if atm.show_halos else ""}
