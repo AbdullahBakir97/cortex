@@ -239,12 +239,27 @@ def _default_footer() -> BannerConfig:
     return BannerConfig(height=160, title="", subtitle="")
 
 
+class ShowcaseConfig(_Strict):
+    """Tuning for the auto-generated CORTEX:SHOWCASE block in the README.
+
+    For most users, the defaults work — variant SVGs are written to
+    ``assets/variants/`` of their <user>/<user> profile repo and the showcase
+    points to that path. Override ``base_url`` only when assets live somewhere
+    non-standard (e.g. the cortex project's own marketing README, where
+    variants ship in ``examples/rendered/extreme/variants/``).
+    """
+    # Override the URL prefix the showcase uses for variant image src attrs.
+    # Empty → default ``https://raw.githubusercontent.com/<user>/<user>/main/assets``.
+    base_url: str = ""
+
+
 class Cards(_Strict):
     tech_stack: TechStackCard = Field(default_factory=TechStackCard)
     current_focus: CurrentFocusCard = Field(default_factory=CurrentFocusCard)
     yearly_highlights: YearlyHighlightsCard = Field(default_factory=YearlyHighlightsCard)
     header: BannerConfig = Field(default_factory=BannerConfig)
     footer: BannerConfig = Field(default_factory=_default_footer)
+    showcase: ShowcaseConfig = Field(default_factory=ShowcaseConfig)
 
 
 # ── Auto-update markers ──────────────────────────────────────────────────

@@ -29,7 +29,15 @@ __all__ = [
     "Typing",
     "__version__",
     "build_all",
+    "build_variants",
 ]
+
+
+def build_variants(config, output_dir="assets/variants"):  # type: ignore[no-untyped-def]
+    """Re-export of :func:`cortex.variants.build_variants` for CLI / programmatic use."""
+    from cortex.variants import build_variants as _bv
+
+    return _bv(config, output_dir)
 
 __version__ = "0.2.1"
 
@@ -81,4 +89,16 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
             continue
         func(config, output=os.path.join(output_dir, filename))
         results[filename] = "built"
+
+    # Variant gallery — render every showcase-catalog recipe to its own SVG so
+    # the SHOWCASE marker block in the README can show actual previews per
+    # recipe (not just code snippets). Goes into <output_dir>/variants/.
+    from cortex.variants import build_variants as _bv
+
+    variant_results = _bv(config, output_dir=os.path.join(output_dir, "variants"))
+    # Mark variants in the result dict with "variants/" prefix so callers can
+    # tell them apart from main builds.
+    for fname, status in variant_results.items():
+        results[f"variants/{fname}"] = status
+
     return results

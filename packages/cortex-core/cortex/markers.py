@@ -139,233 +139,174 @@ def quote_of_the_day(_config: Config, _client: GitHubClient) -> str:
 # ── Showcase / config docs ──────────────────────────────────────────────
 # Multi-variant catalog: each widget has 2-5 example configurations showing
 # different things you can do — minimal vs full, default vs custom palette,
-# with-stats vs without-stats, etc. Each variant is rendered inside a
-# collapsible <details> block in the README so users can scan widget names
-# and expand the ones they want.
+# with-stats vs without-stats, etc. Each variant is rendered as its OWN SVG
+# (via build_variants()) so the showcase shows actual visuals per recipe,
+# not just code snippets. The action regenerates all variants on every push.
 @dataclass(frozen=True)
 class _Variant:
+    slug: str         # filename suffix; must be filesystem-safe (no spaces)
     label: str        # short variant title shown in the <summary>
     blurb: str        # 1-2 sentence "what this shows" line
-    yaml: str         # copy-pasteable cortex.yml snippet
+    yaml: str         # copy-pasteable cortex.yml snippet (also used to render)
 
 
 @dataclass(frozen=True)
 class _WidgetEntry:
-    filename: str            # rendered SVG in assets/
+    filename: str            # rendered SVG in assets/ (full-config preview)
+    builder_module: str      # cortex.builders.<module> for variant rendering
+    builder_func: str        # function name in that module (e.g. "build")
     name: str                # display name
     summary: str             # one-line pitch under the preview image
-    variants: list[_Variant] # 2-5 example configs
+    variants: list[_Variant] # 2-5 example configs, each rendered separately
 
 
 _WIDGET_CATALOG: list[_WidgetEntry] = [
     _WidgetEntry(
-        filename="header-banner.svg",
+        filename="header-banner.svg", builder_module="banner", builder_func="build_header",
         name="Header Banner",
         summary="Wide animated banner with shaped edge — capsule-render replacement. Title, subtitle, drifting gradient.",
         variants=[
-            _Variant(
-                "Wave shape, drifting (default)",
+            _Variant("wave-drift", "Wave shape, drifting (default)",
                 "Sine-wave bottom edge, jewel-tone gradient drifts left↔right on a 22s ease-in-out cycle.",
-                'cards:\n  header:\n    enabled: true\n    shape: wave\n    title: "Your Name"\n    subtitle: "FULLSTACK · ENGINEER · BUILDER"\n    height: 240\n    animation: drift',
-            ),
-            _Variant(
-                "Slice shape, pulsing",
+                'cards:\n  header:\n    enabled: true\n    shape: wave\n    title: "Your Name"\n    subtitle: "FULLSTACK · ENGINEER · BUILDER"\n    height: 240\n    animation: drift'),
+            _Variant("slice-pulse", "Slice shape, pulsing",
                 "Diagonal bottom edge with opacity pulse — minimalist, matches landing-page aesthetics.",
-                'cards:\n  header:\n    enabled: true\n    shape: slice\n    title: "Your Name"\n    height: 220\n    animation: pulse',
-            ),
-            _Variant(
-                "Rect shape, static",
+                'cards:\n  header:\n    enabled: true\n    shape: slice\n    title: "Your Name"\n    height: 220\n    animation: pulse'),
+            _Variant("rect-static", "Rect shape, static",
                 "No shaped edge, no animation — clean rectangular header for code-focused profiles.",
-                'cards:\n  header:\n    enabled: true\n    shape: rect\n    title: "Your Name"\n    subtitle: "github.com/your-handle"\n    height: 180\n    animation: static',
-            ),
-            _Variant(
-                "Custom color palette",
+                'cards:\n  header:\n    enabled: true\n    shape: rect\n    title: "Your Name"\n    subtitle: "github.com/your-handle"\n    height: 180\n    animation: static'),
+            _Variant("custom-palette", "Custom color palette",
                 "Override the default jewel-tones with your own gradient stops (3-5 hex colors recommended).",
-                'cards:\n  header:\n    enabled: true\n    shape: wave\n    title: "Your Name"\n    height: 240\n    animation: drift\n    colors: ["#0D1117", "#1E3A8A", "#2563EB", "#0EA5E9", "#0D1117"]',
-            ),
+                'cards:\n  header:\n    enabled: true\n    shape: wave\n    title: "Your Name"\n    height: 240\n    animation: drift\n    colors: ["#0D1117", "#1E3A8A", "#2563EB", "#0EA5E9", "#0D1117"]'),
         ],
     ),
     _WidgetEntry(
-        filename="brain-anatomical.svg",
+        filename="brain-anatomical.svg", builder_module="brain", builder_func="build",
         name="Anatomical Brain",
         summary="200+ Wikimedia anatomy paths recolored with rose-family gradient, masked aurora flow, DNA helixes, electric arcs across 6 lobes.",
         variants=[
-            _Variant(
-                "Default neon-rainbow palette",
+            _Variant("neon-rainbow", "Default neon-rainbow palette",
                 "Six lobes mapped to skill domains, full atmospheric layers (aurora, particles, DNA, halos), 3D wobble enabled.",
-                "brain:\n  enabled: true\n  palette: neon-rainbow\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    show_halos: true\n    wobble: true\n  regions:\n    frontal:    { domain: Backend,      tools: [Python, Django, FastAPI] }\n    parietal:   { domain: Architecture, tools: [Microservices, RabbitMQ] }\n    occipital:  { domain: Frontend,     tools: [Vue, Nuxt, TypeScript] }\n    temporal:   { domain: Data Layer,   tools: [PostgreSQL, Redis] }\n    cerebellum: { domain: DevOps,       tools: [Docker, GitHub Actions] }\n    brainstem:  { domain: AI & Data,    tools: [PyTorch, LLMs, RAG] }",
-            ),
-            _Variant(
-                "Cyberpunk palette",
+                "brand:\n  palette: neon-rainbow\nbrain:\n  enabled: true\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    show_halos: true\n    wobble: true"),
+            _Variant("cyberpunk", "Cyberpunk palette",
                 "Hot magenta + electric cyan + acid yellow — same brain anatomy, different vibe.",
-                "brain:\n  enabled: true\n  palette: cyberpunk\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    wobble: true",
-            ),
-            _Variant(
-                "Monochrome (atmosphere off)",
+                "brand:\n  palette: cyberpunk\nbrain:\n  enabled: true\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    wobble: true"),
+            _Variant("monochrome", "Monochrome (atmosphere off)",
                 "Subtle, professional single-accent rendering — atmospheric layers disabled for a code-focused look.",
-                "brain:\n  enabled: true\n  palette: monochrome\n  atmosphere:\n    show_aura: false\n    show_particles: false\n    show_halos: false\n    wobble: false",
-            ),
-            _Variant(
-                "Custom palette via brand.colors",
-                "Override individual palette tokens directly — useful when your brand has specific brand colors that don't match a preset.",
-                'brand:\n  colors:\n    primary:    "#FF2D6F"\n    secondary:  "#FFA94D"\n    accent_a:   "#22D3EE"\n    accent_b:   "#A78BFA"\n    accent_c:   "#FFD23F"\n    accent_d:   "#34D399"\n    background: "#0B0F1A"\nbrain:\n  enabled: true',
-            ),
-            _Variant(
-                "Per-region custom metadata",
-                "Override emoji/caption/tagline/mastery/stats per region — full control over what each lobe says.",
-                "brain:\n  enabled: true\n  regions:\n    frontal:\n      domain: Backend\n      tools: [Python, Django]\n      emoji: \"⚙️\"\n      caption: \"SERVER · APIS · LOGIC\"\n      tagline: \"Robust, well-tested server-side systems.\"\n      mastery: EXPERT\n      stats:\n        - { num: \"6+\", label: \"YEARS\" }\n        - { num: \"40+\", label: \"PROJECTS\" }",
-            ),
+                "brand:\n  palette: monochrome\nbrain:\n  enabled: true\n  atmosphere:\n    show_aura: false\n    show_particles: false\n    show_halos: false\n    wobble: false"),
+            _Variant("retro", "Retro warm palette",
+                "Warm 80s-inspired colors — orange/amber tones over rose body. Good for solo dev / indie hacker vibes.",
+                "brand:\n  palette: retro\nbrain:\n  enabled: true\n  atmosphere:\n    show_aura: true\n    show_particles: true\n    wobble: true"),
+            _Variant("minimal", "Minimal palette",
+                "Subtle neutrals + one warm accent — professional, understated, terminal-friendly.",
+                "brand:\n  palette: minimal\nbrain:\n  enabled: true\n  atmosphere:\n    show_aura: true\n    show_particles: false\n    show_halos: false\n    wobble: true"),
         ],
     ),
     _WidgetEntry(
-        filename="tech-cards.svg",
+        filename="tech-cards.svg", builder_module="tech_cards", builder_func="build",
         name="Tech Stack Cards",
         summary="6 glassmorphism cards in a 3x2 grid — one per brain region. Stacked drop shadows, traveling edge glow per card, inner color pulse.",
         variants=[
-            _Variant(
-                "With stats (default)",
+            _Variant("with-stats", "With stats (default)",
                 "Each card shows years/projects/mastery row plus an animated proficiency bar.",
-                "cards:\n  tech_stack:\n    enabled: true\n    show_stats: true",
-            ),
-            _Variant(
-                "Without stats — text-only",
+                "cards:\n  tech_stack:\n    enabled: true\n    show_stats: true"),
+            _Variant("without-stats", "Without stats — text-only",
                 "Hide the years/projects/mastery row for a cleaner card focused on the tools list and tagline.",
-                "cards:\n  tech_stack:\n    enabled: true\n    show_stats: false",
-            ),
-            _Variant(
-                "Disabled — skip the widget entirely",
-                "Don't render tech-cards.svg at all (e.g., minimal profiles where the brain alone is enough).",
-                "cards:\n  tech_stack:\n    enabled: false",
-            ),
+                "cards:\n  tech_stack:\n    enabled: true\n    show_stats: false"),
         ],
     ),
     _WidgetEntry(
-        filename="current-focus.svg",
+        filename="current-focus.svg", builder_module="focus", builder_func="build",
         name="Current Focus Tiles",
         summary="Netflix-style \"now playing\" tiles for active projects — status pill, live dot, traveling edge highlight, tile-rise stagger animation.",
         variants=[
-            _Variant(
-                "Single project tile",
+            _Variant("single-tile", "Single project tile",
                 "Just one focus area — the grid auto-reflows so a 1-tile config still looks polished.",
-                'cards:\n  current_focus:\n    enabled: true\n    tiles:\n      - project: "Cortex"\n        status: SHIPPING\n        accent: red\n        emoji: "🧠"\n        description: "Animated neon-brain README generator with 10 SVG widgets."\n        tech: [Python, Pydantic, SVG, GitHub Actions]',
-            ),
-            _Variant(
-                "Multiple tiles, mixed statuses + accents",
+                'cards:\n  current_focus:\n    enabled: true\n    tiles:\n      - project: "Cortex"\n        status: SHIPPING\n        accent: red\n        emoji: "🧠"\n        description: "Animated neon-brain README generator with 10 SVG widgets."\n        tech: [Python, Pydantic, SVG, GitHub Actions]'),
+            _Variant("multiple-tiles", "Multiple tiles, mixed statuses + accents",
                 "Up to 6 tiles in a 3x2 grid. status: ACTIVE/SHIPPING/EXPLORING/MAINTAINING/BUILDING. accent: red/orange/green/gold/cyan/purple.",
-                'cards:\n  current_focus:\n    enabled: true\n    tiles:\n      - { project: "Cortex",     status: SHIPPING,    accent: red,    emoji: "🧠", description: "Profile README brain generator.",                       tech: [Python, SVG] }\n      - { project: "Pydev",      status: BUILDING,    accent: orange, emoji: "🐍", description: "Local-first Python dev environment manager.",            tech: [Tauri, Vue, TypeScript] }\n      - { project: "Skill DNA",  status: EXPLORING,   accent: cyan,   emoji: "🧬", description: "AI-driven skill atlas + portfolio generator.",            tech: [LangChain, RAG] }\n      - { project: "Brain 3D",   status: MAINTAINING, accent: purple, emoji: "🌌", description: "Three.js viewer for the cortex brain.",                  tech: [Three.js, Vite] }',
-            ),
-            _Variant(
-                "Disabled",
-                "Skip the focus widget — useful for minimal profiles or when you don't have active public projects to showcase.",
-                "cards:\n  current_focus:\n    enabled: false",
-            ),
+                'cards:\n  current_focus:\n    enabled: true\n    tiles:\n      - { project: "Cortex",     status: SHIPPING,    accent: red,    emoji: "🧠", description: "Profile README brain generator.",                       tech: [Python, SVG] }\n      - { project: "Pydev",      status: BUILDING,    accent: orange, emoji: "🐍", description: "Local-first Python dev environment manager.",            tech: [Tauri, Vue, TypeScript] }\n      - { project: "Skill DNA",  status: EXPLORING,   accent: cyan,   emoji: "🧬", description: "AI-driven skill atlas + portfolio generator.",            tech: [LangChain, RAG] }\n      - { project: "Brain 3D",   status: MAINTAINING, accent: purple, emoji: "🌌", description: "Three.js viewer for the cortex brain.",                  tech: [Three.js, Vite] }'),
         ],
     ),
     _WidgetEntry(
-        filename="yearly-highlights.svg",
+        filename="yearly-highlights.svg", builder_module="timeline", builder_func="build",
         name="Yearly Timeline",
         summary="Horizontal career timeline — gradient connector, year markers with LIVE pulse on current year, tall cards with stats and bullets.",
         variants=[
-            _Variant(
-                "Auto-generated from start_year",
+            _Variant("auto", "Auto-generated from start_year",
                 "Just specify when you started — Cortex generates placeholder cards for every year up to today. Replace as you fill them in.",
-                "cards:\n  yearly_highlights:\n    enabled: true\n    start_year: 2022\n    bullets_per_year: 3",
-            ),
-            _Variant(
-                "Fully custom years (recommended)",
+                "cards:\n  yearly_highlights:\n    enabled: true\n    start_year: 2022\n    bullets_per_year: 3\n    years: []"),
+            _Variant("fully-custom", "Fully custom years (recommended)",
                 "Hand-curate each year's headline, bullets, and stats. Up to 6 years; oldest first.",
-                'cards:\n  yearly_highlights:\n    enabled: true\n    years:\n      - year: 2024\n        label: "FOUNDATION"\n        headline: "A Year of Shipping"\n        bullets:\n          - "Built foundations in Python + Vue."\n          - "Earned first community stars."\n        stats:\n          - { num: "25+", label: "PROJECTS" }\n          - { num: "52★", label: "PEAK STARS" }\n      - year: 2025\n        label: "GROWTH"\n        headline: "Production & AI"\n        bullets:\n          - "Shipped LLM-powered features for clients."\n          - "Open-sourced 3 internal tools."\n        stats:\n          - { num: "10+", label: "AI EXPERIMENTS" }\n          - { num: "200+", label: "DEPLOYS" }',
-            ),
-            _Variant(
-                "Tighter — start in 2024, 2 bullets per year",
+                'cards:\n  yearly_highlights:\n    enabled: true\n    years:\n      - year: 2024\n        label: "FOUNDATION"\n        headline: "A Year of Shipping"\n        bullets:\n          - "Built foundations in Python + Vue."\n          - "Earned first community stars."\n        stats:\n          - { num: "25+", label: "PROJECTS" }\n          - { num: "52★", label: "PEAK STARS" }\n      - year: 2025\n        label: "GROWTH"\n        headline: "Production & AI"\n        bullets:\n          - "Shipped LLM-powered features for clients."\n          - "Open-sourced 3 internal tools."\n        stats:\n          - { num: "10+", label: "AI EXPERIMENTS" }\n          - { num: "200+", label: "DEPLOYS" }'),
+            _Variant("tighter", "Tighter — start in 2024, 2 bullets per year",
                 "Shorter cards for early-career profiles or when you want the timeline to feel tight rather than expansive.",
-                "cards:\n  yearly_highlights:\n    enabled: true\n    start_year: 2024\n    bullets_per_year: 2",
-            ),
+                "cards:\n  yearly_highlights:\n    enabled: true\n    start_year: 2024\n    bullets_per_year: 2\n    years: []"),
         ],
     ),
     _WidgetEntry(
-        filename="about-typing.svg",
+        filename="about-typing.svg", builder_module="typing", builder_func="build_about",
         name="About Typing",
         summary="Cycling terminal-style typing animation — 30+ rotating commands with jewel-tone cursor glow.",
         variants=[
-            _Variant(
-                "Generic only",
+            _Variant("generic", "Generic only",
                 "Universal dev terminal commands ($ whoami, $ git status, etc.) — no personal references. Works for any profile.",
-                "typing:\n  about:\n    enabled: true\n    lines: 8\n    include: [generic]",
-            ),
-            _Variant(
-                "Personal only",
+                "typing:\n  about:\n    enabled: true\n    lines: 8\n    include: [generic]"),
+            _Variant("personal", "Personal only",
                 "References your specific projects from current_focus + identity (your github_user, project names, etc.). More personal.",
-                "typing:\n  about:\n    enabled: true\n    lines: 6\n    include: [personal]",
-            ),
-            _Variant(
-                "Both — recommended mix",
+                "typing:\n  about:\n    enabled: true\n    lines: 6\n    include: [personal]"),
+            _Variant("mixed", "Both — recommended mix",
                 "Mix of universal + personal lines — best balance of relatability and personality.",
-                "typing:\n  about:\n    enabled: true\n    lines: 10\n    include: [generic, personal]",
-            ),
+                "typing:\n  about:\n    enabled: true\n    lines: 10\n    include: [generic, personal]"),
         ],
     ),
     _WidgetEntry(
-        filename="motto-typing.svg",
+        filename="motto-typing.svg", builder_module="typing", builder_func="build_motto",
         name="Motto Typing",
         summary="Philosophy quotes cycling — same engine as About but no cursor, longer hold time per line. Use for taglines/principles.",
         variants=[
-            _Variant(
-                "Default — 6 rotating mottos",
+            _Variant("default", "Default — 6 rotating mottos",
                 "Cortex ships 30+ curated dev-philosophy quotes; the typer cycles through 6 of them by default.",
-                "typing:\n  motto:\n    enabled: true\n    lines: 6",
-            ),
-            _Variant(
-                "Tight — 4 lines, faster cycle",
+                "typing:\n  motto:\n    enabled: true\n    lines: 6"),
+            _Variant("tight", "Tight — 4 lines, faster cycle",
                 "Fewer lines = each one shows for longer. Good when you want each motto to register fully before rotating.",
-                "typing:\n  motto:\n    enabled: true\n    lines: 4",
-            ),
+                "typing:\n  motto:\n    enabled: true\n    lines: 4"),
         ],
     ),
     _WidgetEntry(
-        filename="github-icon.svg",
+        filename="github-icon.svg", builder_module="github_icon", builder_func="build",
         name="GitHub Icon",
         summary="Pulsing octocat disc with jewel-tone violet halo + soft Gaussian-blur glow — drop-in 96x96 profile icon.",
         variants=[
-            _Variant(
-                "Default (no config required)",
+            _Variant("default", "Default (no config required)",
                 "Renders automatically from identity.github_user — no widget-level config exists. Halo color is the jewel-tone violet that ties to the rest of the composition.",
-                "identity:\n  github_user: \"your-handle\"  # the icon picks up your handle automatically",
-            ),
+                "identity:\n  github_user: \"your-handle\"  # the icon picks up your handle automatically"),
         ],
     ),
     _WidgetEntry(
-        filename="animated-divider.svg",
+        filename="animated-divider.svg", builder_module="divider", builder_func="build",
         name="Animated Divider",
         summary="Three layered sine waves drifting in counterpoint at different speeds (9s/11s/14s) — used between sections.",
         variants=[
-            _Variant(
-                "Default (no config required)",
+            _Variant("default", "Default (no config required)",
                 "Always-on, no widget-level config — the divider matches the jewel-tone palette of header/footer/brain. Drop the SVG anywhere in your README.",
-                "# Place the rendered SVG anywhere in your README:\n# ![](https://raw.githubusercontent.com/<user>/<user>/main/assets/animated-divider.svg)",
-            ),
+                "# Place the rendered SVG anywhere in your README:\n# ![](https://raw.githubusercontent.com/<user>/<user>/main/assets/animated-divider.svg)"),
         ],
     ),
     _WidgetEntry(
-        filename="footer-banner.svg",
+        filename="footer-banner.svg", builder_module="banner", builder_func="build_footer",
         name="Footer Banner",
         summary="Inverted wave-shape footer mirroring the header — title, subtitle, drifting jewel-tone gradient. Capsule-render replacement.",
         variants=[
-            _Variant(
-                "Wave shape, drifting (default)",
+            _Variant("wave-drift", "Wave shape, drifting (default)",
                 "Sine-wave top edge with the same drift animation as the header — symmetric bookends.",
-                'cards:\n  footer:\n    enabled: true\n    shape: wave\n    title: "@your-handle"\n    subtitle: "Built with Cortex"\n    height: 180\n    animation: drift',
-            ),
-            _Variant(
-                "Slice shape, static",
+                'cards:\n  footer:\n    enabled: true\n    shape: wave\n    title: "@your-handle"\n    subtitle: "Built with Cortex"\n    height: 180\n    animation: drift'),
+            _Variant("slice-static", "Slice shape, static",
                 "Diagonal top edge, no animation — minimal footer for understated profiles.",
-                'cards:\n  footer:\n    enabled: true\n    shape: slice\n    title: "@your-handle"\n    height: 140\n    animation: static',
-            ),
-            _Variant(
-                "Rect shape with custom palette",
+                'cards:\n  footer:\n    enabled: true\n    shape: slice\n    title: "@your-handle"\n    height: 140\n    animation: static'),
+            _Variant("rect-custom", "Rect shape with custom palette",
                 "Flat rectangular footer with your own brand colors — e.g., warm sunset gradient.",
-                'cards:\n  footer:\n    enabled: true\n    shape: rect\n    title: "@your-handle"\n    height: 120\n    animation: drift\n    colors: ["#1A0612", "#7C2D12", "#EA580C", "#FBBF24", "#1A0612"]',
-            ),
+                'cards:\n  footer:\n    enabled: true\n    shape: rect\n    title: "@your-handle"\n    height: 120\n    animation: drift\n    colors: ["#1A0612", "#7C2D12", "#EA580C", "#FBBF24", "#1A0612"]'),
         ],
     ),
 ]
@@ -384,7 +325,14 @@ def showcase(config: Config, _client: GitHubClient) -> str:
     the action on every push.
     """
     user = config.identity.github_user
-    base = f"https://raw.githubusercontent.com/{user}/{user}/main/assets"
+    # base_url override lets the cortex project's own marketing README point
+    # to its example renders rather than a user profile repo. Defaults to the
+    # standard <user>/<user>/main/assets pattern most users will need.
+    base = (
+        config.cards.showcase.base_url
+        if config.cards.showcase.base_url
+        else f"https://raw.githubusercontent.com/{user}/{user}/main/assets"
+    )
 
     parts: list[str] = ["## 🎨 What Cortex Generates — Examples & Recipes", ""]
     parts.append(
@@ -413,10 +361,21 @@ def showcase(config: Config, _client: GitHubClient) -> str:
         parts.append(f"_{entry.summary}_")
         parts.append("")
 
-        # Inner collapsibles: one per variant.
+        # Inner collapsibles: one per variant. Each variant has its OWN
+        # rendered SVG (built by build_variants() into assets/variants/) so
+        # the showcase shows actual visuals per recipe, not just code snippets.
+        base_stem = entry.filename.replace(".svg", "")
         for variant in entry.variants:
+            variant_filename = f"{base_stem}__{variant.slug}.svg"
             parts.append("<details>")
             parts.append(f"<summary><em>{variant.label}</em></summary>")
+            parts.append("")
+            parts.append('<p align="center">')
+            parts.append(
+                f'  <img src="{base}/variants/{variant_filename}" '
+                f'alt="{entry.name} — {variant.label}" width="100%"/>'
+            )
+            parts.append("</p>")
             parts.append("")
             parts.append(variant.blurb)
             parts.append("")

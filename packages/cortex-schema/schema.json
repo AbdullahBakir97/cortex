@@ -240,7 +240,15 @@
           }
         },
         "header": { "$ref": "#/definitions/banner" },
-        "footer": { "$ref": "#/definitions/banner" }
+        "footer": { "$ref": "#/definitions/banner" },
+        "showcase": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Tuning for the auto-generated CORTEX:SHOWCASE block.",
+          "properties": {
+            "base_url": { "type": "string", "default": "", "description": "Override the URL prefix for variant image src. Empty = default <user>/<user>/main/assets path." }
+          }
+        }
       }
     },
 

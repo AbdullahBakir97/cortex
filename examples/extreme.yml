@@ -163,6 +163,10 @@ cards:
     subtitle:  "Built with Cortex · cortex.dev"
     height:    180
     animation: "drift"
+  # Showcase block URL override — cortex's own marketing README points at the
+  # example renders inside this repo rather than a user profile repo.
+  showcase:
+    base_url: "https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme"
 
 contributions:
   snake:      true

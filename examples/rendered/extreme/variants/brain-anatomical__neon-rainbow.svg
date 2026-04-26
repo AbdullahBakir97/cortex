@@ -1,0 +1,1666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Neural Skill Atlas — anatomical neon brain
+    • Brain anatomy by Hugh Guiney, CC-BY-SA-3.0
+      (https://commons.wikimedia.org/wiki/File:Human-brain.SVG)
+    • Recolored + composed by Cortex (https://github.com/AbdullahBakir97/cortex)
+    • Generated for: Abdullah Bakir
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900"
+     viewBox="0 0 1400 900" role="img"
+     aria-label="Cortex Neural Skill Atlas — Abdullah Bakir">
+  <defs>
+    <linearGradient id="brainGrad_unified" x1="0" y1="0" x2="1" y2="1"
+                    gradientUnits="objectBoundingBox">
+      <animateTransform attributeName="gradientTransform" type="rotate"
+                        from="0 0.5 0.5" to="360 0.5 0.5" dur="40s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="#3A1A28"/>
+      <stop offset="33%"  stop-color="#4D2438"/>
+      <stop offset="66%"  stop-color="#5C2E45"/>
+      <stop offset="100%" stop-color="#3A1A28"/>
+    </linearGradient>
+    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
+      <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="#280816"/>
+      <stop offset="60%"  stop-color="#100308"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </radialGradient>
+    <radialGradient id="bgAura" cx="50%" cy="50%" r="40%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_0" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="nebula_3" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#34D399" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#34D399" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="nebulaBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="40"/>
+    </filter>
+    <radialGradient id="aurora_a" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#EC4899" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#EC4899" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#EC4899" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_b" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7C3AED" stop-opacity="0.10"/>
+      <stop offset="60%"  stop-color="#7C3AED" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aurora_c" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.08"/>
+      <stop offset="60%"  stop-color="#22D3EE" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Aurora flow palette: jewel tones (deeper, less saturated than primary
+         hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
+         vocabulary, not "rainbow tech demo". -->
+    <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#C95E8A" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#C95E8A" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_b" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#4F8CC4" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#4F8CC4" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#4F8CC4" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_c" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7B5EAA" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#7B5EAA" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="brainAurora_d" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#6FB28E" stop-opacity="0.30"/>
+      <stop offset="60%"  stop-color="#6FB28E" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#6FB28E" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="25"/>
+    </filter>
+    <filter id="dnaBlur" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
+          <path d="M 149,168 C 138,178 138,185 145,189"/>
+      <path d="M 178,155 C 227,121 263,118 288,135"/>
+      <path d="M 254,184 C 273,170 281,143 296,124 C 316,94 354,119 378,117"/>
+      <path d="M 129,215 C 117,229 132,241 132,254"/>
+      <path d="M 91,256 C 108,247 104,227 120,213 C 131,199 167,198 180,179 C 194,158 212,151 233,155"/>
+      <path d="M 217,174 C 228,163 236,152 243,141"/>
+      <path d="M 285,176 C 296,168 301,158 300,147"/>
+      <path d="M 274,108 C 282,111 293,109 310,97"/>
+      <path d="M 297,93 C 293,98 290,103 290,107"/>
+      <path d="M 341,77 C 343,81 346,84 349,84"/>
+      <path d="M 372,169 C 361,170 353,163 346,153 C 341,143 327,143 321,124"/>
+      <path d="M 48,324 C 55,313 62,307 71,304"/>
+      <path d="M 71,311 C 67,294 98,289 107,279 C 113,274 118,255 149,248 C 166,242 180,224 200,206 C 208,197 223,193 240,192"/>
+      <path d="M 211,167 C 202,179 195,194 205,201"/>
+      <path d="M 169,236 C 167,248 167,260 168,271"/>
+      <path d="M 199,257 C 192,268 180,281 185,296"/>
+      <path d="M 175,292 C 193,297 203,315 216,320"/>
+      <path d="M 184,282 C 178,272 169,267 157,276 C 140,286 124,297 107,307 C 91,321 86,335 93,349"/>
+      <path d="M 49,352 C 62,337 76,330 90,331"/>
+      <path d="M 71,335 C 68,332 63,331 57,330"/>
+      <path d="M 103,319 C 127,306 139,309 143,322 C 153,376 169,386 184,400"/>
+      <path d="M 156,299 C 152,303 146,309 140,316"/>
+      <path d="M 206,268 C 224,252 249,235 202,219"/>
+      <path d="M 229,242 C 258,241 274,247 275,263 C 276,274 269,285 270,297"/>
+      <path d="M 350,386 C 375,362 390,340 373,302 C 367,283 360,265 353,247 C 322,247 295,252 275,262"/>
+      <path d="M 323,276 C 308,290 276,299 278,324 C 279,371 296,381 307,392 C 311,395 315,407 325,419"/>
+      <path d="M 256,149 C 251,168 230,188 249,210 C 256,205 275,205 284,203 C 300,193 343,210 360,198"/>
+      <path d="M 308,393 C 316,380 316,368 296,354"/>
+      <path d="M 243,275 C 244,289 245,302 251,316"/>
+      <path d="M 278,324 C 262,319 249,312 244,322 C 239,326 225,332 229,350 C 228,358 199,362 188,367"/>
+      <path d="M 209,369 C 200,376 203,390 199,400 C 201,421 225,425 250,428"/>
+      <path d="M 96,366 C 102,372 113,377 137,380 C 147,382 146,389 169,396 C 178,397 189,398 199,400"/>
+      <path d="M 111,336 C 105,342 92,347 91,355 C 89,363 83,371 78,379 C 70,394 65,406 66,416 C 67,437 90,448 102,461"/>
+      <path d="M 47,371 C 44,369 42,367 40,365"/>
+      <path d="M 70,362 C 63,369 56,376 51,385 C 47,396 48,405 46,424"/>
+      <path d="M 51,387 C 51,384 49,382 47,380"/>
+      <path d="M 51,432 C 53,426 62,420 57,413"/>
+      <path d="M 70,495 C 72,491 71,486 73,484"/>
+      <path d="M 104,528 C 110,518 111,512 107,511"/>
+      <path d="M 114,515 L 109,512"/>
+      <path d="M 87,449 C 77,469 88,483 115,492"/>
+      <path d="M 84,394 C 106,406 129,431 149,438 C 171,446 203,474 222,461"/>
+      <path d="M 250,446 C 235,449 217,461 217,469 C 218,483 262,493 280,489"/>
+      <path d="M 104,471 C 111,477 121,479 140,470 C 160,464 167,471 181,475"/>
+      <path d="M 219,473 C 195,471 183,472 175,480 C 161,489 147,487 142,488 C 136,490 119,507 95,495"/>
+      <path d="M 154,547 C 187,549 222,548 258,543"/>
+      <path d="M 192,507 C 184,505 180,501 180,494 C 179,508 171,511 165,517 C 158,522 159,530 153,537"/>
+      <path d="M 228,488 C 208,488 189,487 175,480"/>
+      <path d="M 217,488 C 220,505 243,507 255,513"/>
+      <path d="M 209,503 C 211,499 217,499 221,496"/>
+      <path d="M 237,500 C 242,496 248,494 252,489"/>
+      <path d="M 266,501 C 257,486 285,481 292,465"/>
+      <path d="M 264,406 C 280,419 303,426 317,430"/>
+      <path d="M 249,468 C 278,468 304,449 309,427 C 310,425 317,424 321,423"/>
+      <path d="M 327,442 C 325,454 329,462 337,465"/>
+      <path d="M 314,587 C 304,584 292,574 284,571"/>
+      <path d="M 356,542 C 318,560 310,588 339,621"/>
+      <path d="M 369,65 C 365,70 362,74 360,78"/>
+      <path d="M 457,64 C 449,65 441,63 433,56"/>
+      <path d="M 471,124 C 461,122 453,118 457,95 C 458,75 442,69 414,71 C 388,73 364,75 353,81 C 344,90 334,99 322,109"/>
+      <path d="M 357,89 C 350,96 348,104 350,112"/>
+      <path d="M 431,82 C 421,99 407,114 397,123 C 376,145 362,169 384,195"/>
+      <path d="M 454,129 C 405,131 406,162 382,173"/>
+      <path d="M 486,178 C 490,162 479,156 454,157 C 442,158 430,158 421,153"/>
+      <path d="M 461,182 C 435,191 410,194 384,196 C 372,195 355,234 353,247"/>
+      <path d="M 436,269 C 444,239 429,221 400,212"/>
+      <path d="M 453,346 C 439,344 409,323 413,302 C 410,277 395,268 394,258 C 392,253 399,241 393,234"/>
+      <path d="M 498,63 C 503,58 510,53 521,50"/>
+      <path d="M 516,73 C 490,73 468,77 457,96"/>
+      <path d="M 489,91 C 495,95 499,99 499,104"/>
+      <path d="M 549,310 C 536,306 524,298 512,284"/>
+      <path d="M 588,152 C 579,158 569,170 555,179 C 541,187 526,194 519,219 C 517,241 519,256 514,270 C 510,283 508,295 514,304"/>
+      <path d="M 524,140 C 557,148 568,158 565,171"/>
+      <path d="M 512,183 C 518,192 521,201 523,209"/>
+      <path d="M 546,288 C 558,267 593,255 596,247 C 604,226 598,205 599,185 C 605,168 621,161 639,156 C 667,124 697,120 728,144"/>
+      <path d="M 600,220 C 596,215 591,212 586,209"/>
+      <path d="M 595,250 C 604,245 612,243 621,244"/>
+      <path d="M 505,116 C 556,121 620,129 624,161"/>
+      <path d="M 629,123 C 622,113 605,108 597,101"/>
+      <path d="M 597,77 C 604,89 608,100 615,112"/>
+      <path d="M 603,60 C 615,77 638,78 639,100"/>
+      <path d="M 634,85 C 636,82 638,80 640,77"/>
+      <path d="M 674,131 C 662,102 636,103 623,96"/>
+      <path d="M 659,100 C 675,106 683,116 683,129"/>
+      <path d="M 635,67 C 655,72 672,80 686,94"/>
+      <path d="M 671,106 C 676,93 699,90 728,89"/>
+      <path d="M 625,180 C 641,172 660,170 679,181"/>
+      <path d="M 695,140 C 680,155 666,170 685,187 C 720,221 741,240 711,270"/>
+      <path d="M 641,293 C 671,300 693,301 698,285"/>
+      <path d="M 677,197 C 668,215 652,232 650,251 C 634,286 579,283 566,310"/>
+      <path d="M 567,54 C 558,60 562,75 556,86 C 508,89 481,107 490,140 C 501,153 503,162 496,168 C 482,176 477,197 472,220 C 462,233 456,254 456,276 C 455,295 427,306 431,322 C 433,322 434,322 435,322 C 435,315 439,308 446,302 C 455,297 459,285 462,269 C 461,255 465,241 476,226 C 481,207 483,179 503,170 C 515,165 508,152 497,136 C 484,104 519,96 556,91 C 571,87 567,63 577,55 C 574,54 570,54 567,54 z"/>
+      <path d="M 530,160 C 521,157 513,158 506,164"/>
+      <path d="M 724,512 C 750,511 768,501 779,480"/>
+      <path d="M 758,518 L 749,508"/>
+      <path d="M 798,506 C 814,506 828,509 839,518"/>
+      <path d="M 830,500 C 825,503 820,505 815,507"/>
+      <path d="M 856,507 C 853,490 864,482 865,472"/>
+      <path d="M 675,403 C 683,410 693,416 691,424 C 694,441 715,443 727,445 C 751,455 773,466 760,486"/>
+      <path d="M 727,434 C 733,424 733,415 733,405 C 743,389 797,411 804,366"/>
+      <path d="M 728,364 C 733,375 734,389 733,405"/>
+      <path d="M 791,478 C 807,454 807,421 836,411"/>
+      <path d="M 753,457 C 755,451 758,446 761,442"/>
+      <path d="M 803,329 C 796,325 793,318 796,306"/>
+      <path d="M 773,346 C 781,341 788,331 795,318"/>
+      <path d="M 815,269 C 816,294 837,296 833,324"/>
+      <path d="M 762,322 C 763,295 777,279 794,265 C 804,254 816,248 809,213 C 813,192 838,169 816,154 C 790,142 768,118 728,117"/>
+      <path d="M 719,155 C 728,132 779,142 808,164"/>
+      <path d="M 782,162 C 791,175 791,190 785,204"/>
+      <path d="M 727,201 C 741,210 749,224 751,243 C 761,290 748,301 734,311"/>
+      <path d="M 732,327 C 743,312 732,304 686,296"/>
+      <path d="M 740,213 C 757,200 760,179 770,162"/>
+      <path d="M 809,214 C 830,212 846,220 859,237"/>
+      <path d="M 841,199 C 847,201 857,204 869,207"/>
+      <path d="M 912,290 C 898,295 889,306 884,321 C 871,331 864,346 860,362"/>
+      <path d="M 962,422 C 969,425 973,430 973,438"/>
+      <path d="M 941,328 C 937,333 932,335 925,336 C 916,344 910,353 910,364 C 917,381 918,394 914,405"/>
+      <path d="M 913,350 C 913,344 911,337 906,331"/>
+      <path d="M 937,403 C 943,394 947,384 947,369 C 948,357 951,347 956,341"/>
+      <path d="M 947,378 C 957,379 960,385 959,393 C 966,399 969,408 972,416"/>
+      <path d="M 884,320 C 882,290 835,243 807,252 C 830,236 890,275 884,320 z"/>
+      <path d="M 903,251 C 896,259 888,268 880,276 C 887,276 896,271 908,256 L 903,251 z"/>
+      <path d="M 881,277 C 864,291 847,306 835,321 C 826,333 825,350 828,369 C 830,383 832,397 835,410 C 839,410 842,410 846,411 C 862,427 902,424 914,430 C 921,440 927,447 931,445 C 938,452 943,460 946,468 C 943,458 949,458 928,434 C 919,425 898,420 865,415 C 842,407 837,393 835,375 C 831,358 829,342 835,325 C 848,309 864,293 881,277 z"/>
+      <path d="M 838,407 C 841,430 849,451 866,467 C 900,468 921,487 951,488 L 944,495 C 930,496 917,484 904,482 C 893,478 871,477 861,472 C 846,451 837,429 838,407 z"/>
+      <path d="M 436,56 C 405,54 370,60 340,77 C 325,78 309,86 296,92 C 267,94 242,104 220,121 C 201,127 181,134 164,149 C 132,168 111,190 101,217 C 80,224 69,240 69,262 C 54,275 44,292 42,314 C 34,331 35,348 40,365 C 39,371 35,378 40,384 C 35,395 37,406 42,417 C 45,417 46,430 50,432 C 52,461 59,480 68,494 C 78,510 88,524 104,528 C 120,560 186,558 266,547 C 273,558 280,566 287,574 C 298,597 316,611 338,620 C 356,636 378,647 419,631 C 458,629 489,620 499,590 C 509,589 522,584 543,574 C 558,571 570,563 581,554 C 592,562 615,558 638,554 C 674,552 699,547 711,537 C 728,532 745,527 758,517 C 788,527 816,531 839,517 C 906,524 959,510 973,438 C 984,426 981,408 976,390 C 987,372 972,357 957,341 C 955,320 945,305 930,292 C 932,278 927,266 907,256 C 899,232 885,217 868,206 C 868,181 847,165 816,153 C 792,124 762,103 727,88 C 713,77 699,76 685,78 C 669,58 641,53 603,60 C 593,53 582,53 572,53 C 549,51 529,50 512,50 C 483,44 459,48 436,56 z"/>
+      <path d="M 776,364 C 780,318 691,305 647,381 C 641,397 587,391 559,399 C 534,409 509,423 484,438 C 474,454 439,428 419,430 C 354,437 353,534 417,550"/>
+      <path d="M 536,327 C 537,347 515,386 548,404"/>
+      <path d="M 475,369 C 486,365 489,348 496,339"/>
+      <path d="M 453,394 C 448,405 454,409 465,410"/>
+      <path d="M 495,581 C 534,546 528,483 467,487 C 446,489 431,484 421,474"/>
+      <path d="M 525,473 C 539,498 553,492 570,492 C 600,491 617,461 596,429"/>
+      <path d="M 546,492 C 533,496 523,502 516,510"/>
+      <path d="M 493,514 C 481,518 469,531 455,540 C 443,558 426,565 417,575 C 407,590 402,621 345,604"/>
+      <path d="M 494,591 C 466,607 421,593 415,600"/>
+      <path d="M 567,452 C 557,449 551,435 546,428"/>
+      <path d="M 392,411 C 414,423 433,420 452,405"/>
+      <path d="M 418,418 C 410,430 401,435 390,434 C 378,432 361,445 341,461 C 325,474 319,488 315,503 C 312,521 309,529 305,536"/>
+      <path d="M 333,503 C 331,516 340,525 349,533 C 357,537 357,548 359,551 C 371,568 373,579 374,589"/>
+      <path d="M 611,358 C 625,342 650,355 669,353"/>
+      <path d="M 562,373 C 574,363 579,350 575,332"/>
+      <path d="M 586,365 C 582,362 578,359 575,355"/>
+      <path d="M 581,554 C 577,544 580,534 590,525"/>
+      <path d="M 562,548 C 565,543 575,542 581,539"/>
+      <path d="M 639,509 C 636,528 649,537 677,538"/>
+      <path d="M 630,540 C 635,520 622,501 596,482"/>
+      <path d="M 631,528 C 634,526 637,524 640,522"/>
+      <path d="M 683,467 C 668,464 656,458 656,442 C 653,428 635,414 643,386"/>
+      <path d="M 612,480 C 624,492 648,477 670,477 C 724,475 738,504 712,536"/>
+      <path d="M 674,298 C 681,299 688,302 693,306"/>
+      <path d="M 264,547 C 260,519 273,494 294,473 C 317,455 312,429 322,421 C 336,394 373,377 425,368 C 441,349 462,339 491,340 C 511,323 529,307 566,307 C 568,316 571,325 575,333 C 571,328 565,322 561,315 C 528,312 505,331 492,347 C 469,342 449,349 430,371 C 377,381 339,397 326,424 C 319,448 311,468 296,476 C 279,494 264,520 274,558 C 271,555 268,550 264,547 z"/>
+      <path d="M 551,571 C 551,577 552,583 558,589 C 560,623 573,634 591,634 C 671,685 732,688 778,658 C 797,647 827,636 829,625 C 851,614 864,603 876,592 C 895,576 895,548 887,513 C 697,507 601,532 551,571 z"/>
+      <path d="M 771,522 C 733,536 691,552 658,583"/>
+      <path d="M 613,607 C 676,638 742,648 811,641"/>
+      <path d="M 770,618 C 776,627 804,624 839,619"/>
+      <path d="M 788,610 C 801,614 834,606 871,596"/>
+      <path d="M 777,615 C 786,621 820,616 857,608"/>
+      <path d="M 885,579 C 844,597 813,607 797,605"/>
+      <path d="M 808,598 C 830,597 859,585 888,573"/>
+      <path d="M 822,590 C 844,585 867,576 890,566"/>
+      <path d="M 891,558 C 873,567 855,574 836,580"/>
+      <path d="M 634,601 C 679,617 727,627 774,630"/>
+      <path d="M 564,590 C 567,609 576,624 590,633"/>
+      <path d="M 601,621 C 667,660 723,668 775,659"/>
+      <path d="M 604,616 C 669,652 729,661 786,653"/>
+      <path d="M 788,526 C 754,537 718,551 684,569"/>
+      <path d="M 608,611 C 678,645 741,654 801,647"/>
+      <path d="M 624,603 C 691,635 756,636 821,634"/>
+      <path d="M 758,623 C 765,632 790,632 829,626"/>
+      <path d="M 590,633 C 599,623 607,611 616,603"/>
+      <path d="M 597,624 C 638,655 694,666 756,670"/>
+      <path d="M 594,630 C 628,654 679,671 738,676"/>
+      <path d="M 663,571 C 675,562 687,553 699,544"/>
+      <path d="M 623,603 C 637,591 642,575 641,554"/>
+      <path d="M 677,601 C 709,606 740,611 772,617"/>
+      <path d="M 869,551 C 841,580 804,604 758,623 C 719,620 680,607 641,599"/>
+      <path d="M 578,591 C 576,605 580,619 592,628"/>
+      <path d="M 561,589 L 557,571"/>
+      <path d="M 567,589 C 563,582 563,575 564,568"/>
+      <path d="M 575,590 C 573,581 572,572 572,563"/>
+      <path d="M 579,591 L 583,556"/>
+      <path d="M 588,593 C 586,604 591,613 600,621"/>
+      <path d="M 786,610 C 757,605 729,600 701,596"/>
+      <path d="M 727,590 C 752,594 773,597 797,604"/>
+      <path d="M 746,585 C 768,585 789,590 808,598"/>
+      <path d="M 585,593 C 586,581 589,570 592,559"/>
+      <path d="M 774,578 C 789,580 805,584 820,591"/>
+      <path d="M 590,594 C 595,583 597,570 601,560"/>
+      <path d="M 607,602 C 617,589 625,574 629,557"/>
+      <path d="M 616,602 C 626,589 633,574 634,556"/>
+      <path d="M 600,600 L 623,558"/>
+      <path d="M 594,598 C 600,585 604,570 612,560"/>
+      <path d="M 832,583 C 823,582 812,583 802,583"/>
+      <path d="M 843,574 C 823,578 805,578 790,574"/>
+      <path d="M 804,570 C 813,572 832,570 851,567 C 865,563 878,558 891,552"/>
+      <path d="M 635,601 C 644,589 649,573 651,554"/>
+      <path d="M 644,598 C 653,583 657,569 659,554"/>
+      <path d="M 669,552 C 657,604 629,608 597,599 C 584,589 571,589 558,589"/>
+      <path d="M 889,523 C 845,537 666,600 647,600 M 646,596 C 721,565 801,541 877,519"/>
+      <path d="M 811,527 C 759,544 702,568 651,592"/>
+      <path d="M 891,544 C 845,561 693,600 657,604 C 736,578 813,557 890,533"/>
+      <path d="M 518,579 C 525,607 538,626 559,634 C 589,648 612,682 636,712 C 649,705 663,699 674,689 L 560,553 L 518,579 z"/>
+    </clipPath>
+    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
+      <stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/>
+    </linearGradient>
+    <linearGradient id="cardHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+        <radialGradient id="cardInnerGlow_frontal" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#F90001" stop-opacity="0.18"/><stop offset="100%" stop-color="#F90001" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cardInnerGlow_parietal" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#34D399" stop-opacity="0.18"/><stop offset="100%" stop-color="#34D399" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cardInnerGlow_occipital" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#FF652F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FF652F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cardInnerGlow_temporal" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#FFD23F" stop-opacity="0.18"/><stop offset="100%" stop-color="#FFD23F" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cardInnerGlow_cerebellum" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#22D3EE" stop-opacity="0.18"/><stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cardInnerGlow_brainstem" cx="50%" cy="50%" r="60%"><stop offset="0%"   stop-color="#A78BFA" stop-opacity="0.18"/><stop offset="100%" stop-color="#A78BFA" stop-opacity="0"/></radialGradient>
+    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="2"  stdDeviation="4"  flood-color="#000" flood-opacity="0.30"/>
+      <feDropShadow dx="0" dy="6"  stdDeviation="12" flood-color="#000" flood-opacity="0.40"/>
+      <feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/>
+    </filter>
+    <filter id="brainGlow" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="brainRipple" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="2" result="noise">
+        <animate attributeName="baseFrequency" values="0.018;0.024;0.018"
+                 dur="11s" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5"/>
+    </filter>
+    <!-- Electric glow: dilate the source then blur it then merge under the
+         original. Applied to lobe-cells via CSS so each synaptic flash gets
+         an electric corona around the dot. -->
+    <filter id="electricGlow" x="-100%" y="-100%" width="300%" height="300%">
+      <feMorphology operator="dilate" radius="1.5" in="SourceGraphic" result="dilated"/>
+      <feGaussianBlur in="dilated" stdDeviation="3" result="blurred"/>
+      <feMerge>
+        <feMergeNode in="blurred"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style><![CDATA[
+      .t-display   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 44px; fill: #FFFFFF; }
+      .t-tag       { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 15px; letter-spacing: 0.30em; text-transform: uppercase; fill: #A78BFA; }
+      .t-cat-cap   { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.25em; text-transform: uppercase; }
+      .t-region    { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 22px; fill: #FFFFFF; }
+      .t-skill     { font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 16px; fill: #E5E7EB; }
+      .brain-pulse { animation: brainPulse 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes brainPulse {
+        0%, 100% { filter: drop-shadow(0 0 16px rgba(236,72,153,0.45)); }
+        50%      { filter: drop-shadow(0 0 32px rgba(236,72,153,0.85)); }
+      }
+      .brain-3d { animation: brain3d 16s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes brain3d {
+        0%, 100% { transform: scaleX(1)    skewY(0deg); }
+        25%      { transform: scaleX(0.92) skewY(-1.5deg); }
+        50%      { transform: scaleX(0.82) skewY(0deg); }
+        75%      { transform: scaleX(0.92) skewY(1.5deg); }
+      }
+      .leader-flow  { stroke-dasharray: 4 6; animation: lflow 1.6s linear infinite; }
+      @keyframes lflow { to { stroke-dashoffset: -20; } }
+      .target-pulse { animation: tpulse 1.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes tpulse { 0%,100%{transform:scale(1);opacity:0.85} 50%{transform:scale(1.5);opacity:1} }
+      .target-halo { animation: thalo 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+      @keyframes thalo { 0%,100%{opacity:0.18;transform:scale(0.9)} 50%{opacity:0.45;transform:scale(1.25)} }
+      .label-fade { opacity: 0; animation: lfade 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
+      @keyframes lfade { to { opacity: 1; } }
+      .lf1{animation-delay:0.4s} .lf2{animation-delay:0.55s} .lf3{animation-delay:0.7s}
+      .lf4{animation-delay:0.85s} .lf5{animation-delay:1.0s} .lf6{animation-delay:1.15s}
+      .card-inner-pulse { animation: cardPulse 5s ease-in-out infinite; }
+      @keyframes cardPulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1.0; } }
+      .card-edge {
+        stroke-dasharray: 80 1000;
+        animation: cardEdgeTravel 4s linear infinite;
+        filter: url(#electricGlow);
+        opacity: 0.95;
+      }
+      @keyframes cardEdgeTravel { to { stroke-dashoffset: -1080; } }
+      .ce1 { animation-delay: 0s; }
+      .ce2 { animation-delay: 0.7s; }
+      .ce3 { animation-delay: 1.4s; }
+      .ce4 { animation-delay: 2.1s; }
+      .ce5 { animation-delay: 2.8s; }
+      .ce6 { animation-delay: 3.5s; }
+      /* Per-lobe synaptic firing — each cell flashes on its lobe's phase
+         + within-lobe stagger; the lobe-arcs between cells animate a
+         traveling dash so the firing reads as electric impulses moving
+         around the lobe's quadrilateral. */
+      .lobe-cell { animation: lcell 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; opacity: 0; }
+      @keyframes lcell {
+        0%, 100% { opacity: 0;   transform: scale(0.6); }
+        10%      { opacity: 1;   transform: scale(1.8); filter: drop-shadow(0 0 8px currentColor); }
+        20%      { opacity: 0.7; transform: scale(1.2); }
+        30%      { opacity: 0;   transform: scale(0.8); }
+      }
+      /* Per-lobe stroke-draw overlay — duplicate paths above the body fill,
+         each lobe's outline draws in over 1s, holds, draws out over 1s, rests.
+         Six lobes staggered by 1s on a shared 6s cycle. */
+      .lobe-stroke {
+        animation: lstroke 6s ease-in-out infinite;
+        stroke-dashoffset: 100;
+        opacity: 0;
+      }
+      @keyframes lstroke {
+        0%   { stroke-dashoffset: 100; opacity: 0; }
+        16%  { stroke-dashoffset: 0;   opacity: 1; }
+        26%  { stroke-dashoffset: 0;   opacity: 1; }
+        43%  { stroke-dashoffset:-100; opacity: 0; }
+        100% { stroke-dashoffset:-100; opacity: 0; }
+      }
+      .ls-frontal    { animation-delay: 0s; }
+      .ls-parietal   { animation-delay: 1s; }
+      .ls-occipital  { animation-delay: 2s; }
+      .ls-temporal   { animation-delay: 3s; }
+      .ls-cerebellum { animation-delay: 4s; }
+      .ls-brainstem  { animation-delay: 5s; }
+      .lobe-arc {
+        stroke-dasharray: 4 22;
+        animation: arcflow 1.6s linear infinite, arcfade 2.4s ease-in-out infinite;
+        stroke-opacity: 0;
+      }
+      @keyframes arcflow { to { stroke-dashoffset: -26; } }
+      @keyframes arcfade {
+        0%, 35%, 100% { stroke-opacity: 0; }
+        10%           { stroke-opacity: 0.85; }
+        20%           { stroke-opacity: 0.45; }
+      }
+      .particle { animation: pdrift 14s ease-in-out infinite; transform-box: fill-box; }
+      @keyframes pdrift {
+        0%,100% { opacity: 0.18; transform: translate(0, 0); }
+        25%      { opacity: 0.55; transform: translate(8px, -10px); }
+        50%      { opacity: 0.32; transform: translate(-4px, -22px); }
+        75%      { opacity: 0.60; transform: translate(-12px, -8px); }
+      }
+      .p1{animation-delay:0s;animation-duration:14s} .p2{animation-delay:1.5s;animation-duration:18s}
+      .p3{animation-delay:3s;animation-duration:11s} .p4{animation-delay:4.5s;animation-duration:15s}
+      .p5{animation-delay:6s;animation-duration:13s} .p6{animation-delay:7.5s;animation-duration:16s}
+      .p7{animation-delay:2s;animation-duration:12s} .p8{animation-delay:3.5s;animation-duration:17s}
+      .p9{animation-delay:5s;animation-duration:14s} .p10{animation-delay:6.5s;animation-duration:11s}
+      .p11{animation-delay:0.5s;animation-duration:19s} .p12{animation-delay:8s;animation-duration:13s}
+      .p13{animation-delay:1s;animation-duration:15s} .p14{animation-delay:2.5s;animation-duration:18s}
+      .p15{animation-delay:9s;animation-duration:12s} .p16{animation-delay:4s;animation-duration:16s}
+      .constellation-line {
+        animation: clFade 8s ease-in-out infinite;
+      }
+      @keyframes clFade {
+        0%, 100% { stroke-opacity: 0; }
+        50%      { stroke-opacity: 0.30; }
+      }
+      .cl1{animation-delay:0s}    .cl2{animation-delay:0.6s}
+      .cl3{animation-delay:1.2s}  .cl4{animation-delay:1.8s}
+      .cl5{animation-delay:2.4s}  .cl6{animation-delay:3.0s}
+      .cl7{animation-delay:3.6s}  .cl8{animation-delay:4.2s}
+      .cl9{animation-delay:4.8s}  .cl10{animation-delay:5.4s}
+      .cl11{animation-delay:6.0s} .cl12{animation-delay:6.6s}
+      .cl13{animation-delay:7.2s} .cl14{animation-delay:7.8s}
+      .cl15{animation-delay:0.3s} .cl16{animation-delay:1.5s}
+      .far-star {
+        animation-name: starTwinkle;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in-out;
+      }
+      .fs8  { animation-duration:  8s; }
+      .fs10 { animation-duration: 10s; }
+      .fs12 { animation-duration: 12s; }
+      .fs14 { animation-duration: 14s; }
+      @keyframes starTwinkle {
+        0%, 100% { opacity: 0.20; }
+        50%      { opacity: 0.85; }
+      }
+      /* DNA helixes — restraint reads as professional. Each helix has its
+         own animation duration (set inline) so no two ever sync up. The
+         visible phase (40-60% of cycle) is when both the group fade-in AND
+         the strand draw-in are at peak — the strand visibly "draws itself"
+         as the group fades up, then "draws away" as it fades out. */
+      .dna {
+        opacity: 0;
+        animation-name: dnaFade;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }
+      @keyframes dnaFade {
+        0%, 100% { opacity: 0; }
+        12%      { opacity: 0; }
+        28%      { opacity: 0.95; }
+        58%      { opacity: 0.95; }
+        72%      { opacity: 0; }
+      }
+      .dna-strand {
+        animation-name: dnaDraw;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
+      }
+      @keyframes dnaDraw {
+        0%   { stroke-dashoffset: 100; }
+        28%  { stroke-dashoffset: 0; }
+        58%  { stroke-dashoffset: 0; }
+        72%  { stroke-dashoffset: -100; }
+        100% { stroke-dashoffset: -100; }
+      }
+    ]]></style>
+  </defs>
+
+  <rect width="1400" height="900" fill="url(#bgRadial)"/>
+  <rect width="1400" height="900" fill="url(#bgAura)">
+    <animateTransform attributeName="transform" type="translate"
+                      values="0,0; 100,80; -60,40; 0,0" dur="40s" repeatCount="indefinite"/>
+  </rect>
+  <!-- Far star field: 30 dim points twinkling at deep-space distance.
+       Each star uses a CSS class fs8/fs10/fs12/fs14 for varied twinkle speed. -->
+  <g class="stars">
+      <circle cx="1016" cy="263" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="1326" cy="436" r="0.7" fill="#FFFFFF" opacity="0.35" class="far-star fs8"/>
+    <circle cx="1131" cy="390" r="1.1" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="972" cy="214" r="0.9" fill="#FFFFFF" opacity="0.3" class="far-star fs10"/>
+    <circle cx="1132" cy="400" r="0.9" fill="#FFFFFF" opacity="0.34" class="far-star fs10"/>
+    <circle cx="41" cy="500" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs10"/>
+    <circle cx="1019" cy="389" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="1129" cy="547" r="1.1" fill="#FFFFFF" opacity="0.43" class="far-star fs8"/>
+    <circle cx="1006" cy="175" r="0.6" fill="#FFFFFF" opacity="0.48" class="far-star fs12"/>
+    <circle cx="1175" cy="188" r="0.7" fill="#FFFFFF" opacity="0.46" class="far-star fs14"/>
+    <circle cx="663" cy="443" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs8"/>
+    <circle cx="1182" cy="679" r="0.7" fill="#FFFFFF" opacity="0.48" class="far-star fs14"/>
+    <circle cx="1052" cy="152" r="1.1" fill="#FFFFFF" opacity="0.46" class="far-star fs8"/>
+    <circle cx="611" cy="520" r="1.2" fill="#FFFFFF" opacity="0.21" class="far-star fs14"/>
+    <circle cx="184" cy="678" r="1.1" fill="#FFFFFF" opacity="0.35" class="far-star fs10"/>
+    <circle cx="198" cy="730" r="0.6" fill="#FFFFFF" opacity="0.27" class="far-star fs12"/>
+    <circle cx="462" cy="713" r="0.8" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="198" cy="425" r="1.0" fill="#FFFFFF" opacity="0.45" class="far-star fs12"/>
+    <circle cx="1053" cy="717" r="0.9" fill="#FFFFFF" opacity="0.49" class="far-star fs14"/>
+    <circle cx="67" cy="274" r="1.1" fill="#FFFFFF" opacity="0.43" class="far-star fs12"/>
+    <circle cx="1341" cy="218" r="1.0" fill="#FFFFFF" opacity="0.44" class="far-star fs10"/>
+    <circle cx="1134" cy="348" r="1.0" fill="#FFFFFF" opacity="0.43" class="far-star fs14"/>
+    <circle cx="709" cy="204" r="1.2" fill="#FFFFFF" opacity="0.31" class="far-star fs10"/>
+    <circle cx="636" cy="443" r="0.8" fill="#FFFFFF" opacity="0.4" class="far-star fs10"/>
+    <circle cx="691" cy="512" r="0.6" fill="#FFFFFF" opacity="0.23" class="far-star fs8"/>
+    <circle cx="61" cy="452" r="0.6" fill="#FFFFFF" opacity="0.33" class="far-star fs12"/>
+    <circle cx="107" cy="85" r="0.8" fill="#FFFFFF" opacity="0.3" class="far-star fs12"/>
+    <circle cx="1191" cy="51" r="0.6" fill="#FFFFFF" opacity="0.31" class="far-star fs12"/>
+    <circle cx="759" cy="524" r="1.1" fill="#FFFFFF" opacity="0.42" class="far-star fs14"/>
+    <circle cx="541" cy="746" r="0.6" fill="#FFFFFF" opacity="0.33" class="far-star fs10"/>
+  </g>
+
+  <!-- Nebula clouds: 4 large blurred radial gradients drifting slowly.
+       More organic than aurora bands; adds color depth behind the brain. -->
+  <g class="nebulae">
+      <g class="nebula" filter="url(#nebulaBlur)"><rect x="-100" y="-100" width="1100" height="1100" fill="url(#nebula_0)"><animateTransform attributeName="transform" type="translate" values="0,0; -50,-30; 0,0" dur="38s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="-100" width="1100" height="1100" fill="url(#nebula_1)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,-30; 0,0" dur="44s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="-100" y="500" width="1100" height="1100" fill="url(#nebula_2)"><animateTransform attributeName="transform" type="translate" values="0,0; -50,30; 0,0" dur="41s" repeatCount="indefinite"/></rect></g>
+    <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="500" width="1100" height="1100" fill="url(#nebula_3)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,30; 0,0" dur="47s" repeatCount="indefinite"/></rect></g>
+  </g>
+
+  <!-- DNA helix symbols at canvas corners — fade in/out + draw in
+       on staggered 16s timers. 1-2 visible at any moment, others hidden. -->
+  <g class="dna-helixes">
+      <g class="dna" filter="url(#dnaBlur)" style="animation-delay:3.8s;animation-duration:26.6s" transform="translate(1136,742)">
+  <path d="M28.5,-82.0 C28.5,-77.4 22.9,-72.9 14.3,-68.3 C5.6,-63.8 -5.6,-59.2 -14.2,-54.7 C-22.9,-50.1 -28.5,-45.6 -28.5,-41.0 C-28.5,-36.4 -22.9,-31.9 -14.3,-27.3 C-5.6,-22.8 5.6,-18.2 14.3,-13.7 C22.9,-9.1 28.5,-4.6 28.5,0.0 C28.5,4.6 22.9,9.1 14.2,13.7 C5.6,18.2 -5.6,22.8 -14.2,27.3 C-22.9,31.9 -28.5,36.4 -28.5,41.0 C-28.5,45.6 -22.9,50.1 -14.2,54.7 C-5.6,59.2 5.6,63.8 14.2,68.3 C22.9,72.9 28.5,77.4 28.5,82.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:26.6s;animation-delay:3.8s"/>
+  <path d="M-28.5,-82.0 C-28.5,-77.4 -22.9,-72.9 -14.3,-68.3 C-5.6,-63.8 5.6,-59.2 14.2,-54.7 C22.9,-50.1 28.5,-45.6 28.5,-41.0 C28.5,-36.4 22.9,-31.9 14.3,-27.3 C5.6,-22.8 -5.6,-18.2 -14.3,-13.7 C-22.9,-9.1 -28.5,-4.6 -28.5,0.0 C-28.5,4.6 -22.9,9.1 -14.2,13.7 C-5.6,18.2 5.6,22.8 14.2,27.3 C22.9,31.9 28.5,36.4 28.5,41.0 C28.5,45.6 22.9,50.1 14.2,54.7 C5.6,59.2 -5.6,63.8 -14.2,68.3 C-22.9,72.9 -28.5,77.4 -28.5,82.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:26.6s;animation-delay:3.8s"/>
+    <line x1="-28" y1="-41" x2="28" y2="-41" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="28" y1="0" x2="-28" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-28" y1="41" x2="28" y2="41" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+  </g>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:5.2s;animation-duration:29.7s" transform="translate(1302,816)">
+  <path d="M32.0,-92.0 C32.0,-86.9 25.7,-81.8 16.0,-76.7 C6.3,-71.6 -6.3,-66.4 -16.0,-61.3 C-25.7,-56.2 -32.0,-51.1 -32.0,-46.0 C-32.0,-40.9 -25.7,-35.8 -16.0,-30.7 C-6.3,-25.6 6.3,-20.4 16.0,-15.3 C25.7,-10.2 32.0,-5.1 32.0,0.0 C32.0,5.1 25.7,10.2 16.0,15.3 C6.3,20.4 -6.3,25.6 -16.0,30.7 C-25.7,35.8 -32.0,40.9 -32.0,46.0 C-32.0,51.1 -25.7,56.2 -16.0,61.3 C-6.3,66.4 6.3,71.6 16.0,76.7 C25.7,81.8 32.0,86.9 32.0,92.0" stroke="#4F8CC4" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.7s;animation-delay:5.2s"/>
+  <path d="M-32.0,-92.0 C-32.0,-86.9 -25.7,-81.8 -16.0,-76.7 C-6.3,-71.6 6.3,-66.4 16.0,-61.3 C25.7,-56.2 32.0,-51.1 32.0,-46.0 C32.0,-40.9 25.7,-35.8 16.0,-30.7 C6.3,-25.6 -6.3,-20.4 -16.0,-15.3 C-25.7,-10.2 -32.0,-5.1 -32.0,0.0 C-32.0,5.1 -25.7,10.2 -16.0,15.3 C-6.3,20.4 6.3,25.6 16.0,30.7 C25.7,35.8 32.0,40.9 32.0,46.0 C32.0,51.1 25.7,56.2 16.0,61.3 C6.3,66.4 -6.3,71.6 -16.0,76.7 C-25.7,81.8 -32.0,86.9 -32.0,92.0" stroke="#4F8CC4" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.7s;animation-delay:5.2s"/>
+    <line x1="-32" y1="-46" x2="32" y2="-46" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="32" y1="0" x2="-32" y2="0" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-32" y1="46" x2="32" y2="46" stroke="#4F8CC4" stroke-width="0.9" stroke-opacity="0.6"/>
+  </g>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:8.6s;animation-duration:27.5s" transform="translate(135,711)">
+  <path d="M40.0,-114.0 C40.0,-107.7 32.1,-101.3 20.0,-95.0 C7.9,-88.7 -7.9,-82.3 -20.0,-76.0 C-32.1,-69.7 -40.0,-63.3 -40.0,-57.0 C-40.0,-50.7 -32.1,-44.3 -20.0,-38.0 C-7.9,-31.7 7.9,-25.3 20.0,-19.0 C32.1,-12.7 40.0,-6.3 40.0,0.0 C40.0,6.3 32.1,12.7 20.0,19.0 C7.9,25.3 -7.9,31.7 -20.0,38.0 C-32.1,44.3 -40.0,50.7 -40.0,57.0 C-40.0,63.3 -32.1,69.7 -20.0,76.0 C-7.9,82.3 7.9,88.7 20.0,95.0 C32.1,101.3 40.0,107.7 40.0,114.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:27.5s;animation-delay:8.6s"/>
+  <path d="M-40.0,-114.0 C-40.0,-107.7 -32.1,-101.3 -20.0,-95.0 C-7.9,-88.7 7.9,-82.3 20.0,-76.0 C32.1,-69.7 40.0,-63.3 40.0,-57.0 C40.0,-50.7 32.1,-44.3 20.0,-38.0 C7.9,-31.7 -7.9,-25.3 -20.0,-19.0 C-32.1,-12.7 -40.0,-6.3 -40.0,0.0 C-40.0,6.3 -32.1,12.7 -20.0,19.0 C-7.9,25.3 7.9,31.7 20.0,38.0 C32.1,44.3 40.0,50.7 40.0,57.0 C40.0,63.3 32.1,69.7 20.0,76.0 C7.9,82.3 -7.9,88.7 -20.0,95.0 C-32.1,101.3 -40.0,107.7 -40.0,114.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:27.5s;animation-delay:8.6s"/>
+    <line x1="-40" y1="-57" x2="40" y2="-57" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="40" y1="0" x2="-40" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-40" y1="57" x2="40" y2="57" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+  </g>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:4.9s;animation-duration:24.9s" transform="translate(1313,90)">
+  <path d="M30.0,-86.0 C30.0,-81.2 24.1,-76.4 15.0,-71.7 C5.9,-66.9 -5.9,-62.1 -15.0,-57.3 C-24.1,-52.6 -30.0,-47.8 -30.0,-43.0 C-30.0,-38.2 -24.1,-33.4 -15.0,-28.7 C-5.9,-23.9 5.9,-19.1 15.0,-14.3 C24.1,-9.6 30.0,-4.8 30.0,0.0 C30.0,4.8 24.1,9.6 15.0,14.3 C5.9,19.1 -5.9,23.9 -15.0,28.7 C-24.1,33.4 -30.0,38.2 -30.0,43.0 C-30.0,47.8 -24.1,52.6 -15.0,57.3 C-5.9,62.1 5.9,66.9 15.0,71.7 C24.1,76.4 30.0,81.2 30.0,86.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:24.9s;animation-delay:4.9s"/>
+  <path d="M-30.0,-86.0 C-30.0,-81.2 -24.1,-76.4 -15.0,-71.7 C-5.9,-66.9 5.9,-62.1 15.0,-57.3 C24.1,-52.6 30.0,-47.8 30.0,-43.0 C30.0,-38.2 24.1,-33.4 15.0,-28.7 C5.9,-23.9 -5.9,-19.1 -15.0,-14.3 C-24.1,-9.6 -30.0,-4.8 -30.0,0.0 C-30.0,4.8 -24.1,9.6 -15.0,14.3 C-5.9,19.1 5.9,23.9 15.0,28.7 C24.1,33.4 30.0,38.2 30.0,43.0 C30.0,47.8 24.1,52.6 15.0,57.3 C5.9,62.1 -5.9,66.9 -15.0,71.7 C-24.1,76.4 -30.0,81.2 -30.0,86.0" stroke="#C95E8A" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:24.9s;animation-delay:4.9s"/>
+    <line x1="-30" y1="-43" x2="30" y2="-43" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="30" y1="0" x2="-30" y2="0" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-30" y1="43" x2="30" y2="43" stroke="#C95E8A" stroke-width="0.9" stroke-opacity="0.6"/>
+  </g>
+    <g class="dna" filter="url(#dnaBlur)" style="animation-delay:13.5s;animation-duration:29.6s" transform="translate(275,82)">
+  <path d="M32.5,-92.5 C32.5,-87.4 26.1,-82.2 16.3,-77.1 C6.4,-71.9 -6.4,-66.8 -16.2,-61.7 C-26.1,-56.5 -32.5,-51.4 -32.5,-46.2 C-32.5,-41.1 -26.1,-36.0 -16.3,-30.8 C-6.4,-25.7 6.4,-20.6 16.3,-15.4 C26.1,-10.3 32.5,-5.1 32.5,0.0 C32.5,5.1 26.1,10.3 16.2,15.4 C6.4,20.6 -6.4,25.7 -16.2,30.8 C-26.1,36.0 -32.5,41.1 -32.5,46.2 C-32.5,51.4 -26.1,56.5 -16.2,61.7 C-6.4,66.8 6.4,71.9 16.2,77.1 C26.1,82.2 32.5,87.4 32.5,92.5" stroke="#7B5EAA" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.6s;animation-delay:13.5s"/>
+  <path d="M-32.5,-92.5 C-32.5,-87.4 -26.1,-82.2 -16.3,-77.1 C-6.4,-71.9 6.4,-66.8 16.2,-61.7 C26.1,-56.5 32.5,-51.4 32.5,-46.2 C32.5,-41.1 26.1,-36.0 16.3,-30.8 C6.4,-25.7 -6.4,-20.6 -16.3,-15.4 C-26.1,-10.3 -32.5,-5.1 -32.5,0.0 C-32.5,5.1 -26.1,10.3 -16.2,15.4 C-6.4,20.6 6.4,25.7 16.2,30.8 C26.1,36.0 32.5,41.1 32.5,46.2 C32.5,51.4 26.1,56.5 16.2,61.7 C6.4,66.8 -6.4,71.9 -16.2,77.1 C-26.1,82.2 -32.5,87.4 -32.5,92.5" stroke="#7B5EAA" stroke-width="1.4" fill="none" pathLength="100" stroke-dasharray="100 100" class="dna-strand" style="animation-duration:29.6s;animation-delay:13.5s"/>
+    <line x1="-32" y1="-46" x2="32" y2="-46" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="32" y1="0" x2="-32" y2="0" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
+    <line x1="-32" y1="46" x2="32" y2="46" stroke="#7B5EAA" stroke-width="0.9" stroke-opacity="0.6"/>
+  </g>
+  </g>
+
+  <!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
+       on staggered timers. Replaces the old turbulence plasma fog with smooth
+       color flow that reads as atmospheric light, not noise. -->
+  <g class="aurora">
+    <rect x="-200" y="-200" width="900" height="900" fill="url(#aurora_a)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 200,150; 0,0" dur="28s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="700" y="200" width="900" height="900" fill="url(#aurora_b)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; -180,-120; 0,0" dur="35s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="200" y="500" width="900" height="900" fill="url(#aurora_c)">
+      <animateTransform attributeName="transform" type="translate"
+                        values="0,0; 160,-80; 0,0" dur="31s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+
+  <!-- Constellation lines: thin links between nearby particles, fading in/out
+       on staggered timers. Reads as a neural-web behind the brain. -->
+  <g class="constellation">
+      <line x1="260" y1="540" x2="340" y2="660" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl1"/>
+    <line x1="420" y1="760" x2="340" y2="660" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl2"/>
+    <line x1="560" y1="380" x2="700" y2="220" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl3"/>
+    <line x1="700" y1="220" x2="900" y2="160" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl4"/>
+    <line x1="700" y1="220" x2="640" y2="80" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl5"/>
+    <line x1="980" y1="520" x2="1080" y2="340" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl6"/>
+    <line x1="1080" y1="340" x2="1260" y2="240" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl7"/>
+    <line x1="160" y1="780" x2="340" y2="660" stroke="#A78BFA" stroke-width="0.8" stroke-opacity="0" class="constellation-line cl8"/>
+  </g>
+
+<!-- Ambient particle drift — atmospheric depth behind the brain -->
+  <g fill="#A78BFA">
+    <circle cx="120"  cy="180" r="1.8" class="particle p1"/>
+    <circle cx="260"  cy="540" r="1.4" class="particle p2"/>
+    <circle cx="380"  cy="120" r="2.0" class="particle p3" fill="#22D3EE"/>
+    <circle cx="420"  cy="760" r="1.2" class="particle p4"/>
+    <circle cx="560"  cy="380" r="1.6" class="particle p5" fill="#22D3EE"/>
+    <circle cx="700"  cy="220" r="2.2" class="particle p6"/>
+    <circle cx="780"  cy="700" r="1.4" class="particle p7" fill="#FF652F"/>
+    <circle cx="900"  cy="160" r="1.8" class="particle p8"/>
+    <circle cx="980"  cy="520" r="1.6" class="particle p9" fill="#22D3EE"/>
+    <circle cx="1080" cy="340" r="2.0" class="particle p10"/>
+    <circle cx="1180" cy="780" r="1.4" class="particle p11"/>
+    <circle cx="1260" cy="240" r="1.8" class="particle p12" fill="#FF652F"/>
+    <circle cx="160"  cy="780" r="1.6" class="particle p13"/>
+    <circle cx="340"  cy="660" r="1.2" class="particle p14" fill="#22D3EE"/>
+    <circle cx="640"  cy="80"  r="1.8" class="particle p15"/>
+    <circle cx="1320" cy="500" r="1.4" class="particle p16"/>
+  </g>
+
+  <!-- Title -->
+  <text x="700" y="50" class="t-tag" text-anchor="middle">⏵ NEURAL · SKILL · ATLAS · v1.0 ⏴</text>
+  <text x="700" y="86" class="t-display" text-anchor="middle">Abdullah Bakir's Skill Brain</text>
+
+  <!-- Leader lines (drawn behind brain) -->
+  <g fill="none">
+        <path id="leaderPath_frontal" d="M 340,270 Q 245,421 471,503" stroke="#F90001" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 340,270 Q 245,421 471,503;M 340,270 Q 281,403 471,503;M 340,270 Q 245,421 471,503" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_parietal" d="M 860,200 Q 625,319 710,368" stroke="#34D399" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 860,200 Q 625,319 710,368;M 860,200 Q 589,301 710,368;M 860,200 Q 625,319 710,368" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_occipital" d="M 1060,270 Q 984,423 909,506" stroke="#FF652F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,270 Q 984,423 909,506;M 1060,270 Q 1020,405 909,506;M 1060,270 Q 984,423 909,506" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_temporal" d="M 1060,550 Q 883,528 706,576" stroke="#FFD23F" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,550 Q 883,528 706,576;M 1060,550 Q 847,510 706,576;M 1060,550 Q 883,528 706,576" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_cerebellum" d="M 1060,730 Q 942,668 824,676" stroke="#22D3EE" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 1060,730 Q 942,668 824,676;M 1060,730 Q 978,650 824,676;M 1060,730 Q 942,668 824,676" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+    <path id="leaderPath_brainstem" d="M 340,730 Q 381,685 743,710" stroke="#A78BFA" stroke-width="1.2" fill="none" stroke-opacity="0.5" class="leader-flow"><animate attributeName="d" values="M 340,730 Q 381,685 743,710;M 340,730 Q 345,667 743,710;M 340,730 Q 381,685 743,710" dur="7s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/></path>
+  </g>
+
+  <!-- Data packets — small dots traveling card-to-brain along each leader path
+       via SMIL animateMotion. Two per line, half-period staggered, fade in/out
+       so they don't pop at the endpoints. Reads as continuous data flow. -->
+  <g>
+        <circle r="3.5" fill="#F90001" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_frontal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#F90001" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_frontal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#34D399" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_parietal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#34D399" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_parietal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FF652F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_occipital"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FF652F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_occipital"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FFD23F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_temporal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#FFD23F" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_temporal"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#22D3EE" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_cerebellum"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#22D3EE" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_cerebellum"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#A78BFA" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="0.0s" rotate="auto"><mpath href="#leaderPath_brainstem"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="0.0s" repeatCount="indefinite"/></circle>
+    <circle r="3.5" fill="#A78BFA" opacity="0"><animateMotion dur="3s" repeatCount="indefinite" begin="1.5s" rotate="auto"><mpath href="#leaderPath_brainstem"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="3s" begin="1.5s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- The neon brain (Wikimedia anatomical, recolored, centered, optionally
+       3D-wobbling). All endpoint decorations live INSIDE the wobble group so
+       they track the brain anatomy as it moves: per-region color glows tint
+       each lobe area in its card's color (mix-blend-mode: screen), halo rings
+       wobble around their dots, micro-cells pulse like synaptic firing
+       throughout the brain interior. atm.show_halos and atm.show_particles
+       gate the optional layers. -->
+  <g transform="translate(332,260) scale(0.7)">
+    <g filter="url(#brainRipple)">
+      <g class="brain-pulse" filter="url(#brainGlow)">
+        <g class="brain-3d">
+          
+    <g
+       id="brain-stem"
+       style="fill:url(#brainGrad_unified);fill-rule:evenodd;stroke:#FF652F;stroke-width:2">
+      <path
+         d="M 518,579 C 525,607 538,626 559,634 C 589,648 612,682 636,712 C 649,705 663,699 674,689 L 560,553 L 518,579 z"
+         id="medulla-oblongata"
+         style="fill:url(#brainGrad_unified);fill-opacity:1;stroke:#F90001;stroke-width:1.9997319;stroke-miterlimit:4;stroke-dasharray:none" />
+      <g
+         id="cerebellum">
+        <path
+           d="M 551,571 C 551,577 552,583 558,589 C 560,623 573,634 591,634 C 671,685 732,688 778,658 C 797,647 827,636 829,625 C 851,614 864,603 876,592 C 895,576 895,548 887,513 C 697,507 601,532 551,571 z"
+           id="path2173"
+           style="fill:url(#brainGrad_unified);stroke:#F90001" />
+        <path
+           d="M 771,522 C 733,536 691,552 658,583"
+           id="path2463"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 613,607 C 676,638 742,648 811,641"
+           id="path2555"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 770,618 C 776,627 804,624 839,619"
+           id="path2561"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 788,610 C 801,614 834,606 871,596"
+           id="path2563"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 777,615 C 786,621 820,616 857,608"
+           id="path2565"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 885,579 C 844,597 813,607 797,605"
+           id="path2567"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 808,598 C 830,597 859,585 888,573"
+           id="path2569"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 822,590 C 844,585 867,576 890,566"
+           id="path2571"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 891,558 C 873,567 855,574 836,580"
+           id="path2573"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 634,601 C 679,617 727,627 774,630"
+           id="path2575"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 564,590 C 567,609 576,624 590,633"
+           id="path2523"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 601,621 C 667,660 723,668 775,659"
+           id="path2549"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 604,616 C 669,652 729,661 786,653"
+           id="path2551"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 788,526 C 754,537 718,551 684,569"
+           id="path2467"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 608,611 C 678,645 741,654 801,647"
+           id="path2553"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 624,603 C 691,635 756,636 821,634"
+           id="path2557"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 758,623 C 765,632 790,632 829,626"
+           id="path2559"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 590,633 C 599,623 607,611 616,603"
+           id="path2525"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 597,624 C 638,655 694,666 756,670"
+           id="path2547"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 594,630 C 628,654 679,671 738,676"
+           id="path2545"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 663,571 C 675,562 687,553 699,544"
+           id="path2465"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 623,603 C 637,591 642,575 641,554"
+           id="path2497"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 677,601 C 709,606 740,611 772,617"
+           id="path2529"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 869,551 C 841,580 804,604 758,623 C 719,620 680,607 641,599"
+           id="path2527"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 578,591 C 576,605 580,619 592,628"
+           id="path2521"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 561,589 L 557,571"
+           id="path2517"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 567,589 C 563,582 563,575 564,568"
+           id="path2515"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 575,590 C 573,581 572,572 572,563"
+           id="path2513"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 579,591 L 583,556"
+           id="path2511"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 588,593 C 586,604 591,613 600,621"
+           id="path2519"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 786,610 C 757,605 729,600 701,596"
+           id="path2531"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 727,590 C 752,594 773,597 797,604"
+           id="path2533"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 746,585 C 768,585 789,590 808,598"
+           id="path2535"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 585,593 C 586,581 589,570 592,559"
+           id="path2509"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 774,578 C 789,580 805,584 820,591"
+           id="path2537"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 590,594 C 595,583 597,570 601,560"
+           id="path2507"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 607,602 C 617,589 625,574 629,557"
+           id="path2501"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 616,602 C 626,589 633,574 634,556"
+           id="path2499"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 600,600 L 623,558"
+           id="path2503"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 594,598 C 600,585 604,570 612,560"
+           id="path2505"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 832,583 C 823,582 812,583 802,583"
+           id="path2539"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 843,574 C 823,578 805,578 790,574"
+           id="path2541"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 804,570 C 813,572 832,570 851,567 C 865,563 878,558 891,552"
+           id="path2543"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 635,601 C 644,589 649,573 651,554"
+           id="path2495"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 644,598 C 653,583 657,569 659,554"
+           id="path2493"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 669,552 C 657,604 629,608 597,599 C 584,589 571,589 558,589"
+           id="path2491"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 889,523 C 845,537 666,600 647,600 M 646,596 C 721,565 801,541 877,519"
+           id="path2471"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 811,527 C 759,544 702,568 651,592"
+           id="path2469"
+           style="fill:none;stroke:#F90001" />
+        <path
+           d="M 891,544 C 845,561 693,600 657,604 C 736,578 813,557 890,533"
+           id="path2473"
+           style="fill:none;stroke:#F90001" />
+      </g>
+    </g>
+    <g
+       id="cerebrum"
+       style="fill:url(#brainGrad_unified);fill-rule:evenodd;stroke:#F90001;stroke-width:2">
+      <path
+         d="M 436,56 C 405,54 370,60 340,77 C 325,78 309,86 296,92 C 267,94 242,104 220,121 C 201,127 181,134 164,149 C 132,168 111,190 101,217 C 80,224 69,240 69,262 C 54,275 44,292 42,314 C 34,331 35,348 40,365 C 39,371 35,378 40,384 C 35,395 37,406 42,417 C 45,417 46,430 50,432 C 52,461 59,480 68,494 C 78,510 88,524 104,528 C 120,560 186,558 266,547 C 273,558 280,566 287,574 C 298,597 316,611 338,620 C 356,636 378,647 419,631 C 458,629 489,620 499,590 C 509,589 522,584 543,574 C 558,571 570,563 581,554 C 592,562 615,558 638,554 C 674,552 699,547 711,537 C 728,532 745,527 758,517 C 788,527 816,531 839,517 C 906,524 959,510 973,438 C 984,426 981,408 976,390 C 987,372 972,357 957,341 C 955,320 945,305 930,292 C 932,278 927,266 907,256 C 899,232 885,217 868,206 C 868,181 847,165 816,153 C 792,124 762,103 727,88 C 713,77 699,76 685,78 C 669,58 641,53 603,60 C 593,53 582,53 572,53 C 549,51 529,50 512,50 C 483,44 459,48 436,56 z"
+         id="path2179"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:4" />
+      <path
+         d="M 149,168 C 138,178 138,185 145,189"
+         id="path2181"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 178,155 C 227,121 263,118 288,135"
+         id="path2183"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 254,184 C 273,170 281,143 296,124 C 316,94 354,119 378,117"
+         id="path2185"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 129,215 C 117,229 132,241 132,254"
+         id="path2187"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 91,256 C 108,247 104,227 120,213 C 131,199 167,198 180,179 C 194,158 212,151 233,155"
+         id="path2189"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 217,174 C 228,163 236,152 243,141"
+         id="path2191"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 285,176 C 296,168 301,158 300,147"
+         id="path2193"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 274,108 C 282,111 293,109 310,97"
+         id="path2195"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 297,93 C 293,98 290,103 290,107"
+         id="path2197"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 341,77 C 343,81 346,84 349,84"
+         id="path2199"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 369,65 C 365,70 362,74 360,78"
+         id="path2201"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 457,64 C 449,65 441,63 433,56"
+         id="path2203"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 471,124 C 461,122 453,118 457,95 C 458,75 442,69 414,71 C 388,73 364,75 353,81 C 344,90 334,99 322,109"
+         id="path2205"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 357,89 C 350,96 348,104 350,112"
+         id="path2207"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 431,82 C 421,99 407,114 397,123 C 376,145 362,169 384,195"
+         id="path2209"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 372,169 C 361,170 353,163 346,153 C 341,143 327,143 321,124"
+         id="path2211"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 454,129 C 405,131 406,162 382,173"
+         id="path2213"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 486,178 C 490,162 479,156 454,157 C 442,158 430,158 421,153"
+         id="path2215"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 461,182 C 435,191 410,194 384,196 C 372,195 355,234 353,247"
+         id="path2217"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 48,324 C 55,313 62,307 71,304"
+         id="path2219"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 71,311 C 67,294 98,289 107,279 C 113,274 118,255 149,248 C 166,242 180,224 200,206 C 208,197 223,193 240,192"
+         id="path2221"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 211,167 C 202,179 195,194 205,201"
+         id="path2223"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 169,236 C 167,248 167,260 168,271"
+         id="path2225"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 199,257 C 192,268 180,281 185,296"
+         id="path2227"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 175,292 C 193,297 203,315 216,320"
+         id="path2229"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 184,282 C 178,272 169,267 157,276 C 140,286 124,297 107,307 C 91,321 86,335 93,349"
+         id="path2231"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 49,352 C 62,337 76,330 90,331"
+         id="path2233"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 71,335 C 68,332 63,331 57,330"
+         id="path2235"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 103,319 C 127,306 139,309 143,322 C 153,376 169,386 184,400"
+         id="path2237"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 156,299 C 152,303 146,309 140,316"
+         id="path2239"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 206,268 C 224,252 249,235 202,219"
+         id="path2241"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 229,242 C 258,241 274,247 275,263 C 276,274 269,285 270,297"
+         id="path2243"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 350,386 C 375,362 390,340 373,302 C 367,283 360,265 353,247 C 322,247 295,252 275,262"
+         id="path2245"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 323,276 C 308,290 276,299 278,324 C 279,371 296,381 307,392 C 311,395 315,407 325,419"
+         id="path2247"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 256,149 C 251,168 230,188 249,210 C 256,205 275,205 284,203 C 300,193 343,210 360,198"
+         id="path2249"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 436,269 C 444,239 429,221 400,212"
+         id="path2251"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 453,346 C 439,344 409,323 413,302 C 410,277 395,268 394,258 C 392,253 399,241 393,234"
+         id="path2253"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 308,393 C 316,380 316,368 296,354"
+         id="path2255"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 243,275 C 244,289 245,302 251,316"
+         id="path2257"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 278,324 C 262,319 249,312 244,322 C 239,326 225,332 229,350 C 228,358 199,362 188,367"
+         id="path2259"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 209,369 C 200,376 203,390 199,400 C 201,421 225,425 250,428"
+         id="path2261"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 96,366 C 102,372 113,377 137,380 C 147,382 146,389 169,396 C 178,397 189,398 199,400"
+         id="path2263"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 111,336 C 105,342 92,347 91,355 C 89,363 83,371 78,379 C 70,394 65,406 66,416 C 67,437 90,448 102,461"
+         id="path2265"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 47,371 C 44,369 42,367 40,365"
+         id="path2267"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 70,362 C 63,369 56,376 51,385 C 47,396 48,405 46,424"
+         id="path2269"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 51,387 C 51,384 49,382 47,380"
+         id="path2271"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 51,432 C 53,426 62,420 57,413"
+         id="path2273"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 70,495 C 72,491 71,486 73,484"
+         id="path2275"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 104,528 C 110,518 111,512 107,511"
+         id="path2277"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 114,515 L 109,512"
+         id="path2279"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 87,449 C 77,469 88,483 115,492"
+         id="path2281"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 84,394 C 106,406 129,431 149,438 C 171,446 203,474 222,461"
+         id="path2283"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 250,446 C 235,449 217,461 217,469 C 218,483 262,493 280,489"
+         id="path2285"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 104,471 C 111,477 121,479 140,470 C 160,464 167,471 181,475"
+         id="path2287"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 219,473 C 195,471 183,472 175,480 C 161,489 147,487 142,488 C 136,490 119,507 95,495"
+         id="path2289"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 154,547 C 187,549 222,548 258,543"
+         id="path2291"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 192,507 C 184,505 180,501 180,494 C 179,508 171,511 165,517 C 158,522 159,530 153,537"
+         id="path2293"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 228,488 C 208,488 189,487 175,480"
+         id="path2295"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 217,488 C 220,505 243,507 255,513"
+         id="path2297"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 209,503 C 211,499 217,499 221,496"
+         id="path2299"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 237,500 C 242,496 248,494 252,489"
+         id="path2301"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 266,501 C 257,486 285,481 292,465"
+         id="path2303"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 264,406 C 280,419 303,426 317,430"
+         id="path2305"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 249,468 C 278,468 304,449 309,427 C 310,425 317,424 321,423"
+         id="path2307"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 498,63 C 503,58 510,53 521,50"
+         id="path2309"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 516,73 C 490,73 468,77 457,96"
+         id="path2311"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 489,91 C 495,95 499,99 499,104"
+         id="path2313"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 776,364 C 780,318 691,305 647,381 C 641,397 587,391 559,399 C 534,409 509,423 484,438 C 474,454 439,428 419,430 C 354,437 353,534 417,550"
+         id="path2315"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 536,327 C 537,347 515,386 548,404"
+         id="path2317"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 475,369 C 486,365 489,348 496,339"
+         id="path2319"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 453,394 C 448,405 454,409 465,410"
+         id="path2321"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 495,581 C 534,546 528,483 467,487 C 446,489 431,484 421,474"
+         id="path2323"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 525,473 C 539,498 553,492 570,492 C 600,491 617,461 596,429"
+         id="path2325"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 546,492 C 533,496 523,502 516,510"
+         id="path2327"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 493,514 C 481,518 469,531 455,540 C 443,558 426,565 417,575 C 407,590 402,621 345,604"
+         id="path2329"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 494,591 C 466,607 421,593 415,600"
+         id="path2331"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 567,452 C 557,449 551,435 546,428"
+         id="path2333"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 392,411 C 414,423 433,420 452,405"
+         id="path2335"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 418,418 C 410,430 401,435 390,434 C 378,432 361,445 341,461 C 325,474 319,488 315,503 C 312,521 309,529 305,536"
+         id="path2337"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 327,442 C 325,454 329,462 337,465"
+         id="path2339"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 314,587 C 304,584 292,574 284,571"
+         id="path2341"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 356,542 C 318,560 310,588 339,621"
+         id="path2343"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 333,503 C 331,516 340,525 349,533 C 357,537 357,548 359,551 C 371,568 373,579 374,589"
+         id="path2345"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 611,358 C 625,342 650,355 669,353"
+         id="path2347"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 562,373 C 574,363 579,350 575,332"
+         id="path2349"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 586,365 C 582,362 578,359 575,355"
+         id="path2351"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 581,554 C 577,544 580,534 590,525"
+         id="path2353"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 562,548 C 565,543 575,542 581,539"
+         id="path2355"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 639,509 C 636,528 649,537 677,538"
+         id="path2357"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 630,540 C 635,520 622,501 596,482"
+         id="path2359"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 631,528 C 634,526 637,524 640,522"
+         id="path2361"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 683,467 C 668,464 656,458 656,442 C 653,428 635,414 643,386"
+         id="path2363"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 612,480 C 624,492 648,477 670,477 C 724,475 738,504 712,536"
+         id="path2365"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 724,512 C 750,511 768,501 779,480"
+         id="path2367"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 758,518 L 749,508"
+         id="path2369"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 798,506 C 814,506 828,509 839,518"
+         id="path2371"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 830,500 C 825,503 820,505 815,507"
+         id="path2373"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 856,507 C 853,490 864,482 865,472"
+         id="path2375"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 675,403 C 683,410 693,416 691,424 C 694,441 715,443 727,445 C 751,455 773,466 760,486"
+         id="path2377"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 549,310 C 536,306 524,298 512,284"
+         id="path2379"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 588,152 C 579,158 569,170 555,179 C 541,187 526,194 519,219 C 517,241 519,256 514,270 C 510,283 508,295 514,304"
+         id="path2381"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 524,140 C 557,148 568,158 565,171"
+         id="path2383"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 727,434 C 733,424 733,415 733,405 C 743,389 797,411 804,366"
+         id="path2385"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 728,364 C 733,375 734,389 733,405"
+         id="path2387"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 512,183 C 518,192 521,201 523,209"
+         id="path2389"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 791,478 C 807,454 807,421 836,411"
+         id="path2391"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 753,457 C 755,451 758,446 761,442"
+         id="path2393"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 803,329 C 796,325 793,318 796,306"
+         id="path2395"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 773,346 C 781,341 788,331 795,318"
+         id="path2397"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 815,269 C 816,294 837,296 833,324"
+         id="path2399"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 762,322 C 763,295 777,279 794,265 C 804,254 816,248 809,213 C 813,192 838,169 816,154 C 790,142 768,118 728,117"
+         id="path2401"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 546,288 C 558,267 593,255 596,247 C 604,226 598,205 599,185 C 605,168 621,161 639,156 C 667,124 697,120 728,144"
+         id="path2403"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 600,220 C 596,215 591,212 586,209"
+         id="path2405"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 595,250 C 604,245 612,243 621,244"
+         id="path2407"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 505,116 C 556,121 620,129 624,161"
+         id="path2409"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 629,123 C 622,113 605,108 597,101"
+         id="path2411"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 597,77 C 604,89 608,100 615,112"
+         id="path2413"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 603,60 C 615,77 638,78 639,100"
+         id="path2415"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 634,85 C 636,82 638,80 640,77"
+         id="path2417"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 674,131 C 662,102 636,103 623,96"
+         id="path2419"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 659,100 C 675,106 683,116 683,129"
+         id="path2421"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 635,67 C 655,72 672,80 686,94"
+         id="path2423"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 671,106 C 676,93 699,90 728,89"
+         id="path2425"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 719,155 C 728,132 779,142 808,164"
+         id="path2427"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 625,180 C 641,172 660,170 679,181"
+         id="path2429"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 695,140 C 680,155 666,170 685,187 C 720,221 741,240 711,270"
+         id="path2431"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 782,162 C 791,175 791,190 785,204"
+         id="path2433"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 727,201 C 741,210 749,224 751,243 C 761,290 748,301 734,311"
+         id="path2435"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 641,293 C 671,300 693,301 698,285"
+         id="path2437"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 674,298 C 681,299 688,302 693,306"
+         id="path2439"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 732,327 C 743,312 732,304 686,296"
+         id="path2441"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 740,213 C 757,200 760,179 770,162"
+         id="path2443"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 809,214 C 830,212 846,220 859,237"
+         id="path2445"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 841,199 C 847,201 857,204 869,207"
+         id="path2447"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 912,290 C 898,295 889,306 884,321 C 871,331 864,346 860,362"
+         id="path2449"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 962,422 C 969,425 973,430 973,438"
+         id="path2451"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 941,328 C 937,333 932,335 925,336 C 916,344 910,353 910,364 C 917,381 918,394 914,405"
+         id="path2453"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 913,350 C 913,344 911,337 906,331"
+         id="path2455"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 937,403 C 943,394 947,384 947,369 C 948,357 951,347 956,341"
+         id="path2457"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 947,378 C 957,379 960,385 959,393 C 966,399 969,408 972,416"
+         id="path2459"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 677,197 C 668,215 652,232 650,251 C 634,286 579,283 566,310"
+         id="path2461"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 884,320 C 882,290 835,243 807,252 C 830,236 890,275 884,320 z"
+         id="path2577"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+      <path
+         d="M 264,547 C 260,519 273,494 294,473 C 317,455 312,429 322,421 C 336,394 373,377 425,368 C 441,349 462,339 491,340 C 511,323 529,307 566,307 C 568,316 571,325 575,333 C 571,328 565,322 561,315 C 528,312 505,331 492,347 C 469,342 449,349 430,371 C 377,381 339,397 326,424 C 319,448 311,468 296,476 C 279,494 264,520 274,558 C 271,555 268,550 264,547 z"
+         id="path2579"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+      <path
+         d="M 567,54 C 558,60 562,75 556,86 C 508,89 481,107 490,140 C 501,153 503,162 496,168 C 482,176 477,197 472,220 C 462,233 456,254 456,276 C 455,295 427,306 431,322 C 433,322 434,322 435,322 C 435,315 439,308 446,302 C 455,297 459,285 462,269 C 461,255 465,241 476,226 C 481,207 483,179 503,170 C 515,165 508,152 497,136 C 484,104 519,96 556,91 C 571,87 567,63 577,55 C 574,54 570,54 567,54 z"
+         id="path2581"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+      <path
+         d="M 530,160 C 521,157 513,158 506,164"
+         id="path2583"
+         style="fill:url(#brainGrad_unified);stroke:#F90001" />
+      <path
+         d="M 903,251 C 896,259 888,268 880,276 C 887,276 896,271 908,256 L 903,251 z"
+         id="path2599"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+      <path
+         d="M 881,277 C 864,291 847,306 835,321 C 826,333 825,350 828,369 C 830,383 832,397 835,410 C 839,410 842,410 846,411 C 862,427 902,424 914,430 C 921,440 927,447 931,445 C 938,452 943,460 946,468 C 943,458 949,458 928,434 C 919,425 898,420 865,415 C 842,407 837,393 835,375 C 831,358 829,342 835,325 C 848,309 864,293 881,277 z"
+         id="path2601"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+      <path
+         d="M 838,407 C 841,430 849,451 866,467 C 900,468 921,487 951,488 L 944,495 C 930,496 917,484 904,482 C 893,478 871,477 861,472 C 846,451 837,429 838,407 z"
+         id="path2609"
+         style="fill:url(#brainGrad_unified);stroke:#F90001;stroke-width:1" />
+    </g>
+  
+        <!-- Aurora flow inside the brain anatomy: 4 large palette-colored
+             radial gradients drifting freely, masked by the brain shape so
+             colors are visible only inside the anatomy. R7 replacement for
+             R6 region_glow. -->
+        <g clip-path="url(#brainClip)" class="brain-aurora" filter="url(#auroraBlur)">
+          <!-- Each rect's center starts in a different brain quadrant. Translate
+               vectors keep each rect oscillating WITHIN its quadrant so coverage
+               stays balanced across the brain throughout the cycle (no clumping
+               at the back). Brain anatomy spans brain-local (0,0) to (1024,732).
+               calcMode="spline" + keyTimes/keySplines = SMIL ease-in-out for
+               organic motion (not linear/mechanical). auroraBlur softens the
+               radial gradient edges so colors melt into each other. -->
+          <rect x="-150" y="-200" width="800" height="800" fill="url(#brainAurora_a)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; 200,150; 0,0" dur="32s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="350" y="-200" width="800" height="800" fill="url(#brainAurora_b)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; -200,150; 0,0" dur="38s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="-150" y="130" width="800" height="800" fill="url(#brainAurora_c)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; 250,-150; 0,0" dur="41s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+          <rect x="350" y="130" width="800" height="800" fill="url(#brainAurora_d)">
+            <animateTransform attributeName="transform" type="translate"
+                              values="0,0; -250,-150; 0,0" dur="45s" repeatCount="indefinite"
+                              calcMode="spline" keyTimes="0;0.5;1"
+                              keySplines="0.4 0 0.6 1;0.4 0 0.6 1"/>
+          </rect>
+        </g>
+          <g class="lobe-stroke-layer" filter="url(#electricGlow)">
+                      <path d="M 71,311 C 67,294 98,289 107,279 C 113,274 118,255 149,248 C 166,242 180,224 200,206 C 208,197 223,193 240,192" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 111,336 C 105,342 92,347 91,355 C 89,363 83,371 78,379 C 70,394 65,406 66,416 C 67,437 90,448 102,461" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 350,386 C 375,362 390,340 373,302 C 367,283 360,265 353,247 C 322,247 295,252 275,262" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 323,276 C 308,290 276,299 278,324 C 279,371 296,381 307,392 C 311,395 315,407 325,419" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 256,149 C 251,168 230,188 249,210 C 256,205 275,205 284,203 C 300,193 343,210 360,198" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 278,324 C 262,319 249,312 244,322 C 239,326 225,332 229,350 C 228,358 199,362 188,367" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 192,507 C 184,505 180,501 180,494 C 179,508 171,511 165,517 C 158,522 159,530 153,537" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 91,256 C 108,247 104,227 120,213 C 131,199 167,198 180,179 C 194,158 212,151 233,155" fill="none" stroke="#F90001" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-frontal"/>
+            <path d="M 567,54 C 558,60 562,75 556,86 C 508,89 481,107 490,140 C 501,153 503,162 496,168 C 482,176 477,197 472,220 C 462,233 456,254 456,276 C 455,295 427,306 431,322 C 433,322 434,322 435,322 C 435,315 439,308 446,302 C 455,297 459,285 462,269 C 461,255 465,241 476,226 C 481,207 483,179 503,170 C 515,165 508,152 497,136 C 484,104 519,96 556,91 C 571,87 567,63 577,55 C 574,54 570,54 567,54 z" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 588,152 C 579,158 569,170 555,179 C 541,187 526,194 519,219 C 517,241 519,256 514,270 C 510,283 508,295 514,304" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 546,288 C 558,267 593,255 596,247 C 604,226 598,205 599,185 C 605,168 621,161 639,156 C 667,124 697,120 728,144" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 471,124 C 461,122 453,118 457,95 C 458,75 442,69 414,71 C 388,73 364,75 353,81 C 344,90 334,99 322,109" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 453,346 C 439,344 409,323 413,302 C 410,277 395,268 394,258 C 392,253 399,241 393,234" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 486,178 C 490,162 479,156 454,157 C 442,158 430,158 421,153" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 461,182 C 435,191 410,194 384,196 C 372,195 355,234 353,247" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 695,140 C 680,155 666,170 685,187 C 720,221 741,240 711,270" fill="none" stroke="#34D399" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-parietal"/>
+            <path d="M 881,277 C 864,291 847,306 835,321 C 826,333 825,350 828,369 C 830,383 832,397 835,410 C 839,410 842,410 846,411 C 862,427 902,424 914,430 C 921,440 927,447 931,445 C 938,452 943,460 946,468 C 943,458 949,458 928,434 C 919,425 898,420 865,415 C 842,407 837,393 835,375 C 831,358 829,342 835,325 C 848,309 864,293 881,277 z" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 838,407 C 841,430 849,451 866,467 C 900,468 921,487 951,488 L 944,495 C 930,496 917,484 904,482 C 893,478 871,477 861,472 C 846,451 837,429 838,407 z" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 762,322 C 763,295 777,279 794,265 C 804,254 816,248 809,213 C 813,192 838,169 816,154 C 790,142 768,118 728,117" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 675,403 C 683,410 693,416 691,424 C 694,441 715,443 727,445 C 751,455 773,466 760,486" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 941,328 C 937,333 932,335 925,336 C 916,344 910,353 910,364 C 917,381 918,394 914,405" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 903,251 C 896,259 888,268 880,276 C 887,276 896,271 908,256 L 903,251 z" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 884,320 C 882,290 835,243 807,252 C 830,236 890,275 884,320 z" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 727,434 C 733,424 733,415 733,405 C 743,389 797,411 804,366" fill="none" stroke="#FF652F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-occipital"/>
+            <path d="M 436,56 C 405,54 370,60 340,77 C 325,78 309,86 296,92 C 267,94 242,104 220,121 C 201,127 181,134 164,149 C 132,168 111,190 101,217 C 80,224 69,240 69,262 C 54,275 44,292 42,314 C 34,331 35,348 40,365 C 39,371 35,378 40,384 C 35,395 37,406 42,417 C 45,417 46,430 50,432 C 52,461 59,480 68,494 C 78,510 88,524 104,528 C 120,560 186,558 266,547 C 273,558 280,566 287,574 C 298,597 316,611 338,620 C 356,636 378,647 419,631 C 458,629 489,620 499,590 C 509,589 522,584 543,574 C 558,571 570,563 581,554 C 592,562 615,558 638,554 C 674,552 699,547 711,537 C 728,532 745,527 758,517 C 788,527 816,531 839,517 C 906,524 959,510 973,438 C 984,426 981,408 976,390 C 987,372 972,357 957,341 C 955,320 945,305 930,292 C 932,278 927,266 907,256 C 899,232 885,217 868,206 C 868,181 847,165 816,153 C 792,124 762,103 727,88 C 713,77 699,76 685,78 C 669,58 641,53 603,60 C 593,53 582,53 572,53 C 549,51 529,50 512,50 C 483,44 459,48 436,56 z" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 264,547 C 260,519 273,494 294,473 C 317,455 312,429 322,421 C 336,394 373,377 425,368 C 441,349 462,339 491,340 C 511,323 529,307 566,307 C 568,316 571,325 575,333 C 571,328 565,322 561,315 C 528,312 505,331 492,347 C 469,342 449,349 430,371 C 377,381 339,397 326,424 C 319,448 311,468 296,476 C 279,494 264,520 274,558 C 271,555 268,550 264,547 z" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 776,364 C 780,318 691,305 647,381 C 641,397 587,391 559,399 C 534,409 509,423 484,438 C 474,454 439,428 419,430 C 354,437 353,534 417,550" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 418,418 C 410,430 401,435 390,434 C 378,432 361,445 341,461 C 325,474 319,488 315,503 C 312,521 309,529 305,536" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 493,514 C 481,518 469,531 455,540 C 443,558 426,565 417,575 C 407,590 402,621 345,604" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 333,503 C 331,516 340,525 349,533 C 357,537 357,548 359,551 C 371,568 373,579 374,589" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 495,581 C 534,546 528,483 467,487 C 446,489 431,484 421,474" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 525,473 C 539,498 553,492 570,492 C 600,491 617,461 596,429" fill="none" stroke="#FFD23F" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-temporal"/>
+            <path d="M 551,571 C 551,577 552,583 558,589 C 560,623 573,634 591,634 C 671,685 732,688 778,658 C 797,647 827,636 829,625 C 851,614 864,603 876,592 C 895,576 895,548 887,513 C 697,507 601,532 551,571 z" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 889,523 C 845,537 666,600 647,600 M 646,596 C 721,565 801,541 877,519" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 869,551 C 841,580 804,604 758,623 C 719,620 680,607 641,599" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 804,570 C 813,572 832,570 851,567 C 865,563 878,558 891,552" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 669,552 C 657,604 629,608 597,599 C 584,589 571,589 558,589" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 891,544 C 845,561 693,600 657,604 C 736,578 813,557 890,533" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 771,522 C 733,536 691,552 658,583" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 613,607 C 676,638 742,648 811,641" fill="none" stroke="#22D3EE" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-cerebellum"/>
+            <path d="M 518,579 C 525,607 538,626 559,634 C 589,648 612,682 636,712 C 649,705 663,699 674,689 L 560,553 L 518,579 z" fill="none" stroke="#A78BFA" stroke-width="2.2" pathLength="100" stroke-dasharray="100 100" class="lobe-stroke ls-brainstem"/>
+          </g>
+          <g class="arc-network" filter="url(#electricGlow)">
+                      <path d="M799,577 Q492,474 170,397" stroke="#22D3EE" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:3.21s;animation-duration:0.94s"/>
+            <path d="M587,643 Q450,596 416,482" stroke="#A78BFA" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:9.37s;animation-duration:1.20s"/>
+            <path d="M98,500 Q391,602 587,643" stroke="#F90001" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:0.78s;animation-duration:1.43s"/>
+            <path d="M799,577 Q607,372 443,247" stroke="#22D3EE" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:6.33s;animation-duration:1.60s"/>
+            <path d="M627,94 Q617,244 588,349" stroke="#34D399" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:8.75s;animation-duration:0.93s"/>
+            <path d="M666,633 Q789,523 814,315" stroke="#22D3EE" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:0.62s;animation-duration:1.58s"/>
+            <path d="M779,241 Q683,271 525,352" stroke="#FF652F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:4.01s;animation-duration:1.19s"/>
+            <path d="M416,482 Q426,453 525,352" stroke="#FFD23F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:1.08s;animation-duration:1.24s"/>
+            <path d="M99,480 Q122,521 98,500" stroke="#F90001" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:2.12s;animation-duration:1.49s"/>
+            <path d="M443,165 Q482,187 627,94" stroke="#34D399" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:4.77s;animation-duration:0.99s"/>
+            <path d="M919,374 Q671,395 525,352" stroke="#FF652F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:1.50s;animation-duration:1.02s"/>
+            <path d="M587,643 Q617,416 627,94" stroke="#A78BFA" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:10.38s;animation-duration:0.93s"/>
+            <path d="M844,282 Q693,274 615,260" stroke="#FF652F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:0.99s;animation-duration:1.42s"/>
+            <path d="M587,643 Q598,439 615,260" stroke="#A78BFA" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:11.64s;animation-duration:1.42s"/>
+            <path d="M650,585 Q725,513 763,456" stroke="#22D3EE" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:5.23s;animation-duration:1.18s"/>
+            <path d="M416,482 Q514,406 588,349" stroke="#FFD23F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:6.21s;animation-duration:0.94s"/>
+            <path d="M665,623 Q715,479 844,282" stroke="#22D3EE" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:11.09s;animation-duration:1.09s"/>
+            <path d="M229,290 Q498,431 715,627" stroke="#F90001" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:5.22s;animation-duration:1.46s"/>
+            <path d="M919,374 Q693,330 443,247" stroke="#FF652F" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:5.25s;animation-duration:0.98s"/>
+            <path d="M443,165 Q510,435 666,633" stroke="#34D399" stroke-width="2.2" fill="none" pathLength="100" stroke-dasharray="100 100" class="lobe-arc" style="animation-delay:0.95s;animation-duration:1.03s"/>
+                      <circle cx="99" cy="480" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:0.00s"/>
+            <circle cx="216" cy="315" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:0.60s"/>
+            <circle cx="170" cy="397" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:1.20s"/>
+            <circle cx="209" cy="170" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:1.80s"/>
+            <circle cx="229" cy="290" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:2.40s"/>
+            <circle cx="98" cy="500" r="4" fill="#F90001" class="lobe-cell" style="animation-delay:3.00s"/>
+            <circle cx="554" cy="122" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:0.40s"/>
+            <circle cx="475" cy="255" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:1.00s"/>
+            <circle cx="443" cy="165" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:1.60s"/>
+            <circle cx="627" cy="94" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:2.20s"/>
+            <circle cx="615" cy="260" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:2.80s"/>
+            <circle cx="443" cy="247" r="4" fill="#34D399" class="lobe-cell" style="animation-delay:3.40s"/>
+            <circle cx="919" cy="374" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:0.80s"/>
+            <circle cx="779" cy="241" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:1.40s"/>
+            <circle cx="844" cy="282" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:2.00s"/>
+            <circle cx="763" cy="456" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:2.60s"/>
+            <circle cx="901" cy="407" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:3.20s"/>
+            <circle cx="814" cy="315" r="4" fill="#FF652F" class="lobe-cell" style="animation-delay:3.80s"/>
+            <circle cx="453" cy="442" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:1.20s"/>
+            <circle cx="588" cy="349" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:1.80s"/>
+            <circle cx="596" cy="511" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:2.40s"/>
+            <circle cx="416" cy="482" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:3.00s"/>
+            <circle cx="525" cy="352" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:3.60s"/>
+            <circle cx="537" cy="470" r="4" fill="#FFD23F" class="lobe-cell" style="animation-delay:4.20s"/>
+            <circle cx="650" cy="585" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:1.60s"/>
+            <circle cx="799" cy="577" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:2.20s"/>
+            <circle cx="812" cy="578" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:2.80s"/>
+            <circle cx="715" cy="627" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:3.40s"/>
+            <circle cx="665" cy="623" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:4.00s"/>
+            <circle cx="666" cy="633" r="4" fill="#22D3EE" class="lobe-cell" style="animation-delay:4.60s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:2.00s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:2.60s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:3.20s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:3.80s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:4.40s"/>
+            <circle cx="587" cy="643" r="4" fill="#A78BFA" class="lobe-cell" style="animation-delay:5.00s"/>
+          </g>
+                    <circle cx="199" cy="347" r="20" fill="none" stroke="#F90001" stroke-width="2.2" class="target-halo" style="animation-delay:0.0s"/>
+          <circle cx="540" cy="154" r="20" fill="none" stroke="#34D399" stroke-width="2.2" class="target-halo" style="animation-delay:0.3s"/>
+          <circle cx="824" cy="351" r="20" fill="none" stroke="#FF652F" stroke-width="2.2" class="target-halo" style="animation-delay:0.6s"/>
+          <circle cx="534" cy="451" r="20" fill="none" stroke="#FFD23F" stroke-width="2.2" class="target-halo" style="animation-delay:0.8999999999999999s"/>
+          <circle cx="703" cy="594" r="20" fill="none" stroke="#22D3EE" stroke-width="2.2" class="target-halo" style="animation-delay:1.2s"/>
+          <circle cx="587" cy="643" r="20" fill="none" stroke="#A78BFA" stroke-width="2.2" class="target-halo" style="animation-delay:1.5s"/>
+                    <circle cx="199" cy="347" r="6" fill="#F90001" class="target-pulse" style="animation-delay:0.0s"/>
+          <circle cx="540" cy="154" r="6" fill="#34D399" class="target-pulse" style="animation-delay:0.3s"/>
+          <circle cx="824" cy="351" r="6" fill="#FF652F" class="target-pulse" style="animation-delay:0.6s"/>
+          <circle cx="534" cy="451" r="6" fill="#FFD23F" class="target-pulse" style="animation-delay:0.8999999999999999s"/>
+          <circle cx="703" cy="594" r="6" fill="#22D3EE" class="target-pulse" style="animation-delay:1.2s"/>
+          <circle cx="587" cy="643" r="6" fill="#A78BFA" class="target-pulse" style="animation-delay:1.5s"/>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- Region labels -->
+    <g transform="translate(20,200)"><g class="label-fade lf1"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_frontal)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#F90001" stroke-width="2" pathLength="1000" class="card-edge ce1"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#F90001">FRONTAL · LOBE</text><text x="160" y="80" class="t-region" text-anchor="middle">⚙️ Backend</text><text x="160" y="116" class="t-skill" text-anchor="middle">Python · Django · DRF · FastAPI</text></g></g>
+  <g transform="translate(540,130)"><g class="label-fade lf2"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_parietal)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#34D399" stroke-width="2" pathLength="1000" class="card-edge ce2"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#34D399">PARIETAL · LOBE</text><text x="160" y="80" class="t-region" text-anchor="middle">🏗️ Architecture</text><text x="160" y="116" class="t-skill" text-anchor="middle">Microservices · RabbitMQ · Event-Driven</text></g></g>
+  <g transform="translate(1060,200)"><g class="label-fade lf3"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_occipital)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#FF652F" stroke-width="2" pathLength="1000" class="card-edge ce3"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#FF652F">OCCIPITAL · LOBE</text><text x="160" y="80" class="t-region" text-anchor="middle">🎨 Frontend</text><text x="160" y="116" class="t-skill" text-anchor="middle">Vue · Nuxt · TypeScript · Tailwind</text></g></g>
+  <g transform="translate(1060,480)"><g class="label-fade lf4"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_temporal)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#FFD23F" stroke-width="2" pathLength="1000" class="card-edge ce4"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#FFD23F">TEMPORAL · LOBE</text><text x="160" y="80" class="t-region" text-anchor="middle">💾 Data Layer</text><text x="160" y="116" class="t-skill" text-anchor="middle">PostgreSQL · Redis · MySQL · SQLite</text></g></g>
+  <g transform="translate(1060,660)"><g class="label-fade lf5"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_cerebellum)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#22D3EE" stroke-width="2" pathLength="1000" class="card-edge ce5"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#22D3EE">CEREBELLUM</text><text x="160" y="80" class="t-region" text-anchor="middle">🛠️ DevOps</text><text x="160" y="116" class="t-skill" text-anchor="middle">Docker · Git · GitHub Actions · AWS</text></g></g>
+  <g transform="translate(20,660)"><g class="label-fade lf6"><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardBg)" filter="url(#cardShadowStacked)"/><rect x="6" y="6" width="308" height="128" rx="10" fill="url(#cardInnerGlow_brainstem)" class="card-inner-pulse"/><rect x="0" y="0" width="320" height="140" rx="14" fill="none" stroke="#A78BFA" stroke-width="2" pathLength="1000" class="card-edge ce6"/><rect x="0" y="0" width="320" height="140" rx="14" fill="url(#cardHighlight)"/><text x="160" y="38" class="t-cat-cap" text-anchor="middle" fill="#A78BFA">BRAINSTEM</text><text x="160" y="80" class="t-region" text-anchor="middle">🤖 AI &amp; Data</text><text x="160" y="116" class="t-skill" text-anchor="middle">PyTorch · TensorFlow · LLMs · RAG</text></g></g>
+</svg>
