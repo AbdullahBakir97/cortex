@@ -16,6 +16,7 @@ Ported from the prototype at:
 from __future__ import annotations
 
 import hashlib
+import math
 import random
 import re
 from dataclasses import dataclass
@@ -233,6 +234,36 @@ def _build_lobe_stroke_overlay(
                 f'class="lobe-stroke ls-{lobe}"/>'
             )
     return out
+
+
+def _dna_helix_paths(
+    cx: int, cy: int,
+    width: int = 80, height: int = 170,
+    samples: int = 24,
+) -> tuple[str, str, list[tuple[tuple[int, int], tuple[int, int]]]]:
+    """Generate two intertwining sine paths + base-pair rung connectors for a DNA helix.
+
+    Returns (strand_a_path_d, strand_b_path_d, rungs).
+    Strand A: cosine wave (one phase). Strand B: -cosine (anti-phase, mirrored).
+    Rungs: horizontal connectors at every 6th sample point (excluding endpoints).
+    """
+    points_a: list[tuple[int, int]] = []
+    points_b: list[tuple[int, int]] = []
+    rungs: list[tuple[tuple[int, int], tuple[int, int]]] = []
+    for i in range(samples + 1):
+        t = i / samples
+        y = round(cy + (t - 0.5) * height)
+        offset = round(math.cos(t * 2 * math.pi * 2) * (width / 2))
+        ax = cx + offset
+        bx = cx - offset
+        points_a.append((ax, y))
+        points_b.append((bx, y))
+        if i % 6 == 0 and i not in (0, samples):
+            rungs.append(((ax, y), (bx, y)))
+
+    strand_a = "M" + " L".join(f"{x},{y}" for x, y in points_a)
+    strand_b = "M" + " L".join(f"{x},{y}" for x, y in points_b)
+    return strand_a, strand_b, rungs
 
 
 def _classify_brain_paths(
@@ -734,6 +765,37 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
             f'</rect></g>'
         )
 
+    # DNA helix symbols — 4 double-helix line drawings at canvas corners,
+    # each fading in/out + drawing in via stroke-dashoffset on staggered 16s
+    # timers. Reads as a scientific/biological motif tying the brain theme
+    # to the organic atmosphere (no longer competing with the digital grid,
+    # which was removed in R4-2).
+    dna_specs = [
+        (120, 120,  "#22D3EE", 0),    # top-left,    cyan,   delay 0s
+        (1280, 120, "#EC4899", 4),    # top-right,   pink,   delay 4s
+        (120, 780,  "#7C3AED", 8),    # bottom-left, purple, delay 8s
+        (1280, 780, "#22D3EE", 12),   # bottom-right, cyan,  delay 12s
+    ]
+    dna_blocks: list[str] = []
+    for cx_d, cy_d, dcolor, ddelay in dna_specs:
+        strand_a, strand_b, rungs = _dna_helix_paths(cx_d, cy_d)
+        rung_lines = "\n".join(
+            f'    <line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
+            f'stroke="{dcolor}" stroke-width="0.8" stroke-opacity="0.5"/>'
+            for a, b in rungs
+        )
+        dna_blocks.append(
+            f'<g class="dna" style="animation-delay:{ddelay}s">\n'
+            f'    <path d="{strand_a}" stroke="{dcolor}" stroke-width="1.5" '
+            f'fill="none" stroke-opacity="0.7" pathLength="100" '
+            f'stroke-dasharray="100 100" class="dna-strand"/>\n'
+            f'    <path d="{strand_b}" stroke="{dcolor}" stroke-width="1.5" '
+            f'fill="none" stroke-opacity="0.7" pathLength="100" '
+            f'stroke-dasharray="100 100" class="dna-strand"/>\n'
+            f'{rung_lines}\n'
+            f'  </g>'
+        )
+
     # Compose the SVG
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <!--
@@ -1036,6 +1098,29 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         0%, 100% {{ opacity: 0.20; }}
         50%      {{ opacity: 0.85; }}
       }}
+      .dna {{
+        opacity: 0;
+        animation: dnaFade 16s ease-in-out infinite;
+        transform-origin: center;
+        transform-box: fill-box;
+      }}
+      @keyframes dnaFade {{
+        0%, 100% {{ opacity: 0; }}
+        10%      {{ opacity: 0; }}
+        25%      {{ opacity: 0.85; }}
+        50%      {{ opacity: 0.85; }}
+        65%      {{ opacity: 0; }}
+      }}
+      .dna-strand {{
+        animation: dnaDraw 16s ease-in-out infinite;
+      }}
+      @keyframes dnaDraw {{
+        0%   {{ stroke-dashoffset: 100; }}
+        25%  {{ stroke-dashoffset: 0; }}
+        50%  {{ stroke-dashoffset: 0; }}
+        65%  {{ stroke-dashoffset: -100; }}
+        100% {{ stroke-dashoffset: -100; }}
+      }}
     ]]></style>
   </defs>
 
@@ -1054,6 +1139,12 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
        More organic than aurora bands; adds color depth behind the brain. -->
   <g class="nebulae">
   ''' + chr(10).join("    " + nb for nb in nebula_blocks) + '''
+  </g>''') if atm.show_aura else ""}
+
+  {('''<!-- DNA helix symbols at canvas corners — fade in/out + draw in
+       on staggered 16s timers. 1-2 visible at any moment, others hidden. -->
+  <g class="dna-helixes">
+  ''' + chr(10).join("    " + db for db in dna_blocks) + '''
   </g>''') if atm.show_aura else ""}
 
   {('''<!-- Aurora bands: 3 large soft radial gradients drifting across the canvas

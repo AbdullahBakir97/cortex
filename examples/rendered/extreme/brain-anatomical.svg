@@ -309,6 +309,29 @@
         0%, 100% { opacity: 0.20; }
         50%      { opacity: 0.85; }
       }
+      .dna {
+        opacity: 0;
+        animation: dnaFade 16s ease-in-out infinite;
+        transform-origin: center;
+        transform-box: fill-box;
+      }
+      @keyframes dnaFade {
+        0%, 100% { opacity: 0; }
+        10%      { opacity: 0; }
+        25%      { opacity: 0.85; }
+        50%      { opacity: 0.85; }
+        65%      { opacity: 0; }
+      }
+      .dna-strand {
+        animation: dnaDraw 16s ease-in-out infinite;
+      }
+      @keyframes dnaDraw {
+        0%   { stroke-dashoffset: 100; }
+        25%  { stroke-dashoffset: 0; }
+        50%  { stroke-dashoffset: 0; }
+        65%  { stroke-dashoffset: -100; }
+        100% { stroke-dashoffset: -100; }
+      }
     ]]></style>
   </defs>
 
@@ -359,6 +382,39 @@
     <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="-100" width="1100" height="1100" fill="url(#nebula_1)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,-30; 0,0" dur="44s" repeatCount="indefinite"/></rect></g>
     <g class="nebula" filter="url(#nebulaBlur)"><rect x="-100" y="500" width="1100" height="1100" fill="url(#nebula_2)"><animateTransform attributeName="transform" type="translate" values="0,0; -50,30; 0,0" dur="41s" repeatCount="indefinite"/></rect></g>
     <g class="nebula" filter="url(#nebulaBlur)"><rect x="700" y="500" width="1100" height="1100" fill="url(#nebula_3)"><animateTransform attributeName="transform" type="translate" values="0,0; 50,30; 0,0" dur="47s" repeatCount="indefinite"/></rect></g>
+  </g>
+
+  <!-- DNA helix symbols at canvas corners — fade in/out + draw in
+       on staggered 16s timers. 1-2 visible at any moment, others hidden. -->
+  <g class="dna-helixes">
+      <g class="dna" style="animation-delay:0s">
+    <path d="M160,35 L155,42 L140,49 L120,56 L100,63 L85,70 L80,78 L85,85 L100,92 L120,99 L140,106 L155,113 L160,120 L155,127 L140,134 L120,141 L100,148 L85,155 L80,162 L85,170 L100,177 L120,184 L140,191 L155,198 L160,205" stroke="#22D3EE" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <path d="M80,35 L85,42 L100,49 L120,56 L140,63 L155,70 L160,78 L155,85 L140,92 L120,99 L100,106 L85,113 L80,120 L85,127 L100,134 L120,141 L140,148 L155,155 L160,162 L155,170 L140,177 L120,184 L100,191 L85,198 L80,205" stroke="#22D3EE" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <line x1="80" y1="78" x2="160" y2="78" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="160" y1="120" x2="80" y2="120" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="80" y1="162" x2="160" y2="162" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
+    <g class="dna" style="animation-delay:4s">
+    <path d="M1320,35 L1315,42 L1300,49 L1280,56 L1260,63 L1245,70 L1240,78 L1245,85 L1260,92 L1280,99 L1300,106 L1315,113 L1320,120 L1315,127 L1300,134 L1280,141 L1260,148 L1245,155 L1240,162 L1245,170 L1260,177 L1280,184 L1300,191 L1315,198 L1320,205" stroke="#EC4899" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <path d="M1240,35 L1245,42 L1260,49 L1280,56 L1300,63 L1315,70 L1320,78 L1315,85 L1300,92 L1280,99 L1260,106 L1245,113 L1240,120 L1245,127 L1260,134 L1280,141 L1300,148 L1315,155 L1320,162 L1315,170 L1300,177 L1280,184 L1260,191 L1245,198 L1240,205" stroke="#EC4899" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <line x1="1240" y1="78" x2="1320" y2="78" stroke="#EC4899" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="1320" y1="120" x2="1240" y2="120" stroke="#EC4899" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="1240" y1="162" x2="1320" y2="162" stroke="#EC4899" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
+    <g class="dna" style="animation-delay:8s">
+    <path d="M160,695 L155,702 L140,709 L120,716 L100,723 L85,730 L80,738 L85,745 L100,752 L120,759 L140,766 L155,773 L160,780 L155,787 L140,794 L120,801 L100,808 L85,815 L80,822 L85,830 L100,837 L120,844 L140,851 L155,858 L160,865" stroke="#7C3AED" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <path d="M80,695 L85,702 L100,709 L120,716 L140,723 L155,730 L160,738 L155,745 L140,752 L120,759 L100,766 L85,773 L80,780 L85,787 L100,794 L120,801 L140,808 L155,815 L160,822 L155,830 L140,837 L120,844 L100,851 L85,858 L80,865" stroke="#7C3AED" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <line x1="80" y1="738" x2="160" y2="738" stroke="#7C3AED" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="160" y1="780" x2="80" y2="780" stroke="#7C3AED" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="80" y1="822" x2="160" y2="822" stroke="#7C3AED" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
+    <g class="dna" style="animation-delay:12s">
+    <path d="M1320,695 L1315,702 L1300,709 L1280,716 L1260,723 L1245,730 L1240,738 L1245,745 L1260,752 L1280,759 L1300,766 L1315,773 L1320,780 L1315,787 L1300,794 L1280,801 L1260,808 L1245,815 L1240,822 L1245,830 L1260,837 L1280,844 L1300,851 L1315,858 L1320,865" stroke="#22D3EE" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <path d="M1240,695 L1245,702 L1260,709 L1280,716 L1300,723 L1315,730 L1320,738 L1315,745 L1300,752 L1280,759 L1260,766 L1245,773 L1240,780 L1245,787 L1260,794 L1280,801 L1300,808 L1315,815 L1320,822 L1315,830 L1300,837 L1280,844 L1260,851 L1245,858 L1240,865" stroke="#22D3EE" stroke-width="1.5" fill="none" stroke-opacity="0.7" pathLength="100" stroke-dasharray="100 100" class="dna-strand"/>
+    <line x1="1240" y1="738" x2="1320" y2="738" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="1320" y1="780" x2="1240" y2="780" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+    <line x1="1240" y1="822" x2="1320" y2="822" stroke="#22D3EE" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
   </g>
 
   <!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
