@@ -659,60 +659,15 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
      viewBox="0 0 1400 900" role="img"
      aria-label="Cortex Neural Skill Atlas — {name}">
   <defs>
-    <linearGradient id="brainGrad" x1="0" y1="0.05" x2="1" y2="0.95"
+    <linearGradient id="brainGrad_unified" x1="0" y1="0" x2="1" y2="1"
                     gradientUnits="objectBoundingBox">
       <animateTransform attributeName="gradientTransform" type="rotate"
-                        from="0 0.5 0.5" to="360 0.5 0.5" dur="22s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_a}"/>
-      <stop offset="22%"  stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="76%"  stop-color="{p_secondary}"/>
-      <stop offset="100%" stop-color="{p_primary}"/>
-    </linearGradient>
-    <linearGradient id="brainGradAlt" x1="0" y1="0" x2="1" y2="1"
-                    gradientUnits="objectBoundingBox">
-      <stop offset="0%"   stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_secondary}"/>
-    </linearGradient>
-    <!-- Per-lobe gradients — each lobe paints in its card's accent color
-         blending through pink (#EC4899) for vibrancy. Different rotation
-         periods so the lobes don't sync visually. -->
-    <linearGradient id="brainGrad_frontal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="13s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_primary}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_primary}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_parietal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="11s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_d}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_d}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_occipital" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="17s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_secondary}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_secondary}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_temporal" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="19s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_c}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_c}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_cerebellum" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="15s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_a}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_a}"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_brainstem" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="21s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="{p_accent_b}"/>
-      <stop offset="50%"  stop-color="#EC4899"/>
-      <stop offset="100%" stop-color="{p_accent_b}"/>
+                        from="0 0.5 0.5" to="360 0.5 0.5" dur="30s" repeatCount="indefinite"/>
+      <stop offset="0%"   stop-color="#0E0820"/>
+      <stop offset="25%"  stop-color="#1A0F35"/>
+      <stop offset="50%"  stop-color="{p_accent_b}" stop-opacity="0.40"/>
+      <stop offset="75%"  stop-color="#1A0F35"/>
+      <stop offset="100%" stop-color="#0E0820"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
       <animate attributeName="r" values="72%;88%;72%" dur="9s" repeatCount="indefinite"/>
