@@ -1,0 +1,69 @@
+# yaml-language-server: $schema=https://cortex.dev/schema/v1.json
+# .github/cortex.yml — standard Cortex config (~60 lines)
+# Brain + 3 cards + 30-line typing. The default for full-stack developers.
+
+version: 1
+
+identity:
+  name:        "Your Name"
+  github_user: "yourhandle"
+  tagline:     "Full-Stack Developer ⚡ Python · Django · Vue"
+  location:    "Earth"
+  pronouns:    ""
+  email:       ""
+  socials:
+    linkedin:  ""
+
+brand:
+  palette: "neon-rainbow"
+  animations:
+    enabled:   true
+    intensity: "high"
+
+brain:
+  enabled: true
+  source:  "wikimedia"
+  three_d:
+    enabled: true
+  regions:
+    frontal:    { domain: "Backend",       tools: [Python, Django, DRF, FastAPI] }
+    parietal:   { domain: "Architecture",  tools: [Microservices, RabbitMQ] }
+    occipital:  { domain: "Frontend",      tools: [Vue, Nuxt, TypeScript] }
+    temporal:   { domain: "Data Layer",    tools: [PostgreSQL, Redis] }
+    cerebellum: { domain: "DevOps",        tools: [Docker, Git, AWS] }
+    brainstem:  { domain: "AI & Data",     tools: [PyTorch, LLMs, RAG] }
+
+typing:
+  header:
+    enabled:            true
+    languages:          [en]
+    lines_per_language: 10
+    cycle:              "medium"
+  about:
+    enabled: true
+    lines:   30
+    include: [generic]
+  motto:
+    enabled: true
+    lines:   30
+
+cards:
+  tech_stack:        { enabled: true, show_stats: true }
+  current_focus:     { enabled: true }
+  yearly_highlights: { enabled: true, start_year: 2023, bullets_per_year: 3 }
+
+contributions:
+  snake:    true
+  skylines: { stl: true }
+  cities:   {}
+  profile_3d: true
+
+auto_update:
+  schedule: "0 6 * * *"
+  markers:
+    activity:         true
+    latest_releases:  true
+    quote_of_the_day: true
+    gitgraph:         true
+    pagespeed:        { enabled: false }
+    wakatime:         { enabled: false }

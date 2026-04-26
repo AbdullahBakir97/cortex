@@ -1,0 +1,147 @@
+# ════════════════════════════════════════════════════════════════════════
+# action.yml — Cortex GitHub Action (composite)
+# Lives at the root of the cortex repo.
+#
+# Anyone can drop this into their profile repo with one workflow file:
+#   .github/workflows/cortex.yml:
+#     name: Cortex Profile
+#     on:
+#       schedule: [{cron: "0 6 * * *"}]
+#       workflow_dispatch:
+#     jobs:
+#       build:
+#         runs-on: ubuntu-latest
+#         permissions: { contents: write, pages: write, id-token: write }
+#         steps:
+#           - uses: actions/checkout@v4
+#           - uses: AbdullahBakir97/cortex@v1
+#             with:
+#               config: .github/cortex.yml
+#               github_token: ${{ secrets.GITHUB_TOKEN }}
+# ════════════════════════════════════════════════════════════════════════
+
+name:        "Cortex"
+description: "Turn your GitHub into a cinematic neon brain skill atlas — installable in 30 seconds."
+author:      "Abdullah Bakir"
+
+branding:
+  icon:  "cpu"          # GitHub Marketplace icon
+  color: "purple"
+
+inputs:
+  config:
+    description: "Path to your cortex.yml config file"
+    required:    false
+    default:     ".github/cortex.yml"
+  github_token:
+    description: "GitHub token (auto-provided as secrets.GITHUB_TOKEN)"
+    required:    true
+  metrics_token:
+    description: "Optional PAT with broader scopes (for rich GraphQL queries — read:user, repo)"
+    required:    false
+  wakatime_token:
+    description: "Optional WakaTime API key"
+    required:    false
+  psi_token:
+    description: "Optional PageSpeed Insights API key"
+    required:    false
+  publish_3d_to_pages:
+    description: "Whether to publish the interactive 3D viewer to gh-pages"
+    required:    false
+    default:     "true"
+  commit:
+    description: "Whether to auto-commit generated assets back to the repo"
+    required:    false
+    default:     "true"
+
+outputs:
+  brain_svg_path:
+    description: "Path to the generated brain SVG"
+    value:       ${{ steps.build.outputs.brain_svg_path }}
+  pages_url:
+    description: "URL of the published 3D viewer (if enabled)"
+    value:       ${{ steps.build.outputs.pages_url }}
+  duration_ms:
+    description: "Total build duration in milliseconds"
+    value:       ${{ steps.build.outputs.duration_ms }}
+
+runs:
+  using: "composite"
+  steps:
+    # ── 1. Set up Python (Cortex builders are Python) ─────────────────────
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+        cache: "pip"
+
+    # ── 2. Install Cortex CLI (the @cortex/cli npm package) ───────────────
+    - name: Install Cortex
+      shell: bash
+      run: |
+        pip install --no-cache-dir requests==2.32.3 PyYAML==6.0.2
+        # In v1, ship as a Python package; later move to compiled binary for speed.
+        pip install --no-cache-dir cortex-profile==1.0.0
+
+    # ── 3. Validate the user's cortex.yml ─────────────────────────────────
+    - name: Validate config
+      shell: bash
+      env:
+        CORTEX_CONFIG: ${{ inputs.config }}
+      run: cortex validate "$CORTEX_CONFIG"
+
+    # ── 4. Build all SVGs and update README markers ───────────────────────
+    - name: Build profile assets
+      id: build
+      shell: bash
+      env:
+        CORTEX_CONFIG:   ${{ inputs.config }}
+        GH_TOKEN:        ${{ inputs.github_token }}
+        METRICS_TOKEN:   ${{ inputs.metrics_token }}
+        WAKATIME_TOKEN:  ${{ inputs.wakatime_token }}
+        PSI_API_KEY:     ${{ inputs.psi_token }}
+      run: |
+        START=$(date +%s%3N)
+        cortex build --config "$CORTEX_CONFIG" --output assets/
+        cortex update-readme --config "$CORTEX_CONFIG" --readme README.md
+        END=$(date +%s%3N)
+        echo "brain_svg_path=assets/brain-anatomical.svg" >> "$GITHUB_OUTPUT"
+        echo "duration_ms=$((END - START))"               >> "$GITHUB_OUTPUT"
+
+    # ── 5. Publish 3D viewer to gh-pages (if enabled) ─────────────────────
+    - name: Generate 3D viewer
+      if: inputs.publish_3d_to_pages == 'true'
+      shell: bash
+      run: cortex viewer --config "${{ inputs.config }}" --output docs/
+
+    - name: Setup Pages
+      if: inputs.publish_3d_to_pages == 'true'
+      uses: actions/configure-pages@v5
+
+    - name: Upload Pages artifact
+      if: inputs.publish_3d_to_pages == 'true'
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: docs
+
+    - name: Deploy to GitHub Pages
+      if: inputs.publish_3d_to_pages == 'true'
+      id: deployment
+      uses: actions/deploy-pages@v4
+
+    # ── 6. Commit changes back to the repo (if enabled) ───────────────────
+    - name: Commit profile updates
+      if: inputs.commit == 'true'
+      shell: bash
+      run: |
+        git config user.name "cortex-bot[bot]"
+        git config user.email "cortex-bot[bot]@users.noreply.github.com"
+        git add assets/ docs/ README.md
+        if git diff --cached --quiet; then
+          echo "No profile changes — skipping commit."
+        else
+          git commit -m "chore(cortex): refresh profile assets
+
+Auto-generated by Cortex v1 — see .github/cortex.yml for config."
+          git push
+        fi

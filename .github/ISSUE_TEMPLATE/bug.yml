@@ -1,0 +1,57 @@
+name: 🐛 Bug Report
+description: Something is broken in Cortex — file rendering, wrong output, build failure, etc.
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report.
+
+  - type: input
+    id: cortex_version
+    attributes:
+      label: Cortex version
+      description: Output of `cortex --version` (or the @ version pinned in your workflow)
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it happen?
+      multiple: false
+      options:
+        - "GitHub Action run (workflow log)"
+        - "Local CLI (`cortex build`)"
+        - "Generated SVG looks wrong"
+        - "Three.js viewer"
+        - "Schema validation"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: cortex_yml
+    attributes:
+      label: Your cortex.yml
+      description: Paste your config (redact emails/socials if you prefer).
+      render: yaml
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: What happened
+      description: What did you see? Paste error output / screenshots.
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true

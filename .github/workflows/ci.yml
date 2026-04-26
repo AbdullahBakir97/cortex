@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install packages (editable)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e packages/cortex-core
+          pip install -e packages/cortex-cli
+          pip install pytest pytest-cov ruff mypy
+
+      - name: Lint with ruff
+        run: ruff check packages/
+
+      - name: Format check with ruff
+        run: ruff format --check packages/
+
+      - name: Type-check with mypy
+        run: mypy packages/cortex-core/cortex packages/cortex-cli/cortex_cli
+        continue-on-error: true   # tighten in v0.2
+
+      - name: Test with pytest
+        run: pytest packages/ -v
+        continue-on-error: true   # tests come in v0.2
+
+      - name: Smoke-test the CLI
+        run: |
+          cortex --version
+          cortex --help
+          cortex validate examples/standard.yml
+          cortex build -c examples/extreme.yml -o /tmp/cortex-out
+          test -f /tmp/cortex-out/brain-anatomical.svg
+          python -c "import xml.etree.ElementTree as ET; ET.parse('/tmp/cortex-out/brain-anatomical.svg')"
+
+  schema:
+    name: JSON Schema validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate examples against the schema
+        run: |
+          npm install --no-save ajv ajv-formats js-yaml
+          node -e '
+            const Ajv = require("ajv");
+            const addFormats = require("ajv-formats");
+            const yaml = require("js-yaml");
+            const fs = require("fs");
+            const path = require("path");
+
+            const ajv = new Ajv({allErrors: true, strict: false});
+            addFormats(ajv);
+            const schema = JSON.parse(fs.readFileSync("packages/cortex-schema/schema.json", "utf8"));
+            const validate = ajv.compile(schema);
+
+            const examples = ["minimal", "standard", "extreme"];
+            let failed = 0;
+            for (const name of examples) {
+              const text = fs.readFileSync(path.join("examples", name + ".yml"), "utf8");
+              const config = yaml.load(text);
+              const ok = validate(config);
+              if (ok) {
+                console.log("[OK] examples/" + name + ".yml");
+              } else {
+                console.error("[FAIL] examples/" + name + ".yml");
+                console.error(JSON.stringify(validate.errors, null, 2));
+                failed++;
+              }
+            }
+            process.exit(failed ? 1 : 0);
+          '
+
+  marketing-md-check:
+    name: README link check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "README.md ARCHITECTURE.md CHANGELOG.md packages/*/README.md examples/README.md"
+        continue-on-error: true

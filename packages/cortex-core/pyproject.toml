@@ -1,0 +1,43 @@
+[build-system]
+requires      = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name            = "cortex-core"
+version         = "0.1.0"
+description     = "SVG generators, GitHub API clients, and marker rewriting for the Cortex profile system."
+readme          = "README.md"
+requires-python = ">=3.10"
+license         = { text = "MIT" }
+authors         = [{ name = "Abdullah Bakir", email = "abdullah.bakir.1997@gmail.com" }]
+keywords        = ["github", "profile", "readme", "svg", "brain", "neon"]
+classifiers     = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Code Generators",
+]
+dependencies = [
+    "pydantic>=2.6.0",
+    "PyYAML>=6.0.2",
+    "requests>=2.32.3",
+    "Jinja2>=3.1.4",
+]
+
+[project.urls]
+Homepage      = "https://github.com/AbdullahBakir97/cortex"
+Documentation = "https://docs.cortex.dev"
+Issues        = "https://github.com/AbdullahBakir97/cortex/issues"
+Changelog     = "https://github.com/AbdullahBakir97/cortex/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cortex"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/cortex",
+    "/README.md",
+    "/CHANGELOG.md",
+]

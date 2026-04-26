@@ -1,0 +1,5 @@
+packages:
+  - "packages/cortex-3d"
+  - "packages/cortex-schema"
+  # Python packages (cortex-core, cortex-cli) are managed by pyproject.toml,
+  # not pnpm. Listed here only for completeness.

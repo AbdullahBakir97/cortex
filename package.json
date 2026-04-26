@@ -1,0 +1,28 @@
+{
+  "name": "cortex-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cortex monorepo root — orchestrates JS/TS packages.",
+  "license": "MIT",
+  "author": "Abdullah Bakir <abdullah.bakir.1997@gmail.com>",
+  "homepage": "https://github.com/AbdullahBakir97/cortex",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AbdullahBakir97/cortex.git"
+  },
+  "scripts": {
+    "dev:viewer":   "pnpm --filter @cortex/3d dev",
+    "build:viewer": "pnpm --filter @cortex/3d build",
+    "lint":         "pnpm -r lint",
+    "test":         "pnpm -r test",
+    "py:install":   "uv sync && uv pip install -e packages/cortex-core -e packages/cortex-cli",
+    "py:lint":      "ruff check . && ruff format --check .",
+    "py:test":      "pytest",
+    "py:typecheck": "mypy packages/cortex-core packages/cortex-cli"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.12.0"
+}

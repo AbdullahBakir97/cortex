@@ -1,0 +1,40 @@
+Brain Anatomy SVG — Attribution & License
+==========================================
+
+The anatomical brain paths used by Cortex's brain builder are derived from:
+
+  Title:    "File:Human-brain.SVG"
+  Author:   Hugh Guiney
+  Source:   https://commons.wikimedia.org/wiki/File:Human-brain.SVG
+  License:  Creative Commons Attribution-ShareAlike 3.0 Unported
+            (CC-BY-SA-3.0)
+
+Cortex modifies the source SVG by:
+  • Recoloring fill colors with a configurable neon multi-stop gradient
+  • Recoloring stroke colors with a configurable neon palette
+  • Wrapping the brain group inside a composed SVG containing additional
+    decorative elements (background, labels, leader lines, animations)
+  • Injecting CSS animations and SMIL-based reveal effects
+
+The original geometry — every <path d="..."/> element of brain anatomy —
+remains as Hugh Guiney published it. No anatomical paths are altered.
+
+Per CC-BY-SA-3.0 §4(b), derivatives of this work must:
+  1. Provide attribution to the original author (Hugh Guiney)
+  2. Indicate that the work has been modified
+  3. Distribute the derivative under the same or a compatible license
+
+Cortex satisfies these requirements as follows:
+  • This file in LICENSES/ contains the full attribution
+  • Each generated brain SVG carries an inline XML comment:
+      <!-- ATTRIBUTION: Original brain anatomy SVG by Hugh Guiney,
+           CC-BY-SA-3.0 (https://commons.wikimedia.org/wiki/File:Human-brain.SVG)
+           Recolored and composed by Cortex. -->
+  • The Cortex marketing README links back to the Wikimedia source
+
+Full text of CC-BY-SA-3.0:
+https://creativecommons.org/licenses/by-sa/3.0/legalcode
+
+────────────────────────────────────────────────────────────────────────────
+The rest of the Cortex codebase (see /LICENSE) is MIT-licensed. Only the
+brain anatomy paths and direct derivatives carry CC-BY-SA-3.0 obligations.

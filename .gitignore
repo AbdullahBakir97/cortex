@@ -1,0 +1,52 @@
+# ── Local AI / editor configs ────────────────────────────────────────────
+.claude/
+.cursor/
+.aider*
+.vscode/
+.idea/
+
+# ── OS / editor noise ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# ── Python build/cache ───────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.tox/
+.coverage
+htmlcov/
+
+# ── Node/TypeScript ──────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+.npm/
+.pnpm-store/
+.yarn/
+
+# ── Vite ──────────────────────────────────────────────────────────────────
+packages/cortex-3d/dist/
+
+# ── Local secrets / env ──────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.local
+
+# ── Test artifacts ───────────────────────────────────────────────────────
+.coverage.*
+coverage/
+test-output/

@@ -1,0 +1,39 @@
+[build-system]
+requires      = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name            = "cortex-profile"
+version         = "0.1.0"
+description     = "Command-line interface for Cortex — turn your GitHub into a cinematic neon brain skill atlas."
+readme          = "README.md"
+requires-python = ">=3.10"
+license         = { text = "MIT" }
+authors         = [{ name = "Abdullah Bakir", email = "abdullah.bakir.1997@gmail.com" }]
+keywords        = ["github", "profile", "readme", "svg", "cli", "brain", "neon"]
+classifiers     = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "cortex-core>=0.1.0",
+    "click>=8.1.0",
+]
+
+[project.scripts]
+cortex = "cortex_cli.__main__:cli"
+
+[project.urls]
+Homepage      = "https://github.com/AbdullahBakir97/cortex"
+Documentation = "https://docs.cortex.dev"
+Issues        = "https://github.com/AbdullahBakir97/cortex/issues"
+Changelog     = "https://github.com/AbdullahBakir97/cortex/blob/main/CHANGELOG.md"
+
+[tool.hatch.build.targets.wheel]
+packages = ["cortex_cli"]

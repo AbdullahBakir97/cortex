@@ -1,0 +1,39 @@
+name: 🌟 Showcase My Profile
+description: Share a profile you built with Cortex — featured ones land in the README gallery.
+title: "[showcase] "
+labels: ["showcase"]
+body:
+  - type: input
+    id: profile_url
+    attributes:
+      label: Profile URL
+      placeholder: "https://github.com/yourhandle"
+    validations:
+      required: true
+
+  - type: input
+    id: viewer_url
+    attributes:
+      label: 3D viewer URL (if you published one)
+      placeholder: "https://yourhandle.github.io/yourhandle/"
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which tier are you closest to?
+      options:
+        - "Minimal"
+        - "Standard"
+        - "Extreme"
+        - "Custom (heavily modified)"
+
+  - type: textarea
+    id: cortex_yml
+    attributes:
+      label: Your cortex.yml (redact identity if you prefer)
+      render: yaml
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything you customized / tweaks worth highlighting

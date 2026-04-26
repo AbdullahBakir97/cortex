@@ -1,0 +1,41 @@
+name: ✨ Feature Request
+description: Suggest a new widget, palette, builder, or capability.
+title: "[feat] "
+labels: ["feature", "triage"]
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - "New widget (e.g., DNA strand, AI portrait)"
+        - "New palette / theme"
+        - "New typing-SVG language"
+        - "New auto-update marker"
+        - "CLI improvement"
+        - "3D viewer enhancement"
+        - "Pro feature idea"
+        - "Documentation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What should it do
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why is it valuable
+      description: Who benefits? What use-case does it unlock?
+    validations:
+      required: true
+
+  - type: textarea
+    id: mockup
+    attributes:
+      label: Sketch / inspiration (optional)
+      description: Drop a screenshot, diagram, or link to a similar widget elsewhere.

@@ -1,0 +1,148 @@
+# ════════════════════════════════════════════════════════════════════════
+# .github/cortex.yml — Cortex profile configuration
+#
+# Three preset tiers shown below as commented examples:
+#   1. minimal     — under 30 lines, drops in to any profile in 2 minutes
+#   2. standard    — what we ship as the default template
+#   3. extreme     — every feature on, like Abdullah's reference profile
+#
+# Pick the tier that matches your ambition; mix and match freely.
+# ════════════════════════════════════════════════════════════════════════
+
+# ── Identity (required) ──────────────────────────────────────────────────
+identity:
+  name:        "Abdullah Bakir"
+  github_user: "AbdullahBakir97"      # used to fetch contributions, repos, etc.
+  tagline:     "Full-Stack Developer ⚡ Python · Django · Vue · Nuxt"
+  location:    "Germany"
+  pronouns:    "he/him"                # optional, only rendered if set
+  email:       "abdullah.bakir.1997@gmail.com"
+  socials:
+    linkedin:  "abdullah-bakir-809065273"
+    telegram:  "BlackSea0011"
+    instagram: "abdulahbaker"
+    twitter:                            # leave empty to skip
+
+# ── Brand (palette + typography that flows through all widgets) ──────────
+brand:
+  palette: "neon-rainbow"               # presets: neon-rainbow, monochrome,
+                                        # cyberpunk, minimal, retro
+  # Or override individual colors:
+  colors:
+    primary:    "#F90001"
+    secondary:  "#FF652F"
+    accent_a:   "#22D3EE"
+    accent_b:   "#A78BFA"
+    accent_c:   "#FFD23F"
+    accent_d:   "#34D399"
+    background: "#0D1117"
+  typography:
+    display:  "Inter"                   # any Google Font
+    mono:     "JetBrains Mono"
+  animations:
+    enabled:    true
+    intensity:  "high"                  # off | subtle | medium | high
+
+# ── Brain (the centerpiece — anatomical neon brain SVG) ──────────────────
+brain:
+  enabled: true
+  source:  "wikimedia"                  # wikimedia | abstract | custom
+  # Map your skill domains to brain regions:
+  regions:
+    frontal:    { domain: "Backend",       tools: [Python, Django, DRF, FastAPI] }
+    parietal:   { domain: "Architecture",  tools: [Microservices, RabbitMQ] }
+    occipital:  { domain: "Frontend",      tools: [Vue, Nuxt, TypeScript] }
+    temporal:   { domain: "Data Layer",    tools: [PostgreSQL, Redis, MySQL] }
+    cerebellum: { domain: "DevOps",        tools: [Docker, Git, AWS] }
+    brainstem:  { domain: "AI & Data",     tools: [PyTorch, LLMs, RAG] }
+  three_d:
+    enabled:        true                # publishes interactive viewer to /docs
+    auto_rotate:    true
+    custom_domain:                       # Pro tier: brain.your.dev
+  heatmap:
+    enabled:        false               # Pro tier: regions glow by GH activity
+
+# ── Typing animations (multi-language identity headlines) ────────────────
+typing:
+  header:
+    enabled: true
+    languages: [en, de, ar]             # any combo from supported list
+    lines_per_language: 10
+    cycle: "fast"                       # fast | medium | slow
+  about:                                # in-page terminal session
+    enabled: true
+    lines:    50                        # generates that many command lines
+    include:
+      - personal                        # references your repos/projects
+      - generic                         # universal dev commands
+  motto:                                # philosophy ticker
+    enabled: true
+    lines:    50
+
+# ── Cards (composed SVG widgets) ─────────────────────────────────────────
+cards:
+  tech_stack:
+    enabled: true
+    show_stats: true                    # years / projects / mastery bars
+    categories:                         # auto-grouped from `brain.regions`
+  current_focus:
+    enabled: true
+    tiles:
+      - { project: PyDev,        status: ACTIVE,     accent: red }
+      - { project: Baeckrei,     status: SHIPPING,   accent: orange }
+      - { project: Stock-Manager, status: ACTIVE,    accent: green }
+      - { project: Generative-AI, status: EXPLORING, accent: purple }
+      - { project: Docker-CICD,  status: MAINTAINING, accent: cyan }
+      - { project: Media-Archive, status: BUILDING,   accent: gold }
+  yearly_highlights:
+    enabled: true
+    start_year: 2023                    # auto-extends every Jan 1
+    bullets_per_year: 3
+
+# ── Auto-updating markers (re-render daily via the included workflow) ────
+auto_update:
+  schedule: "0 6 * * *"                  # cron in UTC
+  markers:
+    activity:        true                # last 8 events
+    latest_releases: true                # top 5 releases across repos
+    quote_of_the_day: true               # rotates daily
+    pagespeed:                           # optional — your portfolio URL
+      enabled: false
+      url: "http://your-site.com"
+    wakatime:                            # optional — needs WAKATIME_API_KEY secret
+      enabled: false
+    gitgraph:        true                # mermaid graph of recent pushes
+
+# ── Contribution visualizations ──────────────────────────────────────────
+contributions:
+  snake:        true                     # classic snake animation
+  skylines:     { years: [2023, 2024, 2025, 2026], stl: true }
+  cities:       { years: [2024, 2025, 2026] }
+  profile_3d:   true                     # yoshi389111 3D contribution image
+
+# ── Pro features (Cortex Pro tier — leave commented for free tier) ───────
+# pro:
+#   ai_portrait:        true              # generated neon avatar from your data
+#   skill_dna_strand:   true              # double-helix of your tech evolution
+#   project_cards:      true              # Pokemon-style holographic cards
+#   digital_twin_chat:  true              # embedded chatbot answers about you
+#   constellation:      true              # commits as starfield
+#   sound_reactive:     true              # 3D viewer reacts to ambient audio
+#   custom_domain:      "brain.you.dev"
+#   analytics:          true              # who visits your profile
+
+# ── ════════════════════════════════════════════════════════════════════════
+# ── MINIMAL EXAMPLE (drop-in 2-minute setup) ──────────────────────────────
+# ── ════════════════════════════════════════════════════════════════════════
+# identity:
+#   name: "Jane Doe"
+#   github_user: "janedoe"
+#   tagline: "Backend engineer at Acme"
+# brand:
+#   palette: "monochrome"
+# brain:
+#   enabled: true
+# cards:
+#   tech_stack: { enabled: true }
+# auto_update:
+#   markers: { activity: true, quote_of_the_day: true }

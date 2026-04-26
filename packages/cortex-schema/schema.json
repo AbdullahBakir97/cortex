@@ -1,0 +1,274 @@
+{
+  "$schema":     "http://json-schema.org/draft-07/schema#",
+  "$id":         "https://cortex.dev/schema/v1.json",
+  "title":       "Cortex Profile Configuration",
+  "description": "Schema for cortex.yml — the config file that drives the Cortex GitHub Action.",
+  "type":        "object",
+  "required":    ["identity"],
+  "additionalProperties": false,
+
+  "properties": {
+    "version": {
+      "type":        "integer",
+      "const":       1,
+      "default":     1,
+      "description": "Cortex schema version. Currently always 1."
+    },
+
+    "identity": {
+      "type": "object",
+      "required": ["name", "github_user"],
+      "additionalProperties": false,
+      "properties": {
+        "name":        { "type": "string", "description": "Display name shown in titles" },
+        "github_user": { "type": "string", "minLength": 1, "maxLength": 39, "pattern": "^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,38})$" },
+        "tagline":     { "type": "string", "default": "" },
+        "location":    { "type": "string", "default": "" },
+        "pronouns":    { "type": "string", "default": "" },
+        "email":       { "type": "string", "format": "email" },
+        "socials": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "linkedin":  { "type": "string" },
+            "telegram":  { "type": "string" },
+            "instagram": { "type": "string" },
+            "twitter":   { "type": "string" }
+          }
+        }
+      }
+    },
+
+    "brand": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "palette": {
+          "type":        "string",
+          "enum":        ["neon-rainbow", "monochrome", "cyberpunk", "minimal", "retro"],
+          "default":     "neon-rainbow",
+          "description": "Named palette preset"
+        },
+        "colors": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Override individual colors (takes precedence over palette)",
+          "properties": {
+            "primary":    { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "secondary":  { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "accent_a":   { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "accent_b":   { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "accent_c":   { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "accent_d":   { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+            "background": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "display": { "type": "string", "default": "Inter",          "description": "Display font (any Google Font name)" },
+            "mono":    { "type": "string", "default": "JetBrains Mono", "description": "Monospace font" }
+          }
+        },
+        "animations": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":   { "type": "boolean", "default": true },
+            "intensity": { "type": "string", "enum": ["off", "subtle", "medium", "high"], "default": "high" }
+          }
+        }
+      }
+    },
+
+    "brain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "source":  { "type": "string", "enum": ["wikimedia", "abstract", "custom"], "default": "wikimedia" },
+        "regions": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "frontal":    { "$ref": "#/definitions/brainRegion" },
+            "parietal":   { "$ref": "#/definitions/brainRegion" },
+            "occipital":  { "$ref": "#/definitions/brainRegion" },
+            "temporal":   { "$ref": "#/definitions/brainRegion" },
+            "cerebellum": { "$ref": "#/definitions/brainRegion" },
+            "brainstem":  { "$ref": "#/definitions/brainRegion" }
+          }
+        },
+        "three_d": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":       { "type": "boolean", "default": true },
+            "auto_rotate":   { "type": "boolean", "default": true },
+            "custom_domain": { "type": "string", "description": "Pro tier — your custom domain" }
+          }
+        },
+        "heatmap": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "Pro tier — lobes glow brighter where you actually contribute",
+          "properties": {
+            "enabled": { "type": "boolean", "default": false }
+          }
+        }
+      }
+    },
+
+    "typing":        { "$ref": "#/definitions/typing" },
+    "cards":         { "$ref": "#/definitions/cards" },
+    "auto_update":   { "$ref": "#/definitions/autoUpdate" },
+    "contributions": { "$ref": "#/definitions/contributions" },
+    "pro":           { "$ref": "#/definitions/proFeatures" }
+  },
+
+  "definitions": {
+    "brainRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain"],
+      "properties": {
+        "domain": { "type": "string", "description": "Skill domain shown on the label" },
+        "tools":  { "type": "array", "items": { "type": "string" }, "default": [] }
+      }
+    },
+
+    "typing": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "header": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":            { "type": "boolean", "default": true },
+            "languages":          { "type": "array", "items": { "type": "string", "enum": ["en", "de", "ar", "es", "fr", "ja", "zh", "ru", "tr", "pt"] }, "default": ["en"] },
+            "lines_per_language": { "type": "integer", "minimum": 1, "maximum": 30, "default": 10 },
+            "cycle":              { "type": "string", "enum": ["fast", "medium", "slow"], "default": "medium" }
+          }
+        },
+        "about": { "$ref": "#/definitions/typingBody" },
+        "motto": { "$ref": "#/definitions/typingBody" }
+      }
+    },
+
+    "typingBody": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "lines":   { "type": "integer", "minimum": 3, "maximum": 100, "default": 30 },
+        "include": { "type": "array",   "items": { "type": "string", "enum": ["personal", "generic"] }, "default": ["personal", "generic"] }
+      }
+    },
+
+    "cards": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tech_stack": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":    { "type": "boolean", "default": true },
+            "show_stats": { "type": "boolean", "default": true },
+            "categories": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "current_focus": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean", "default": true },
+            "tiles":   { "type": "array", "items": { "$ref": "#/definitions/focusTile" }, "default": [] }
+          }
+        },
+        "yearly_highlights": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled":          { "type": "boolean", "default": true },
+            "start_year":       { "type": "integer", "minimum": 2008, "default": 2023 },
+            "bullets_per_year": { "type": "integer", "minimum": 1, "maximum": 8, "default": 3 }
+          }
+        }
+      }
+    },
+
+    "focusTile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project"],
+      "properties": {
+        "project": { "type": "string" },
+        "status":  { "type": "string", "enum": ["ACTIVE", "SHIPPING", "EXPLORING", "MAINTAINING", "BUILDING"], "default": "ACTIVE" },
+        "accent":  { "type": "string", "enum": ["red", "orange", "green", "gold", "cyan", "purple"], "default": "red" }
+      }
+    },
+
+    "autoUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schedule": { "type": "string", "default": "0 6 * * *", "description": "Cron schedule (UTC)" },
+        "markers": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "activity":         { "type": "boolean", "default": true },
+            "latest_releases":  { "type": "boolean", "default": true },
+            "quote_of_the_day": { "type": "boolean", "default": true },
+            "gitgraph":         { "type": "boolean", "default": true },
+            "pagespeed": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "enabled": { "type": "boolean", "default": false },
+                "url":     { "type": "string",  "format": "uri" }
+              }
+            },
+            "wakatime": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "enabled": { "type": "boolean", "default": false }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "contributions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "snake":      { "type": "boolean", "default": true },
+        "skylines":   { "type": "object", "additionalProperties": false, "properties": { "years": { "type": "array", "items": { "type": "integer" } }, "stl": { "type": "boolean", "default": true } } },
+        "cities":     { "type": "object", "additionalProperties": false, "properties": { "years": { "type": "array", "items": { "type": "integer" } } } },
+        "profile_3d": { "type": "boolean", "default": true }
+      }
+    },
+
+    "proFeatures": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Pro tier — gated behind subscription in v2+",
+      "properties": {
+        "ai_portrait":       { "type": "boolean", "default": false },
+        "skill_dna_strand":  { "type": "boolean", "default": false },
+        "project_cards":     { "type": "boolean", "default": false },
+        "digital_twin_chat": { "type": "boolean", "default": false },
+        "constellation":     { "type": "boolean", "default": false },
+        "sound_reactive":    { "type": "boolean", "default": false },
+        "custom_domain":     { "type": "string" },
+        "analytics":         { "type": "boolean", "default": false }
+      }
+    }
+  }
+}

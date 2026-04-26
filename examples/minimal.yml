@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://cortex.dev/schema/v1.json
+# .github/cortex.yml — minimal Cortex config (~25 lines)
+# Drop-in for any profile. Replace identity, push, done.
+
+version: 1
+
+identity:
+  name:        "Your Name"
+  github_user: "yourhandle"
+  tagline:     "Backend engineer at Acme"
+
+brand:
+  palette: "monochrome"
+
+brain:
+  enabled: true
+  three_d:
+    enabled: true
+
+cards:
+  tech_stack: { enabled: true }
+
+typing:
+  header: { enabled: true, languages: [en], lines_per_language: 5 }
+  about:  { enabled: false }
+  motto:  { enabled: false }
+
+auto_update:
+  markers:
+    activity:         true
+    quote_of_the_day: true

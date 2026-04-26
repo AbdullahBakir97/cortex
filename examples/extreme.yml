@@ -1,0 +1,99 @@
+# yaml-language-server: $schema=https://cortex.dev/schema/v1.json
+# .github/cortex.yml — Abdullah's extreme profile (~120 lines)
+# Every feature on. The reference for "what's possible".
+
+version: 1
+
+identity:
+  name:        "Abdullah Bakir"
+  github_user: "AbdullahBakir97"
+  tagline:     "Full-Stack Developer ⚡ Python · Django · Vue · Nuxt"
+  location:    "Germany"
+  pronouns:    "he/him"
+  email:       "abdullah.bakir.1997@gmail.com"
+  socials:
+    linkedin:  "abdullah-bakir-809065273"
+    telegram:  "BlackSea0011"
+    instagram: "abdulahbaker"
+
+brand:
+  palette: "neon-rainbow"
+  typography:
+    display: "Inter"
+    mono:    "JetBrains Mono"
+  animations:
+    enabled:   true
+    intensity: "high"
+
+brain:
+  enabled: true
+  source:  "wikimedia"
+  three_d:
+    enabled:     true
+    auto_rotate: true
+  regions:
+    frontal:    { domain: "Backend",       tools: [Python, Django, DRF, FastAPI, Flask] }
+    parietal:   { domain: "Architecture",  tools: [Microservices, RabbitMQ, Event-Driven] }
+    occipital:  { domain: "Frontend",      tools: [Vue, Nuxt, TypeScript, Tailwind] }
+    temporal:   { domain: "Data Layer",    tools: [PostgreSQL, Redis, MySQL, SQLite] }
+    cerebellum: { domain: "DevOps",        tools: [Docker, Git, GitHub Actions, AWS] }
+    brainstem:  { domain: "AI & Data",     tools: [PyTorch, TensorFlow, LLMs, RAG] }
+
+typing:
+  header:
+    enabled:            true
+    languages:          [en, de, ar]
+    lines_per_language: 10
+    cycle:              "fast"
+  about:
+    enabled: true
+    lines:   50
+    include: [personal, generic]
+  motto:
+    enabled: true
+    lines:   50
+
+cards:
+  tech_stack:
+    enabled:    true
+    show_stats: true
+  current_focus:
+    enabled: true
+    tiles:
+      - { project: "PyDev",          status: ACTIVE,      accent: red }
+      - { project: "Baeckrei",       status: SHIPPING,    accent: orange }
+      - { project: "Stock-Manager",  status: ACTIVE,      accent: green }
+      - { project: "Generative-AI",  status: EXPLORING,   accent: purple }
+      - { project: "Docker-CICD",    status: MAINTAINING, accent: cyan }
+      - { project: "Media-Archive",  status: BUILDING,    accent: gold }
+  yearly_highlights:
+    enabled:          true
+    start_year:       2023
+    bullets_per_year: 3
+
+contributions:
+  snake:      true
+  skylines:   { years: [2023, 2024, 2025, 2026], stl: true }
+  cities:     { years: [2024, 2025, 2026] }
+  profile_3d: true
+
+auto_update:
+  schedule: "0 6 * * *"
+  markers:
+    activity:         true
+    latest_releases:  true
+    quote_of_the_day: true
+    gitgraph:         true
+    pagespeed:
+      enabled: true
+      url:     "http://kharsa-style.de/"
+    wakatime:
+      enabled: true
+
+# Pro features (uncomment when subscribed):
+# pro:
+#   ai_portrait:       true
+#   skill_dna_strand:  true
+#   project_cards:     true
+#   digital_twin_chat: true
+#   custom_domain:     "brain.abdullah.dev"
