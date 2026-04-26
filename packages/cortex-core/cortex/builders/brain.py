@@ -863,9 +863,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="100%" stop-color="#34D399" stop-opacity="0"/>
     </radialGradient>
     <mask id="brainMask">
-      <g transform="translate(332,260) scale(0.7)">
-      {chr(10).join("        " + p for p in brain_mask_paths)}
-      </g>
+    {chr(10).join("      " + p for p in brain_mask_paths)}
     </mask>
     <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%"  stop-color="#1C1428" stop-opacity="0.94"/>
