@@ -19,6 +19,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `version: 1` field; mismatches raise a helpful migration error rather than a
   cryptic crash.
 
+## [0.2.1] — 2026-04-26 (alpha — markers + decorative bits)
+
+### Added
+- **`cortex.markers`** — daily README rewriter, ported from
+  `scripts/update_readme.py`. Ten sections registered:
+  QUOTE / ACTIVITY / GITGRAPH / SKYLINE_GRID / CITY_GRID / STL_LINKS /
+  GITCITY_LINKS (token-free) +
+  LATEST_RELEASES / HIGHLIGHTS_STATS / PAGESPEED (token-required).
+- **`cortex.github_api`** — thin REST + GraphQL client; anonymous mode
+  supported for token-free sections; GraphQL raises a helpful error
+  rather than 401-ing on missing token.
+- **`cortex.builders.github_icon`** — pulsing brand-glow Octocat halo.
+- **`cortex.builders.divider`** — animated section divider with the
+  brand color sweeping across.
+- `cortex update-readme` CLI command now wired to `cortex.markers.update`
+  with per-section status reporting (updated / missing / skipped /
+  failed) and precise skip reasons.
+
+### Schema additions
+- `auto_update.markers` gains five new bool flags
+  (`highlights_stats`, `skyline_grid`, `city_grid`, `stl_links`,
+  `gitcity_links`) and the existing nested PageSpeedConfig is now
+  dispatched correctly via `getattr(attr, "enabled", attr)`.
+
+### Verified
+- 8 widgets emit clean XML end-to-end (`cortex build` ~41 ms).
+- 5 token-free marker sections rewrite a synthetic README correctly with
+  no GitHub token set; PAGESPEED reports a single graceful failure when
+  rate-limited; LATEST_RELEASES + HIGHLIGHTS_STATS report precise skip
+  reasons.
+
 ## [0.2.0] — 2026-04-26 (alpha — full core widget set)
 
 ### Added
@@ -75,6 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `templates/` directory with archetype starter packs.
 - Brain anatomy attribution at `LICENSES/BRAIN-ANATOMY-CC-BY-SA-3.0.txt`.
 
-[Unreleased]: https://github.com/AbdullahBakir97/cortex/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/AbdullahBakir97/cortex/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/AbdullahBakir97/cortex/releases/tag/v0.2.1
 [0.2.0]: https://github.com/AbdullahBakir97/cortex/releases/tag/v0.2.0
 [0.1.0]: https://github.com/AbdullahBakir97/cortex/releases/tag/v0.1.0
