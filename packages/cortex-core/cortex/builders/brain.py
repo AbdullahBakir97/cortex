@@ -266,6 +266,39 @@ def _dna_helix_paths(
     return strand_a, strand_b, rungs
 
 
+def _dna_specs_random(rng: random.Random, count: int = 8) -> list[dict]:
+    """Generate `count` deterministic-random DNA helix specs scattered around
+    canvas edge zones (avoiding brain + cards). Each spec has unique position,
+    size, tilt, color, and timings — no two helixes ever sync up visually.
+    """
+    palette = ["#22D3EE", "#EC4899", "#7C3AED", "#34D399", "#A78BFA", "#FFD23F"]
+    # 4 corner zones — keep helixes away from brain (canvas 262-892, 260-720)
+    # and away from card areas. Each zone is (xmin, xmax, ymin, ymax).
+    zones = [
+        (60, 280, 60, 220),       # top-left
+        (1120, 1340, 60, 220),    # top-right
+        (60, 280, 680, 840),      # bottom-left
+        (1120, 1340, 680, 840),   # bottom-right
+    ]
+    specs: list[dict] = []
+    for _ in range(count):
+        xmin, xmax, ymin, ymax = rng.choice(zones)
+        specs.append({
+            "cx": rng.randint(xmin, xmax),
+            "cy": rng.randint(ymin, ymax),
+            "size": rng.randint(80, 220),
+            "width": 0,  # filled below as size * 0.4
+            "tilt": rng.randint(-30, 30),
+            "color": rng.choice(palette),
+            "cycle": round(rng.uniform(18, 28), 1),
+            "delay": round(rng.uniform(0, 12), 1),
+            "packet_dur": round(rng.uniform(6, 11), 1),
+            "pulse_dur": round(rng.uniform(3, 5), 1),
+        })
+        specs[-1]["width"] = round(specs[-1]["size"] * 0.4)
+    return specs
+
+
 def _classify_brain_paths(
     svg: str,
 ) -> tuple[
@@ -747,29 +780,42 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     # timers. Reads as a scientific/biological motif tying the brain theme
     # to the organic atmosphere (no longer competing with the digital grid,
     # which was removed in R4-2).
-    dna_specs = [
-        (120, 120,  "#22D3EE", 0),    # top-left,    cyan,   delay 0s
-        (1280, 120, "#EC4899", 4),    # top-right,   pink,   delay 4s
-        (120, 780,  "#7C3AED", 8),    # bottom-left, purple, delay 8s
-        (1280, 780, "#22D3EE", 12),   # bottom-right, cyan,  delay 12s
-    ]
+    # 8 deterministically-random DNA helixes scattered around canvas edges,
+    # each with unique size, tilt, color, and timing. Pseudo-3D rotation via
+    # stroke-width/opacity pulse 180° out of phase between strands. Data
+    # packets travel along strand-a via animateMotion. Soft Gaussian blur for
+    # cinematic edge softening.
+    dna_rng = random.Random(_seed_from_name(config.identity.name) ^ 0xCAFEBABE)
+    dna_specs_list = _dna_specs_random(dna_rng, count=8)
     dna_blocks: list[str] = []
-    for cx_d, cy_d, dcolor, ddelay in dna_specs:
-        strand_a, strand_b, rungs = _dna_helix_paths(cx_d, cy_d)
+    for idx, spec in enumerate(dna_specs_list):
+        strand_a, strand_b, rungs = _dna_helix_paths(
+            cx=0, cy=0, width=spec["width"], height=spec["size"], samples=20,
+        )
+        strand_a_id = f"dnaStrand_{idx}_a"
         rung_lines = "\n".join(
             f'    <line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" '
-            f'stroke="{dcolor}" stroke-width="0.8" stroke-opacity="0.5"/>'
+            f'stroke="{spec["color"]}" stroke-width="0.7" stroke-opacity="0.5"/>'
             for a, b in rungs
         )
         dna_blocks.append(
-            f'<g class="dna" style="animation-delay:{ddelay}s">\n'
-            f'    <path d="{strand_a}" stroke="{dcolor}" stroke-width="1.5" '
-            f'fill="none" stroke-opacity="0.7" pathLength="100" '
-            f'stroke-dasharray="100 100" class="dna-strand"/>\n'
-            f'    <path d="{strand_b}" stroke="{dcolor}" stroke-width="1.5" '
-            f'fill="none" stroke-opacity="0.7" pathLength="100" '
-            f'stroke-dasharray="100 100" class="dna-strand"/>\n'
+            f'<g class="dna" filter="url(#dnaBlur)" '
+            f'style="animation-delay:{spec["delay"]}s;animation-duration:{spec["cycle"]}s" '
+            f'transform="translate({spec["cx"]},{spec["cy"]}) rotate({spec["tilt"]})">\n'
+            f'  <path id="{strand_a_id}" d="{strand_a}" stroke="{spec["color"]}" '
+            f'fill="none" class="dna-strand-a" '
+            f'style="animation-duration:{spec["pulse_dur"]}s"/>\n'
+            f'  <path d="{strand_b}" stroke="{spec["color"]}" '
+            f'fill="none" class="dna-strand-b" '
+            f'style="animation-duration:{spec["pulse_dur"]}s"/>\n'
             f'{rung_lines}\n'
+            f'  <circle r="2.5" fill="{spec["color"]}" class="dna-packet" opacity="0">\n'
+            f'    <animateMotion dur="{spec["packet_dur"]}s" repeatCount="indefinite">\n'
+            f'      <mpath href="#{strand_a_id}"/>\n'
+            f'    </animateMotion>\n'
+            f'    <animate attributeName="opacity" values="0;0.9;0.9;0" '
+            f'keyTimes="0;0.2;0.8;1" dur="{spec["packet_dur"]}s" repeatCount="indefinite"/>\n'
+            f'  </circle>\n'
             f'  </g>'
         )
 
@@ -869,6 +915,9 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
     </radialGradient>
     <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="25"/>
+    </filter>
+    <filter id="dnaBlur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="0.5"/>
     </filter>
     <clipPath id="brainClip" clipPathUnits="userSpaceOnUse">
     {chr(10).join("      " + p for p in brain_clip_paths)}
@@ -1041,28 +1090,39 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         0%, 100% {{ opacity: 0.20; }}
         50%      {{ opacity: 0.85; }}
       }}
+      /* DNA helixes — duration set inline per element so each helix has a
+         unique timing (no shared period multiples = no synchronization tells). */
       .dna {{
         opacity: 0;
-        animation: dnaFade 16s ease-in-out infinite;
-        transform-origin: center;
-        transform-box: fill-box;
+        animation-name: dnaFade;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
       }}
       @keyframes dnaFade {{
         0%, 100% {{ opacity: 0; }}
-        10%      {{ opacity: 0; }}
-        25%      {{ opacity: 0.85; }}
-        50%      {{ opacity: 0.85; }}
-        65%      {{ opacity: 0; }}
+        12%      {{ opacity: 0; }}
+        28%      {{ opacity: 0.85; }}
+        58%      {{ opacity: 0.85; }}
+        72%      {{ opacity: 0; }}
       }}
-      .dna-strand {{
-        animation: dnaDraw 16s ease-in-out infinite;
+      /* Pseudo-3D rotation: strands pulse stroke-width + opacity 180° out
+         of phase. The brain reads the alternating thickness as a 3D barrel
+         rotating around its long axis. Same trick used by Pixar for
+         line-weight 3D illusion. */
+      .dna-strand-a, .dna-strand-b {{
+        stroke-width: 1.2;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
       }}
-      @keyframes dnaDraw {{
-        0%   {{ stroke-dashoffset: 100; }}
-        25%  {{ stroke-dashoffset: 0; }}
-        50%  {{ stroke-dashoffset: 0; }}
-        65%  {{ stroke-dashoffset: -100; }}
-        100% {{ stroke-dashoffset: -100; }}
+      .dna-strand-a {{ animation-name: dnaStrandFront; }}
+      .dna-strand-b {{ animation-name: dnaStrandBack; }}
+      @keyframes dnaStrandFront {{
+        0%, 100% {{ stroke-width: 1.7; opacity: 1.0; }}
+        50%      {{ stroke-width: 0.6; opacity: 0.45; }}
+      }}
+      @keyframes dnaStrandBack {{
+        0%, 100% {{ stroke-width: 0.6; opacity: 0.45; }}
+        50%      {{ stroke-width: 1.7; opacity: 1.0; }}
       }}
     ]]></style>
   </defs>
