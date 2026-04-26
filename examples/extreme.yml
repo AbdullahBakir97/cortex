@@ -60,12 +60,42 @@ cards:
   current_focus:
     enabled: true
     tiles:
-      - { project: "PyDev",          status: ACTIVE,      accent: red }
-      - { project: "Baeckrei",       status: SHIPPING,    accent: orange }
-      - { project: "Stock-Manager",  status: ACTIVE,      accent: green }
-      - { project: "Generative-AI",  status: EXPLORING,   accent: purple }
-      - { project: "Docker-CICD",    status: MAINTAINING, accent: cyan }
-      - { project: "Media-Archive",  status: BUILDING,    accent: gold }
+      - project:     "PyDev Platform"
+        status:      ACTIVE
+        accent:      red
+        emoji:       "🛠️"
+        description: "Enterprise-grade Python tooling: CLI + secure template marketplace + AI-driven dev features."
+        tech:        [Python, CLI, AI, "GitHub Apps"]
+      - project:     "Baeckrei"
+        status:      SHIPPING
+        accent:      orange
+        emoji:       "🥖"
+        description: "Bakery management system: inventory, recipes, online orders, customer accounts, real-time production scheduling."
+        tech:        [Django, Vue, Postgres, Redis]
+      - project:     "Stock-Manager"
+        status:      ACTIVE
+        accent:      green
+        emoji:       "📦"
+        description: "Desktop inventory app for shop floors — local-first, barcode-aware, role-based. v2.4.3 in production."
+        tech:        [Python, PyQt, SQLite, Desktop]
+      - project:     "Generative AI"
+        status:      EXPLORING
+        accent:      purple
+        emoji:       "🤖"
+        description: "Integrating LLMs and RAG into Django/Vue applications. Local agents, prompt engineering, embeddings."
+        tech:        [LLMs, RAG, PyTorch, Agents]
+      - project:     "Docker & CI/CD"
+        status:      MAINTAINING
+        accent:      cyan
+        emoji:       "🐳"
+        description: "Production deploy workflows that don't break on Friday — multi-stage builds, GitHub Actions, blue-green."
+        tech:        [Docker, "GH Actions", Linux, Nginx]
+      - project:     "Media Archive"
+        status:      BUILDING
+        accent:      gold
+        emoji:       "📚"
+        description: "Digital archive for magazines & news — edition mgmt, metadata, multi-format preservation, searchable taxonomies."
+        tech:        [Django, DRF, Postgres, Archive]
   yearly_highlights:
     enabled:          true
     start_year:       2023

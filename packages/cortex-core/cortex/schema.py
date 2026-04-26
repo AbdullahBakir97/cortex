@@ -155,14 +155,17 @@ class TechStackCard(_Strict):
 
 
 class FocusTile(_Strict):
-    project:  str
-    status:   Literal["ACTIVE", "SHIPPING", "EXPLORING", "MAINTAINING", "BUILDING"] = "ACTIVE"
-    accent:   Literal["red", "orange", "green", "gold", "cyan", "purple"] = "red"
+    project:     str
+    status:      Literal["ACTIVE", "SHIPPING", "EXPLORING", "MAINTAINING", "BUILDING"] = "ACTIVE"
+    accent:      Literal["red", "orange", "green", "gold", "cyan", "purple"] = "red"
+    emoji:       str = ""
+    description: str = ""                          # word-wrapped to ≤3 lines
+    tech:        list[str] = Field(default_factory=list, max_length=4)
 
 
 class CurrentFocusCard(_Strict):
     enabled: bool = True
-    tiles:   list[FocusTile] = Field(default_factory=list)
+    tiles:   list[FocusTile] = Field(default_factory=list, max_length=6)
 
 
 class YearEntry(_Strict):

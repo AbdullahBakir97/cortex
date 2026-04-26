@@ -1,0 +1,179 @@
+"""Current-focus tile dashboard — Netflix-style "now playing" cards.
+
+Renders up to 6 rich tiles in a 3×2 grid. Each tile = one project the user is
+working on right now. Status pill pulses ("RECORDING NOW" feel), accent stripe
+glows, tiles stagger-fade in.
+
+Per-tile content:
+  • status badge (ACTIVE / SHIPPING / EXPLORING / MAINTAINING / BUILDING)
+  • emoji + project title
+  • description (word-wrapped to ≤3 lines)
+  • up to 4 tech pills (auto-sized by label width)
+"""
+from __future__ import annotations
+
+from pathlib import Path
+from xml.sax.saxutils import escape as _xml_escape
+
+from ..schema import Config, FocusTile
+
+
+def _x(s: str) -> str:
+    return _xml_escape(s, {"'": "&apos;", '"': "&quot;"})
+
+
+# Accent name → hex (matches the brain palette + tech-cards palette)
+_ACCENT_HEX: dict[str, str] = {
+    "red":    "#F90001",
+    "orange": "#FF652F",
+    "green":  "#34D399",
+    "gold":   "#FFD23F",
+    "cyan":   "#22D3EE",
+    "purple": "#A78BFA",
+}
+
+# Tile geometry
+_TILE_W = 420
+_TILE_H = 220
+_GAP    = 20
+_PAD    = 40
+_COLS   = 3
+
+# Stagger classes per slot
+_STAGGER = ["t1", "t2", "t3", "t4", "t5", "t6"]
+
+
+def _wrap_desc(text: str, max_chars: int = 38) -> list[str]:
+    """Greedy word-wrap for tile description. Caps at 3 lines."""
+    if not text:
+        return []
+    words = text.split()
+    lines: list[str] = []
+    current: list[str] = []
+    for word in words:
+        candidate = (" ".join(current + [word])).strip()
+        if len(candidate) <= max_chars or not current:
+            current.append(word)
+        else:
+            lines.append(" ".join(current))
+            current = [word]
+        if len(lines) >= 3:
+            break
+    if current and len(lines) < 3:
+        lines.append(" ".join(current))
+    return lines[:3]
+
+
+def _pill_width(label: str) -> int:
+    """Approximate pixel width of a tech pill at 10px JetBrains Mono."""
+    return max(40, len(label) * 7 + 16)
+
+
+def _render_tile(slot_x: int, slot_y: int, slot_idx: int, tile: FocusTile) -> str:
+    accent = _ACCENT_HEX.get(tile.accent, _ACCENT_HEX["red"])
+    title  = f"{tile.emoji} {tile.project}".strip()
+    desc_lines = _wrap_desc(tile.description, max_chars=38)
+
+    # Status pill auto-sizes to the label
+    status_label = tile.status
+    status_w = max(72, len(status_label) * 7 + 36)
+    status_text_x = (status_w + 18) // 2  # offset right of the dot
+
+    parts = [
+        f'  <g transform="translate({slot_x},{slot_y})">',
+        f'    <g class="tile-rise {_STAGGER[slot_idx]}">',
+        f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileBg)" filter="url(#tileShadow)"/>',
+        f'      <rect x="0" y="0" width="{_TILE_W}" height="{_TILE_H}" rx="14" fill="url(#tileHighlight)"/>',
+        f'      <rect x="0" y="0" width="{_TILE_W}" height="3" rx="1.5" fill="{accent}" class="stripe-glow"/>',
+        f'      <g transform="translate(20, 24)">',
+        f'        <rect x="0" y="0" width="{status_w}" height="22" rx="11" fill="{accent}" fill-opacity="0.18" stroke="{accent}" stroke-width="1"/>',
+        f'        <circle cx="14" cy="11" r="3.5" fill="{accent}" class="live-dot"/>',
+        f'        <text x="{status_text_x}" y="15" class="t-status" fill="{accent}" text-anchor="middle">{_x(status_label)}</text>',
+        f'      </g>',
+        f'      <text x="20" y="84" class="t-title">{_x(title)}</text>',
+    ]
+
+    # Description lines (up to 3)
+    for li, line in enumerate(desc_lines):
+        parts.append(f'      <text x="20" y="{116 + li * 18}" class="t-desc">{_x(line)}</text>')
+
+    # Tech pills
+    if tile.tech:
+        pill_x = 0
+        pill_parts = [f'      <g transform="translate(20, 178)">']
+        for label in tile.tech[:4]:
+            w = _pill_width(label)
+            pill_parts.append(f'        <g><rect x="{pill_x}" y="0" width="{w}" height="22" rx="11" fill="none" stroke="{accent}" stroke-width="1"/><text x="{pill_x + w // 2}" y="15" class="t-pill" fill="{accent}" text-anchor="middle">{_x(label)}</text></g>')
+            pill_x += w + 8
+        pill_parts.append('      </g>')
+        parts.extend(pill_parts)
+
+    parts.append('    </g>')
+    parts.append('  </g>')
+    return "\n".join(parts)
+
+
+def build(config: Config, output: str | Path) -> Path:
+    """Emit assets/current-focus.svg from cards.current_focus.tiles."""
+    out = Path(output)
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    tiles = list(config.cards.current_focus.tiles)[:6]
+    if not tiles:
+        out.write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n'
+            '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="120" viewBox="0 0 800 120">'
+            '<text x="400" y="60" font-family="Inter,sans-serif" fill="#9BA1A6" text-anchor="middle">'
+            'Add tiles to cards.current_focus.tiles in cortex.yml.'
+            '</text></svg>\n', encoding="utf-8")
+        return out
+
+    n = len(tiles)
+    cols = min(_COLS, n)
+    rows = (n + cols - 1) // cols
+    svg_w = _PAD * 2 + cols * _TILE_W + (cols - 1) * _GAP
+    svg_h = 110 + rows * _TILE_H + (rows - 1) * _GAP + _PAD
+
+    head = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{svg_w}" height="{svg_h}" viewBox="0 0 {svg_w} {svg_h}" '
+        f'role="img" aria-label="Currently working on — {n} active focus tiles">\n'
+        '  <style>\n'
+        "    .t-display   { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.01em; fill: #FFFFFF; }\n"
+        "    .t-tag       { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase; fill: #C4B5FD; }\n"
+        "    .t-status    { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 9px; letter-spacing: 0.20em; text-transform: uppercase; }\n"
+        "    .t-title     { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.005em; fill: #FFFFFF; }\n"
+        "    .t-desc      { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 12.5px; fill: #C9CDD3; }\n"
+        "    .t-pill      { font-family: 'JetBrains Mono','SF Mono',Consolas,monospace; font-weight: 600; font-size: 10px; }\n"
+        "    .live-dot { animation: liveDot 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
+        "    @keyframes liveDot { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.8); opacity: 0.4; } }\n"
+        "    .stripe-glow { animation: stripeGlow 3s ease-in-out infinite; }\n"
+        "    @keyframes stripeGlow { 0%, 100% { opacity: 0.85; } 50% { opacity: 1; } }\n"
+        "    .tile-rise { opacity: 0; animation: tileRise 0.7s cubic-bezier(0.22,1,0.36,1) forwards; }\n"
+        "    @keyframes tileRise { to { opacity: 1; } }\n"
+        "    .t1 { animation-delay: 0.0s; } .t2 { animation-delay: 0.08s; } .t3 { animation-delay: 0.16s; }\n"
+        "    .t4 { animation-delay: 0.24s; } .t5 { animation-delay: 0.32s; } .t6 { animation-delay: 0.40s; }\n"
+        '  </style>\n'
+        '  <defs>\n'
+        '    <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%"><stop offset="0%" stop-color="#0F0816"/><stop offset="100%" stop-color="#000000"/></radialGradient>\n'
+        '    <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="0.8" fill="#F90001" fill-opacity="0.07"/></pattern>\n'
+        '    <linearGradient id="tileBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A2028" stop-opacity="0.96"/><stop offset="100%" stop-color="#0D1117" stop-opacity="0.96"/></linearGradient>\n'
+        '    <linearGradient id="tileHighlight" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08"/><stop offset="40%" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>\n'
+        '    <filter id="tileShadow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dx="0" dy="3" result="shadow"/><feFlood flood-color="#000000" flood-opacity="0.65"/><feComposite in2="shadow" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>\n'
+        '  </defs>\n'
+        f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#bgRadial)"/>\n'
+        f'  <rect width="{svg_w}" height="{svg_h}" fill="url(#dots)"/>\n'
+        f'  <text x="{svg_w // 2}" y="42" class="t-tag" text-anchor="middle">⏵ NOW · WORKING · ON ⏴</text>\n'
+        f'  <text x="{svg_w // 2}" y="78" class="t-display" text-anchor="middle">Current Focus</text>\n'
+    )
+
+    tile_blocks: list[str] = []
+    for i, tile in enumerate(tiles):
+        col = i % cols
+        row = i // cols
+        slot_x = _PAD + col * (_TILE_W + _GAP)
+        slot_y = 110 + row * (_TILE_H + _GAP)
+        tile_blocks.append(_render_tile(slot_x, slot_y, i, tile))
+
+    out.write_text(head + "\n".join(tile_blocks) + "\n</svg>\n", encoding="utf-8")
+    return out
