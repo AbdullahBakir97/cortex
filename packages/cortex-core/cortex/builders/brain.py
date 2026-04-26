@@ -760,6 +760,27 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         20%      {{ opacity: 0.7; transform: scale(1.2); }}
         30%      {{ opacity: 0;   transform: scale(0.8); }}
       }}
+      /* Per-lobe stroke-draw overlay — duplicate paths above the body fill,
+         each lobe's outline draws in over 1s, holds, draws out over 1s, rests.
+         Six lobes staggered by 1s on a shared 6s cycle. */
+      .lobe-stroke {{
+        animation: lstroke 6s ease-in-out infinite;
+        stroke-dashoffset: 100;
+        opacity: 0;
+      }}
+      @keyframes lstroke {{
+        0%   {{ stroke-dashoffset: 100; opacity: 0; }}
+        16%  {{ stroke-dashoffset: 0;   opacity: 1; }}
+        26%  {{ stroke-dashoffset: 0;   opacity: 1; }}
+        43%  {{ stroke-dashoffset:-100; opacity: 0; }}
+        100% {{ stroke-dashoffset:-100; opacity: 0; }}
+      }}
+      .ls-frontal    {{ animation-delay: 0s; }}
+      .ls-parietal   {{ animation-delay: 1s; }}
+      .ls-occipital  {{ animation-delay: 2s; }}
+      .ls-temporal   {{ animation-delay: 3s; }}
+      .ls-cerebellum {{ animation-delay: 4s; }}
+      .ls-brainstem  {{ animation-delay: 5s; }}
       .lobe-arc {{
         stroke-dasharray: 4 22;
         animation: arcflow 1.6s linear infinite, arcfade 2.4s ease-in-out infinite;
