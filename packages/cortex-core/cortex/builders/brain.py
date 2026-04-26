@@ -629,22 +629,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         "brainstem": p_accent_b,
     }
 
-    # Per-lobe fill substitution: paths that classify into a lobe get that
-    # lobe's gradient (e.g., brainGrad_frontal). Unclassified paths keep
-    # url(#brainGrad_unified) from _recolor's global pass — the unified
-    # gradient is now just a fallback. Each lobe rotates on its own period
-    # (frontal=20s, parietal=23s, etc.) so the 6 networks are never visually
-    # synced.
-    brain_content_lobed = brain_content
-    for lobe, pairs in paths_by_lobe.items():
-        grad_url = f"url(#brainGrad_{lobe})"
-        for pid, _d in pairs:
-            pattern = (
-                rf'(<path\b[^>]*?\sid="{re.escape(pid)}"[^>]*?\sstyle="[^"]*?fill:)'
-                rf'url\(#brainGrad_unified\)'
-            )
-            brain_content_lobed = re.sub(pattern, rf"\1{grad_url}", brain_content_lobed)
-
     # Per-lobe stroke overlay — top 8 paths per lobe, duplicated as colored
     # stroke <path/> elements with stroke-dashoffset animation. Lobe identity
     # comes from this layer, not the body fill.
@@ -816,66 +800,6 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="0%"   stop-color="#3A1A28"/>
       <stop offset="33%"  stop-color="#4D2438"/>
       <stop offset="66%"  stop-color="#5C2E45"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_frontal" x1="0" y1="0" x2="1" y2="0"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="1 0" dur="10s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_primary}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_parietal" x1="0" y1="0" x2="0" y2="1"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="0 1" dur="12s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_accent_d}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_occipital" x1="1" y1="0" x2="0" y2="0"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="1 0" dur="9s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_secondary}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_temporal" x1="0" y1="1" x2="1" y2="0"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="1 -1" dur="14s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_accent_c}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_cerebellum" x1="0" y1="0" x2="1" y2="1"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="1 1" dur="11s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_accent_a}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
-      <stop offset="100%" stop-color="#3A1A28"/>
-    </linearGradient>
-    <linearGradient id="brainGrad_brainstem" x1="0" y1="1" x2="0" y2="0"
-                    gradientUnits="objectBoundingBox" spreadMethod="repeat">
-      <animateTransform attributeName="gradientTransform" type="translate"
-                        from="0 0" to="0 1" dur="13s" repeatCount="indefinite"/>
-      <stop offset="0%"   stop-color="#3A1A28"/>
-      <stop offset="45%"  stop-color="#3A1A28"/>
-      <stop offset="50%"  stop-color="{p_accent_b}" stop-opacity="0.40"/>
-      <stop offset="55%"  stop-color="#3A1A28"/>
       <stop offset="100%" stop-color="#3A1A28"/>
     </linearGradient>
     <radialGradient id="bgRadial" cx="50%" cy="50%" r="80%">
@@ -1258,7 +1182,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
   <g transform="translate(332,152) scale(0.7)">
     <g class="brain-pulse" filter="url(#brainGlow)">
       <g class="{brain_3d_class}">
-        {brain_content_lobed}
+        {brain_content}
         {chr(10).join("        " + rg for rg in region_glows)}
         <g class="lobe-stroke-layer" filter="url(#electricGlow)">
         {chr(10).join("          " + lso for lso in lobe_stroke_overlay)}
