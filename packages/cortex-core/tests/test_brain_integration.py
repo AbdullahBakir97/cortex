@@ -49,16 +49,18 @@ def test_no_legacy_source_hex_in_output(tmp_path: Path, extreme_config: Config) 
 
 
 def test_no_legacy_gradient_ids_in_output(tmp_path: Path, extreme_config: Config) -> None:
-    """Old gradient defs must be gone — only brainGrad_unified should remain."""
+    """Old gradient defs must be gone; unified fallback + 6 per-lobe defs must be present."""
     out = tmp_path / "brain.svg"
     build(extreme_config, out)
     text = out.read_text(encoding="utf-8")
-    for legacy in ('id="brainGrad"', 'id="brainGradAlt"',
-                    'id="brainGrad_frontal"', 'id="brainGrad_parietal"',
-                    'id="brainGrad_occipital"', 'id="brainGrad_temporal"',
-                    'id="brainGrad_cerebellum"', 'id="brainGrad_brainstem"'):
+    # Truly legacy ids that must never appear
+    for legacy in ('id="brainGrad"', 'id="brainGradAlt"', 'id="brainGrad_specular"'):
         assert legacy not in text, f"legacy gradient {legacy} still in output"
+    # Unified fallback must remain (for unclassified paths)
     assert 'id="brainGrad_unified"' in text
+    # 6 per-lobe gradients must be present (R3 Task 1)
+    for lobe in ("frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem"):
+        assert f'id="brainGrad_{lobe}"' in text, f"per-lobe gradient missing for {lobe}"
 
 
 def test_overlay_layer_present_with_six_lobe_classes(tmp_path: Path, extreme_config: Config) -> None:
