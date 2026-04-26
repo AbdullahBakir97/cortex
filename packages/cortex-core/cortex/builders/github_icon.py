@@ -15,13 +15,14 @@ def build(config: Config, output: str | Path) -> Path:
     out = Path(output)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    primary = config.brand.colors.primary  # default #F90001 (red)
     secondary = config.brand.colors.secondary  # default #FF652F (orange)
     bg = config.brand.colors.background  # default #0D1117 (dark blue-black)
     user = config.identity.github_user
 
     # Jewel-tone halo color — same palette as the brain DNA + aurora flow,
-    # so the icon ties visually to the rest of the composition.
+    # so the icon ties visually to the rest of the composition. (Replaces the
+    # previous brand-primary halo, which was always saturated red and clashed
+    # with the rest of the polished widgets.)
     halo = "#7B5EAA"  # violet (jewel)
 
     svg = (
