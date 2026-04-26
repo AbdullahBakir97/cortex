@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="100%" height="420"
+     viewBox="0 0 1200 420" preserveAspectRatio="xMidYMin meet"
+     role="img" aria-label="Skill cloud">
+  <defs>
+    <radialGradient id="pc-core" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="40%" stop-color="#FF6B9D" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="pc-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.4"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .pc-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
+    .pc-label { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 700; letter-spacing: 0.04em; }
+  ]]></style>
+  <text x="600.0" y="40" class="pc-title" text-anchor="middle">Skill cloud</text>
+  
+  <circle cx="600.0" cy="230.0" r="36" fill="url(#pc-core)" filter="url(#pc-glow)"/>
+  <circle cx="600.0" cy="230.0" r="14" fill="#FFFFFF" opacity="0.95">
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="2.6s" repeatCount="indefinite"/>
+  </circle>
+  
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FFFFFF"
+          style="font-size: 27.6px;" filter="url(#pc-glow)">
+      Python
+      <animateMotion dur="16.8s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-0"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-0" d="M 680.0,228.7 m -28.2,0 a 28.2,17.4 0 1,0 56.5,0 a 28.2,17.4 0 1,0 -56.5,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FF6B9D"
+          style="font-size: 26.4px;" filter="url(#pc-glow)">
+      TypeScript
+      <animateMotion dur="15.1s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-2"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-2" d="M 623.3,319.2 m -19.3,0 a 19.3,15.1 0 1,0 38.6,0 a 19.3,15.1 0 1,0 -38.6,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FFD23F"
+          style="font-size: 24.0px;" filter="url(#pc-glow)">
+      Rust
+      <animateMotion dur="14.1s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-1"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-1" d="M 668.8,308.6 m -30.9,0 a 30.9,18.6 0 1,0 61.7,0 a 30.9,18.6 0 1,0 -61.7,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#22D3EE"
+          style="font-size: 22.8px;" filter="url(#pc-glow)">
+      React
+      <animateMotion dur="19.9s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-3"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-3" d="M 630.7,342.5 m -23.5,0 a 23.5,21.1 0 1,0 46.9,0 a 23.5,21.1 0 1,0 -46.9,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#34D399"
+          style="font-size: 21.6px;" filter="url(#pc-glow)">
+      AWS
+      <animateMotion dur="18.5s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-4"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-4" d="M 543.0,345.6 m -24.4,0 a 24.4,23.6 0 1,0 48.7,0 a 24.4,23.6 0 1,0 -48.7,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FFD23F"
+          style="font-size: 21.6px;" filter="url(#pc-glow)">
+      FastAPI
+      <animateMotion dur="21.9s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-8"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-8" d="M 530.4,107.3 m -35.8,0 a 35.8,14.6 0 1,0 71.6,0 a 35.8,14.6 0 1,0 -71.6,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#7C3AED"
+          style="font-size: 20.4px;" filter="url(#pc-glow)">
+      Docker
+      <animateMotion dur="17.7s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-5"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-5" d="M 468.9,309.5 m -28.6,0 a 28.6,22.0 0 1,0 57.3,0 a 28.6,22.0 0 1,0 -57.3,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FF9D6B"
+          style="font-size: 20.4px;" filter="url(#pc-glow)">
+      Postgres
+      <animateMotion dur="19.3s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-6"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-6" d="M 440.8,275.2 m -23.0,0 a 23.0,14.1 0 1,0 45.9,0 a 23.0,14.1 0 1,0 -45.9,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FF6B9D"
+          style="font-size: 19.2px;" filter="url(#pc-glow)">
+      Three.js
+      <animateMotion dur="19.7s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-9"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-9" d="M 588.5,52.6 m -30.9,0 a 30.9,14.6 0 1,0 61.8,0 a 30.9,14.6 0 1,0 -61.8,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#22D3EE"
+          style="font-size: 19.2px;" filter="url(#pc-glow)">
+      Pydantic
+      <animateMotion dur="19.4s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-10"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-10" d="M 650.3,46.8 m -28.6,0 a 28.6,15.8 0 1,0 57.2,0 a 28.6,15.8 0 1,0 -57.2,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#FFFFFF"
+          style="font-size: 18.0px;" filter="url(#pc-glow)">
+      Redis
+      <animateMotion dur="14.7s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-7"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-7" d="M 405.6,174.5 m -23.3,0 a 23.3,14.6 0 1,0 46.6,0 a 23.3,14.6 0 1,0 -46.6,0" fill="none" stroke="none"/>
+  </g>
+  <g>
+    <text class="pc-label" text-anchor="middle" fill="#34D399"
+          style="font-size: 16.8px;" filter="url(#pc-glow)">
+      Kafka
+      <animateMotion dur="15.0s" repeatCount="indefinite" rotate="auto-reverse">
+        <mpath xlink:href="#pc-orbit-11"/>
+      </animateMotion>
+    </text>
+    <path id="pc-orbit-11" d="M 737.4,65.4 m -24.4,0 a 24.4,15.1 0 1,0 48.8,0 a 24.4,15.1 0 1,0 -48.8,0" fill="none" stroke="none"/>
+  </g>
+</svg>

@@ -249,6 +249,10 @@
         "heatmap": { "$ref": "#/definitions/heatmap" },
         "cubes": { "$ref": "#/definitions/cubes" },
         "trophies": { "$ref": "#/definitions/trophies" },
+        "dna": { "$ref": "#/definitions/dna" },
+        "globe": { "$ref": "#/definitions/globe" },
+        "particles": { "$ref": "#/definitions/particles" },
+        "now_playing": { "$ref": "#/definitions/nowPlaying" },
         "showcase": {
           "type": "object",
           "additionalProperties": false,
@@ -397,6 +401,84 @@
         "label": { "type": "string" },
         "value": { "type": "string" },
         "color": { "type": "string", "default": "" }
+      }
+    },
+
+    "dna": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Code DNA Helix — twin spiral strands with language base-pairs.",
+      "properties": {
+        "enabled":   { "type": "boolean", "default": false },
+        "title":     { "type": "string", "default": "" },
+        "languages": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "colors":    { "type": "array", "items": { "type": "string" }, "default": [] },
+        "height":    { "type": "integer", "minimum": 200, "maximum": 800, "default": 360 }
+      }
+    },
+
+    "globe": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Stylized 2D globe with neon contribution pins.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "title":   { "type": "string", "default": "" },
+        "pins":    { "type": "array", "items": { "$ref": "#/definitions/globePin" }, "default": [] },
+        "rotate":  { "type": "boolean", "default": true },
+        "height":  { "type": "integer", "minimum": 240, "maximum": 800, "default": 480 }
+      }
+    },
+
+    "globePin": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label": { "type": "string" },
+        "lon":   { "type": "number", "minimum": -180, "maximum": 180, "default": 0 },
+        "lat":   { "type": "number", "minimum": -90, "maximum": 90, "default": 0 },
+        "color": { "type": "string", "default": "" }
+      }
+    },
+
+    "particles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Drifting particle / tag cloud — items orbit a center point.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "title":   { "type": "string", "default": "" },
+        "items":   { "type": "array", "items": { "$ref": "#/definitions/particleSpec" }, "default": [] },
+        "height":  { "type": "integer", "minimum": 240, "maximum": 800, "default": 420 }
+      }
+    },
+
+    "particleSpec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label":  { "type": "string" },
+        "weight": { "type": "number", "minimum": 0.5, "maximum": 3.0, "default": 1.0 },
+        "color":  { "type": "string", "default": "" }
+      }
+    },
+
+    "nowPlaying": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Spotify-style 'currently coding in' card with waveform + progress bar.",
+      "properties": {
+        "enabled":  { "type": "boolean", "default": false },
+        "activity": { "type": "string", "default": "Coding" },
+        "language": { "type": "string", "default": "Python" },
+        "project":  { "type": "string", "default": "" },
+        "progress": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.62 },
+        "elapsed":  { "type": "string", "default": "1:24" },
+        "duration": { "type": "string", "default": "—" },
+        "color":    { "type": "string", "default": "" },
+        "height":   { "type": "integer", "minimum": 140, "maximum": 400, "default": 220 }
       }
     },
 

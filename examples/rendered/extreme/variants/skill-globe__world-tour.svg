@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="480"
+     viewBox="0 0 1200 480" preserveAspectRatio="xMidYMin meet"
+     role="img" aria-label="Where I work from">
+  <defs>
+    <radialGradient id="gb-sphere" cx="35%" cy="32%" r="62%">
+      <stop offset="0%" stop-color="#1A1A48"/>
+      <stop offset="50%" stop-color="#0E0820"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+    <radialGradient id="gb-atmosphere" cx="50%" cy="50%" r="50%">
+      <stop offset="85%" stop-color="#22D3EE" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0.45"/>
+    </radialGradient>
+    <filter id="gb-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.6"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .gb-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
+    .gb-label { font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 600; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.92; letter-spacing: 0.06em; }
+  ]]></style>
+  <text x="600.0" y="40" class="gb-title" text-anchor="middle">Where I work from</text>
+  <circle cx="600.0" cy="260.0" r="210.0" fill="url(#gb-atmosphere)"/>
+  <circle cx="600.0" cy="260.0" r="200.0" fill="url(#gb-sphere)"
+          stroke="#22D3EE" stroke-opacity="0.45" stroke-width="1.5"/>
+  <g>
+    <animateTransform attributeName="transform" type="rotate" from="0 600.0 260.0" to="360 600.0 260.0" dur="60s" repeatCount="indefinite"/>
+    <ellipse cx="600.0" cy="260.0" rx="155.6" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="111.1" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="66.7" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="22.2" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="22.2" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="66.7" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="111.1" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <ellipse cx="600.0" cy="260.0" rx="155.6" ry="200.0" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+    <line x1="500.0" y1="433.2" x2="700.0" y2="433.2" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <line x1="438.2" y1="377.6" x2="761.8" y2="377.6" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <line x1="404.4" y1="301.6" x2="795.6" y2="301.6" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <line x1="404.4" y1="218.4" x2="795.6" y2="218.4" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <line x1="438.2" y1="142.4" x2="761.8" y2="142.4" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  <line x1="500.0" y1="86.8" x2="700.0" y2="86.8" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+  </g>
+  
+  <g transform="translate(628.2,101.3)">
+    <circle r="14" fill="none" stroke="#FFD23F" stroke-width="2" stroke-opacity="0.85">
+      <animate attributeName="r" values="6;18;6" begin="0.00s"
+               dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+               begin="0.00s" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="5" fill="#FFD23F" stroke="#FFFFFF" stroke-opacity="0.9"
+            stroke-width="1.5" filter="url(#gb-glow)"/>
+    <text y="-22" class="gb-label" text-anchor="middle">Berlin</text>
+  </g>
+  <g transform="translate(575.3,135.0)">
+    <circle r="14" fill="none" stroke="#FF6B9D" stroke-width="2" stroke-opacity="0.85">
+      <animate attributeName="r" values="6;18;6" begin="0.32s"
+               dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+               begin="0.32s" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="5" fill="#FF6B9D" stroke="#FFFFFF" stroke-opacity="0.9"
+            stroke-width="1.5" filter="url(#gb-glow)"/>
+    <text y="-22" class="gb-label" text-anchor="middle">Lisbon</text>
+  </g>
+  <g transform="translate(599.7,103.5)">
+    <circle r="14" fill="none" stroke="#22D3EE" stroke-width="2" stroke-opacity="0.85">
+      <animate attributeName="r" values="6;18;6" begin="0.64s"
+               dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+               begin="0.64s" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="5" fill="#22D3EE" stroke="#FFFFFF" stroke-opacity="0.9"
+            stroke-width="1.5" filter="url(#gb-glow)"/>
+    <text y="-22" class="gb-label" text-anchor="middle">London</text>
+  </g>
+  <g transform="translate(454.2,129.6)">
+    <circle r="14" fill="none" stroke="#34D399" stroke-width="2" stroke-opacity="0.85">
+      <animate attributeName="r" values="6;18;6" begin="0.96s"
+               dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+               begin="0.96s" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="5" fill="#34D399" stroke="#FFFFFF" stroke-opacity="0.9"
+            stroke-width="1.5" filter="url(#gb-glow)"/>
+    <text y="-22" class="gb-label" text-anchor="middle">New York</text>
+  </g>
+</svg>

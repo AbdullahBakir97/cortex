@@ -402,6 +402,69 @@ class TrophiesConfig(_Strict):
     height: int = 360
 
 
+class DnaConfig(_Strict):
+    """Code DNA Helix — twin spiral strands with language base-pairs."""
+
+    enabled: bool = False
+    title: str = ""
+    # Top languages to encode as base pairs. Each shows a color band on the
+    # rungs between the two strands.
+    languages: list[str] = Field(default_factory=list)
+    # Optional explicit colors per language (paired by index). Empty entries
+    # fall back to jewel-tone palette.
+    colors: list[str] = Field(default_factory=list)
+    height: int = 360
+
+
+class GlobePin(_Strict):
+    label: str
+    # Polar coordinates on the globe — angles in degrees.
+    # lon: 0 = front center; +ve = right (east). Range: -180..180.
+    # lat: 0 = equator; +ve = north. Range: -90..90.
+    lon: float = 0.0
+    lat: float = 0.0
+    color: str = ""
+
+
+class GlobeConfig(_Strict):
+    """Stylized 2D globe with neon contribution pins."""
+
+    enabled: bool = False
+    title: str = ""
+    pins: list[GlobePin] = Field(default_factory=list)
+    rotate: bool = True
+    height: int = 480
+
+
+class ParticleSpec(_Strict):
+    label: str
+    weight: float = 1.0  # relative size; 0.5 - 3.0 typical
+    color: str = ""
+
+
+class ParticlesConfig(_Strict):
+    """Drifting particle / tag cloud — items orbit a center point with physics."""
+
+    enabled: bool = False
+    title: str = ""
+    items: list[ParticleSpec] = Field(default_factory=list)
+    height: int = 420
+
+
+class NowPlayingConfig(_Strict):
+    """Spotify-style 'currently coding in' card with waveform + progress bar."""
+
+    enabled: bool = False
+    activity: str = "Coding"  # e.g. "Coding", "Building", "Debugging"
+    language: str = "Python"  # the "track title"
+    project: str = ""  # the "artist line" — repo or product name
+    progress: float = 0.62  # 0.0 - 1.0; bar fill ratio
+    elapsed: str = "1:24"
+    duration: str = "—"
+    color: str = ""  # accent color; default jewel-tone violet
+    height: int = 220
+
+
 class ShowcaseConfig(_Strict):
     """Tuning for the auto-generated CORTEX:SHOWCASE block in the README.
 
@@ -431,6 +494,10 @@ class Cards(_Strict):
     heatmap: HeatmapConfig = Field(default_factory=HeatmapConfig)
     cubes: CubesConfig = Field(default_factory=CubesConfig)
     trophies: TrophiesConfig = Field(default_factory=TrophiesConfig)
+    dna: DnaConfig = Field(default_factory=DnaConfig)
+    globe: GlobeConfig = Field(default_factory=GlobeConfig)
+    particles: ParticlesConfig = Field(default_factory=ParticlesConfig)
+    now_playing: NowPlayingConfig = Field(default_factory=NowPlayingConfig)
     showcase: ShowcaseConfig = Field(default_factory=ShowcaseConfig)
 
 

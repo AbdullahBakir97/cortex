@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="360"
+     viewBox="0 0 1200 360" preserveAspectRatio="xMidYMin meet"
+     role="img" aria-label="Code DNA helix">
+  <defs>
+    <linearGradient id="dna-strand-a" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#7B5EAA"/>
+      <stop offset="50%" stop-color="#FF6B9D"/>
+      <stop offset="100%" stop-color="#22D3EE"/>
+    </linearGradient>
+    <linearGradient id="dna-strand-b" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#22D3EE"/>
+      <stop offset="50%" stop-color="#FFD23F"/>
+      <stop offset="100%" stop-color="#7B5EAA"/>
+    </linearGradient>
+    <filter id="dna-glow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="1.6"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.5"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .dna-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
+    .dna-label { font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 600; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.85; letter-spacing: 0.04em; }
+  ]]></style>
+  <text x="600.0" y="40" class="dna-title" text-anchor="middle">Code DNA</text>
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0;-30 0;0 0" dur="14s" repeatCount="indefinite"/>
+    <path d="M 0.0,190.0 L 15.0,219.9 L 30.0,247.5 L 45.0,270.8 L 60.0,288.0 L 75.0,297.9 L 90.0,299.7 L 105.0,293.2 L 120.0,279.0 L 135.0,258.1 L 150.0,232.1 L 165.0,202.9 L 180.0,172.8 L 195.0,143.9 L 210.0,118.6 L 225.0,98.5 L 240.0,85.4 L 255.0,80.1 L 270.0,83.0 L 285.0,94.0 L 300.0,112.2 L 315.0,136.3 L 330.0,164.3 L 345.0,194.3 L 360.0,224.0 L 375.0,251.1 L 390.0,273.6 L 405.0,289.9 L 420.0,298.6 L 435.0,299.2 L 450.0,291.6 L 465.0,276.4 L 480.0,254.7 L 495.0,228.1 L 510.0,198.6 L 525.0,168.5 L 540.0,140.1 L 555.0,115.3 L 570.0,96.2 L 585.0,84.1 L 600.0,80.0 L 615.0,84.1 L 630.0,96.2 L 645.0,115.3 L 660.0,140.1 L 675.0,168.5 L 690.0,198.6 L 705.0,228.1 L 720.0,254.7 L 735.0,276.4 L 750.0,291.6 L 765.0,299.2 L 780.0,298.6 L 795.0,289.9 L 810.0,273.6 L 825.0,251.1 L 840.0,224.0 L 855.0,194.3 L 870.0,164.3 L 885.0,136.3 L 900.0,112.2 L 915.0,94.0 L 930.0,83.0 L 945.0,80.1 L 960.0,85.4 L 975.0,98.5 L 990.0,118.6 L 1005.0,143.9 L 1020.0,172.8 L 1035.0,202.9 L 1050.0,232.1 L 1065.0,258.1 L 1080.0,279.0 L 1095.0,293.2 L 1110.0,299.7 L 1125.0,297.9 L 1140.0,288.0 L 1155.0,270.8 L 1170.0,247.5 L 1185.0,219.9 L 1200.0,190.0" fill="none" stroke="url(#dna-strand-a)"
+          stroke-width="3.5" stroke-opacity="0.9" filter="url(#dna-glow)"/>
+    <path d="M 0.0,190.0 L 15.0,160.1 L 30.0,132.5 L 45.0,109.2 L 60.0,92.0 L 75.0,82.1 L 90.0,80.3 L 105.0,86.8 L 120.0,101.0 L 135.0,121.9 L 150.0,147.9 L 165.0,177.1 L 180.0,207.2 L 195.0,236.1 L 210.0,261.4 L 225.0,281.5 L 240.0,294.6 L 255.0,299.9 L 270.0,297.0 L 285.0,286.0 L 300.0,267.8 L 315.0,243.7 L 330.0,215.7 L 345.0,185.7 L 360.0,156.0 L 375.0,128.9 L 390.0,106.4 L 405.0,90.1 L 420.0,81.4 L 435.0,80.8 L 450.0,88.4 L 465.0,103.6 L 480.0,125.3 L 495.0,151.9 L 510.0,181.4 L 525.0,211.5 L 540.0,239.9 L 555.0,264.7 L 570.0,283.8 L 585.0,295.9 L 600.0,300.0 L 615.0,295.9 L 630.0,283.8 L 645.0,264.7 L 660.0,239.9 L 675.0,211.5 L 690.0,181.4 L 705.0,151.9 L 720.0,125.3 L 735.0,103.6 L 750.0,88.4 L 765.0,80.8 L 780.0,81.4 L 795.0,90.1 L 810.0,106.4 L 825.0,128.9 L 840.0,156.0 L 855.0,185.7 L 870.0,215.7 L 885.0,243.7 L 900.0,267.8 L 915.0,286.0 L 930.0,297.0 L 945.0,299.9 L 960.0,294.6 L 975.0,281.5 L 990.0,261.4 L 1005.0,236.1 L 1020.0,207.2 L 1035.0,177.1 L 1050.0,147.9 L 1065.0,121.9 L 1080.0,101.0 L 1095.0,86.8 L 1110.0,80.3 L 1125.0,82.1 L 1140.0,92.0 L 1155.0,109.2 L 1170.0,132.5 L 1185.0,160.1 L 1200.0,190.0" fill="none" stroke="url(#dna-strand-b)"
+          stroke-width="3.5" stroke-opacity="0.9" filter="url(#dna-glow)"/>
+    
+  <g>
+    <line x1="60.0" y1="288.0" x2="60.0" y2="92.0"
+          stroke="#3776AB" stroke-width="3" stroke-opacity="0.85"
+          stroke-linecap="round" filter="url(#dna-glow)">
+      <animate attributeName="stroke-opacity" values="0.55;1;0.55"
+               begin="0.00s" dur="2.6s" repeatCount="indefinite"/>
+    </line>
+    <circle cx="60.0" cy="288.0" r="5" fill="#3776AB"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+    <circle cx="60.0" cy="92.0" r="5" fill="#3776AB"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+  </g>
+  <g>
+    <line x1="600.0" y1="80.0" x2="600.0" y2="300.0"
+          stroke="#CE422B" stroke-width="3" stroke-opacity="0.85"
+          stroke-linecap="round" filter="url(#dna-glow)">
+      <animate attributeName="stroke-opacity" values="0.55;1;0.55"
+               begin="0.18s" dur="2.6s" repeatCount="indefinite"/>
+    </line>
+    <circle cx="600.0" cy="80.0" r="5" fill="#CE422B"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+    <circle cx="600.0" cy="300.0" r="5" fill="#CE422B"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+  </g>
+  <g>
+    <line x1="1140.0" y1="288.0" x2="1140.0" y2="92.0"
+          stroke="#3178C6" stroke-width="3" stroke-opacity="0.85"
+          stroke-linecap="round" filter="url(#dna-glow)">
+      <animate attributeName="stroke-opacity" values="0.55;1;0.55"
+               begin="0.36s" dur="2.6s" repeatCount="indefinite"/>
+    </line>
+    <circle cx="1140.0" cy="288.0" r="5" fill="#3178C6"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+    <circle cx="1140.0" cy="92.0" r="5" fill="#3178C6"
+            stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="1.5"/>
+  </g>
+  </g>
+  <text x="60.0" y="314.0" class="dna-label" text-anchor="middle">Python</text>
+<text x="600.0" y="326.0" class="dna-label" text-anchor="middle">Rust</text>
+<text x="1140.0" y="314.0" class="dna-label" text-anchor="middle">TypeScript</text>
+</svg>
