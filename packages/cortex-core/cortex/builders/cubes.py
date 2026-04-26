@@ -67,6 +67,14 @@ def _render(config: Config) -> str:
     ccfg: CubesConfig = config.cards.cubes
     height = ccfg.height
     cubes = ccfg.cubes
+    if ccfg.from_github:
+        # Live-fetch from GitHub. Falls back to "—" placeholders on failure
+        # so the SVG still renders rather than disappearing.
+        from cortex.github_api import client_from_env
+        from cortex.sources import stats_cubes_from_github
+
+        client = client_from_env(config.identity.github_user)
+        cubes = stats_cubes_from_github(client)
     if not cubes:
         return (
             '<?xml version="1.0" encoding="UTF-8"?>\n'

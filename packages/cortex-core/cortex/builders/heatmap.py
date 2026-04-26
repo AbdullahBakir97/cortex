@@ -79,6 +79,14 @@ def _render(config: Config) -> str:
 
     # Resolve the data matrix.
     data = hcfg.data
+    if hcfg.from_github and not data:
+        # Live-fetch real contributions. Empty result on failure falls through
+        # to the mock generator below, so we always render something.
+        from cortex.github_api import client_from_env
+        from cortex.sources import contribution_grid_from_github
+
+        client = client_from_env(config.identity.github_user)
+        data = contribution_grid_from_github(client, weeks=weeks)
     if not data or len(data) != 7 or any(len(r) != weeks for r in data):
         seed = _seed_from_name(config.identity.name) if config.identity.name else 42
         data = _generate_mock_data(weeks, seed)
