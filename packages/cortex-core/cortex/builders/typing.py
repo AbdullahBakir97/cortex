@@ -242,11 +242,22 @@ def _compose(
         f"Consolas,monospace; font-size: {font_size}px; font-weight: {font_weight}; }}"
     )
     if has_cursor:
-        out.append("    .cursor { fill: #F90001; }")
+        # Cursor: jewel-tone cyan (matches DNA / aurora palette across widgets)
+        # with a soft glow halo via feGaussianBlur. Step-end blink keeps the
+        # terminal-cursor metaphor; ease-in-out would feel like a different
+        # element entirely.
+        out.append("    .cursor { fill: #4F8CC4; filter: url(#cursorGlow); }")
         out.append("    .cursor-blink { animation: blink 0.8s step-end infinite; }")
         out.append("    @keyframes blink { 50% { opacity: 0; } }")
     out.append("  </style>")
     out.append("  <defs>")
+    if has_cursor:
+        out.append(
+            '    <filter id="cursorGlow" x="-200%" y="-50%" width="500%" height="200%">'
+            '<feGaussianBlur stdDeviation="1.5" result="blur"/>'
+            '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>'
+            "</filter>"
+        )
 
     for i in range(n):
         values, kt = _clip_animate(i, n, reveal_w)
