@@ -11,7 +11,7 @@
 </a>
 
 <p align="center">
-  <a href="https://github.com/marketplace/actions/cortex"><ivmg src="https://img.shields.io/badge/GitHub_Action-v1-F90001?style=for-the-badge&logo=githubactions&logoColor=white&labelColor=0D1117" alt="Cortex Action v1"/></a>
+  <a href="https://github.com/marketplace/actions/cortex"><img src="https://img.shields.io/badge/GitHub_Action-v1-F90001?style=for-the-badge&logo=githubactions&logoColor=white&labelColor=0D1117" alt="Cortex Action v1"/></a>
   &nbsp;
   <a href="https://abdullahbakir97.github.io/AbdullahBakir97/"><img src="https://img.shields.io/badge/🧠_Live_Demo-Interactive_3D-7C3AED?style=for-the-badge&labelColor=0D1117" alt="Live demo"/></a>
   &nbsp;
@@ -33,7 +33,11 @@
 <br/>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/.github/assets/hero-demo.gif" alt="Cortex in action — 30-second loop showing the brain rotating with skill labels and live activity" width="80%"/>
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" alt="Cortex anatomical neon brain — generated from examples/extreme.yml, 200+ Wikimedia anatomy paths recolored with a multi-stop neon gradient. Each lobe maps to a skill domain." width="92%"/>
+</p>
+
+<p align="center">
+  <sub>↑ <strong>Live SVG</strong> — generated from <a href="./examples/extreme.yml"><code>examples/extreme.yml</code></a> on every push. Open <a href="https://abdullahbakir97.github.io/AbdullahBakir97/">the 3D version</a> to drag and rotate it.</sub>
 </p>
 
 ---
@@ -51,9 +55,73 @@ There are dozens of profile README generators. Cortex is the only one that gives
 
 ---
 
-## 📺 Gallery
+## 🎨 What this generates
 
-| Tier | Profile | Live |
+> Every image below is the **actual output** from [`examples/extreme.yml`](./examples/extreme.yml). Refreshed on every push by [`.github/workflows/build-examples.yml`](./.github/workflows/build-examples.yml) — no screenshots, no fakes.
+
+<details open>
+<summary><strong>🧠 Brain — anatomical skill atlas</strong> &nbsp;·&nbsp; <code>brain-anatomical.svg</code> · 42 KB · 200+ paths</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/brain-anatomical.svg" width="92%" alt="Anatomical brain SVG with neon-rainbow gradient, each lobe labelled with a skill domain"/>
+</p>
+</details>
+
+<details>
+<summary><strong>🎴 Tech cards — six glassmorphism skill panels</strong> &nbsp;·&nbsp; <code>tech-cards.svg</code> · 13 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/tech-cards.svg" width="92%" alt="Six glassmorphism cards arranged in a 3x2 grid, each one a brain region's tools and stats"/>
+</p>
+</details>
+
+<details>
+<summary><strong>📅 Yearly highlights — career timeline with LIVE pulse</strong> &nbsp;·&nbsp; <code>yearly-highlights.svg</code> · 14 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/yearly-highlights.svg" width="92%" alt="Year-by-year career timeline with markers and a live-pulsing tag for the current year"/>
+</p>
+</details>
+
+<details>
+<summary><strong>📺 Current focus — Netflix-tile dashboard</strong> &nbsp;·&nbsp; <code>current-focus.svg</code> · 14 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/current-focus.svg" width="92%" alt="Six tiles in a 3x2 grid, each one a project the author is actively working on with a status pill and tech stack"/>
+</p>
+</details>
+
+<details>
+<summary><strong>⌨️ About typing — multilingual rotating headlines</strong> &nbsp;·&nbsp; <code>about-typing.svg</code> · 16 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/about-typing.svg" width="92%" alt="Animated typing SVG cycling through about-me lines in multiple languages"/>
+</p>
+</details>
+
+<details>
+<summary><strong>💬 Motto typing — philosophy lines on rotation</strong> &nbsp;·&nbsp; <code>motto-typing.svg</code> · 17 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/motto-typing.svg" width="92%" alt="Animated typing SVG cycling through personal mottos and philosophy lines"/>
+</p>
+</details>
+
+<details>
+<summary><strong>✨ Animated divider</strong> &nbsp;·&nbsp; <code>animated-divider.svg</code> · 1 KB</summary>
+<br/>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/AbdullahBakir97/cortex/main/examples/rendered/extreme/animated-divider.svg" width="92%" alt="Thin animated gradient divider"/>
+</p>
+</details>
+
+> **Want to see other tiers?** [`examples/standard.yml`](./examples/standard.yml) is the default for full-stack devs (~60 lines). [`examples/minimal.yml`](./examples/minimal.yml) is the 10-line starting point. Both render to the same widget set above with smaller payloads.
+
+---
+
+## 📺 Profile gallery
+
+| Tier | Profile | Live 3D |
 |---|---|---|
 | **Reference (Extreme)** | [@AbdullahBakir97](https://github.com/AbdullahBakir97) | [3D Brain →](https://abdullahbakir97.github.io/AbdullahBakir97/) |
 | **Standard** | _your profile here — submit a [showcase issue](https://github.com/AbdullahBakir97/cortex/issues/new?template=showcase.yml)_ | _coming soon_ |

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **`examples/rendered/extreme/`** — pre-generated SVG showcase committed to
+  the repo so the marketing README can embed real, current widget output
+  instead of placeholder/missing screenshots.
+- **`.github/workflows/build-examples.yml`** — auto-renders the extreme tier
+  whenever `packages/cortex-{core,cli}/**` or `examples/*.yml` changes on
+  main, then commits the refreshed SVGs back as `cortex-bot[bot]`. Marked
+  `[skip ci]` to avoid loops; concurrency-grouped to avoid mid-commit races.
+
+### Changed
+- **README.md** — replaced the broken `hero-demo.gif` reference with the
+  live `brain-anatomical.svg`. Added a "What this generates" section with
+  collapsible `<details>` blocks for all 8 widgets, each backed by the real
+  output from `examples/extreme.yml`. Fixed a `<ivmg>` typo in the badges
+  row that was rendering as plain text.
+
 ### Architectural decisions (locked in for v1)
 - **Composite GitHub Action** (not Docker) — chosen for cold-start speed (~5 s vs ~60 s).
 - **YAML config** (not TOML) — matches the format GitHub Actions users already write.
