@@ -736,7 +736,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
         ("#22D3EE", -100, 500, 41),
         ("#34D399", 700, 500, 47),
     ]
-    for n, (ncolor, nx, ny, ndur) in enumerate(nebula_specs):
+    for n, (_ncolor, nx, ny, ndur) in enumerate(nebula_specs):
         ndx = -50 if n % 2 == 0 else 50
         ndy = -30 if n < 2 else 30
         nebula_blocks.append(
