@@ -911,7 +911,10 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
   </defs>
 
   <rect width="1400" height="900" fill="url(#bgRadial)"/>
-  {('<rect width="1400" height="900" fill="url(#bgAura)"/>') if atm.show_aura else ""}
+  {('''<rect width="1400" height="900" fill="url(#bgAura)">
+    <animateTransform attributeName="transform" type="translate"
+                      values="0,0; 100,80; -60,40; 0,0" dur="40s" repeatCount="indefinite"/>
+  </rect>''') if atm.show_aura else ""}
   {('''<!-- Aurora bands: 3 large soft radial gradients drifting across the canvas
        on staggered timers. Replaces the old turbulence plasma fog with smooth
        color flow that reads as atmospheric light, not noise. -->
