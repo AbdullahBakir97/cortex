@@ -76,9 +76,24 @@ class Brand(_Strict):
 
 
 # ── Brain ────────────────────────────────────────────────────────────────
+MasteryLevel = Literal["EXPERT", "ADVANCED", "PROFICIENT", "GROWING"]
+
+
+class StatEntry(_Strict):
+    num:   str
+    label: str
+
+
 class BrainRegion(_Strict):
-    domain: str
-    tools:  list[str] = Field(default_factory=list)
+    domain:  str
+    tools:   list[str] = Field(default_factory=list)
+    # Optional visual metadata — blank values fall back to domain-keyed presets in
+    # cortex.builders.tech_cards (so simple configs still get a polished card).
+    emoji:   str = ""
+    caption: str = ""
+    tagline: str = ""
+    mastery: MasteryLevel | None = None
+    stats:   list[StatEntry] = Field(default_factory=list, max_length=3)
 
 
 class BrainRegions(_Strict):
