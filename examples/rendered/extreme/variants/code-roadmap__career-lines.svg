@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="360"
+     viewBox="0 0 1200 360" preserveAspectRatio="xMidYMin meet"
+     role="img" aria-label="Career roadmap">
+  <defs>
+    <filter id="rd-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.4"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .rd-title    { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 900; font-size: 22px; letter-spacing: 0.20em; text-transform: uppercase; fill: #FFFFFF; }
+    .rd-station  { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 700; font-size: 12px; fill: #FFFFFF; fill-opacity: 0.92; }
+    .rd-axis     { font-family: 'JetBrains Mono','SF Mono',monospace; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.62; letter-spacing: 0.06em; }
+    .rd-legend   { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 600; font-size: 13px; fill: #FFFFFF; fill-opacity: 0.85; }
+    .rd-legend-h { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 11px; letter-spacing: 0.30em; fill: #FFFFFF; fill-opacity: 0.55; }
+    .rd-live     { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 900; font-size: 12px; fill: #FFFFFF; }
+  ]]></style>
+  <text x="600.0" y="40" class="rd-title" text-anchor="middle">Career roadmap</text><line x1="240" y1="332" x2="1140" y2="332" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/><text x="240.0" y="344.0" class="rd-axis" text-anchor="middle">2019</text><text x="368.6" y="344.0" class="rd-axis" text-anchor="middle">2020</text><text x="497.1" y="344.0" class="rd-axis" text-anchor="middle">2021</text><text x="625.7" y="344.0" class="rd-axis" text-anchor="middle">2022</text><text x="754.3" y="344.0" class="rd-axis" text-anchor="middle">2023</text><text x="882.9" y="344.0" class="rd-axis" text-anchor="middle">2024</text><text x="1011.4" y="344.0" class="rd-axis" text-anchor="middle">2025</text><text x="1140.0" y="344.0" class="rd-axis" text-anchor="middle">2026</text>
+  <g>
+    <path d="M 240.0,104.0 L 625.7,104.0 L 1140.0,104.0" fill="none" stroke="#22D3EE" stroke-width="6"
+          stroke-linecap="round" stroke-opacity="0.92" filter="url(#rd-glow)"/>
+    <path d="M 240.0,104.0 L 625.7,104.0 L 1140.0,104.0" fill="none" stroke="#FFFFFF" stroke-width="2"
+          stroke-linecap="round" stroke-opacity="0.45"
+          stroke-dasharray="3 18">
+      <animate attributeName="stroke-dashoffset" from="0" to="-42"
+               dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g><circle cx="240.0" cy="104.0" r="9" fill="#22D3EE" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="240.0" y="88.0" class="rd-station" text-anchor="middle">Django</text><circle cx="625.7" cy="104.0" r="9" fill="#22D3EE" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="625.7" y="130.0" class="rd-station" text-anchor="middle">FastAPI</text><circle cx="1140.0" cy="104.0" r="9" fill="#22D3EE" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="1140.0" y="88.0" class="rd-station" text-anchor="middle">Cortex</text>
+  <circle cx="1140.0" cy="104.0" r="14" fill="none" stroke="#22D3EE"
+          stroke-width="2" stroke-opacity="0.8">
+    <animate attributeName="r" values="14;22;14" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+             dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <text x="1140.0" y="108.0" class="rd-live" text-anchor="middle">●</text>
+  <g>
+    <path d="M 368.6,192.0 L 625.7,192.0 L 1011.4,192.0" fill="none" stroke="#FF6B9D" stroke-width="6"
+          stroke-linecap="round" stroke-opacity="0.92" filter="url(#rd-glow)"/>
+    <path d="M 368.6,192.0 L 625.7,192.0 L 1011.4,192.0" fill="none" stroke="#FFFFFF" stroke-width="2"
+          stroke-linecap="round" stroke-opacity="0.45"
+          stroke-dasharray="3 18">
+      <animate attributeName="stroke-dashoffset" from="0" to="-42"
+               dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g><circle cx="368.6" cy="192.0" r="9" fill="#FF6B9D" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="368.6" y="176.0" class="rd-station" text-anchor="middle">Vue 2</text><circle cx="625.7" cy="192.0" r="9" fill="#FF6B9D" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="625.7" y="218.0" class="rd-station" text-anchor="middle">React</text><circle cx="1011.4" cy="192.0" r="9" fill="#FF6B9D" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="1011.4" y="176.0" class="rd-station" text-anchor="middle">Three.js</text>
+  <circle cx="1011.4" cy="192.0" r="14" fill="none" stroke="#FF6B9D"
+          stroke-width="2" stroke-opacity="0.8">
+    <animate attributeName="r" values="14;22;14" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+             dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <text x="1011.4" y="196.0" class="rd-live" text-anchor="middle">●</text>
+  <g>
+    <path d="M 497.1,280.0 L 882.9,280.0" fill="none" stroke="#FFD23F" stroke-width="6"
+          stroke-linecap="round" stroke-opacity="0.92" filter="url(#rd-glow)"/>
+    <path d="M 497.1,280.0 L 882.9,280.0" fill="none" stroke="#FFFFFF" stroke-width="2"
+          stroke-linecap="round" stroke-opacity="0.45"
+          stroke-dasharray="3 18">
+      <animate attributeName="stroke-dashoffset" from="0" to="-42"
+               dur="3s" repeatCount="indefinite"/>
+    </path>
+  </g><circle cx="497.1" cy="280.0" r="9" fill="#FFD23F" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="497.1" y="264.0" class="rd-station" text-anchor="middle">AWS basics</text><circle cx="882.9" cy="280.0" r="9" fill="#FFD23F" stroke="#FFFFFF" stroke-width="2.5" filter="url(#rd-glow)"/><text x="882.9" y="306.0" class="rd-station" text-anchor="middle">K8s prod</text>
+  <circle cx="882.9" cy="280.0" r="14" fill="none" stroke="#FFD23F"
+          stroke-width="2" stroke-opacity="0.8">
+    <animate attributeName="r" values="14;22;14" dur="1.6s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.85;0;0.85"
+             dur="1.6s" repeatCount="indefinite"/>
+  </circle>
+  <text x="882.9" y="284.0" class="rd-live" text-anchor="middle">●</text><text x="40" y="90" class="rd-legend-h">LINES</text><rect x="40" y="100.0" width="22" height="8" rx="3" fill="#22D3EE"/><text x="68" y="108.0" class="rd-legend">Backend</text><rect x="40" y="188.0" width="22" height="8" rx="3" fill="#FF6B9D"/><text x="68" y="196.0" class="rd-legend">Frontend</text><rect x="40" y="276.0" width="22" height="8" rx="3" fill="#FFD23F"/><text x="68" y="284.0" class="rd-legend">Cloud</text>
+</svg>

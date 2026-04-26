@@ -183,6 +183,97 @@ cards:
       - { icon: kubernetes, label: "Kubernetes",  value: "CKA" }
       - { icon: postgres,   label: "PostgreSQL",  value: "Senior" }
       - { icon: github,     label: "GitHub",      value: "Pro" }
+  # ─── Tier-1 mind-blowing widgets ────────────────────────────────────────
+  synthwave:
+    enabled: true
+    title:    "CORTEX"
+    subtitle: "Cinematic profile generator"
+    palette:  outrun
+    height:   320
+  galaxy:
+    enabled: true
+    title: "Skill galaxy"
+    background: nebula
+    stars:
+      - { label: "Python",     color: "#FFD23F", size: 6 }
+      - { label: "Rust",       color: "#CE422B", size: 5 }
+      - { label: "TypeScript", color: "#3178C6", size: 5 }
+      - { label: "React",      color: "#61DAFB", size: 4 }
+      - { label: "AWS",        color: "#FF9900", size: 5 }
+      - { label: "PostgreSQL", color: "#4169E1", size: 4 }
+      - { label: "Docker",     color: "#22D3EE", size: 4 }
+      - { label: "Kubernetes", color: "#326CE5", size: 4 }
+      - { label: "Three.js",   color: "#FF6B9D", size: 4 }
+      - { label: "Pydantic",   color: "#34D399", size: 3 }
+    connections:
+      - ["Python", "Rust"]
+      - ["Python", "PostgreSQL"]
+      - ["Python", "Pydantic"]
+      - ["TypeScript", "React"]
+      - ["React", "Three.js"]
+      - ["AWS", "Docker"]
+      - ["Docker", "Kubernetes"]
+  radar:
+    enabled: true
+    title: "Stack profile"
+    breathe: true
+    color: "#7B5EAA"
+    axes:
+      - { label: "Backend",   value: 92 }
+      - { label: "Frontend",  value: 68 }
+      - { label: "DevOps",    value: 78 }
+      - { label: "Data / ML", value: 55 }
+      - { label: "Mobile",    value: 35 }
+      - { label: "Design",    value: 72 }
+  roadmap:
+    enabled: true
+    title: "Career roadmap"
+    lines:
+      - name: "Backend"
+        color: "#22D3EE"
+        stations:
+          - { label: "Django",   year: 2020 }
+          - { label: "FastAPI",  year: 2022 }
+          - { label: "Cortex",   year: 2026, is_current: true }
+      - name: "Frontend"
+        color: "#FF6B9D"
+        stations:
+          - { label: "Vue 2",    year: 2020 }
+          - { label: "React",    year: 2022 }
+          - { label: "Three.js", year: 2025, is_current: true }
+      - name: "Cloud"
+        color: "#FFD23F"
+        stations:
+          - { label: "AWS",      year: 2021 }
+          - { label: "K8s",      year: 2024, is_current: true }
+
+  # ─── Tier-2 widgets ─────────────────────────────────────────────────────
+  heatmap:
+    enabled: true
+    palette: neon-rainbow
+    glow:    true
+  cubes:
+    enabled: true
+    cubes:
+      - { label: "PRs",     value: "1.2k" }
+      - { label: "Commits", value: "8.4k" }
+      - { label: "Stars",   value: "3.1k" }
+      - { label: "Repos",   value: "47" }
+      - { label: "Streak",  value: "112d" }
+  trophies:
+    enabled: true
+    title: "Achievements"
+    columns: 4
+    trophies:
+      - { label: "First PR",       date: "2018",    glyph: "★" }
+      - { label: "1k Commits",     date: "2020",    glyph: "🔥" }
+      - { label: "OSS Maintainer", date: "2022",    glyph: "Ⓜ" }
+      - { label: "AWS Certified",  date: "2023",    glyph: "☁" }
+      - { label: "Speaker",        date: "2024",    glyph: "🎤" }
+      - { label: "Cortex v1",      date: "2026-04", glyph: "🧠" }
+      - { label: "100k Downloads", date: "2026",    glyph: "⬇" }
+      - { label: "Hall of Fame",   date: "2026",    glyph: "Ⓗ" }
+
   # Showcase block URL override — cortex's own marketing README points at the
   # example renders inside this repo rather than a user profile repo.
   showcase:

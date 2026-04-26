@@ -40,6 +40,20 @@ def run(*, config: Path) -> None:
         enabled_widgets.append("yearly-highlights")
     if cfg.cards.badges.enabled:
         enabled_widgets.append("badges")
+    if cfg.cards.synthwave.enabled:
+        enabled_widgets.append("synthwave")
+    if cfg.cards.galaxy.enabled:
+        enabled_widgets.append("galaxy")
+    if cfg.cards.radar.enabled:
+        enabled_widgets.append("radar")
+    if cfg.cards.roadmap.enabled:
+        enabled_widgets.append("roadmap")
+    if cfg.cards.heatmap.enabled:
+        enabled_widgets.append("heatmap")
+    if cfg.cards.cubes.enabled:
+        enabled_widgets.append("cubes")
+    if cfg.cards.trophies.enabled:
+        enabled_widgets.append("trophies")
     if cfg.typing.about.enabled:
         enabled_widgets.append("about-typing")
     if cfg.typing.motto.enabled:

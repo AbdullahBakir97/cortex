@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="480"
+     viewBox="0 0 1200 480" preserveAspectRatio="xMidYMin meet"
+     role="img" aria-label="Stack profile">
+  <defs>
+    <linearGradient id="r-fill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7B5EAA" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7B5EAA" stop-opacity="0.18"/>
+    </linearGradient>
+    <filter id="r-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.6"/></feComponentTransfer>
+    </filter>
+  </defs>
+  <style><![CDATA[
+    .r-title  { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
+    .r-label  { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 600; font-size: 14px; fill: #FFFFFF; fill-opacity: 0.86; }
+  ]]></style>
+  <text x="600.0" y="40" class="r-title" text-anchor="middle">Stack profile</text>
+  <g transform="translate(0,0)">
+    <path d="M 600.0,200.0 L 643.3,225.0 L 643.3,275.0 L 600.0,300.0 L 556.7,275.0 L 556.7,225.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.07" stroke-width="1"/>
+  <path d="M 600.0,150.0 L 686.6,200.0 L 686.6,300.0 L 600.0,350.0 L 513.4,300.0 L 513.4,200.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.09" stroke-width="1"/>
+  <path d="M 600.0,100.0 L 729.9,175.0 L 729.9,325.0 L 600.0,400.0 L 470.1,325.0 L 470.1,175.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.11" stroke-width="1"/>
+  <path d="M 600.0,50.0 L 773.2,150.0 L 773.2,350.0 L 600.0,450.0 L 426.8,350.0 L 426.8,150.0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.13" stroke-width="1"/>
+    <line x1="600.0" y1="250.0" x2="600.0" y2="50.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+<line x1="600.0" y1="250.0" x2="773.2" y2="150.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+<line x1="600.0" y1="250.0" x2="773.2" y2="350.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+<line x1="600.0" y1="250.0" x2="600.0" y2="450.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+<line x1="600.0" y1="250.0" x2="426.8" y2="350.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+<line x1="600.0" y1="250.0" x2="426.8" y2="150.0" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/>
+    <g transform="translate(600.0,250.0)">
+      <g transform="translate(-600.0,-250.0)">
+        <animateTransform attributeName="transform" type="scale" values="1;1.04;1" dur="3.5s" repeatCount="indefinite" additive="sum"/>
+        <path d="M 600.0,66.0 L 717.8,182.0 L 735.1,328.0 L 600.0,360.0 L 539.4,285.0 L 475.3,178.0 Z" fill="url(#r-fill)" stroke="#7B5EAA"
+              stroke-width="2.5" stroke-opacity="0.95" filter="url(#r-glow)"/>
+        <circle cx="600.0" cy="66.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+  <circle cx="717.8" cy="182.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+  <circle cx="735.1" cy="328.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+  <circle cx="600.0" cy="360.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+  <circle cx="539.4" cy="285.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+  <circle cx="475.3" cy="178.0" r="5" fill="#7B5EAA" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="1.5"/>
+      </g>
+    </g>
+    <text x="600.0" y="26.0" class="r-label" text-anchor="middle">Backend</text>
+<text x="797.5" y="140.0" class="r-label" text-anchor="start">Frontend</text>
+<text x="797.5" y="368.0" class="r-label" text-anchor="start">DevOps</text>
+<text x="600.0" y="482.0" class="r-label" text-anchor="middle">Data / ML</text>
+<text x="402.5" y="368.0" class="r-label" text-anchor="end">Mobile</text>
+<text x="402.5" y="140.0" class="r-label" text-anchor="end">Design</text>
+  </g>
+</svg>
