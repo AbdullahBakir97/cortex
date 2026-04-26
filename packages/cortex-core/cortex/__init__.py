@@ -63,11 +63,18 @@ def build_all(config: Config, output_dir: str = "assets") -> dict[str, str]:
     # (enabled_flag, builder_module, builder_func, output_filename)
     plan: list[tuple[bool, str, str, str]] = [
         (config.cards.header.enabled, "banner", "build_header", "header-banner.svg"),
+        (config.cards.synthwave.enabled, "synthwave", "build", "synthwave-banner.svg"),
         (config.brain.enabled, "brain", "build", "brain-anatomical.svg"),
+        (config.cards.galaxy.enabled, "galaxy", "build", "skill-galaxy.svg"),
         (config.cards.tech_stack.enabled, "tech_cards", "build", "tech-cards.svg"),
         (config.cards.yearly_highlights.enabled, "timeline", "build", "yearly-highlights.svg"),
+        (config.cards.roadmap.enabled, "roadmap", "build", "code-roadmap.svg"),
         (config.cards.current_focus.enabled, "focus", "build", "current-focus.svg"),
         (config.cards.badges.enabled, "badges", "build", "badges.svg"),
+        (config.cards.radar.enabled, "radar", "build", "skill-radar.svg"),
+        (config.cards.heatmap.enabled, "heatmap", "build", "activity-heatmap.svg"),
+        (config.cards.cubes.enabled, "cubes", "build", "stat-cubes.svg"),
+        (config.cards.trophies.enabled, "trophies", "build", "achievement-wall.svg"),
         (config.typing.about.enabled, "typing", "build_about", "about-typing.svg"),
         (config.typing.motto.enabled, "typing", "build_motto", "motto-typing.svg"),
         (True, "github_icon", "build", "github-icon.svg"),

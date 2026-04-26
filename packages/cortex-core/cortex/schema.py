@@ -278,6 +278,130 @@ class BadgesConfig(_Strict):
     items: list[BadgeItem] = Field(default_factory=list)
 
 
+# ── Tier-1 widgets ───────────────────────────────────────────────────────
+
+
+class StarSpec(_Strict):
+    """Single star in the Skill Galaxy."""
+
+    label: str
+    color: str = ""  # auto from cortex jewel-tone if empty
+    size: int = 4  # base radius in px (2-12)
+
+
+class GalaxyConfig(_Strict):
+    """Skill Galaxy / Constellation widget — stars + connections drifting in space."""
+
+    enabled: bool = False
+    title: str = ""
+    stars: list[StarSpec] = Field(default_factory=list)
+    # Pairs of star labels; each pair draws a faint connecting line.
+    connections: list[list[str]] = Field(default_factory=list)
+    background: Literal["deep-space", "nebula", "void"] = "deep-space"
+    twinkle_speed: float = 1.0
+    drift_speed: float = 1.0
+    height: int = 540
+
+
+class SynthwaveConfig(_Strict):
+    """Synthwave Horizon hero banner — receding grid, sun, mountains."""
+
+    enabled: bool = False
+    title: str = ""
+    subtitle: str = ""
+    height: int = 320
+    palette: Literal["sunset", "neon", "miami", "outrun"] = "outrun"
+    show_grid: bool = True
+    show_sun: bool = True
+    show_mountains: bool = True
+
+
+class RadarAxis(_Strict):
+    label: str
+    value: float = 50.0  # 0-100
+
+
+class RadarConfig(_Strict):
+    """Skill Radar / Polar Chart — translucent polygon over polar grid."""
+
+    enabled: bool = False
+    title: str = ""
+    axes: list[RadarAxis] = Field(default_factory=list)
+    max_value: float = 100.0
+    color: str = ""  # default jewel-tone violet
+    breathe: bool = True
+    height: int = 480
+
+
+class MetroStation(_Strict):
+    label: str
+    year: int = 0  # for x-position; 0 = auto-evenly-spaced
+    is_current: bool = False
+
+
+class MetroLine(_Strict):
+    name: str
+    color: str = ""
+    stations: list[MetroStation] = Field(default_factory=list)
+
+
+class RoadmapConfig(_Strict):
+    """Code Roadmap — metro/subway-style multi-line career map."""
+
+    enabled: bool = False
+    title: str = ""
+    lines: list[MetroLine] = Field(default_factory=list)
+    show_legend: bool = True
+    height: int = 360
+
+
+# ── Tier-2 widgets ───────────────────────────────────────────────────────
+
+
+class HeatmapConfig(_Strict):
+    """Activity Heatmap — 7x52 contribution grid with neon glow."""
+
+    enabled: bool = False
+    weeks: int = 52
+    # Optional intensity matrix (rows=days 0..6, cols=weeks). Empty → mock.
+    data: list[list[int]] = Field(default_factory=list)
+    palette: Literal["neon-green", "neon-cyan", "neon-rainbow", "rose"] = "neon-green"
+    glow: bool = True
+    height: int = 200
+
+
+class StatCube(_Strict):
+    label: str
+    value: str
+    color: str = ""
+
+
+class CubesConfig(_Strict):
+    """3D Stat Cubes — isometric blocks orbiting slowly."""
+
+    enabled: bool = False
+    cubes: list[StatCube] = Field(default_factory=list)
+    orbit: bool = True
+    height: int = 280
+
+
+class TrophySpec(_Strict):
+    label: str
+    date: str = ""
+    glyph: str = ""  # single emoji or 1-2 letter code
+    color: str = ""
+
+
+class TrophiesConfig(_Strict):
+    """Achievement Wall / Trophy Cabinet — bevelled cabinet with mounted trophies."""
+
+    enabled: bool = False
+    title: str = ""
+    trophies: list[TrophySpec] = Field(default_factory=list)
+    columns: int = 4
+    height: int = 360
+
+
 class ShowcaseConfig(_Strict):
     """Tuning for the auto-generated CORTEX:SHOWCASE block in the README.
 
@@ -300,6 +424,13 @@ class Cards(_Strict):
     header: BannerConfig = Field(default_factory=BannerConfig)
     footer: BannerConfig = Field(default_factory=_default_footer)
     badges: BadgesConfig = Field(default_factory=BadgesConfig)
+    galaxy: GalaxyConfig = Field(default_factory=GalaxyConfig)
+    synthwave: SynthwaveConfig = Field(default_factory=SynthwaveConfig)
+    radar: RadarConfig = Field(default_factory=RadarConfig)
+    roadmap: RoadmapConfig = Field(default_factory=RoadmapConfig)
+    heatmap: HeatmapConfig = Field(default_factory=HeatmapConfig)
+    cubes: CubesConfig = Field(default_factory=CubesConfig)
+    trophies: TrophiesConfig = Field(default_factory=TrophiesConfig)
     showcase: ShowcaseConfig = Field(default_factory=ShowcaseConfig)
 
 

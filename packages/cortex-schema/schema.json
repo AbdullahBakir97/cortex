@@ -242,6 +242,13 @@
         "header": { "$ref": "#/definitions/banner" },
         "footer": { "$ref": "#/definitions/banner" },
         "badges": { "$ref": "#/definitions/badges" },
+        "galaxy": { "$ref": "#/definitions/galaxy" },
+        "synthwave": { "$ref": "#/definitions/synthwave" },
+        "radar": { "$ref": "#/definitions/radar" },
+        "roadmap": { "$ref": "#/definitions/roadmap" },
+        "heatmap": { "$ref": "#/definitions/heatmap" },
+        "cubes": { "$ref": "#/definitions/cubes" },
+        "trophies": { "$ref": "#/definitions/trophies" },
         "showcase": {
           "type": "object",
           "additionalProperties": false,
@@ -250,6 +257,171 @@
             "base_url": { "type": "string", "default": "", "description": "Override the URL prefix for variant image src. Empty = default <user>/<user>/main/assets path." }
           }
         }
+      }
+    },
+
+    "galaxy": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Skill Galaxy / Constellation — stars + connections drifting in space.",
+      "properties": {
+        "enabled":       { "type": "boolean", "default": false },
+        "title":         { "type": "string", "default": "" },
+        "stars":         { "type": "array", "items": { "$ref": "#/definitions/star" }, "default": [] },
+        "connections":   { "type": "array", "items": { "type": "array", "items": { "type": "string" }, "minItems": 2, "maxItems": 2 }, "default": [] },
+        "background":    { "type": "string", "enum": ["deep-space", "nebula", "void"], "default": "deep-space" },
+        "twinkle_speed": { "type": "number", "default": 1.0 },
+        "drift_speed":   { "type": "number", "default": 1.0 },
+        "height":        { "type": "integer", "minimum": 200, "maximum": 1200, "default": 540 }
+      }
+    },
+
+    "star": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label": { "type": "string" },
+        "color": { "type": "string", "default": "" },
+        "size":  { "type": "integer", "minimum": 2, "maximum": 12, "default": 4 }
+      }
+    },
+
+    "synthwave": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Synthwave Horizon hero banner — receding grid, sun, mountains.",
+      "properties": {
+        "enabled":        { "type": "boolean", "default": false },
+        "title":          { "type": "string", "default": "" },
+        "subtitle":       { "type": "string", "default": "" },
+        "height":         { "type": "integer", "minimum": 120, "maximum": 600, "default": 320 },
+        "palette":        { "type": "string", "enum": ["sunset", "neon", "miami", "outrun"], "default": "outrun" },
+        "show_grid":      { "type": "boolean", "default": true },
+        "show_sun":       { "type": "boolean", "default": true },
+        "show_mountains": { "type": "boolean", "default": true }
+      }
+    },
+
+    "radar": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Skill Radar / Polar Chart — translucent polygon over polar grid.",
+      "properties": {
+        "enabled":   { "type": "boolean", "default": false },
+        "title":     { "type": "string", "default": "" },
+        "axes":      { "type": "array", "items": { "$ref": "#/definitions/radarAxis" }, "default": [] },
+        "max_value": { "type": "number", "default": 100 },
+        "color":     { "type": "string", "default": "" },
+        "breathe":   { "type": "boolean", "default": true },
+        "height":    { "type": "integer", "minimum": 240, "maximum": 1000, "default": 480 }
+      }
+    },
+
+    "radarAxis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "number", "default": 50 }
+      }
+    },
+
+    "roadmap": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Code Roadmap — metro/subway-style multi-line career map.",
+      "properties": {
+        "enabled":     { "type": "boolean", "default": false },
+        "title":       { "type": "string", "default": "" },
+        "lines":       { "type": "array", "items": { "$ref": "#/definitions/metroLine" }, "default": [] },
+        "show_legend": { "type": "boolean", "default": true },
+        "height":      { "type": "integer", "minimum": 200, "maximum": 800, "default": 360 }
+      }
+    },
+
+    "metroLine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name":     { "type": "string" },
+        "color":    { "type": "string", "default": "" },
+        "stations": { "type": "array", "items": { "$ref": "#/definitions/metroStation" }, "default": [] }
+      }
+    },
+
+    "metroStation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label":      { "type": "string" },
+        "year":       { "type": "integer", "default": 0 },
+        "is_current": { "type": "boolean", "default": false }
+      }
+    },
+
+    "heatmap": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Activity Heatmap — 7x52 contribution grid with neon glow.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "weeks":   { "type": "integer", "minimum": 12, "maximum": 104, "default": 52 },
+        "data":    { "type": "array", "items": { "type": "array", "items": { "type": "integer", "minimum": 0, "maximum": 4 } }, "default": [] },
+        "palette": { "type": "string", "enum": ["neon-green", "neon-cyan", "neon-rainbow", "rose"], "default": "neon-green" },
+        "glow":    { "type": "boolean", "default": true },
+        "height":  { "type": "integer", "minimum": 140, "maximum": 400, "default": 200 }
+      }
+    },
+
+    "cubes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "3D Stat Cubes — isometric blocks orbiting slowly.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "cubes":   { "type": "array", "items": { "$ref": "#/definitions/statCube" }, "default": [] },
+        "orbit":   { "type": "boolean", "default": true },
+        "height":  { "type": "integer", "minimum": 200, "maximum": 600, "default": 280 }
+      }
+    },
+
+    "statCube": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "value"],
+      "properties": {
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "color": { "type": "string", "default": "" }
+      }
+    },
+
+    "trophies": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Achievement Wall / Trophy Cabinet — beveled cabinet with trophies.",
+      "properties": {
+        "enabled":  { "type": "boolean", "default": false },
+        "title":    { "type": "string", "default": "" },
+        "trophies": { "type": "array", "items": { "$ref": "#/definitions/trophy" }, "default": [] },
+        "columns":  { "type": "integer", "minimum": 1, "maximum": 8, "default": 4 },
+        "height":   { "type": "integer", "minimum": 200, "maximum": 800, "default": 360 }
+      }
+    },
+
+    "trophy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label"],
+      "properties": {
+        "label": { "type": "string" },
+        "date":  { "type": "string", "default": "" },
+        "glyph": { "type": "string", "default": "" },
+        "color": { "type": "string", "default": "" }
       }
     },
 
