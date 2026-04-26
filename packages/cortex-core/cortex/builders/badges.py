@@ -31,6 +31,7 @@ from xml.sax.saxutils import escape as _xml_escape
 
 from ..icons import derive_monogram, lookup
 from ..schema import BadgeItem, BadgesConfig, Config
+from ..themes import REDUCED_MOTION_CSS, resolve_theme
 
 
 def _x(s: str) -> str:
@@ -46,7 +47,7 @@ BADGE_H = {"pill": 56, "hex": 116, "shield": 128, "circle": 100}
 BADGE_GAP = 14
 
 
-def _resolve(item: BadgeItem) -> tuple[str, str, str]:
+def _resolve(item: BadgeItem, theme_fallback: str) -> tuple[str, str, str]:
     """Return (monogram, color, label) for a badge.
 
     Resolution order for monogram:
@@ -57,12 +58,12 @@ def _resolve(item: BadgeItem) -> tuple[str, str, str]:
     Resolution order for color:
         1. explicit ``color`` field
         2. brand color from KNOWN_ICONS lookup
-        3. fallback to cortex jewel-tone violet
+        3. ``brand.theme`` primary slot
     """
     if item.icon and (hit := lookup(item.icon)):
         mono_default, color_default = hit
     else:
-        mono_default, color_default = derive_monogram(item.label), "#7B5EAA"
+        mono_default, color_default = derive_monogram(item.label), theme_fallback
     color = item.color or color_default
     return mono_default, color, item.label
 
@@ -168,9 +169,17 @@ def _icon_glyph(item: BadgeItem, monogram: str, cx: float, cy: float, size: int)
     )
 
 
-def _render_badge(item: BadgeItem, x: int, y: int, shape: str, idx: int, animation: str) -> str:
+def _render_badge(
+    item: BadgeItem,
+    x: int,
+    y: int,
+    shape: str,
+    idx: int,
+    animation: str,
+    theme_fallback: str,
+) -> str:
     """Render a single badge group at (x, y)."""
-    monogram, color, label = _resolve(item)
+    monogram, color, label = _resolve(item, theme_fallback)
     w, h = BADGE_W[shape], BADGE_H[shape]
     shape_d = _shape_path(shape, w, h)
     grad_id = f"bg-{idx}"
@@ -274,6 +283,8 @@ def _render_badge(item: BadgeItem, x: int, y: int, shape: str, idx: int, animati
 
 def _render(config: Config) -> str:
     bcfg: BadgesConfig = config.cards.badges
+    theme = resolve_theme(config)
+    theme_fallback = theme["primary"]
     items = list(bcfg.items)
     if not items:
         # Render an empty placeholder so the file always exists.
@@ -288,7 +299,7 @@ def _render(config: Config) -> str:
     positions, total_h = _layout_positions(len(items), bcfg.layout, bcfg.columns, w, h)
 
     badges_svg = "\n  ".join(
-        _render_badge(item, x, y, shape, i, bcfg.animation)
+        _render_badge(item, x, y, shape, i, bcfg.animation, theme_fallback)
         for i, (item, (x, y)) in enumerate(zip(items, positions, strict=True))
     )
 
@@ -310,7 +321,9 @@ def _render(config: Config) -> str:
             badges_svg
             + "\n  "
             + "\n  ".join(
-                _render_badge(item, x + total_w, y, shape, i + len(items), bcfg.animation)
+                _render_badge(
+                    item, x + total_w, y, shape, i + len(items), bcfg.animation, theme_fallback
+                )
                 for i, (item, (x, y)) in enumerate(zip(items, positions, strict=True))
             )
         )
@@ -337,6 +350,7 @@ def _render(config: Config) -> str:
     .b-value  {{ font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.78; letter-spacing: 0.06em; text-transform: uppercase; }}
     .b-pulse  {{ animation: bPulse 3.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }}
     @keyframes bPulse {{ 0%,100% {{ transform: scale(1); }} 50% {{ transform: scale(1.04); }} }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   {marquee_open}
   {badges_svg}

@@ -82,8 +82,15 @@ class Animations(_Strict):
     speed: float = Field(default=1.0, ge=0.25, le=4.0)
 
 
+ThemeName = Literal["outrun", "sunset", "midnight", "minimal", "cyberpunk", "rose"]
+
+
 class Brand(_Strict):
     palette: PaletteName = "neon-rainbow"
+    # Coordinated color theme that every widget consults for default colors.
+    # Per-widget explicit ``color`` overrides still win — this only sets
+    # defaults so you can change the look of every widget by changing one line.
+    theme: ThemeName = "outrun"
     colors: BrandColors = Field(default_factory=BrandColors)
     typography: Typography = Field(default_factory=Typography)
     animations: Animations = Field(default_factory=Animations)

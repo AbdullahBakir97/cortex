@@ -81,7 +81,7 @@ def test_derive_monogram_handles_empty():
 
 def test_resolve_uses_brand_color_when_no_override():
     item = BadgeItem(label="Python", icon="python")
-    monogram, color, label = _resolve(item)
+    monogram, color, label = _resolve(item, "#7B5EAA")
     assert monogram == "PY"
     assert color == "#3776AB"
     assert label == "Python"
@@ -89,13 +89,13 @@ def test_resolve_uses_brand_color_when_no_override():
 
 def test_resolve_explicit_color_overrides_brand_color():
     item = BadgeItem(label="Python", icon="python", color="#FF0000")
-    _, color, _ = _resolve(item)
+    _, color, _ = _resolve(item, "#7B5EAA")
     assert color == "#FF0000"
 
 
 def test_resolve_unknown_icon_falls_back_to_label_monogram():
     item = BadgeItem(label="Unknown Tech", icon="unknown-slug")
-    monogram, color, _ = _resolve(item)
+    monogram, color, _ = _resolve(item, "#7B5EAA")
     assert monogram == "UN"
     # Fallback color is jewel-tone violet.
     assert color == "#7B5EAA"
@@ -103,7 +103,7 @@ def test_resolve_unknown_icon_falls_back_to_label_monogram():
 
 def test_resolve_no_icon_at_all_uses_label():
     item = BadgeItem(label="Custom")
-    monogram, color, _ = _resolve(item)
+    monogram, color, _ = _resolve(item, "#7B5EAA")
     assert monogram == "CU"
     assert color == "#7B5EAA"
 

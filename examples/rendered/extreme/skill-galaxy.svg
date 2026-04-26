@@ -5,6 +5,9 @@
   <style><![CDATA[
     .gx-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
     .gx-label { font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.85; letter-spacing: 0.04em; }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   
   <defs>

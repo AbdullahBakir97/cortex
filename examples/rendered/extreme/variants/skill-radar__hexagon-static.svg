@@ -15,6 +15,9 @@
   <style><![CDATA[
     .r-title  { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
     .r-label  { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 600; font-size: 14px; fill: #FFFFFF; fill-opacity: 0.86; }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   <text x="600.0" y="40" class="r-title" text-anchor="middle">Skills</text>
   <g transform="translate(0,0)">

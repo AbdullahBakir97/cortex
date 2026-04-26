@@ -13,6 +13,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, GlobeConfig, GlobePin
+from ..themes import REDUCED_MOTION_CSS
 
 
 def _x(s: str) -> str:
@@ -151,6 +152,7 @@ def _render(config: Config) -> str:
   <style><![CDATA[
     .gb-title {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }}
     .gb-label {{ font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 600; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.92; letter-spacing: 0.06em; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   {title_svg}
   <circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r + 10:.1f}" fill="url(#gb-atmosphere)"/>

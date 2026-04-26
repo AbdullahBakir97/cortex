@@ -49,6 +49,12 @@
           "default":     "neon-rainbow",
           "description": "Named palette preset"
         },
+        "theme": {
+          "type":        "string",
+          "enum":        ["outrun", "sunset", "midnight", "minimal", "cyberpunk", "rose"],
+          "default":     "outrun",
+          "description": "Coordinated 5-slot color theme that propagates as default colors to every widget. Per-widget explicit color overrides still win."
+        },
         "colors": {
           "type": "object",
           "additionalProperties": false,

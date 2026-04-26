@@ -21,6 +21,9 @@
     .b-value  { font-family: 'Inter','SF Pro Display','Segoe UI',sans-serif; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.78; letter-spacing: 0.06em; text-transform: uppercase; }
     .b-pulse  { animation: bPulse 3.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes bPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   
   <g transform="translate(20,20)" opacity="0"><defs><linearGradient id="bg-0" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3776AB" stop-opacity="0.95"/><stop offset="100%" stop-color="#3776AB" stop-opacity="0.55"/></linearGradient><clipPath id="clip-0"><path d="M 28.0,0 H 140.0 A 28.0,28.0 0 0 1 140.0,56 H 28.0 A 28.0,28.0 0 0 1 28.0,0 Z"/></clipPath><linearGradient id="shimmer-0" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="50%" stop-color="#FFFFFF" stop-opacity="0.45"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient></defs><path d="M 28.0,0 H 140.0 A 28.0,28.0 0 0 1 140.0,56 H 28.0 A 28.0,28.0 0 0 1 28.0,0 Z" fill="url(#bg-0)" filter="url(#glow-0)"/><path d="M 28.0,0 H 140.0 A 28.0,28.0 0 0 1 140.0,56 H 28.0 A 28.0,28.0 0 0 1 28.0,0 Z" fill="none" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1"/><text x="28.0" y="32.3" class="b-mono" text-anchor="middle">PY</text><text x="60.0" y="24.0" class="b-label" text-anchor="start">Python</text><text x="60.0" y="42.0" class="b-value" text-anchor="start">Senior</text><animate attributeName="opacity" from="0" to="1" begin="0.00s" dur="0.5s" fill="freeze"/></g>

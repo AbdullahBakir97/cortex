@@ -20,6 +20,9 @@
   <style><![CDATA[
     .gb-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
     .gb-label { font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 600; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.92; letter-spacing: 0.06em; }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   <text x="600.0" y="40" class="gb-title" text-anchor="middle">Where I work from</text>
   <circle cx="600.0" cy="260.0" r="210.0" fill="url(#gb-atmosphere)"/>

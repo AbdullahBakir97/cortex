@@ -13,6 +13,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, DnaConfig
+from ..themes import REDUCED_MOTION_CSS
 
 
 def _x(s: str) -> str:
@@ -147,6 +148,7 @@ def _render(config: Config) -> str:
   <style><![CDATA[
     .dna-title {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }}
     .dna-label {{ font-family: 'JetBrains Mono','SF Mono','Consolas',monospace; font-weight: 600; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.85; letter-spacing: 0.04em; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   {title_svg}
   <g>

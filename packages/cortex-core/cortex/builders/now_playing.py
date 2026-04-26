@@ -12,6 +12,7 @@ from pathlib import Path
 from xml.sax.saxutils import escape as _xml_escape
 
 from ..schema import Config, NowPlayingConfig
+from ..themes import REDUCED_MOTION_CSS, resolve_theme
 
 
 def _x(s: str) -> str:
@@ -25,7 +26,7 @@ DEFAULT_COLOR = "#7B5EAA"
 def _render(config: Config) -> str:
     npcfg: NowPlayingConfig = config.cards.now_playing
     h = npcfg.height
-    color = npcfg.color or DEFAULT_COLOR
+    color = npcfg.color or resolve_theme(config)["primary"]
     progress = max(0.0, min(1.0, npcfg.progress))
 
     # Layout: card with rounded corners, full canvas.
@@ -103,6 +104,7 @@ def _render(config: Config) -> str:
     .np-artist    {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 500; font-size: 16px; fill: #FFFFFF; fill-opacity: 0.65; }}
     .np-time      {{ font-family: 'JetBrains Mono','SF Mono',monospace; font-weight: 500; font-size: 11px; fill: #FFFFFF; fill-opacity: 0.55; letter-spacing: 0.06em; }}
     .np-glyph     {{ font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 900; font-size: 80px; fill: #FFFFFF; }}
+    {REDUCED_MOTION_CSS}
   ]]></style>
   <rect x="{pad}" y="{pad}" width="{card_w}" height="{card_h}" rx="16"
         fill="url(#np-card)" filter="url(#np-shadow)"/>

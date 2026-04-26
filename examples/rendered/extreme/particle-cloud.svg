@@ -17,6 +17,9 @@
   <style><![CDATA[
     .pc-title { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 800; font-size: 22px; letter-spacing: 0.18em; text-transform: uppercase; fill: #FFFFFF; }
     .pc-label { font-family: 'Inter','SF Pro Display',sans-serif; font-weight: 700; letter-spacing: 0.04em; }
+    @media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   ]]></style>
   <text x="600.0" y="40" class="pc-title" text-anchor="middle">Skill cloud</text>
   
