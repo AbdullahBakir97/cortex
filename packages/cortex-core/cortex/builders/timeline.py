@@ -116,8 +116,11 @@ def _render_marker(
         f'    <text x="0" y="6" class="t-year" fill="{color}" text-anchor="middle">{_x(yy)}</text>',
     ]
     if with_live:
+        # Push badge ~78px right of marker (was 60) so its drop-shadow glow
+        # at peak animation doesn't bleed onto the year text — both are the
+        # same color and would visually merge otherwise.
         parts += [
-            '    <g transform="translate(60, 0)" class="live-pulse">',
+            '    <g transform="translate(78, 0)" class="live-pulse">',
             f'      <rect x="0" y="-12" width="60" height="22" rx="11" fill="{color}"/>',
             '      <circle cx="11" cy="-1" r="3.5" fill="#0D1117"/>',
             '      <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>',
@@ -256,7 +259,7 @@ def build(config: Config, output: str | Path) -> Path:
         "    .marker-pulse { animation: markerPulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
         "    @keyframes markerPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.10); opacity: 0.85; } }\n"
         "    .live-pulse { animation: livePulse 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }\n"
-        "    @keyframes livePulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,210,63,0.6)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 14px rgba(255,210,63,1)); } }\n"
+        "    @keyframes livePulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(255,210,63,0.5)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 8px rgba(255,210,63,0.9)); } }\n"
         "    .card-rise { opacity: 0; animation: cardRise 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }\n"
         "    @keyframes cardRise { to { opacity: 1; } }\n"
         "    .y0 { animation-delay: 0.30s; } .y1 { animation-delay: 0.50s; }\n"

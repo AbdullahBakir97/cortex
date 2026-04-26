@@ -15,7 +15,7 @@
     .marker-pulse { animation: markerPulse 2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
     @keyframes markerPulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.10); opacity: 0.85; } }
     .live-pulse { animation: livePulse 1.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-    @keyframes livePulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,210,63,0.6)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 14px rgba(255,210,63,1)); } }
+    @keyframes livePulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(255,210,63,0.5)); } 50% { transform: scale(1.06); filter: drop-shadow(0 0 8px rgba(255,210,63,0.9)); } }
     .card-rise { opacity: 0; animation: cardRise 0.9s cubic-bezier(0.22,1,0.36,1) forwards; }
     @keyframes cardRise { to { opacity: 1; } }
     .y0 { animation-delay: 0.30s; } .y1 { animation-delay: 0.50s; }
@@ -67,7 +67,7 @@
     <circle r="34" fill="url(#markerGlow)"/>
     <circle r="24" fill="#0D1117" stroke="#FFD23F" stroke-width="2" class="marker-pulse" style="animation-delay:0.9s"/>
     <text x="0" y="6" class="t-year" fill="#FFD23F" text-anchor="middle">&apos;26</text>
-    <g transform="translate(60, 0)" class="live-pulse">
+    <g transform="translate(78, 0)" class="live-pulse">
       <rect x="0" y="-12" width="60" height="22" rx="11" fill="#FFD23F"/>
       <circle cx="11" cy="-1" r="3.5" fill="#0D1117"/>
       <text x="40" y="3" class="t-year-tag" fill="#0D1117" text-anchor="middle" font-weight="700">LIVE</text>
