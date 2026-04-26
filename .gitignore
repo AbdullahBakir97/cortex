@@ -50,3 +50,6 @@ packages/cortex-3d/dist/
 .coverage.*
 coverage/
 test-output/
+
+# ── Local worktrees (isolated per-feature workspaces) ────────────────────
+.worktrees/
