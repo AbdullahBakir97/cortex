@@ -49,7 +49,9 @@ def _apply_variant(base_config: Config, variant_yaml: str) -> Config | None:
         return None
     # Strip comment-only snippets (divider, github_icon variants)
     non_comment = "\n".join(
-        line for line in variant_yaml.splitlines() if line.strip() and not line.strip().startswith("#")
+        line
+        for line in variant_yaml.splitlines()
+        if line.strip() and not line.strip().startswith("#")
     )
     if not non_comment.strip():
         return None

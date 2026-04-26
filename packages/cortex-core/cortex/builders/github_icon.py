@@ -38,7 +38,7 @@ def build(config: Config, output: str | Path) -> Path:
         f'      <stop offset="0%"   stop-color="#FF8A50"/>\n'
         f'      <stop offset="100%" stop-color="{secondary}"/>\n'
         "    </radialGradient>\n"
-        "    <filter id=\"ghGlowSoft\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"160%\">\n"
+        '    <filter id="ghGlowSoft" x="-30%" y="-30%" width="160%" height="160%">\n'
         '      <feGaussianBlur stdDeviation="1.5"/>\n'
         "    </filter>\n"
         "  </defs>\n"

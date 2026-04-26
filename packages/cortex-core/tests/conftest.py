@@ -1,4 +1,5 @@
 """pytest config: ensure the cortex-core package is importable from tests."""
+
 from __future__ import annotations
 
 import sys

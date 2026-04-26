@@ -1,7 +1,17 @@
 """Unit tests for the brain builder's pure helpers."""
+
 from __future__ import annotations
 
-from cortex.builders.brain import _seed_from_name
+import random as _random
+
+from cortex.builders.brain import (
+    _LOBE_KEYS,
+    _build_lobe_stroke_overlay,
+    _ensure_classification,
+    _random_arc_network,
+    _random_cells_in_bbox,
+    _seed_from_name,
+)
 
 
 def test_seed_from_name_is_deterministic():
@@ -16,11 +26,6 @@ def test_seed_from_name_returns_int_in_32bit_range():
     seed = _seed_from_name("anything")
     assert isinstance(seed, int)
     assert 0 <= seed < (1 << 32)
-
-
-import random as _random
-
-from cortex.builders.brain import _random_cells_in_bbox
 
 
 def test_random_cells_count_matches_n():
@@ -53,35 +58,33 @@ def test_random_cells_returns_int_tuples():
         assert isinstance(cy, int)
 
 
-from cortex.builders.brain import _Arc, _random_arc_network
-
-
 def _sample_cells_by_lobe() -> dict[str, list[tuple[int, int]]]:
     return {
-        "frontal":    [(100, 100), (120, 100), (110, 130)],
-        "parietal":   [(200, 100), (220, 100), (210, 130)],
-        "occipital":  [(300, 100), (320, 100), (310, 130)],
-        "temporal":   [(200, 200), (220, 200), (210, 230)],
+        "frontal": [(100, 100), (120, 100), (110, 130)],
+        "parietal": [(200, 100), (220, 100), (210, 130)],
+        "occipital": [(300, 100), (320, 100), (310, 130)],
+        "temporal": [(200, 200), (220, 200), (210, 230)],
         "cerebellum": [(280, 250), (300, 250), (290, 280)],
-        "brainstem":  [(280, 320), (300, 320), (290, 350)],
+        "brainstem": [(280, 320), (300, 320), (290, 350)],
     }
 
 
 def _sample_lobe_colors() -> dict[str, str]:
     return {
-        "frontal":    "#F90001",
-        "parietal":   "#34D399",
-        "occipital":  "#FF652F",
-        "temporal":   "#FFD23F",
+        "frontal": "#F90001",
+        "parietal": "#34D399",
+        "occipital": "#FF652F",
+        "temporal": "#FFD23F",
         "cerebellum": "#22D3EE",
-        "brainstem":  "#A78BFA",
+        "brainstem": "#A78BFA",
     }
 
 
 def test_random_arc_network_returns_n_arcs():
     rng = _random.Random(42)
-    arcs = _random_arc_network(_sample_cells_by_lobe(), n=20, rng=rng,
-                                lobe_colors=_sample_lobe_colors())
+    arcs = _random_arc_network(
+        _sample_cells_by_lobe(), n=20, rng=rng, lobe_colors=_sample_lobe_colors()
+    )
     assert len(arcs) == 20
 
 
@@ -107,34 +110,35 @@ def test_random_arc_network_color_matches_source_lobe():
 
 def test_random_arc_network_timing_in_range():
     rng = _random.Random(42)
-    arcs = _random_arc_network(_sample_cells_by_lobe(), n=30, rng=rng,
-                                lobe_colors=_sample_lobe_colors())
+    arcs = _random_arc_network(
+        _sample_cells_by_lobe(), n=30, rng=rng, lobe_colors=_sample_lobe_colors()
+    )
     for a in arcs:
         assert 0.0 <= a.begin_s < 12.0
         assert 0.8 <= a.dur_s < 1.6
 
 
 def test_random_arc_network_is_deterministic():
-    a = _random_arc_network(_sample_cells_by_lobe(), n=10, rng=_random.Random(99),
-                              lobe_colors=_sample_lobe_colors())
-    b = _random_arc_network(_sample_cells_by_lobe(), n=10, rng=_random.Random(99),
-                              lobe_colors=_sample_lobe_colors())
+    a = _random_arc_network(
+        _sample_cells_by_lobe(), n=10, rng=_random.Random(99), lobe_colors=_sample_lobe_colors()
+    )
+    b = _random_arc_network(
+        _sample_cells_by_lobe(), n=10, rng=_random.Random(99), lobe_colors=_sample_lobe_colors()
+    )
     assert a == b
 
 
 def test_random_arc_network_no_self_loops():
     rng = _random.Random(42)
-    arcs = _random_arc_network(_sample_cells_by_lobe(), n=30, rng=rng,
-                                lobe_colors=_sample_lobe_colors())
+    arcs = _random_arc_network(
+        _sample_cells_by_lobe(), n=30, rng=rng, lobe_colors=_sample_lobe_colors()
+    )
     for a in arcs:
         assert (a.x1, a.y1) != (a.x2, a.y2)
 
 
-from cortex.builders.brain import _ensure_classification, _LOBE_KEYS
-
-
 def test_ensure_classification_returns_paths_by_lobe():
-    classification, _centroids, _bboxes, paths_by_lobe = _ensure_classification()
+    _classification, _centroids, _bboxes, paths_by_lobe = _ensure_classification()
     assert set(paths_by_lobe.keys()) == set(_LOBE_KEYS)
     # Every lobe should have at least one path
     for lobe in _LOBE_KEYS:
@@ -158,26 +162,28 @@ def test_paths_by_lobe_ids_match_classification_set():
         assert ids_from_pairs == classification[lobe], f"{lobe} id mismatch"
 
 
-from cortex.builders.brain import _build_lobe_stroke_overlay
-
-
 def test_overlay_picks_n_largest_per_lobe():
     paths_by_lobe = {
-        "frontal":    [("a", "x" * 10), ("b", "x" * 100), ("c", "x" * 50),
-                       ("d", "x" * 200), ("e", "x" * 30)],
-        "parietal":   [("f", "x" * 80), ("g", "x" * 20)],
-        "occipital":  [("h", "x" * 5)],
-        "temporal":   [],
+        "frontal": [
+            ("a", "x" * 10),
+            ("b", "x" * 100),
+            ("c", "x" * 50),
+            ("d", "x" * 200),
+            ("e", "x" * 30),
+        ],
+        "parietal": [("f", "x" * 80), ("g", "x" * 20)],
+        "occipital": [("h", "x" * 5)],
+        "temporal": [],
         "cerebellum": [("i", "x" * 60), ("j", "x" * 70), ("k", "x" * 65)],
-        "brainstem":  [],
+        "brainstem": [],
     }
     colors = {
-        "frontal":    "#FF0000",
-        "parietal":   "#00FF00",
-        "occipital":  "#0000FF",
-        "temporal":   "#FFFF00",
+        "frontal": "#FF0000",
+        "parietal": "#00FF00",
+        "occipital": "#0000FF",
+        "temporal": "#FFFF00",
         "cerebellum": "#00FFFF",
-        "brainstem":  "#FF00FF",
+        "brainstem": "#FF00FF",
     }
     overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=2)
     # frontal: 2 (b, d), parietal: 2 (f, g), occipital: 1 (h),
@@ -189,33 +195,41 @@ def test_overlay_picks_largest_d_first():
     """Top-N selection ranks by len(d), descending."""
     paths_by_lobe = {
         "frontal": [("small", "x"), ("big", "x" * 999), ("med", "x" * 50)],
-        "parietal": [], "occipital": [], "temporal": [],
-        "cerebellum": [], "brainstem": [],
+        "parietal": [],
+        "occipital": [],
+        "temporal": [],
+        "cerebellum": [],
+        "brainstem": [],
     }
-    colors = {k: "#000000" for k in [
-        "frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem"]}
+    colors = {
+        k: "#000000"
+        for k in ["frontal", "parietal", "occipital", "temporal", "cerebellum", "brainstem"]
+    }
     overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=2)
     assert len(overlay) == 2
     # Both elements should reference the d-strings, with the longer d included
     joined = " ".join(overlay)
     assert ("x" * 999) in joined
     assert ("x" * 50) in joined
-    assert " x\"" not in joined or joined.count('d="x"') == 0  # the 1-char d not picked
+    assert ' x"' not in joined or joined.count('d="x"') == 0  # the 1-char d not picked
 
 
 def test_overlay_emits_fill_none_and_lobe_color_stroke():
     paths_by_lobe = {
         "frontal": [("p1", "M0,0 L10,10")],
-        "parietal": [], "occipital": [], "temporal": [],
-        "cerebellum": [], "brainstem": [],
+        "parietal": [],
+        "occipital": [],
+        "temporal": [],
+        "cerebellum": [],
+        "brainstem": [],
     }
     colors = {
-        "frontal":    "#F90001",
-        "parietal":   "#34D399",
-        "occipital":  "#FF652F",
-        "temporal":   "#FFD23F",
+        "frontal": "#F90001",
+        "parietal": "#34D399",
+        "occipital": "#FF652F",
+        "temporal": "#FFD23F",
         "cerebellum": "#22D3EE",
-        "brainstem":  "#A78BFA",
+        "brainstem": "#A78BFA",
     }
     overlay = _build_lobe_stroke_overlay(paths_by_lobe, colors, n_per_lobe=8)
     assert len(overlay) == 1

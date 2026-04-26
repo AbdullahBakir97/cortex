@@ -297,7 +297,7 @@ def build(config: Config, output: str | Path) -> Path:
         '    <linearGradient id="tlGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#A78BFA"/><stop offset="33%" stop-color="#F90001"/><stop offset="66%" stop-color="#FF652F"/><stop offset="100%" stop-color="#FFD23F"/></linearGradient>\n'
         '    <linearGradient id="cardBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1C1428" stop-opacity="0.94"/><stop offset="100%" stop-color="#0A0612" stop-opacity="0.94"/></linearGradient>\n'
         '    <radialGradient id="markerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.55"/><stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>\n'
-        '    <!-- Stacked drop shadow — 3 layers for real depth (replaces single shadow). -->\n'
+        "    <!-- Stacked drop shadow — 3 layers for real depth (replaces single shadow). -->\n"
         '    <filter id="cardShadowStacked" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.30"/><feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.40"/><feDropShadow dx="0" dy="14" stdDeviation="24" flood-color="#000" flood-opacity="0.30"/></filter>\n'
         '    <filter id="cardEdgeGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.2"/></filter>\n'
         "  </defs>\n"

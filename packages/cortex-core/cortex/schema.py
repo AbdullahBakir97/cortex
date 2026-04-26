@@ -248,6 +248,7 @@ class ShowcaseConfig(_Strict):
     non-standard (e.g. the cortex project's own marketing README, where
     variants ship in ``examples/rendered/extreme/variants/``).
     """
+
     # Override the URL prefix the showcase uses for variant image src attrs.
     # Empty → default ``https://raw.githubusercontent.com/<user>/<user>/main/assets``.
     base_url: str = ""

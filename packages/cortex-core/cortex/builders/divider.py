@@ -24,10 +24,7 @@ def _sine_path(period: float, amplitude: float, y_center: float, width: int = 12
     half = period / 2
     quarter = period / 4
     # First quadratic: control at top of first hump → end at first zero crossing
-    d = (
-        f"M 0,{y_center:.1f} "
-        f"Q {quarter:.1f},{y_center - amplitude:.1f} {half:.1f},{y_center:.1f}"
-    )
+    d = f"M 0,{y_center:.1f} Q {quarter:.1f},{y_center - amplitude:.1f} {half:.1f},{y_center:.1f}"
     x = half
     while x < width:
         x += half

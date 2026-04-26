@@ -39,6 +39,7 @@ def build_variants(config, output_dir="assets/variants"):  # type: ignore[no-unt
 
     return _bv(config, output_dir)
 
+
 __version__ = "0.2.1"
 
 

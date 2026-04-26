@@ -32,10 +32,7 @@ def _sine_path(period: float, amplitude: float, y_center: float, width: int = 12
     """Generate a smooth sine wave SVG path (Q + T commands)."""
     half = period / 2
     quarter = period / 4
-    d = (
-        f"M 0,{y_center:.1f} "
-        f"Q {quarter:.1f},{y_center - amplitude:.1f} {half:.1f},{y_center:.1f}"
-    )
+    d = f"M 0,{y_center:.1f} Q {quarter:.1f},{y_center - amplitude:.1f} {half:.1f},{y_center:.1f}"
     x = half
     while x < width:
         x += half
@@ -58,8 +55,7 @@ def _shape_path(shape: str, height: int, edge_y: float, width: int = 1200, *, fo
         period = 280
         # Wave shape on the chosen edge, then close the rectangle on the other 3 sides.
         wave_d = (
-            f"M 0,{edge_y:.1f} "
-            f"Q {period / 4:.1f},{edge_y - amp:.1f} {period / 2:.1f},{edge_y:.1f}"
+            f"M 0,{edge_y:.1f} Q {period / 4:.1f},{edge_y - amp:.1f} {period / 2:.1f},{edge_y:.1f}"
         )
         x = period / 2
         while x < width:
@@ -77,10 +73,7 @@ def _shape_path(shape: str, height: int, edge_y: float, width: int = 1200, *, fo
                 f"M 0,{edge_y - 30:.1f} L {width},{edge_y + 10:.1f} "
                 f"L {width},{height} L 0,{height} Z"
             )
-        return (
-            f"M 0,{edge_y - 10:.1f} L {width},{edge_y - 50:.1f} "
-            f"L {width},0 L 0,0 Z"
-        )
+        return f"M 0,{edge_y - 10:.1f} L {width},{edge_y - 50:.1f} L {width},0 L 0,0 Z"
     else:  # rect — straight edge, no decoration
         if footer:
             return f"M 0,{edge_y:.1f} L {width},{edge_y:.1f} L {width},{height} L 0,{height} Z"
@@ -183,7 +176,7 @@ def _render_banner(config: Config, banner: BannerConfig, *, footer: bool) -> str
     svg = f"""<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="{height}"
      viewBox="0 0 {width} {height}" preserveAspectRatio="none"
-     role="img" aria-label="{_x(banner.title or ('Footer' if footer else 'Header'))}">
+     role="img" aria-label="{_x(banner.title or ("Footer" if footer else "Header"))}">
   <defs>
     <linearGradient id="{bg_id}" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
       {_gradient_stops(colors)}
