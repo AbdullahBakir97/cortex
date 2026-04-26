@@ -936,6 +936,47 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
   ''' + chr(10).join("    " + ln for ln in constellation_lines) + '''
   </g>''') if atm.show_particles else ""}
 
+  {('''<!-- Light streaks: 5 thin diagonal lines that traverse the canvas on
+       staggered timers, mimicking meteors / lens flares. Each one fires for
+       3s then waits 10-13s before repeating. -->
+  <g class="streaks">
+    <line x1="-100" y1="200"  x2="-50"  y2="220"  stroke="#EC4899" stroke-width="1.5"
+          stroke-opacity="0" filter="url(#electricGlow)">
+      <animate attributeName="x1" values="-100;1500" dur="3s" begin="0s;13s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="-50;1550"  dur="3s" begin="0s;13s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0;0.7;0.7;0" keyTimes="0;0.15;0.85;1"
+               dur="3s" begin="0s;13s" repeatCount="indefinite"/>
+    </line>
+    <line x1="-100" y1="450"  x2="-50"  y2="470"  stroke="#A78BFA" stroke-width="1.5"
+          stroke-opacity="0" filter="url(#electricGlow)">
+      <animate attributeName="x1" values="-100;1500" dur="3s" begin="2s;15s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="-50;1550"  dur="3s" begin="2s;15s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0;0.7;0.7;0" keyTimes="0;0.15;0.85;1"
+               dur="3s" begin="2s;15s" repeatCount="indefinite"/>
+    </line>
+    <line x1="-100" y1="650"  x2="-50"  y2="670"  stroke="#22D3EE" stroke-width="1.5"
+          stroke-opacity="0" filter="url(#electricGlow)">
+      <animate attributeName="x1" values="-100;1500" dur="3s" begin="5s;18s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="-50;1550"  dur="3s" begin="5s;18s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0;0.7;0.7;0" keyTimes="0;0.15;0.85;1"
+               dur="3s" begin="5s;18s" repeatCount="indefinite"/>
+    </line>
+    <line x1="-100" y1="100"  x2="-50"  y2="120"  stroke="#EC4899" stroke-width="1.2"
+          stroke-opacity="0" filter="url(#electricGlow)">
+      <animate attributeName="x1" values="-100;1500" dur="3s" begin="8s;21s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="-50;1550"  dur="3s" begin="8s;21s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0;0.7;0.7;0" keyTimes="0;0.15;0.85;1"
+               dur="3s" begin="8s;21s" repeatCount="indefinite"/>
+    </line>
+    <line x1="-100" y1="780"  x2="-50"  y2="800"  stroke="#A78BFA" stroke-width="1.2"
+          stroke-opacity="0" filter="url(#electricGlow)">
+      <animate attributeName="x1" values="-100;1500" dur="3s" begin="11s;24s" repeatCount="indefinite"/>
+      <animate attributeName="x2" values="-50;1550"  dur="3s" begin="11s;24s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-opacity" values="0;0.7;0.7;0" keyTimes="0;0.15;0.85;1"
+               dur="3s" begin="11s;24s" repeatCount="indefinite"/>
+    </line>
+  </g>''') if atm.show_particles else ""}
+
   {('''<!-- Ambient particle drift — atmospheric depth behind the brain -->
   <g fill="''' + p_accent_b + '''">
     <circle cx="120"  cy="180" r="1.8" class="particle p1"/>
