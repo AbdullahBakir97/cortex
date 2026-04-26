@@ -5,7 +5,7 @@
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <!-- 🎬 ANIMATED HERO BANNER — capsule-render with brain-themed gradient     -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
-
+ 
 <a href="https://cortex.dev">
   <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0D1117,50:7C3AED,100:F90001&height=240&section=header&text=Cortex&fontSize=110&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Turn%20your%20GitHub%20into%20a%20cinematic%20neon%20brain%20skill%20atlas&descSize=20&descAlignY=58&descColor=F0F0F0" width="100%" alt="Cortex — turn your GitHub into a cinematic neon brain skill atlas"/>
 </a>
