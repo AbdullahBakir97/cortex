@@ -70,6 +70,51 @@ cards:
     enabled:          true
     start_year:       2023
     bullets_per_year: 3
+    years:
+      - year: 2023
+        label: "ORIGIN"
+        headline: "First Steps"
+        bullets:
+          - "Started shipping public projects — Django-Store, Jobs-Portal, BookStore."
+          - "Built foundations in Python, Django, REST APIs, JS & HTML/CSS."
+          - "Earned first community stars — Jobs-Portal & Django-Blog took off."
+        stats:
+          - { num: "15+",   label: "PROJECTS" }
+          - { num: "30★",   label: "PEAK STARS" }
+          - { num: "FIRST", label: "CLIENT" }
+      - year: 2024
+        label: "FOUNDATION"
+        headline: "A Year of Shipping"
+        bullets:
+          - "Wave of full-stack Django + Vue projects went live for real users."
+          - "Established long-running client engagements that still run today."
+          - "Earned community recognition — Barber-Salon hit 52★, Django-LMS 22★."
+        stats:
+          - { num: "25+", label: "PROJECTS" }
+          - { num: "52★", label: "PEAK STARS" }
+          - { num: "5+",  label: "CLIENTS" }
+      - year: 2025
+        label: "GROWTH"
+        headline: "Production & AI"
+        bullets:
+          - "Maintained & grew long-running client systems through their first full year in production."
+          - "Hands-on with the AI/LLM stack — local models, RAG, agent workflows."
+          - "Contributed to community & educational projects beyond own work."
+        stats:
+          - { num: "2+",   label: "SAAS LIVE" }
+          - { num: "10+",  label: "AI EXPERIMENTS" }
+          - { num: "200+", label: "DEPLOYS" }
+      - year: 2026
+        label: "CURRENT YEAR"
+        headline: "Tooling & Reach"
+        bullets:
+          - "Shifting to developer tooling & automation — building for engineers, not just end users."
+          - "Branching from web into desktop and CLI applications."
+          - "Investing in public presence — portfolio, blog, open-source."
+        stats:
+          - { num: "5",  label: "GH APPS" }
+          - { num: "v1", label: "PYDEV PLATFORM" }
+          - { num: "9+", label: "NEW REPOS" }
 
 contributions:
   snake:      true

@@ -165,10 +165,19 @@ class CurrentFocusCard(_Strict):
     tiles:   list[FocusTile] = Field(default_factory=list)
 
 
+class YearEntry(_Strict):
+    year:     int = Field(..., ge=2008, le=2100)
+    label:    str = ""                          # e.g. "ORIGIN", "GROWTH", "CURRENT YEAR"
+    headline: str = ""                          # e.g. "First Steps"
+    bullets:  list[str] = Field(default_factory=list, max_length=8)
+    stats:    list[StatEntry] = Field(default_factory=list, max_length=3)
+
+
 class YearlyHighlightsCard(_Strict):
     enabled:          bool = True
     start_year:       int = Field(default=2023, ge=2008)
     bullets_per_year: int = Field(default=3, ge=1, le=8)
+    years:            list[YearEntry] = Field(default_factory=list, max_length=6)
 
 
 class Cards(_Strict):
