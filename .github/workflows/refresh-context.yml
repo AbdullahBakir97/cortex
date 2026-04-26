@@ -1,0 +1,53 @@
+# Regenerates the auto-marker sections of CONTEXT.md on every push so the
+# state-of-the-project file always reflects the current git state. Manual
+# sections (Active work, Open issues, Decisions, Code map) are untouched.
+#
+# Pairs with scripts/refresh_context.py — that script defines what the
+# auto sections contain.
+
+name: Refresh CONTEXT.md
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Don't cancel mid-commit if another push lands.
+concurrency:
+  group: refresh-context
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Update CONTEXT.md auto sections
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 30  # need git log access for the recent-commits section
+          persist-credentials: true
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Refresh CONTEXT.md
+        run: python scripts/refresh_context.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name  "cortex-bot[bot]"
+          git config user.email "cortex-bot[bot]@users.noreply.github.com"
+          git add CONTEXT.md
+          if git diff --cached --quiet; then
+            echo "::notice::CONTEXT.md unchanged — auto sections already current."
+          else
+            git commit -m "chore(context): refresh auto-marker sections
+
+[skip ci]"
+            git push
+          fi
