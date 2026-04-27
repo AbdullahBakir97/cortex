@@ -303,37 +303,32 @@ def _render(config: Config) -> str:
         for i, (item, (x, y)) in enumerate(zip(items, positions, strict=True))
     )
 
-    # Marquee wraps the whole badge group in an animated translate.
+    # Marquee wraps the whole badge group in an animated translate. To get
+    # the seamless-loop effect we need TWO copies of the badge row offset by
+    # ``total_w`` — but rendering them inline doubles the SVG size. Instead,
+    # wrap one copy in a <g id="b-loop"> and reference it with a <use> at
+    # the offset position. The <use> element is ~50 bytes vs ~half the file.
     marquee_open = ""
     marquee_close = ""
     if bcfg.layout == "marquee":
-        # Compute total content width to know when to wrap.
         total_w = len(items) * (w + BADGE_GAP)
         marquee_open = (
             '<g class="b-marquee">'
             f'<animateTransform attributeName="transform" type="translate" '
             f'from="0 0" to="-{total_w} 0" dur="{max(20, len(items) * 2)}s" '
             f'repeatCount="indefinite"/>'
+            '<g id="b-loop">'
         )
-        marquee_close = "</g>"
-        # Render twice for seamless loop.
-        badges_svg = (
-            badges_svg
-            + "\n  "
-            + "\n  ".join(
-                _render_badge(
-                    item, x + total_w, y, shape, i + len(items), bcfg.animation, theme_fallback
-                )
-                for i, (item, (x, y)) in enumerate(zip(items, positions, strict=True))
-            )
-        )
+        # Close the inner b-loop, then place a <use> offset by total_w to
+        # provide the seamless second copy, then close the outer marquee.
+        marquee_close = f'</g><use href="#b-loop" transform="translate({total_w} 0)"/></g>'
 
     # One shared filter (drop shadow + inner glow) used by every badge.
     glow_filters = "\n    ".join(
         f'<filter id="glow-{i}" x="-20%" y="-20%" width="140%" height="140%">'
         f'<feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.45"/>'
         f"</filter>"
-        for i in range(len(items) * (2 if bcfg.layout == "marquee" else 1))
+        for i in range(len(items))
     )
 
     return f"""<?xml version="1.0" encoding="UTF-8"?>

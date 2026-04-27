@@ -241,8 +241,9 @@ def test_heatmap_default_uses_mock_data(tmp_path: Path):
     cfg = _make_config(heatmap=HeatmapConfig(enabled=True))
     out = heatmap.build(cfg, tmp_path / "h.svg")
     text = out.read_text(encoding="utf-8")
-    # 7 days x 52 weeks = 364 cells.
-    assert text.count("<rect ") >= 360
+    # 7 days x 52 weeks = 364 cells. After the perf pass these are <use>
+    # references to the shared #hm-cell symbol, not inline <rect>s.
+    assert text.count("<use ") >= 360
 
 
 def test_heatmap_explicit_data_takes_precedence(tmp_path: Path):
