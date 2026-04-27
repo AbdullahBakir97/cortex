@@ -5,6 +5,44 @@ All notable changes to Cortex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] — 2026-04-27
+
+First production release. Cortex ships 22 widget builders, 180+ tests, a coordinated theme system, real GitHub data integrations, and the `cortex compose` command for one-image profile setups.
+
+### Added — widgets (22 total)
+- 🧠 **brain-anatomical** — anatomically-accurate neon brain, 200+ Wikimedia paths
+- 🌅 **synthwave-banner** — 80s retro-futurist hero (4 palettes)
+- 🌌 **skill-galaxy** — constellation of skills as named stars (3 backgrounds)
+- 📡 **skill-radar** — polar chart with translucent breathing polygon
+- 🚇 **code-roadmap** — metro/subway-style multi-line career map
+- 🟩 **activity-heatmap** — 7×52 contribution grid with neon glow (4 palettes)
+- 🧊 **stat-cubes** — isometric 3D blocks with label/value faces
+- 🏆 **achievement-wall** — beveled trophy cabinet with hex medallions
+- 🧬 **code-dna** — twin spiral strands with language base-pair rungs
+- 🌍 **skill-globe** — stylized 2D globe with neon contribution pins
+- ✨ **particle-cloud** — labelled particles orbiting a glowing core
+- 🎵 **now-playing** — Spotify-style "currently coding in" card
+- 🎖️ **badges** — compact skill strip (4 shapes × 3 layouts × 4 animations)
+- Plus original suite: tech-cards, current-focus, yearly-highlights, header-banner, footer-banner, animated-divider, github-icon, about-typing, motto-typing
+
+### Added — system features
+- **`brand.theme`** (outrun · sunset · midnight · minimal · cyberpunk · rose) — propagates as default colors to every widget. One line changes the whole palette.
+- **Reduced-motion accessibility** — `@media (prefers-reduced-motion: reduce)` opt-out injected into 8 builders.
+- **Real GitHub data integrations** — `cubes.from_github` and `heatmap.from_github` flags pull live stats / contribution calendar via the GraphQL API. Graceful fallback on missing token or API error.
+- **`cortex compose`** CLI — stack any subset of the 22 widgets into a single composite SVG.
+- **`cortex.sources` package** — pure-data helpers for auto-population (`stats_cubes_from_github`, `contribution_grid_from_github`, `top_languages_from_github`).
+
+### Performance
+- Heatmap SVG: 51KB → 45KB (–12%) via `<symbol>` / `<use>` cell dedup.
+- Badges marquee: 23KB → 12KB (–47%) via `<g id>` / `<use>` loop dedup.
+
+### CI
+- New `health-check.yml` — daily build smoke + size-delta tracking, Monday code-debt audit + community signal sweep.
+- CI matrix: Python 3.10 / 3.11 / 3.12, ruff lint + format, pytest, ajv JSON Schema validation, README link check.
+
+### Breaking changes
+- None. Fully backward-compatible with v0.x widget configs.
+
 ## [Unreleased]
 
 ### Added — Phase B.1 theming surface (foundation for inline directives + web playground)
