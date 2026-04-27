@@ -19,6 +19,7 @@ import click
 
 from cortex_cli import __version__
 from cortex_cli.commands import build as build_cmd
+from cortex_cli.commands import compose as compose_cmd
 from cortex_cli.commands import init as init_cmd
 from cortex_cli.commands import update_readme as update_readme_cmd
 from cortex_cli.commands import validate as validate_cmd
@@ -99,6 +100,57 @@ def validate_command(config: str) -> None:
 def build_command(config: str, output: str) -> None:
     """Render every enabled SVG to the output directory."""
     build_cmd.run(config=Path(config), output_dir=Path(output))
+
+
+@cli.command("compose")
+@click.option(
+    "-c",
+    "--config",
+    type=click.Path(exists=True, dir_okay=False),
+    default=DEFAULT_CONFIG,
+    show_default=True,
+    help="Path to your cortex.yml.",
+)
+@click.option(
+    "-w",
+    "--widget",
+    "widgets",
+    multiple=True,
+    help="Widget slug to include (repeatable). Use --list to see available slugs.",
+)
+@click.option(
+    "-o",
+    "--output",
+    type=click.Path(),
+    default="assets/composite.svg",
+    show_default=True,
+    help="Output path for the composite SVG.",
+)
+@click.option(
+    "--gap",
+    type=int,
+    default=12,
+    show_default=True,
+    help="Vertical pixel gap between stacked widgets.",
+)
+@click.option(
+    "--list",
+    "list_only",
+    is_flag=True,
+    default=False,
+    help="Print the available widget slugs and exit.",
+)
+def compose_command(
+    config: str, widgets: tuple[str, ...], output: str, gap: int, list_only: bool
+) -> None:
+    """Stack listed widgets into a single SVG (one image to drop in your README)."""
+    if list_only:
+        from cortex.compose import list_available
+
+        for slug in list_available():
+            click.echo(slug)
+        return
+    compose_cmd.run(config=Path(config), widgets=list(widgets), output=Path(output), gap=gap)
 
 
 @cli.command("update-readme")
