@@ -35,7 +35,10 @@
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
-- `14a0875` fix(ci): rebase-and-retry auto-commit pushes to survive races (#14) _(8 seconds ago by Abdullah Bakir)_
+- `b365575` docs: add v1 development summary covering all 14 PRs + 22 widgets (#15) _(9 seconds ago by Abdullah Bakir)_
+- `0a54783` chore(examples): refresh rendered showcase _(13 minutes ago by cortex-bot[bot])_
+- `50a3b3f` chore(context): refresh auto-marker sections _(13 minutes ago by cortex-bot[bot])_
+- `14a0875` fix(ci): rebase-and-retry auto-commit pushes to survive races (#14) _(13 minutes ago by Abdullah Bakir)_
 - `5ed1147` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
 - `8217205` release: v1.0.0 — action.yml polish for Marketplace publishing (#13) _(4 hours ago by Abdullah Bakir)_
 - `91928ee` chore(context): refresh auto-marker sections _(5 hours ago by cortex-bot[bot])_
@@ -44,9 +47,6 @@
 - `f5f0f84` perf(svg): symbol/use dedup for heatmap cells + marquee loop (#11) _(6 hours ago by Abdullah Bakir)_
 - `9e047b3` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
 - `8d114ad` feat(sources): real GitHub data integrations for cubes + heatmap (#10) _(9 hours ago by Abdullah Bakir)_
-- `73c68cf` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
-- `c88257e` feat(theme+a11y): brand.theme system + reduced-motion CSS across 8 widgets (#9) _(9 hours ago by Abdullah Bakir)_
-- `d191a9d` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
 <!-- AUTO:RECENT_COMMITS:END -->
 
 ## Active work
