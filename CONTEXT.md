@@ -35,18 +35,18 @@
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
-- `8217205` release: v1.0.0 — action.yml polish for Marketplace publishing (#13) _(8 seconds ago by Abdullah Bakir)_
-- `91928ee` chore(context): refresh auto-marker sections _(66 minutes ago by cortex-bot[bot])_
-- `e913f5e` feat(compose): cortex compose command stacks widgets into single SVG (#12) _(66 minutes ago by Abdullah Bakir)_
-- `9d8f47d` chore(context): refresh auto-marker sections _(2 hours ago by cortex-bot[bot])_
-- `f5f0f84` perf(svg): symbol/use dedup for heatmap cells + marquee loop (#11) _(2 hours ago by Abdullah Bakir)_
-- `9e047b3` chore(context): refresh auto-marker sections _(5 hours ago by cortex-bot[bot])_
-- `8d114ad` feat(sources): real GitHub data integrations for cubes + heatmap (#10) _(5 hours ago by Abdullah Bakir)_
-- `73c68cf` chore(context): refresh auto-marker sections _(5 hours ago by cortex-bot[bot])_
-- `c88257e` feat(theme+a11y): brand.theme system + reduced-motion CSS across 8 widgets (#9) _(5 hours ago by Abdullah Bakir)_
-- `d191a9d` chore(context): refresh auto-marker sections _(6 hours ago by cortex-bot[bot])_
-- `e1c12a4` docs+ci: feature batch-3 widgets in README grid + persistent health-check workflow (#8) _(6 hours ago by Abdullah Bakir)_
-- `6d50df6` chore(context): refresh auto-marker sections _(6 hours ago by cortex-bot[bot])_
+- `14a0875` fix(ci): rebase-and-retry auto-commit pushes to survive races (#14) _(8 seconds ago by Abdullah Bakir)_
+- `5ed1147` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
+- `8217205` release: v1.0.0 — action.yml polish for Marketplace publishing (#13) _(4 hours ago by Abdullah Bakir)_
+- `91928ee` chore(context): refresh auto-marker sections _(5 hours ago by cortex-bot[bot])_
+- `e913f5e` feat(compose): cortex compose command stacks widgets into single SVG (#12) _(5 hours ago by Abdullah Bakir)_
+- `9d8f47d` chore(context): refresh auto-marker sections _(6 hours ago by cortex-bot[bot])_
+- `f5f0f84` perf(svg): symbol/use dedup for heatmap cells + marquee loop (#11) _(6 hours ago by Abdullah Bakir)_
+- `9e047b3` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
+- `8d114ad` feat(sources): real GitHub data integrations for cubes + heatmap (#10) _(9 hours ago by Abdullah Bakir)_
+- `73c68cf` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
+- `c88257e` feat(theme+a11y): brand.theme system + reduced-motion CSS across 8 widgets (#9) _(9 hours ago by Abdullah Bakir)_
+- `d191a9d` chore(context): refresh auto-marker sections _(9 hours ago by cortex-bot[bot])_
 <!-- AUTO:RECENT_COMMITS:END -->
 
 ## Active work
