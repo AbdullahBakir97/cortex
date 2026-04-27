@@ -35,18 +35,18 @@
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
-- `8d114ad` feat(sources): real GitHub data integrations for cubes + heatmap (#10) _(8 seconds ago by Abdullah Bakir)_
-- `73c68cf` chore(context): refresh auto-marker sections _(6 minutes ago by cortex-bot[bot])_
-- `c88257e` feat(theme+a11y): brand.theme system + reduced-motion CSS across 8 widgets (#9) _(6 minutes ago by Abdullah Bakir)_
-- `d191a9d` chore(context): refresh auto-marker sections _(30 minutes ago by cortex-bot[bot])_
-- `e1c12a4` docs+ci: feature batch-3 widgets in README grid + persistent health-check workflow (#8) _(30 minutes ago by Abdullah Bakir)_
-- `6d50df6` chore(context): refresh auto-marker sections _(39 minutes ago by cortex-bot[bot])_
-- `64e68d2` feat: 4 more widgets — DNA helix, globe, particle cloud, now-playing (#7) _(39 minutes ago by Abdullah Bakir)_
-- `53595d9` chore(context): refresh auto-marker sections _(52 minutes ago by cortex-bot[bot])_
-- `7631fec` docs(readme): feature 7 new widgets in handwritten showcase grid (#6) _(52 minutes ago by Abdullah Bakir)_
-- `4623933` chore(context): refresh auto-marker sections _(58 minutes ago by cortex-bot[bot])_
-- `5b3ec23` feat: 7 new mind-blowing widgets — galaxy, synthwave, radar, roadmap, heatmap, cubes, trophies (#5) _(58 minutes ago by Abdullah Bakir)_
-- `a63e67b` chore(context): refresh auto-marker sections _(78 minutes ago by cortex-bot[bot])_
+- `f5f0f84` perf(svg): symbol/use dedup for heatmap cells + marquee loop (#11) _(7 seconds ago by Abdullah Bakir)_
+- `9e047b3` chore(context): refresh auto-marker sections _(3 hours ago by cortex-bot[bot])_
+- `8d114ad` feat(sources): real GitHub data integrations for cubes + heatmap (#10) _(3 hours ago by Abdullah Bakir)_
+- `73c68cf` chore(context): refresh auto-marker sections _(3 hours ago by cortex-bot[bot])_
+- `c88257e` feat(theme+a11y): brand.theme system + reduced-motion CSS across 8 widgets (#9) _(3 hours ago by Abdullah Bakir)_
+- `d191a9d` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
+- `e1c12a4` docs+ci: feature batch-3 widgets in README grid + persistent health-check workflow (#8) _(4 hours ago by Abdullah Bakir)_
+- `6d50df6` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
+- `64e68d2` feat: 4 more widgets — DNA helix, globe, particle cloud, now-playing (#7) _(4 hours ago by Abdullah Bakir)_
+- `53595d9` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
+- `7631fec` docs(readme): feature 7 new widgets in handwritten showcase grid (#6) _(4 hours ago by Abdullah Bakir)_
+- `4623933` chore(context): refresh auto-marker sections _(4 hours ago by cortex-bot[bot])_
 <!-- AUTO:RECENT_COMMITS:END -->
 
 ## Active work
