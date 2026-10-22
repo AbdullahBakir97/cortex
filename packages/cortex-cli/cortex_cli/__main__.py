@@ -6,6 +6,7 @@ Usage:
     cortex build [--config CONFIG] [--output DIR]
     cortex update-readme [--config CONFIG] [--readme PATH]
     cortex viewer [--config CONFIG] [--output DIR]
+    cortex graph-art {fetch,analyze,detect,check,render}
     cortex --version
     cortex --help
 """
@@ -20,6 +21,7 @@ import click
 from cortex_cli import __version__
 from cortex_cli.commands import build as build_cmd
 from cortex_cli.commands import compose as compose_cmd
+from cortex_cli.commands import graph_art as graph_art_cmd
 from cortex_cli.commands import init as init_cmd
 from cortex_cli.commands import update_readme as update_readme_cmd
 from cortex_cli.commands import validate as validate_cmd
@@ -193,6 +195,9 @@ def update_readme_command(config: str, readme: str) -> None:
 def viewer_command(config: str, output: str) -> None:
     """Build the Three.js 3D viewer."""
     viewer_cmd.run(config=Path(config), output_dir=Path(output))
+
+
+cli.add_command(graph_art_cmd.group)
 
 
 def main() -> int:

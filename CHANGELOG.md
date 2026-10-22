@@ -5,6 +5,16 @@ All notable changes to Cortex will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- **graph-art** — read a contribution graph as a story and as drawings.
+  - `cortex graph-art fetch` saves every year of daily contribution counts.
+  - `cortex graph-art analyze` splits each year into quiet, steady and busy stretches and finds the longest streak and the biggest day.
+  - `cortex graph-art detect` suggests shapes hiding in the grid: faces from empty "eye" days, plus pixel-art templates.
+  - `cortex graph-art check` fails when a figure colours a day that had no contributions (empty days are allowed only as holes).
+  - `cortex graph-art render` writes `year-story.svg` and a `graph-art.svg` gallery of confirmed figures.
+
 ## [1.0.0] — 2026-04-27
 
 First production release. Cortex ships 22 widget builders, 180+ tests, a coordinated theme system, real GitHub data integrations, and the `cortex compose` command for one-image profile setups.
