@@ -1,5 +1,9 @@
 # graph-art
 
+> Original concept and design: **Abdullah Bakir** ([@AbdullahBakir97](https://github.com/AbdullahBakir97)), 2026.
+> Reading a contribution graph as a story, finding drawings hidden in real commit days,
+> and keeping every drawing true to the graph.
+
 Read your contribution graph two ways: as a story (which months were quiet,
 steady or busy) and as a drawing (the shapes your real commit days happen to
 make). Everything works on real days only.

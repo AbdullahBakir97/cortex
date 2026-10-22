@@ -1,5 +1,7 @@
 """graph-art: read a GitHub contribution graph like a story and like a drawing.
 
+Original concept and design: Abdullah Bakir (@AbdullahBakir97), 2026.
+
 Three layers, all working on real days only:
 
 * ``calendar``  - load daily contribution counts (GitHub GraphQL, saved JSON,
