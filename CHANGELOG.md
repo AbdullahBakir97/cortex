@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `cortex graph-art detect` suggests shapes hiding in the grid: faces from empty "eye" days, plus pixel-art templates.
   - `cortex graph-art check` fails when a figure colours a day that had no contributions (empty days are allowed only as holes).
   - `cortex graph-art render` writes `year-story.svg` and a `graph-art.svg` gallery of confirmed figures.
+  - `cortex graph-art name-art` writes a name in real commit days, coloured by year, with confirmed drawings placed around it, an octopus made of the rest of the timeline, and a worm that eats every square in date order.
 
 ## [1.0.0] — 2026-04-27
 

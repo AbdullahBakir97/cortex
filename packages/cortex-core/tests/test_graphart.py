@@ -165,3 +165,26 @@ def test_cli_end_to_end(tmp_path):
     )
     assert res.exit_code == 0, res.output
     assert (out / "year-story.svg").exists() and (out / "graph-art.svg").exists()
+
+
+def test_name_art_svg_and_layout():
+    from cortex.graphart import name_art
+
+    cal = _paint(FACE, 2)
+    cal.days.update(_paint(FACE, 30).days)
+    fig = Figure(year=YEAR, name="A face", weeks=(2, 8), cells={"2,0": "#ffffff", "3,0": "#ffffff"})
+    svg = name_art.render_name_art(cal, "Ada Lovelace", "github.com/ada", [fig])
+    xml.dom.minidom.parseString(svg)
+    assert name_art.NAME_LINES == ["ADA", "LOVELACE"]
+    assert "A face" in name_art.SLOTS
+    letters = {(c, r) for _, c, r in name_art.letter_cells()[0]}
+    c0, r0 = name_art.SLOTS["A face"]
+    assert not {(c0, r0), (c0 + 1, r0)} & letters
+    assert "<script" not in svg and "foreignObject" not in svg
+
+
+def test_split_name():
+    from cortex.graphart.name_art import split_name
+
+    assert split_name("Abdullah Bakir") == ["ABDULLAH", "BAKIR"]
+    assert split_name("Cher") == ["CHER"]

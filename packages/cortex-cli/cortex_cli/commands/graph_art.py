@@ -12,6 +12,7 @@ from cortex.graphart.analysis import summarize_year
 from cortex.graphart.calendar import Calendar
 from cortex.graphart.detect import detect
 from cortex.graphart.figures import load_figures, save_figures, validate_figure
+from cortex.graphart.name_art import render_name_art
 from cortex.graphart.render import render_gallery, render_year_story
 
 
@@ -149,3 +150,29 @@ def render(user, calendar, heatmaps, figures, out) -> None:
                 )
         (d / "graph-art.svg").write_text(render_gallery(figs, cal), encoding="utf-8")
         click.echo(f"wrote {d / 'graph-art.svg'} ({len(figs)} figures)")
+
+
+@group.command("name-art")
+@source_options
+@click.option("-n", "--name", required=True, help='The name to write, e.g. "Ada Lovelace".')
+@click.option(
+    "-f",
+    "--figures",
+    type=click.Path(exists=True, dir_okay=False),
+    help="Confirmed figures.json to place around it.",
+)
+@click.option("--handle", default="", help="Shown in the footer, e.g. github.com/you.")
+@click.option("-o", "--out", default="assets/name-art.svg", show_default=True)
+def name_art_cmd(user, calendar, heatmaps, name, figures, handle, out) -> None:
+    """Write NAME in your real commit days, with drawings, an octopus and a worm."""
+    cal = load_calendar(user, calendar, heatmaps)
+    figs = load_figures(figures) if figures else []
+    for f in figs:
+        if validate_figure(f, cal):
+            raise click.ClickException(
+                f"{f.name} is not true to the graph; run `cortex graph-art check`"
+            )
+    svg = render_name_art(cal, name, handle or (f"github.com/{user}" if user else ""), figs)
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    Path(out).write_text(svg, encoding="utf-8")
+    click.echo(f"wrote {out} ({len(svg) // 1024} KB, {len(figs)} drawings)")

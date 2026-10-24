@@ -59,3 +59,15 @@ keep SVGs whose cells carry `<title>N on YYYY-MM-DD</title>`.
 
 Detection only suggests. Seeing a dog or a lighthouse in a graph is a human
 reading, so the draft is meant to be reviewed and edited before rendering.
+
+## name-art
+
+```bash
+cortex graph-art name-art --calendar calendar.json -n "Your Name" -f figures.json --handle github.com/you
+```
+
+Writes `assets/name-art.svg`: your name in pixel letters made of your real
+commit days (oldest to newest, one colour per year), your confirmed drawings
+placed in the free space around it, an octopus made of the rest of your
+timeline, the longest streak and biggest day marked on the letters, and a worm
+that sleeps, then eats every square in date order before it all grows back.
