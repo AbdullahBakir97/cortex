@@ -6,7 +6,7 @@
 
 ## At a glance
 - **Repo**: https://github.com/AbdullahBakir97/cortex
-- **Owner**: Abdullah Bakir (@AbdullahBakir97), abdullah.bakir.1997@gmail.com
+- **Owner**: Abdullah Bakir (@AbdullahBakir97)
 - **What it does**: GitHub Action + Python toolkit that turns a personal GitHub profile README into a cinematic neon-brain skill atlas — generated from a single YAML config.
 - **Current version**: v0.2.1 (alpha; pre-v1.0)
 - **License**: MIT (CC-BY-SA-3.0 for Wikimedia brain anatomy paths only)
@@ -29,9 +29,9 @@
 | Live showcase | `examples/rendered/extreme/*.svg` | Pre-rendered SVGs embedded in the marketing README |
 | CI | `.github/workflows/{ci.yml, build-examples.yml, refresh-context.yml}` | Lint+test · auto-render showcase · auto-refresh this file |
 | Strategy & roadmap | [`VISION.md`](./VISION.md) | Phases B/C/D, viral strategy, competitive landscape |
-| Visual tooling decision | [`TOOLING.md`](./TOOLING.md) | Why we stay on SVG (not Figma/Lottie/Three.js for README); advanced SVG techniques to ship next |
-| Architecture deep-dive | [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Repo layout, data flow, package responsibilities |
-| Changelog | [`CHANGELOG.md`](./CHANGELOG.md) | Keep-a-Changelog format; per-release notes |
+| Visual tooling decision | [`TOOLING.md`](../../TOOLING.md) | Why we stay on SVG (not Figma/Lottie/Three.js for README); advanced SVG techniques to ship next |
+| Architecture deep-dive | [`ARCHITECTURE.md`](../../ARCHITECTURE.md) | Repo layout, data flow, package responsibilities |
+| Changelog | [`CHANGELOG.md`](../../CHANGELOG.md) | Keep-a-Changelog format; per-release notes |
 
 ## Recent changes
 <!-- AUTO:RECENT_COMMITS:START -->
@@ -96,7 +96,7 @@
 - **Python for builders, TypeScript for the 3D viewer** — Three.js is JS-native; Python has the cleaner SVG generation story
 - **Schema versioning baked in from day one** — `cortex.yml` has top-level `version: 1`; mismatches raise migration errors with doc links
 - **Pydantic = source of truth, JSON Schema = IDE mirror** — both must agree; CI validates examples against both
-- **No `Co-Authored-By: Claude` trailers** — disabled in `~/.claude/settings.json`; commits authored solely by the human contributor
+- **Commits are authored solely by the maintainer** — no co-author trailers
 - **No telemetry** in the free tier — Pro tier opt-in via `pro.analytics: true`
 - **All animations are CSS or SMIL** — never JavaScript (GitHub strips `<script>` from rendered SVGs)
 - **Font sizes calibrated for ~0.55× downscale** — README embeds at `width="100%"` on github.com's ~830px content area downscale a 1400px viewBox by ~0.55×; source fonts must be sized accordingly to read at ~13–18px on screen

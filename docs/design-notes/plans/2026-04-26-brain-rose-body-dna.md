@@ -1,12 +1,10 @@
 # Brain — Rose Body, Wave Lobes & DNA Helixes Implementation Plan (Round 4)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to implement this plan task-by-task.
-
 **Goal:** Replace the bold per-lobe color blocks with thin sweeping color waves over a slowly-cycling rose body. Remove the perspective grid. Add 4 DNA double-helix symbols in canvas corners that fade in (drawing in via `stroke-dashoffset`) and out on staggered 16s cycles.
 
 **Architecture:** All edits land in `packages/cortex-core/cortex/builders/brain.py`. Per-lobe gradients keep the same id names and per-lobe rotation periods from R3, but with new stop offsets and opacity. New `_dna_helix_paths` helper (math-based, deterministic). DNA blocks are pre-computed Python strings injected into the f-string composition.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-rose-body-dna-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-rose-body-dna-design.md`.
 
 ---
 

@@ -163,7 +163,7 @@ Size budgets locked in by `test_perf_dedup.py`:
 
 ### New workflow — `health-check.yml` (PR #8)
 
-Persistent (runs in GitHub Actions, survives across Claude sessions, no 7-day TTL):
+Persistent (runs in GitHub Actions, no 7-day TTL):
 
 | Job | Cadence | What it does |
 |---|---|---|

@@ -63,18 +63,18 @@ cards:
   current_focus:
     enabled: true
     tiles:
-      - project:     "PyDev Platform"
-        status:      ACTIVE
+      - project:     "Stacked"
+        status:      BUILDING
         accent:      red
-        emoji:       "🛠️"
-        description: "Enterprise-grade Python tooling: CLI + secure template marketplace + AI-driven dev features."
-        tech:        [Python, CLI, AI, "GitHub Apps"]
-      - project:     "Baeckrei"
+        emoji:       "🧱"
+        description: "Django accelerator toolkit: plain-language flow descriptions become models, serializers, viewsets and URLs."
+        tech:        [Python, Django, DRF, CLI]
+      - project:     "Mini-RAG"
         status:      SHIPPING
         accent:      orange
-        emoji:       "🥖"
-        description: "Bakery management system: inventory, recipes, online orders, customer accounts, real-time production scheduling."
-        tech:        [Django, Vue, Postgres, Redis]
+        emoji:       "📚"
+        description: "RAG service: hybrid search, cited answers, an MCP server, a multi-tenant API and SDKs."
+        tech:        [FastAPI, pgvector, Vue, TypeScript]
       - project:     "Stock-Manager"
         status:      ACTIVE
         accent:      green
@@ -146,7 +146,7 @@ cards:
           - "Investing in public presence — portfolio, blog, open-source."
         stats:
           - { num: "5",  label: "GH APPS" }
-          - { num: "v1", label: "PYDEV PLATFORM" }
+          - { num: "v1", label: "CORTEX" }
           - { num: "9+", label: "NEW REPOS" }
 
   # Animated banners — capsule-render replacement. Renders as header-banner.svg

@@ -41,19 +41,19 @@
       <rect x="0" y="0" width="460" height="280" rx="14" fill="none" stroke="#F90001" stroke-width="2" pathLength="1580" class="tile-edge te1"/>
       <rect x="0" y="0" width="460" height="280" rx="14" fill="url(#tileHighlight)"/>
       <g transform="translate(24, 28)">
-        <rect x="0" y="0" width="98" height="28" rx="14" fill="#F90001" fill-opacity="0.18" stroke="#F90001" stroke-width="1"/>
+        <rect x="0" y="0" width="116" height="28" rx="14" fill="#F90001" fill-opacity="0.18" stroke="#F90001" stroke-width="1"/>
         <circle cx="16" cy="14" r="4" fill="#F90001" class="live-dot"/>
-        <text x="60" y="19" class="t-status" fill="#F90001" text-anchor="middle">ACTIVE</text>
+        <text x="69" y="19" class="t-status" fill="#F90001" text-anchor="middle">BUILDING</text>
       </g>
-      <text x="24" y="106" class="t-title">🛠️ PyDev Platform</text>
-      <text x="24" y="146" class="t-desc">Enterprise-grade Python tooling:</text>
-      <text x="24" y="168" class="t-desc">CLI + secure template marketplace</text>
-      <text x="24" y="190" class="t-desc">+ AI-driven dev features.</text>
+      <text x="24" y="106" class="t-title">🧱 Stacked</text>
+      <text x="24" y="146" class="t-desc">Django accelerator toolkit:</text>
+      <text x="24" y="168" class="t-desc">plain-language flow descriptions</text>
+      <text x="24" y="190" class="t-desc">become models, serializers,</text>
       <g transform="translate(24, 226)">
         <g><rect x="0" y="0" width="76" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="38" y="19" class="t-pill" fill="#F90001" text-anchor="middle">Python</text></g>
-        <g><rect x="86" y="0" width="52" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="112" y="19" class="t-pill" fill="#F90001" text-anchor="middle">CLI</text></g>
-        <g><rect x="148" y="0" width="52" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="174" y="19" class="t-pill" fill="#F90001" text-anchor="middle">AI</text></g>
-        <g><rect x="210" y="0" width="121" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="270" y="19" class="t-pill" fill="#F90001" text-anchor="middle">GitHub Apps</text></g>
+        <g><rect x="86" y="0" width="76" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="124" y="19" class="t-pill" fill="#F90001" text-anchor="middle">Django</text></g>
+        <g><rect x="172" y="0" width="52" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="198" y="19" class="t-pill" fill="#F90001" text-anchor="middle">DRF</text></g>
+        <g><rect x="234" y="0" width="52" height="28" rx="14" fill="none" stroke="#F90001" stroke-width="1"/><text x="260" y="19" class="t-pill" fill="#F90001" text-anchor="middle">CLI</text></g>
       </g>
     </g>
   </g>
@@ -68,15 +68,15 @@
         <circle cx="16" cy="14" r="4" fill="#FF652F" class="live-dot"/>
         <text x="69" y="19" class="t-status" fill="#FF652F" text-anchor="middle">SHIPPING</text>
       </g>
-      <text x="24" y="106" class="t-title">🥖 Baeckrei</text>
-      <text x="24" y="146" class="t-desc">Bakery management system:</text>
-      <text x="24" y="168" class="t-desc">inventory, recipes, online</text>
-      <text x="24" y="190" class="t-desc">orders, customer accounts,</text>
+      <text x="24" y="106" class="t-title">📚 Mini-RAG</text>
+      <text x="24" y="146" class="t-desc">RAG service: hybrid search, cited</text>
+      <text x="24" y="168" class="t-desc">answers, an MCP server, a</text>
+      <text x="24" y="190" class="t-desc">multi-tenant API and SDKs.</text>
       <g transform="translate(24, 226)">
-        <g><rect x="0" y="0" width="76" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="38" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">Django</text></g>
-        <g><rect x="86" y="0" width="52" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="112" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">Vue</text></g>
-        <g><rect x="148" y="0" width="94" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="195" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">Postgres</text></g>
-        <g><rect x="252" y="0" width="67" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="285" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">Redis</text></g>
+        <g><rect x="0" y="0" width="85" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="42" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">FastAPI</text></g>
+        <g><rect x="95" y="0" width="94" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="142" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">pgvector</text></g>
+        <g><rect x="199" y="0" width="52" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="225" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">Vue</text></g>
+        <g><rect x="261" y="0" width="112" height="28" rx="14" fill="none" stroke="#FF652F" stroke-width="1"/><text x="317" y="19" class="t-pill" fill="#FF652F" text-anchor="middle">TypeScript</text></g>
       </g>
     </g>
   </g>

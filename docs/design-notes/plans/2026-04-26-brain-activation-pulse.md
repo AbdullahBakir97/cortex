@@ -1,12 +1,10 @@
 # Brain — Activation Pulse + Organic Ripple Implementation Plan (Round 6)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development.
-
 **Goal:** Replace the per-lobe gradient sweep system (R1–R5) with discrete activation pulses (enhanced region_glow) + organic tissue ripple (`feDisplacementMap`). Body color stays unchanged (`brainGrad_unified` rose hue cycle). Per-lobe color identity moves from gradient channel to glow channel.
 
 **Architecture:** All edits in `packages/cortex-core/cortex/builders/brain.py`. Subtractive (delete 6 lobe gradients + substitution loop) + additive (new filter + tuned glow CSS). No new helpers, no schema changes.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-activation-pulse-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-activation-pulse-design.md`.
 
 ---
 

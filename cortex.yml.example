@@ -88,8 +88,8 @@ cards:
   current_focus:
     enabled: true
     tiles:
-      - { project: PyDev,        status: ACTIVE,     accent: red }
-      - { project: Baeckrei,     status: SHIPPING,   accent: orange }
+      - { project: Stacked,      status: BUILDING,   accent: red }
+      - { project: Mini-RAG,     status: SHIPPING,   accent: orange }
       - { project: Stock-Manager, status: ACTIVE,    accent: green }
       - { project: Generative-AI, status: EXPLORING, accent: purple }
       - { project: Docker-CICD,  status: MAINTAINING, accent: cyan }

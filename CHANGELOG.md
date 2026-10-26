@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] — 2026-04-27
 
-First production release. Cortex ships 22 widget builders, 180+ tests, a coordinated theme system, real GitHub data integrations, and the `cortex compose` command for one-image profile setups.
+First production release. Cortex ships 22 widget builders, 164 tests, a coordinated theme system, real GitHub data integrations, and the `cortex compose` command for one-image profile setups.
 
 ### Added — widgets (22 total)
 - 🧠 **brain-anatomical** — anatomically-accurate neon brain, 200+ Wikimedia paths

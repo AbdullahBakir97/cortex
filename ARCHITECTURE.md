@@ -170,7 +170,7 @@ cortex/                                    # ← new public repo, MIT-licensed (
 **Third-party services (optional, gated by user secrets)**
 - WakaTime API
 - Google PageSpeed Insights API
-- (Pro tier) OpenAI / Anthropic for AI portrait + digital twin
+- (Pro tier) an LLM API for AI portrait + digital twin
 
 ---
 

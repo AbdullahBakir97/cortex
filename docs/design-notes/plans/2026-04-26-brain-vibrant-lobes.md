@@ -1,12 +1,10 @@
 # Brain — Vibrant Lobes & Atmospheric Depth Implementation Plan (Round 3)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to implement this plan task-by-task.
-
 **Goal:** Kill the metallic specular pass, restore per-lobe color identity via 6 desaturated tinted gradients (not the saturated paint-by-numbers from before), add three new background depth layers (star field + perspective grid + nebula clouds), and fix card text overflow.
 
 **Architecture:** All edits land in `packages/cortex-core/cortex/builders/brain.py`. Per-lobe gradient substitution happens in `_compose_wrapper` via regex on `paths_by_lobe` (existing data), not in `_recolor` (which stays simple). No new schema fields.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-vibrant-lobes-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-vibrant-lobes-design.md`.
 
 ---
 

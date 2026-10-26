@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name  "cortex-bot[bot]"
           git config user.email "cortex-bot[bot]@users.noreply.github.com"
-          git add CONTEXT.md
+          git add docs/internal/CONTEXT.md
           if git diff --cached --quiet; then
             echo "::notice::CONTEXT.md unchanged — auto sections already current."
           else
