@@ -102,7 +102,7 @@ The thesis: a single user should be able to customize through whichever surface 
 
 ### Phase D — Mind-blowing (post-v1.0 differentiators)
 - **D.1 — Time-lapse brain** — animated 2018→today rendered as a 30-second video (FFmpeg in CI). Listed as v1.4.
-- **D.2 — AI portrait** — turn commit history into a generated portrait via Claude/OpenAI. Listed as v2.1.
+- **D.2 — AI portrait** — turn commit history into a generated portrait via an LLM API. Listed as v2.1.
 - **D.3 — Digital twin chatbot** — visitors ask "what does X work on?" and the README answers via embedded MCP server. Listed as v2.2.
 - **D.4 — Constellation viewer** — contribution graph reimagined as a star map.
 - **D.5 — Sound-reactive brain** — ambient audio sync. Gimmicky, but the kind of thing that wins demos.
@@ -118,7 +118,7 @@ The thesis: a single user should be able to customize through whichever surface 
 - Every example yml validates against both Pydantic *and* JSON Schema (CI gate)
 - Every push runs `ruff check`, `ruff format --check`, ajv schema validation, and re-renders the showcase
 - Every commit message uses Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:`, `style:`, `refactor:`)
-- **No `Co-Authored-By` trailers**, no "Generated with Claude Code" footers — all commits authored solely by the human contributor
+- **No co-author trailers or tool footers** — all commits authored solely by the maintainer
 - Every external dependency pinned in lockfiles
 - No telemetry without explicit opt-in (`pro.analytics: true`)
 - Every new widget ships with: a Pydantic schema entry, a JSON Schema mirror entry, an example in `extreme.yml`, a rendered example in `examples/rendered/extreme/`, and a README `<details>` showcase block
@@ -127,6 +127,5 @@ The thesis: a single user should be able to customize through whichever surface 
 
 ## Decision log (when we change direction, write it here)
 - **2026-04-26** — Adopted two-file context model: `CONTEXT.md` (auto-friendly, current state) + `VISION.md` (manual, strategy). Reason: mixing decays both; separating lets each evolve at its natural cadence.
-- **2026-04-26** — Locked in "no Claude attribution" globally via `~/.claude/settings.json` after a Co-Authored-By trailer accidentally surfaced "Claude" as a repo contributor.
 - **2026-04-26** — Font sizes in builders calibrated for the ~0.55× README downscale rather than 1:1 viewing. All future widgets must follow.
 - **2026-04-26** — Pre-rendered showcase SVGs committed to `examples/rendered/extreme/`. Auto-refreshed by `.github/workflows/build-examples.yml`. README embeds these via raw GitHub URLs at `width="100%"`.

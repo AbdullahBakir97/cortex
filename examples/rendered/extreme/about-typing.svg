@@ -90,24 +90,24 @@
   <text class="term" x="20" y="40" fill="#EC4899" clip-path="url(#t27)">$ man developer</text>
   <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t28)">$ exit 0</text>
   <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t29)"># open to collab</text>
-  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t30)">$ cd ~/projects/pydev-platform &amp;&amp; make dev</text>
-  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t31)">$ python -m pydev-platform create my-app</text>
-  <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t32)">$ pydev-platform --status</text>
-  <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t33)">$ docker compose -f pydev-platform.yml up</text>
-  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t34)">$ deploy.sh pydev-platform-prod</text>
-  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t35)">$ tail -f /var/log/pydev-platform.log</text>
-  <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t36)">$ python manage.py migrate pydev-platform</text>
+  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t30)">$ cd ~/projects/stacked &amp;&amp; make dev</text>
+  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t31)">$ python -m stacked create my-app</text>
+  <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t32)">$ stacked --status</text>
+  <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t33)">$ docker compose -f stacked.yml up</text>
+  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t34)">$ deploy.sh stacked-prod</text>
+  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t35)">$ tail -f /var/log/stacked.log</text>
+  <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t36)">$ python manage.py migrate stacked</text>
   <text class="term" x="20" y="40" fill="#EC4899" clip-path="url(#t37)">$ ssh AbdullahBakir97-prod</text>
   <text class="term" x="20" y="40" fill="#00C853" clip-path="url(#t38)">$ git checkout -b feature/new-thing</text>
   <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t39)">$ pytest tests/ -v</text>
-  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t40)">$ gh extension install AbdullahBakir97/pydev-platform</text>
+  <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t40)">$ gh extension install AbdullahBakir97/stacked</text>
   <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t41)">$ python -c &apos;import abdullahbakir97&apos;</text>
   <text class="term" x="20" y="40" fill="#22D3EE" clip-path="url(#t42)"># made by AbdullahBakir97</text>
   <text class="term" x="20" y="40" fill="#FF652F" clip-path="url(#t43)">$ rabbitmq-plugins enable rabbitmq_management</text>
   <text class="term" x="20" y="40" fill="#22D3EE" clip-path="url(#t44)">$ npx nuxt build &amp;&amp; npx nuxt start</text>
-  <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t45)">$ kubectl get pods -n pydev-platform</text>
+  <text class="term" x="20" y="40" fill="#A78BFA" clip-path="url(#t45)">$ kubectl get pods -n stacked</text>
   <text class="term" x="20" y="40" fill="#F90001" clip-path="url(#t46)">$ redis-cli FLUSHDB</text>
-  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t47)">$ celery worker -A pydev-platform</text>
+  <text class="term" x="20" y="40" fill="#34D399" clip-path="url(#t47)">$ celery worker -A stacked</text>
   <text class="term" x="20" y="40" fill="#FFD700" clip-path="url(#t48)">$ make migrate &amp;&amp; make seed</text>
   <text class="term" x="20" y="40" fill="#22D3EE" clip-path="url(#t49)"># from Germany with code</text>
   <rect class="cursor cursor-blink" x="6" y="20" width="3" height="24"/>

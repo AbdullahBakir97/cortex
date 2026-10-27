@@ -10,7 +10,7 @@
 
 User feedback after 5 rounds of gradient-sweep iterations: *"this not what i exactly want, search to learn how you could similar animation and learn new ideas."*
 
-Cause: every round R1–R5 used gradient sweeps (rotated, then translated) on per-lobe `<linearGradient>` defs. Gradient sweeps = continuous graphic motion. Real brain visualizations (fMRI, OpenAI sphere, Anthropic brand, Apple Neural Engine) use **discrete activation events** — zones light up, hold, fade — and **organic tissue distortion** — the anatomy ripples like real living matter. Both are missing in R5.
+Cause: every round R1–R5 used gradient sweeps (rotated, then translated) on per-lobe `<linearGradient>` defs. Gradient sweeps = continuous graphic motion. Real brain visualizations (fMRI, Apple Neural Engine) use **discrete activation events** — zones light up, hold, fade — and **organic tissue distortion** — the anatomy ripples like real living matter. Both are missing in R5.
 
 ## Three coordinated changes
 

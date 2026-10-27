@@ -1,14 +1,12 @@
 # Brain — Atmosphere & Polish Implementation Plan (Round 2)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development to implement this plan task-by-task.
-
 **Goal:** Replace the `feTurbulence` plasma fog with aurora bands (A), add a specular highlight overlay on the brain body for liquid-glass depth (D), polish the lobe cards with traveling edge glow + inner pulse + stacked shadow + typography (B), and make the canvas atmosphere lively via constellation lines + light streaks + animated background aura (C).
 
 **Architecture:** All edits land in `packages/cortex-core/cortex/builders/brain.py`. No new schema fields. Same `feature/brain-professional-visuals` branch as Round 1.
 
 **Tech Stack:** Python 3.10+, SVG 1.1 with SMIL + CSS. No new dependencies.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-atmosphere-polish-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-atmosphere-polish-design.md`.
 
 ---
 

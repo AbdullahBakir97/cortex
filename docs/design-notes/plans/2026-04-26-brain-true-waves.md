@@ -1,12 +1,10 @@
 # Brain — True Waves Implementation Plan (Round 5)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development.
-
 **Goal:** Replace `<animateTransform type="rotate">` on the 6 per-lobe gradients with `type="translate">`, add `spreadMethod="repeat"`, and set unique direction vectors per lobe so each shows a directional wave instead of a rotating band.
 
 **Architecture:** Per-lobe gradient animations only. No structural changes. No new helpers. No CSS changes. The unified gradient (`brainGrad_unified`) stays rotating because its 4-stop rose-family pattern doesn't read as a spinner.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-true-waves-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-true-waves-design.md`.
 
 ---
 

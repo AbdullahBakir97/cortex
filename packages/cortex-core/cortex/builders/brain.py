@@ -972,7 +972,7 @@ def _compose_wrapper(brain_content: str, config: Config) -> str:
       <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
     </radialGradient>
     <!-- Aurora flow palette: jewel tones (deeper, less saturated than primary
-         hues). Cinematic feel — Anthropic / Apple Vision Pro / Northern Lights
+         hues). Cinematic feel — Apple Vision Pro / Northern Lights
          vocabulary, not "rainbow tech demo". -->
     <radialGradient id="brainAurora_a" cx="50%" cy="50%" r="50%">
       <stop offset="0%"   stop-color="#C95E8A" stop-opacity="0.30"/>

@@ -1,7 +1,3 @@
-<!-- This is the marketing README that goes at the root of the cortex repo.
-     Visitors land here from Hacker News, Product Hunt, marketplace listings, awesome-lists.
-     The entire job: convince them in 10 seconds, install in 30. -->
-
 <!-- ════════════════════════════════════════════════════════════════════════ -->
 <!-- 🎬 ANIMATED HERO BANNER — capsule-render with brain-themed gradient     -->
 <!-- ════════════════════════════════════════════════════════════════════════ -->
@@ -21,7 +17,7 @@
 </p>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=AbdullahBakir97-cortex&label=PROFILES%20BUILT&color=F90001&style=for-the-badge" alt="Profiles built" />
+  <img src="https://komarev.com/ghpvc/?username=AbdullahBakir97-cortex&label=README%20VIEWS&color=F90001&style=for-the-badge" alt="README views" />
   <img src="https://img.shields.io/github/stars/AbdullahBakir97/cortex?style=for-the-badge&color=F90001&logo=github&logoColor=white&labelColor=0D1117" alt="Stars" />
   <img src="https://img.shields.io/github/v/release/AbdullahBakir97/cortex?style=for-the-badge&color=F90001&label=version&labelColor=0D1117" alt="Latest version" />
 </p>
@@ -669,7 +665,7 @@ cards:
     enabled: true
     tiles:
       - { project: "Cortex",     status: SHIPPING,    accent: red,    emoji: "🧠", description: "Profile README brain generator.",                       tech: [Python, SVG] }
-      - { project: "Pydev",      status: BUILDING,    accent: orange, emoji: "🐍", description: "Local-first Python dev environment manager.",            tech: [Tauri, Vue, TypeScript] }
+      - { project: "Stacked",    status: BUILDING,    accent: orange, emoji: "🧱", description: "Django accelerator: plain-language flows to REST APIs.",  tech: [Python, Django, DRF] }
       - { project: "Skill DNA",  status: EXPLORING,   accent: cyan,   emoji: "🧬", description: "AI-driven skill atlas + portfolio generator.",            tech: [LangChain, RAG] }
       - { project: "Brain 3D",   status: MAINTAINING, accent: purple, emoji: "🌌", description: "Three.js viewer for the cortex brain.",                  tech: [Three.js, Vite] }
 ```

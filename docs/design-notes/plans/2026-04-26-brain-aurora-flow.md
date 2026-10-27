@@ -1,12 +1,10 @@
 # Brain — Aurora Flow Implementation Plan (Round 7)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development.
-
 **Goal:** Replace region_glow circles with brain-shape-masked aurora flow (4 large palette-colored radial gradients drifting freely through the canvas, masked by the brain anatomy). Push the brain down +58px to clear card overlap. Remove the rgrad/region_glow system entirely.
 
 **Architecture:** Three coordinated changes in `_compose_wrapper`: build mask paths from `paths_by_lobe`, add `<mask>` def + 4 aurora gradient defs, replace region_glow composition with the masked aurora flow group, shift brain transform y from 152→210 in three places (wobble group, mask group, classifier formula).
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-aurora-flow-design.md`.
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-aurora-flow-design.md`.
 
 ---
 

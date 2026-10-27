@@ -4,7 +4,7 @@
 >
 > Short answer: **No** — the GitHub-renders-no-JS constraint rules out most of what people think of as "modern visual tooling". The path to mind-blowing visuals goes through **mastering SVG techniques we currently underuse**, not switching tools.
 >
-> Companion to [`VISION.md`](./VISION.md). Decision-log entry: 2026-04-26.
+> Companion to [`VISION.md`](docs/internal/VISION.md). Decision-log entry: 2026-04-26.
 
 ---
 

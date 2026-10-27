@@ -25,7 +25,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CONTEXT = ROOT / "CONTEXT.md"
+CONTEXT = ROOT / "docs" / "internal" / "CONTEXT.md"
 
 
 def _git(*args: str) -> str:

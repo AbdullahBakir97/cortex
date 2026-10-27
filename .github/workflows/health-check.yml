@@ -1,5 +1,4 @@
-# Persistent scheduled checks that survive across Claude sessions. Mirrors the
-# in-session crons (build regression, code-debt audit, community signal) but
+# Persistent scheduled checks. Mirrors the local checks (build regression, code-debt audit, community signal) but
 # runs in GitHub Actions so it keeps going indefinitely. Outputs a job summary
 # that's visible in the Actions tab — no notifications unless something is
 # wrong (job fails on regressions).

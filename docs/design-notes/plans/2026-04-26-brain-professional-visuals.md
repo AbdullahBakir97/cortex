@@ -1,14 +1,12 @@
 # Brain — Professional Visual Pass Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
 **Goal:** Replace the brain's six saturated per-lobe color blocks with one unified muted gradient body, add an animated stroke-overlay layer that draws the lobe outlines in card colors on a 6s loop, and replace the fixed-grid arc quadrilateral with a deterministic-but-disordered random Bezier arc network.
 
 **Architecture:** All edits land in `packages/cortex-core/cortex/builders/brain.py`. Lobe identity moves from the *fill channel* (per-lobe gradients) to a *stroke-overlay channel* (duplicated `<path>` elements above the body fill, animated via CSS `stroke-dashoffset`). Random arcs use a deterministic `random.Random` seeded by `sha256(config.identity.name)[:8]` so renders are reproducible per user. New tests live in `packages/cortex-core/tests/`.
 
 **Tech Stack:** Python 3.10+, pydantic v2 (existing), pytest 8 (existing dev dep), SVG 1.1 with SMIL + CSS animation. No new dependencies.
 
-**Spec:** `docs/superpowers/specs/2026-04-26-brain-professional-visuals-design.md` (commit `8b51be6`).
+**Spec:** `docs/design-notes/specs/2026-04-26-brain-professional-visuals-design.md` (commit `8b51be6`).
 
 ---
 
